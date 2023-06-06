@@ -149,7 +149,7 @@ Args:
 
 { # A Course in Classroom.
   &quot;alternateLink&quot;: &quot;A String&quot;, # Absolute link to this course in the Classroom web UI. Read-only.
-  &quot;calendarId&quot;: &quot;A String&quot;, # The Calendar ID for a calendar that all course members can see, to which Classroom adds events for course work and announcements in the course. Read-only.
+  &quot;calendarId&quot;: &quot;A String&quot;, # The Calendar ID for a calendar that all course members can see, to which Classroom adds events for course work and announcements in the course. The Calendar for a course is created asynchronously when the course is set to `CourseState.ACTIVE` for the first time (at creation time or when it is updated to `ACTIVE` through the UI or the API). The Calendar ID will not be populated until the creation process is completed. Read-only.
   &quot;courseGroupEmail&quot;: &quot;A String&quot;, # The email address of a Google group containing all members of the course. This group does not accept email and can only be used for permissions. Read-only.
   &quot;courseMaterialSets&quot;: [ # Sets of materials that appear on the &quot;about&quot; page of this course. Read-only.
     { # A set of materials that appears on the &quot;About&quot; page of the course. These materials might include a syllabus, schedule, or other background information relating to the course as a whole.
@@ -163,7 +163,7 @@ Args:
           },
           &quot;form&quot;: { # Google Forms item. # Google Forms attachment.
             &quot;formUrl&quot;: &quot;A String&quot;, # URL of the form.
-            &quot;responseUrl&quot;: &quot;A String&quot;, # URL of the form responses document. Only set if respsonses have been recorded and only when the requesting user is an editor of the form. Read-only.
+            &quot;responseUrl&quot;: &quot;A String&quot;, # URL of the form responses document. Only set if responses have been recorded and only when the requesting user is an editor of the form. Read-only.
             &quot;thumbnailUrl&quot;: &quot;A String&quot;, # URL of a thumbnail image of the Form. Read-only.
             &quot;title&quot;: &quot;A String&quot;, # Title of the Form. Read-only.
           },
@@ -225,7 +225,7 @@ Returns:
 
     { # A Course in Classroom.
   &quot;alternateLink&quot;: &quot;A String&quot;, # Absolute link to this course in the Classroom web UI. Read-only.
-  &quot;calendarId&quot;: &quot;A String&quot;, # The Calendar ID for a calendar that all course members can see, to which Classroom adds events for course work and announcements in the course. Read-only.
+  &quot;calendarId&quot;: &quot;A String&quot;, # The Calendar ID for a calendar that all course members can see, to which Classroom adds events for course work and announcements in the course. The Calendar for a course is created asynchronously when the course is set to `CourseState.ACTIVE` for the first time (at creation time or when it is updated to `ACTIVE` through the UI or the API). The Calendar ID will not be populated until the creation process is completed. Read-only.
   &quot;courseGroupEmail&quot;: &quot;A String&quot;, # The email address of a Google group containing all members of the course. This group does not accept email and can only be used for permissions. Read-only.
   &quot;courseMaterialSets&quot;: [ # Sets of materials that appear on the &quot;about&quot; page of this course. Read-only.
     { # A set of materials that appears on the &quot;About&quot; page of the course. These materials might include a syllabus, schedule, or other background information relating to the course as a whole.
@@ -239,7 +239,7 @@ Returns:
           },
           &quot;form&quot;: { # Google Forms item. # Google Forms attachment.
             &quot;formUrl&quot;: &quot;A String&quot;, # URL of the form.
-            &quot;responseUrl&quot;: &quot;A String&quot;, # URL of the form responses document. Only set if respsonses have been recorded and only when the requesting user is an editor of the form. Read-only.
+            &quot;responseUrl&quot;: &quot;A String&quot;, # URL of the form responses document. Only set if responses have been recorded and only when the requesting user is an editor of the form. Read-only.
             &quot;thumbnailUrl&quot;: &quot;A String&quot;, # URL of a thumbnail image of the Form. Read-only.
             &quot;title&quot;: &quot;A String&quot;, # Title of the Form. Read-only.
           },
@@ -326,7 +326,7 @@ Returns:
 
     { # A Course in Classroom.
   &quot;alternateLink&quot;: &quot;A String&quot;, # Absolute link to this course in the Classroom web UI. Read-only.
-  &quot;calendarId&quot;: &quot;A String&quot;, # The Calendar ID for a calendar that all course members can see, to which Classroom adds events for course work and announcements in the course. Read-only.
+  &quot;calendarId&quot;: &quot;A String&quot;, # The Calendar ID for a calendar that all course members can see, to which Classroom adds events for course work and announcements in the course. The Calendar for a course is created asynchronously when the course is set to `CourseState.ACTIVE` for the first time (at creation time or when it is updated to `ACTIVE` through the UI or the API). The Calendar ID will not be populated until the creation process is completed. Read-only.
   &quot;courseGroupEmail&quot;: &quot;A String&quot;, # The email address of a Google group containing all members of the course. This group does not accept email and can only be used for permissions. Read-only.
   &quot;courseMaterialSets&quot;: [ # Sets of materials that appear on the &quot;about&quot; page of this course. Read-only.
     { # A set of materials that appears on the &quot;About&quot; page of the course. These materials might include a syllabus, schedule, or other background information relating to the course as a whole.
@@ -340,7 +340,7 @@ Returns:
           },
           &quot;form&quot;: { # Google Forms item. # Google Forms attachment.
             &quot;formUrl&quot;: &quot;A String&quot;, # URL of the form.
-            &quot;responseUrl&quot;: &quot;A String&quot;, # URL of the form responses document. Only set if respsonses have been recorded and only when the requesting user is an editor of the form. Read-only.
+            &quot;responseUrl&quot;: &quot;A String&quot;, # URL of the form responses document. Only set if responses have been recorded and only when the requesting user is an editor of the form. Read-only.
             &quot;thumbnailUrl&quot;: &quot;A String&quot;, # URL of a thumbnail image of the Form. Read-only.
             &quot;title&quot;: &quot;A String&quot;, # Title of the Form. Read-only.
           },
@@ -422,7 +422,7 @@ Returns:
   &quot;courses&quot;: [ # Courses that match the list request.
     { # A Course in Classroom.
       &quot;alternateLink&quot;: &quot;A String&quot;, # Absolute link to this course in the Classroom web UI. Read-only.
-      &quot;calendarId&quot;: &quot;A String&quot;, # The Calendar ID for a calendar that all course members can see, to which Classroom adds events for course work and announcements in the course. Read-only.
+      &quot;calendarId&quot;: &quot;A String&quot;, # The Calendar ID for a calendar that all course members can see, to which Classroom adds events for course work and announcements in the course. The Calendar for a course is created asynchronously when the course is set to `CourseState.ACTIVE` for the first time (at creation time or when it is updated to `ACTIVE` through the UI or the API). The Calendar ID will not be populated until the creation process is completed. Read-only.
       &quot;courseGroupEmail&quot;: &quot;A String&quot;, # The email address of a Google group containing all members of the course. This group does not accept email and can only be used for permissions. Read-only.
       &quot;courseMaterialSets&quot;: [ # Sets of materials that appear on the &quot;about&quot; page of this course. Read-only.
         { # A set of materials that appears on the &quot;About&quot; page of the course. These materials might include a syllabus, schedule, or other background information relating to the course as a whole.
@@ -436,7 +436,7 @@ Returns:
               },
               &quot;form&quot;: { # Google Forms item. # Google Forms attachment.
                 &quot;formUrl&quot;: &quot;A String&quot;, # URL of the form.
-                &quot;responseUrl&quot;: &quot;A String&quot;, # URL of the form responses document. Only set if respsonses have been recorded and only when the requesting user is an editor of the form. Read-only.
+                &quot;responseUrl&quot;: &quot;A String&quot;, # URL of the form responses document. Only set if responses have been recorded and only when the requesting user is an editor of the form. Read-only.
                 &quot;thumbnailUrl&quot;: &quot;A String&quot;, # URL of a thumbnail image of the Form. Read-only.
                 &quot;title&quot;: &quot;A String&quot;, # Title of the Form. Read-only.
               },
@@ -517,7 +517,7 @@ Args:
 
 { # A Course in Classroom.
   &quot;alternateLink&quot;: &quot;A String&quot;, # Absolute link to this course in the Classroom web UI. Read-only.
-  &quot;calendarId&quot;: &quot;A String&quot;, # The Calendar ID for a calendar that all course members can see, to which Classroom adds events for course work and announcements in the course. Read-only.
+  &quot;calendarId&quot;: &quot;A String&quot;, # The Calendar ID for a calendar that all course members can see, to which Classroom adds events for course work and announcements in the course. The Calendar for a course is created asynchronously when the course is set to `CourseState.ACTIVE` for the first time (at creation time or when it is updated to `ACTIVE` through the UI or the API). The Calendar ID will not be populated until the creation process is completed. Read-only.
   &quot;courseGroupEmail&quot;: &quot;A String&quot;, # The email address of a Google group containing all members of the course. This group does not accept email and can only be used for permissions. Read-only.
   &quot;courseMaterialSets&quot;: [ # Sets of materials that appear on the &quot;about&quot; page of this course. Read-only.
     { # A set of materials that appears on the &quot;About&quot; page of the course. These materials might include a syllabus, schedule, or other background information relating to the course as a whole.
@@ -531,7 +531,7 @@ Args:
           },
           &quot;form&quot;: { # Google Forms item. # Google Forms attachment.
             &quot;formUrl&quot;: &quot;A String&quot;, # URL of the form.
-            &quot;responseUrl&quot;: &quot;A String&quot;, # URL of the form responses document. Only set if respsonses have been recorded and only when the requesting user is an editor of the form. Read-only.
+            &quot;responseUrl&quot;: &quot;A String&quot;, # URL of the form responses document. Only set if responses have been recorded and only when the requesting user is an editor of the form. Read-only.
             &quot;thumbnailUrl&quot;: &quot;A String&quot;, # URL of a thumbnail image of the Form. Read-only.
             &quot;title&quot;: &quot;A String&quot;, # Title of the Form. Read-only.
           },
@@ -594,7 +594,7 @@ Returns:
 
     { # A Course in Classroom.
   &quot;alternateLink&quot;: &quot;A String&quot;, # Absolute link to this course in the Classroom web UI. Read-only.
-  &quot;calendarId&quot;: &quot;A String&quot;, # The Calendar ID for a calendar that all course members can see, to which Classroom adds events for course work and announcements in the course. Read-only.
+  &quot;calendarId&quot;: &quot;A String&quot;, # The Calendar ID for a calendar that all course members can see, to which Classroom adds events for course work and announcements in the course. The Calendar for a course is created asynchronously when the course is set to `CourseState.ACTIVE` for the first time (at creation time or when it is updated to `ACTIVE` through the UI or the API). The Calendar ID will not be populated until the creation process is completed. Read-only.
   &quot;courseGroupEmail&quot;: &quot;A String&quot;, # The email address of a Google group containing all members of the course. This group does not accept email and can only be used for permissions. Read-only.
   &quot;courseMaterialSets&quot;: [ # Sets of materials that appear on the &quot;about&quot; page of this course. Read-only.
     { # A set of materials that appears on the &quot;About&quot; page of the course. These materials might include a syllabus, schedule, or other background information relating to the course as a whole.
@@ -608,7 +608,7 @@ Returns:
           },
           &quot;form&quot;: { # Google Forms item. # Google Forms attachment.
             &quot;formUrl&quot;: &quot;A String&quot;, # URL of the form.
-            &quot;responseUrl&quot;: &quot;A String&quot;, # URL of the form responses document. Only set if respsonses have been recorded and only when the requesting user is an editor of the form. Read-only.
+            &quot;responseUrl&quot;: &quot;A String&quot;, # URL of the form responses document. Only set if responses have been recorded and only when the requesting user is an editor of the form. Read-only.
             &quot;thumbnailUrl&quot;: &quot;A String&quot;, # URL of a thumbnail image of the Form. Read-only.
             &quot;title&quot;: &quot;A String&quot;, # Title of the Form. Read-only.
           },
@@ -672,7 +672,7 @@ Args:
 
 { # A Course in Classroom.
   &quot;alternateLink&quot;: &quot;A String&quot;, # Absolute link to this course in the Classroom web UI. Read-only.
-  &quot;calendarId&quot;: &quot;A String&quot;, # The Calendar ID for a calendar that all course members can see, to which Classroom adds events for course work and announcements in the course. Read-only.
+  &quot;calendarId&quot;: &quot;A String&quot;, # The Calendar ID for a calendar that all course members can see, to which Classroom adds events for course work and announcements in the course. The Calendar for a course is created asynchronously when the course is set to `CourseState.ACTIVE` for the first time (at creation time or when it is updated to `ACTIVE` through the UI or the API). The Calendar ID will not be populated until the creation process is completed. Read-only.
   &quot;courseGroupEmail&quot;: &quot;A String&quot;, # The email address of a Google group containing all members of the course. This group does not accept email and can only be used for permissions. Read-only.
   &quot;courseMaterialSets&quot;: [ # Sets of materials that appear on the &quot;about&quot; page of this course. Read-only.
     { # A set of materials that appears on the &quot;About&quot; page of the course. These materials might include a syllabus, schedule, or other background information relating to the course as a whole.
@@ -686,7 +686,7 @@ Args:
           },
           &quot;form&quot;: { # Google Forms item. # Google Forms attachment.
             &quot;formUrl&quot;: &quot;A String&quot;, # URL of the form.
-            &quot;responseUrl&quot;: &quot;A String&quot;, # URL of the form responses document. Only set if respsonses have been recorded and only when the requesting user is an editor of the form. Read-only.
+            &quot;responseUrl&quot;: &quot;A String&quot;, # URL of the form responses document. Only set if responses have been recorded and only when the requesting user is an editor of the form. Read-only.
             &quot;thumbnailUrl&quot;: &quot;A String&quot;, # URL of a thumbnail image of the Form. Read-only.
             &quot;title&quot;: &quot;A String&quot;, # Title of the Form. Read-only.
           },
@@ -748,7 +748,7 @@ Returns:
 
     { # A Course in Classroom.
   &quot;alternateLink&quot;: &quot;A String&quot;, # Absolute link to this course in the Classroom web UI. Read-only.
-  &quot;calendarId&quot;: &quot;A String&quot;, # The Calendar ID for a calendar that all course members can see, to which Classroom adds events for course work and announcements in the course. Read-only.
+  &quot;calendarId&quot;: &quot;A String&quot;, # The Calendar ID for a calendar that all course members can see, to which Classroom adds events for course work and announcements in the course. The Calendar for a course is created asynchronously when the course is set to `CourseState.ACTIVE` for the first time (at creation time or when it is updated to `ACTIVE` through the UI or the API). The Calendar ID will not be populated until the creation process is completed. Read-only.
   &quot;courseGroupEmail&quot;: &quot;A String&quot;, # The email address of a Google group containing all members of the course. This group does not accept email and can only be used for permissions. Read-only.
   &quot;courseMaterialSets&quot;: [ # Sets of materials that appear on the &quot;about&quot; page of this course. Read-only.
     { # A set of materials that appears on the &quot;About&quot; page of the course. These materials might include a syllabus, schedule, or other background information relating to the course as a whole.
@@ -762,7 +762,7 @@ Returns:
           },
           &quot;form&quot;: { # Google Forms item. # Google Forms attachment.
             &quot;formUrl&quot;: &quot;A String&quot;, # URL of the form.
-            &quot;responseUrl&quot;: &quot;A String&quot;, # URL of the form responses document. Only set if respsonses have been recorded and only when the requesting user is an editor of the form. Read-only.
+            &quot;responseUrl&quot;: &quot;A String&quot;, # URL of the form responses document. Only set if responses have been recorded and only when the requesting user is an editor of the form. Read-only.
             &quot;thumbnailUrl&quot;: &quot;A String&quot;, # URL of a thumbnail image of the Form. Read-only.
             &quot;title&quot;: &quot;A String&quot;, # Title of the Form. Read-only.
           },

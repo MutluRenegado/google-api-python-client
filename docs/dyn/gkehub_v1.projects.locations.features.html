@@ -124,7 +124,7 @@ Args:
   &quot;deleteTime&quot;: &quot;A String&quot;, # Output only. When the Feature resource was deleted.
   &quot;fleetDefaultMemberConfig&quot;: { # CommonFleetDefaultMemberConfigSpec contains default configuration information for memberships of a fleet # Optional. Feature configuration applicable to all memberships of the fleet.
   },
-  &quot;labels&quot;: { # GCP labels for this Feature.
+  &quot;labels&quot;: { # Labels for this Feature.
     &quot;a_key&quot;: &quot;A String&quot;,
   },
   &quot;membershipSpecs&quot;: { # Optional. Membership-specific configuration for this Feature. If this Feature does not support any per-Membership configuration, this field may be unused. The keys indicate which Membership the configuration is for, in the form: `projects/{p}/locations/{l}/memberships/{m}` Where {p} is the project, {l} is a valid location and {m} is a valid Membership in this project at that location. {p} WILL match the Feature&#x27;s project. {p} will always be returned as the project number, but the project ID is also accepted during input. If the same Membership is specified in the map twice (using the project ID form, and the project number form), exactly ONE of the entries will be saved, with no guarantees as to which. For this reason, it is recommended the same format be used for all entries when mutating a Feature.
@@ -142,6 +142,9 @@ Args:
             &quot;syncRepo&quot;: &quot;A String&quot;, # The URL of the Git repository to use as the source of truth.
             &quot;syncRev&quot;: &quot;A String&quot;, # Git revision (tag or hash) to check out. Default HEAD.
             &quot;syncWaitSecs&quot;: &quot;A String&quot;, # Period in seconds between consecutive syncs. Default: 15.
+          },
+          &quot;managed&quot;: { # Configuration for Managed Config Sync. # Configuration for Managed Config Sync.
+            &quot;enabled&quot;: True or False, # Set to true to enable Managed Config Sync. Defaults to false which disables Managed Config Sync.
           },
           &quot;oci&quot;: { # OCI repo configuration for a single cluster # OCI repo configuration for the cluster
             &quot;gcpServiceAccountEmail&quot;: &quot;A String&quot;, # The GCP Service Account Email used for auth when secret_type is gcpServiceAccount.
@@ -214,7 +217,7 @@ Args:
         ],
       },
       &quot;mesh&quot;: { # **Service Mesh**: Spec for a single Membership for the servicemesh feature # Anthos Service Mesh-specific spec
-        &quot;controlPlane&quot;: &quot;A String&quot;, # Enables automatic control plane management.
+        &quot;controlPlane&quot;: &quot;A String&quot;, # Deprecated: use `management` instead Enables automatic control plane management.
         &quot;management&quot;: &quot;A String&quot;, # Enables automatic Service Mesh management.
       },
     },
@@ -299,6 +302,9 @@ Args:
               &quot;syncRev&quot;: &quot;A String&quot;, # Git revision (tag or hash) to check out. Default HEAD.
               &quot;syncWaitSecs&quot;: &quot;A String&quot;, # Period in seconds between consecutive syncs. Default: 15.
             },
+            &quot;managed&quot;: { # Configuration for Managed Config Sync. # Configuration for Managed Config Sync.
+              &quot;enabled&quot;: True or False, # Set to true to enable Managed Config Sync. Defaults to false which disables Managed Config Sync.
+            },
             &quot;oci&quot;: { # OCI repo configuration for a single cluster # OCI repo configuration for the cluster
               &quot;gcpServiceAccountEmail&quot;: &quot;A String&quot;, # The GCP Service Account Email used for auth when secret_type is gcpServiceAccount.
               &quot;policyDir&quot;: &quot;A String&quot;, # The absolute path of the directory that contains the local resources. Default: the root directory of the image.
@@ -347,12 +353,15 @@ Args:
             &quot;gatekeeperControllerManagerState&quot;: &quot;A String&quot;, # Status of gatekeeper-controller-manager pod.
             &quot;gatekeeperMutation&quot;: &quot;A String&quot;, # Status of the pod serving the mutation webhook.
           },
+          &quot;migration&quot;: { # State for the migration of PolicyController from ACM -&gt; PoCo Hub. # Record state of ACM -&gt; PoCo Hub migration for this feature.
+            &quot;stage&quot;: &quot;A String&quot;, # Stage of the migration.
+          },
           &quot;version&quot;: { # The build version of Gatekeeper Policy Controller is using. # The version of Gatekeeper Policy Controller deployed.
             &quot;version&quot;: &quot;A String&quot;, # The gatekeeper image tag that is composed of ACM version, git tag, build number.
           },
         },
       },
-      &quot;fleetobservability&quot;: { # **FleetObservability**: An empty state left as an example membership-specific Feature state. # Fleet observability membership state.
+      &quot;fleetobservability&quot;: { # **FleetObservability**: Membership-specific Feature state for fleetobservability. # Fleet observability membership state.
       },
       &quot;identityservice&quot;: { # **Anthos Identity Service**: State for a single Membership. # Identity Service-specific state.
         &quot;failureReason&quot;: &quot;A String&quot;, # The reason of the failure.
@@ -453,7 +462,7 @@ Args:
         &quot;description&quot;: &quot;A String&quot;, # Description is populated if Code is Failed, explaining why it has failed.
       },
     },
-    &quot;fleetobservability&quot;: { # **FleetObservability**: An empty state left as an example Hub-wide Feature state. # FleetObservability feature state.
+    &quot;fleetobservability&quot;: { # **FleetObservability**: Hub-wide Feature for FleetObservability feature. state. # FleetObservability feature state.
     },
     &quot;state&quot;: { # FeatureState describes the high-level state of a Feature. It may be used to describe a Feature&#x27;s state at the environ-level, or per-membershop, depending on the context. # Output only. The &quot;running state&quot; of the Feature in this Hub.
       &quot;code&quot;: &quot;A String&quot;, # The high-level, machine-readable status of this Feature.
@@ -551,7 +560,7 @@ Returns:
   &quot;deleteTime&quot;: &quot;A String&quot;, # Output only. When the Feature resource was deleted.
   &quot;fleetDefaultMemberConfig&quot;: { # CommonFleetDefaultMemberConfigSpec contains default configuration information for memberships of a fleet # Optional. Feature configuration applicable to all memberships of the fleet.
   },
-  &quot;labels&quot;: { # GCP labels for this Feature.
+  &quot;labels&quot;: { # Labels for this Feature.
     &quot;a_key&quot;: &quot;A String&quot;,
   },
   &quot;membershipSpecs&quot;: { # Optional. Membership-specific configuration for this Feature. If this Feature does not support any per-Membership configuration, this field may be unused. The keys indicate which Membership the configuration is for, in the form: `projects/{p}/locations/{l}/memberships/{m}` Where {p} is the project, {l} is a valid location and {m} is a valid Membership in this project at that location. {p} WILL match the Feature&#x27;s project. {p} will always be returned as the project number, but the project ID is also accepted during input. If the same Membership is specified in the map twice (using the project ID form, and the project number form), exactly ONE of the entries will be saved, with no guarantees as to which. For this reason, it is recommended the same format be used for all entries when mutating a Feature.
@@ -569,6 +578,9 @@ Returns:
             &quot;syncRepo&quot;: &quot;A String&quot;, # The URL of the Git repository to use as the source of truth.
             &quot;syncRev&quot;: &quot;A String&quot;, # Git revision (tag or hash) to check out. Default HEAD.
             &quot;syncWaitSecs&quot;: &quot;A String&quot;, # Period in seconds between consecutive syncs. Default: 15.
+          },
+          &quot;managed&quot;: { # Configuration for Managed Config Sync. # Configuration for Managed Config Sync.
+            &quot;enabled&quot;: True or False, # Set to true to enable Managed Config Sync. Defaults to false which disables Managed Config Sync.
           },
           &quot;oci&quot;: { # OCI repo configuration for a single cluster # OCI repo configuration for the cluster
             &quot;gcpServiceAccountEmail&quot;: &quot;A String&quot;, # The GCP Service Account Email used for auth when secret_type is gcpServiceAccount.
@@ -641,7 +653,7 @@ Returns:
         ],
       },
       &quot;mesh&quot;: { # **Service Mesh**: Spec for a single Membership for the servicemesh feature # Anthos Service Mesh-specific spec
-        &quot;controlPlane&quot;: &quot;A String&quot;, # Enables automatic control plane management.
+        &quot;controlPlane&quot;: &quot;A String&quot;, # Deprecated: use `management` instead Enables automatic control plane management.
         &quot;management&quot;: &quot;A String&quot;, # Enables automatic Service Mesh management.
       },
     },
@@ -726,6 +738,9 @@ Returns:
               &quot;syncRev&quot;: &quot;A String&quot;, # Git revision (tag or hash) to check out. Default HEAD.
               &quot;syncWaitSecs&quot;: &quot;A String&quot;, # Period in seconds between consecutive syncs. Default: 15.
             },
+            &quot;managed&quot;: { # Configuration for Managed Config Sync. # Configuration for Managed Config Sync.
+              &quot;enabled&quot;: True or False, # Set to true to enable Managed Config Sync. Defaults to false which disables Managed Config Sync.
+            },
             &quot;oci&quot;: { # OCI repo configuration for a single cluster # OCI repo configuration for the cluster
               &quot;gcpServiceAccountEmail&quot;: &quot;A String&quot;, # The GCP Service Account Email used for auth when secret_type is gcpServiceAccount.
               &quot;policyDir&quot;: &quot;A String&quot;, # The absolute path of the directory that contains the local resources. Default: the root directory of the image.
@@ -774,12 +789,15 @@ Returns:
             &quot;gatekeeperControllerManagerState&quot;: &quot;A String&quot;, # Status of gatekeeper-controller-manager pod.
             &quot;gatekeeperMutation&quot;: &quot;A String&quot;, # Status of the pod serving the mutation webhook.
           },
+          &quot;migration&quot;: { # State for the migration of PolicyController from ACM -&gt; PoCo Hub. # Record state of ACM -&gt; PoCo Hub migration for this feature.
+            &quot;stage&quot;: &quot;A String&quot;, # Stage of the migration.
+          },
           &quot;version&quot;: { # The build version of Gatekeeper Policy Controller is using. # The version of Gatekeeper Policy Controller deployed.
             &quot;version&quot;: &quot;A String&quot;, # The gatekeeper image tag that is composed of ACM version, git tag, build number.
           },
         },
       },
-      &quot;fleetobservability&quot;: { # **FleetObservability**: An empty state left as an example membership-specific Feature state. # Fleet observability membership state.
+      &quot;fleetobservability&quot;: { # **FleetObservability**: Membership-specific Feature state for fleetobservability. # Fleet observability membership state.
       },
       &quot;identityservice&quot;: { # **Anthos Identity Service**: State for a single Membership. # Identity Service-specific state.
         &quot;failureReason&quot;: &quot;A String&quot;, # The reason of the failure.
@@ -880,7 +898,7 @@ Returns:
         &quot;description&quot;: &quot;A String&quot;, # Description is populated if Code is Failed, explaining why it has failed.
       },
     },
-    &quot;fleetobservability&quot;: { # **FleetObservability**: An empty state left as an example Hub-wide Feature state. # FleetObservability feature state.
+    &quot;fleetobservability&quot;: { # **FleetObservability**: Hub-wide Feature for FleetObservability feature. state. # FleetObservability feature state.
     },
     &quot;state&quot;: { # FeatureState describes the high-level state of a Feature. It may be used to describe a Feature&#x27;s state at the environ-level, or per-membershop, depending on the context. # Output only. The &quot;running state&quot; of the Feature in this Hub.
       &quot;code&quot;: &quot;A String&quot;, # The high-level, machine-readable status of this Feature.
@@ -929,7 +947,7 @@ Returns:
         &quot;location&quot;: &quot;A String&quot;, # Optional. String indicating the location of the expression for error reporting, e.g. a file name and a position in the file.
         &quot;title&quot;: &quot;A String&quot;, # Optional. Title for the expression, i.e. a short string describing its purpose. This can be used e.g. in UIs which allow to enter the expression.
       },
-      &quot;members&quot;: [ # Specifies the principals requesting access for a Google Cloud resource. `members` can have the following values: * `allUsers`: A special identifier that represents anyone who is on the internet; with or without a Google account. * `allAuthenticatedUsers`: A special identifier that represents anyone who is authenticated with a Google account or a service account. Does not include identities that come from external identity providers (IdPs) through identity federation. * `user:{emailid}`: An email address that represents a specific Google account. For example, `alice@example.com` . * `serviceAccount:{emailid}`: An email address that represents a Google service account. For example, `my-other-app@appspot.gserviceaccount.com`. * `serviceAccount:{projectid}.svc.id.goog[{namespace}/{kubernetes-sa}]`: An identifier for a [Kubernetes service account](https://cloud.google.com/kubernetes-engine/docs/how-to/kubernetes-service-accounts). For example, `my-project.svc.id.goog[my-namespace/my-kubernetes-sa]`. * `group:{emailid}`: An email address that represents a Google group. For example, `admins@example.com`. * `deleted:user:{emailid}?uid={uniqueid}`: An email address (plus unique identifier) representing a user that has been recently deleted. For example, `alice@example.com?uid=123456789012345678901`. If the user is recovered, this value reverts to `user:{emailid}` and the recovered user retains the role in the binding. * `deleted:serviceAccount:{emailid}?uid={uniqueid}`: An email address (plus unique identifier) representing a service account that has been recently deleted. For example, `my-other-app@appspot.gserviceaccount.com?uid=123456789012345678901`. If the service account is undeleted, this value reverts to `serviceAccount:{emailid}` and the undeleted service account retains the role in the binding. * `deleted:group:{emailid}?uid={uniqueid}`: An email address (plus unique identifier) representing a Google group that has been recently deleted. For example, `admins@example.com?uid=123456789012345678901`. If the group is recovered, this value reverts to `group:{emailid}` and the recovered group retains the role in the binding. * `domain:{domain}`: The G Suite domain (primary) that represents all the users of that domain. For example, `google.com` or `example.com`.
+      &quot;members&quot;: [ # Specifies the principals requesting access for a Google Cloud resource. `members` can have the following values: * `allUsers`: A special identifier that represents anyone who is on the internet; with or without a Google account. * `allAuthenticatedUsers`: A special identifier that represents anyone who is authenticated with a Google account or a service account. Does not include identities that come from external identity providers (IdPs) through identity federation. * `user:{emailid}`: An email address that represents a specific Google account. For example, `alice@example.com` . * `serviceAccount:{emailid}`: An email address that represents a Google service account. For example, `my-other-app@appspot.gserviceaccount.com`. * `serviceAccount:{projectid}.svc.id.goog[{namespace}/{kubernetes-sa}]`: An identifier for a [Kubernetes service account](https://cloud.google.com/kubernetes-engine/docs/how-to/kubernetes-service-accounts). For example, `my-project.svc.id.goog[my-namespace/my-kubernetes-sa]`. * `group:{emailid}`: An email address that represents a Google group. For example, `admins@example.com`. * `domain:{domain}`: The G Suite domain (primary) that represents all the users of that domain. For example, `google.com` or `example.com`. * `deleted:user:{emailid}?uid={uniqueid}`: An email address (plus unique identifier) representing a user that has been recently deleted. For example, `alice@example.com?uid=123456789012345678901`. If the user is recovered, this value reverts to `user:{emailid}` and the recovered user retains the role in the binding. * `deleted:serviceAccount:{emailid}?uid={uniqueid}`: An email address (plus unique identifier) representing a service account that has been recently deleted. For example, `my-other-app@appspot.gserviceaccount.com?uid=123456789012345678901`. If the service account is undeleted, this value reverts to `serviceAccount:{emailid}` and the undeleted service account retains the role in the binding. * `deleted:group:{emailid}?uid={uniqueid}`: An email address (plus unique identifier) representing a Google group that has been recently deleted. For example, `admins@example.com?uid=123456789012345678901`. If the group is recovered, this value reverts to `group:{emailid}` and the recovered group retains the role in the binding.
         &quot;A String&quot;,
       ],
       &quot;role&quot;: &quot;A String&quot;, # Role that is assigned to the list of `members`, or principals. For example, `roles/viewer`, `roles/editor`, or `roles/owner`.
@@ -966,7 +984,7 @@ Returns:
       &quot;deleteTime&quot;: &quot;A String&quot;, # Output only. When the Feature resource was deleted.
       &quot;fleetDefaultMemberConfig&quot;: { # CommonFleetDefaultMemberConfigSpec contains default configuration information for memberships of a fleet # Optional. Feature configuration applicable to all memberships of the fleet.
       },
-      &quot;labels&quot;: { # GCP labels for this Feature.
+      &quot;labels&quot;: { # Labels for this Feature.
         &quot;a_key&quot;: &quot;A String&quot;,
       },
       &quot;membershipSpecs&quot;: { # Optional. Membership-specific configuration for this Feature. If this Feature does not support any per-Membership configuration, this field may be unused. The keys indicate which Membership the configuration is for, in the form: `projects/{p}/locations/{l}/memberships/{m}` Where {p} is the project, {l} is a valid location and {m} is a valid Membership in this project at that location. {p} WILL match the Feature&#x27;s project. {p} will always be returned as the project number, but the project ID is also accepted during input. If the same Membership is specified in the map twice (using the project ID form, and the project number form), exactly ONE of the entries will be saved, with no guarantees as to which. For this reason, it is recommended the same format be used for all entries when mutating a Feature.
@@ -984,6 +1002,9 @@ Returns:
                 &quot;syncRepo&quot;: &quot;A String&quot;, # The URL of the Git repository to use as the source of truth.
                 &quot;syncRev&quot;: &quot;A String&quot;, # Git revision (tag or hash) to check out. Default HEAD.
                 &quot;syncWaitSecs&quot;: &quot;A String&quot;, # Period in seconds between consecutive syncs. Default: 15.
+              },
+              &quot;managed&quot;: { # Configuration for Managed Config Sync. # Configuration for Managed Config Sync.
+                &quot;enabled&quot;: True or False, # Set to true to enable Managed Config Sync. Defaults to false which disables Managed Config Sync.
               },
               &quot;oci&quot;: { # OCI repo configuration for a single cluster # OCI repo configuration for the cluster
                 &quot;gcpServiceAccountEmail&quot;: &quot;A String&quot;, # The GCP Service Account Email used for auth when secret_type is gcpServiceAccount.
@@ -1056,7 +1077,7 @@ Returns:
             ],
           },
           &quot;mesh&quot;: { # **Service Mesh**: Spec for a single Membership for the servicemesh feature # Anthos Service Mesh-specific spec
-            &quot;controlPlane&quot;: &quot;A String&quot;, # Enables automatic control plane management.
+            &quot;controlPlane&quot;: &quot;A String&quot;, # Deprecated: use `management` instead Enables automatic control plane management.
             &quot;management&quot;: &quot;A String&quot;, # Enables automatic Service Mesh management.
           },
         },
@@ -1141,6 +1162,9 @@ Returns:
                   &quot;syncRev&quot;: &quot;A String&quot;, # Git revision (tag or hash) to check out. Default HEAD.
                   &quot;syncWaitSecs&quot;: &quot;A String&quot;, # Period in seconds between consecutive syncs. Default: 15.
                 },
+                &quot;managed&quot;: { # Configuration for Managed Config Sync. # Configuration for Managed Config Sync.
+                  &quot;enabled&quot;: True or False, # Set to true to enable Managed Config Sync. Defaults to false which disables Managed Config Sync.
+                },
                 &quot;oci&quot;: { # OCI repo configuration for a single cluster # OCI repo configuration for the cluster
                   &quot;gcpServiceAccountEmail&quot;: &quot;A String&quot;, # The GCP Service Account Email used for auth when secret_type is gcpServiceAccount.
                   &quot;policyDir&quot;: &quot;A String&quot;, # The absolute path of the directory that contains the local resources. Default: the root directory of the image.
@@ -1189,12 +1213,15 @@ Returns:
                 &quot;gatekeeperControllerManagerState&quot;: &quot;A String&quot;, # Status of gatekeeper-controller-manager pod.
                 &quot;gatekeeperMutation&quot;: &quot;A String&quot;, # Status of the pod serving the mutation webhook.
               },
+              &quot;migration&quot;: { # State for the migration of PolicyController from ACM -&gt; PoCo Hub. # Record state of ACM -&gt; PoCo Hub migration for this feature.
+                &quot;stage&quot;: &quot;A String&quot;, # Stage of the migration.
+              },
               &quot;version&quot;: { # The build version of Gatekeeper Policy Controller is using. # The version of Gatekeeper Policy Controller deployed.
                 &quot;version&quot;: &quot;A String&quot;, # The gatekeeper image tag that is composed of ACM version, git tag, build number.
               },
             },
           },
-          &quot;fleetobservability&quot;: { # **FleetObservability**: An empty state left as an example membership-specific Feature state. # Fleet observability membership state.
+          &quot;fleetobservability&quot;: { # **FleetObservability**: Membership-specific Feature state for fleetobservability. # Fleet observability membership state.
           },
           &quot;identityservice&quot;: { # **Anthos Identity Service**: State for a single Membership. # Identity Service-specific state.
             &quot;failureReason&quot;: &quot;A String&quot;, # The reason of the failure.
@@ -1295,7 +1322,7 @@ Returns:
             &quot;description&quot;: &quot;A String&quot;, # Description is populated if Code is Failed, explaining why it has failed.
           },
         },
-        &quot;fleetobservability&quot;: { # **FleetObservability**: An empty state left as an example Hub-wide Feature state. # FleetObservability feature state.
+        &quot;fleetobservability&quot;: { # **FleetObservability**: Hub-wide Feature for FleetObservability feature. state. # FleetObservability feature state.
         },
         &quot;state&quot;: { # FeatureState describes the high-level state of a Feature. It may be used to describe a Feature&#x27;s state at the environ-level, or per-membershop, depending on the context. # Output only. The &quot;running state&quot; of the Feature in this Hub.
           &quot;code&quot;: &quot;A String&quot;, # The high-level, machine-readable status of this Feature.
@@ -1337,7 +1364,7 @@ Args:
   &quot;deleteTime&quot;: &quot;A String&quot;, # Output only. When the Feature resource was deleted.
   &quot;fleetDefaultMemberConfig&quot;: { # CommonFleetDefaultMemberConfigSpec contains default configuration information for memberships of a fleet # Optional. Feature configuration applicable to all memberships of the fleet.
   },
-  &quot;labels&quot;: { # GCP labels for this Feature.
+  &quot;labels&quot;: { # Labels for this Feature.
     &quot;a_key&quot;: &quot;A String&quot;,
   },
   &quot;membershipSpecs&quot;: { # Optional. Membership-specific configuration for this Feature. If this Feature does not support any per-Membership configuration, this field may be unused. The keys indicate which Membership the configuration is for, in the form: `projects/{p}/locations/{l}/memberships/{m}` Where {p} is the project, {l} is a valid location and {m} is a valid Membership in this project at that location. {p} WILL match the Feature&#x27;s project. {p} will always be returned as the project number, but the project ID is also accepted during input. If the same Membership is specified in the map twice (using the project ID form, and the project number form), exactly ONE of the entries will be saved, with no guarantees as to which. For this reason, it is recommended the same format be used for all entries when mutating a Feature.
@@ -1355,6 +1382,9 @@ Args:
             &quot;syncRepo&quot;: &quot;A String&quot;, # The URL of the Git repository to use as the source of truth.
             &quot;syncRev&quot;: &quot;A String&quot;, # Git revision (tag or hash) to check out. Default HEAD.
             &quot;syncWaitSecs&quot;: &quot;A String&quot;, # Period in seconds between consecutive syncs. Default: 15.
+          },
+          &quot;managed&quot;: { # Configuration for Managed Config Sync. # Configuration for Managed Config Sync.
+            &quot;enabled&quot;: True or False, # Set to true to enable Managed Config Sync. Defaults to false which disables Managed Config Sync.
           },
           &quot;oci&quot;: { # OCI repo configuration for a single cluster # OCI repo configuration for the cluster
             &quot;gcpServiceAccountEmail&quot;: &quot;A String&quot;, # The GCP Service Account Email used for auth when secret_type is gcpServiceAccount.
@@ -1427,7 +1457,7 @@ Args:
         ],
       },
       &quot;mesh&quot;: { # **Service Mesh**: Spec for a single Membership for the servicemesh feature # Anthos Service Mesh-specific spec
-        &quot;controlPlane&quot;: &quot;A String&quot;, # Enables automatic control plane management.
+        &quot;controlPlane&quot;: &quot;A String&quot;, # Deprecated: use `management` instead Enables automatic control plane management.
         &quot;management&quot;: &quot;A String&quot;, # Enables automatic Service Mesh management.
       },
     },
@@ -1512,6 +1542,9 @@ Args:
               &quot;syncRev&quot;: &quot;A String&quot;, # Git revision (tag or hash) to check out. Default HEAD.
               &quot;syncWaitSecs&quot;: &quot;A String&quot;, # Period in seconds between consecutive syncs. Default: 15.
             },
+            &quot;managed&quot;: { # Configuration for Managed Config Sync. # Configuration for Managed Config Sync.
+              &quot;enabled&quot;: True or False, # Set to true to enable Managed Config Sync. Defaults to false which disables Managed Config Sync.
+            },
             &quot;oci&quot;: { # OCI repo configuration for a single cluster # OCI repo configuration for the cluster
               &quot;gcpServiceAccountEmail&quot;: &quot;A String&quot;, # The GCP Service Account Email used for auth when secret_type is gcpServiceAccount.
               &quot;policyDir&quot;: &quot;A String&quot;, # The absolute path of the directory that contains the local resources. Default: the root directory of the image.
@@ -1560,12 +1593,15 @@ Args:
             &quot;gatekeeperControllerManagerState&quot;: &quot;A String&quot;, # Status of gatekeeper-controller-manager pod.
             &quot;gatekeeperMutation&quot;: &quot;A String&quot;, # Status of the pod serving the mutation webhook.
           },
+          &quot;migration&quot;: { # State for the migration of PolicyController from ACM -&gt; PoCo Hub. # Record state of ACM -&gt; PoCo Hub migration for this feature.
+            &quot;stage&quot;: &quot;A String&quot;, # Stage of the migration.
+          },
           &quot;version&quot;: { # The build version of Gatekeeper Policy Controller is using. # The version of Gatekeeper Policy Controller deployed.
             &quot;version&quot;: &quot;A String&quot;, # The gatekeeper image tag that is composed of ACM version, git tag, build number.
           },
         },
       },
-      &quot;fleetobservability&quot;: { # **FleetObservability**: An empty state left as an example membership-specific Feature state. # Fleet observability membership state.
+      &quot;fleetobservability&quot;: { # **FleetObservability**: Membership-specific Feature state for fleetobservability. # Fleet observability membership state.
       },
       &quot;identityservice&quot;: { # **Anthos Identity Service**: State for a single Membership. # Identity Service-specific state.
         &quot;failureReason&quot;: &quot;A String&quot;, # The reason of the failure.
@@ -1666,7 +1702,7 @@ Args:
         &quot;description&quot;: &quot;A String&quot;, # Description is populated if Code is Failed, explaining why it has failed.
       },
     },
-    &quot;fleetobservability&quot;: { # **FleetObservability**: An empty state left as an example Hub-wide Feature state. # FleetObservability feature state.
+    &quot;fleetobservability&quot;: { # **FleetObservability**: Hub-wide Feature for FleetObservability feature. state. # FleetObservability feature state.
     },
     &quot;state&quot;: { # FeatureState describes the high-level state of a Feature. It may be used to describe a Feature&#x27;s state at the environ-level, or per-membershop, depending on the context. # Output only. The &quot;running state&quot; of the Feature in this Hub.
       &quot;code&quot;: &quot;A String&quot;, # The high-level, machine-readable status of this Feature.
@@ -1740,7 +1776,7 @@ Args:
           &quot;location&quot;: &quot;A String&quot;, # Optional. String indicating the location of the expression for error reporting, e.g. a file name and a position in the file.
           &quot;title&quot;: &quot;A String&quot;, # Optional. Title for the expression, i.e. a short string describing its purpose. This can be used e.g. in UIs which allow to enter the expression.
         },
-        &quot;members&quot;: [ # Specifies the principals requesting access for a Google Cloud resource. `members` can have the following values: * `allUsers`: A special identifier that represents anyone who is on the internet; with or without a Google account. * `allAuthenticatedUsers`: A special identifier that represents anyone who is authenticated with a Google account or a service account. Does not include identities that come from external identity providers (IdPs) through identity federation. * `user:{emailid}`: An email address that represents a specific Google account. For example, `alice@example.com` . * `serviceAccount:{emailid}`: An email address that represents a Google service account. For example, `my-other-app@appspot.gserviceaccount.com`. * `serviceAccount:{projectid}.svc.id.goog[{namespace}/{kubernetes-sa}]`: An identifier for a [Kubernetes service account](https://cloud.google.com/kubernetes-engine/docs/how-to/kubernetes-service-accounts). For example, `my-project.svc.id.goog[my-namespace/my-kubernetes-sa]`. * `group:{emailid}`: An email address that represents a Google group. For example, `admins@example.com`. * `deleted:user:{emailid}?uid={uniqueid}`: An email address (plus unique identifier) representing a user that has been recently deleted. For example, `alice@example.com?uid=123456789012345678901`. If the user is recovered, this value reverts to `user:{emailid}` and the recovered user retains the role in the binding. * `deleted:serviceAccount:{emailid}?uid={uniqueid}`: An email address (plus unique identifier) representing a service account that has been recently deleted. For example, `my-other-app@appspot.gserviceaccount.com?uid=123456789012345678901`. If the service account is undeleted, this value reverts to `serviceAccount:{emailid}` and the undeleted service account retains the role in the binding. * `deleted:group:{emailid}?uid={uniqueid}`: An email address (plus unique identifier) representing a Google group that has been recently deleted. For example, `admins@example.com?uid=123456789012345678901`. If the group is recovered, this value reverts to `group:{emailid}` and the recovered group retains the role in the binding. * `domain:{domain}`: The G Suite domain (primary) that represents all the users of that domain. For example, `google.com` or `example.com`.
+        &quot;members&quot;: [ # Specifies the principals requesting access for a Google Cloud resource. `members` can have the following values: * `allUsers`: A special identifier that represents anyone who is on the internet; with or without a Google account. * `allAuthenticatedUsers`: A special identifier that represents anyone who is authenticated with a Google account or a service account. Does not include identities that come from external identity providers (IdPs) through identity federation. * `user:{emailid}`: An email address that represents a specific Google account. For example, `alice@example.com` . * `serviceAccount:{emailid}`: An email address that represents a Google service account. For example, `my-other-app@appspot.gserviceaccount.com`. * `serviceAccount:{projectid}.svc.id.goog[{namespace}/{kubernetes-sa}]`: An identifier for a [Kubernetes service account](https://cloud.google.com/kubernetes-engine/docs/how-to/kubernetes-service-accounts). For example, `my-project.svc.id.goog[my-namespace/my-kubernetes-sa]`. * `group:{emailid}`: An email address that represents a Google group. For example, `admins@example.com`. * `domain:{domain}`: The G Suite domain (primary) that represents all the users of that domain. For example, `google.com` or `example.com`. * `deleted:user:{emailid}?uid={uniqueid}`: An email address (plus unique identifier) representing a user that has been recently deleted. For example, `alice@example.com?uid=123456789012345678901`. If the user is recovered, this value reverts to `user:{emailid}` and the recovered user retains the role in the binding. * `deleted:serviceAccount:{emailid}?uid={uniqueid}`: An email address (plus unique identifier) representing a service account that has been recently deleted. For example, `my-other-app@appspot.gserviceaccount.com?uid=123456789012345678901`. If the service account is undeleted, this value reverts to `serviceAccount:{emailid}` and the undeleted service account retains the role in the binding. * `deleted:group:{emailid}?uid={uniqueid}`: An email address (plus unique identifier) representing a Google group that has been recently deleted. For example, `admins@example.com?uid=123456789012345678901`. If the group is recovered, this value reverts to `group:{emailid}` and the recovered group retains the role in the binding.
           &quot;A String&quot;,
         ],
         &quot;role&quot;: &quot;A String&quot;, # Role that is assigned to the list of `members`, or principals. For example, `roles/viewer`, `roles/editor`, or `roles/owner`.
@@ -1782,7 +1818,7 @@ Returns:
         &quot;location&quot;: &quot;A String&quot;, # Optional. String indicating the location of the expression for error reporting, e.g. a file name and a position in the file.
         &quot;title&quot;: &quot;A String&quot;, # Optional. Title for the expression, i.e. a short string describing its purpose. This can be used e.g. in UIs which allow to enter the expression.
       },
-      &quot;members&quot;: [ # Specifies the principals requesting access for a Google Cloud resource. `members` can have the following values: * `allUsers`: A special identifier that represents anyone who is on the internet; with or without a Google account. * `allAuthenticatedUsers`: A special identifier that represents anyone who is authenticated with a Google account or a service account. Does not include identities that come from external identity providers (IdPs) through identity federation. * `user:{emailid}`: An email address that represents a specific Google account. For example, `alice@example.com` . * `serviceAccount:{emailid}`: An email address that represents a Google service account. For example, `my-other-app@appspot.gserviceaccount.com`. * `serviceAccount:{projectid}.svc.id.goog[{namespace}/{kubernetes-sa}]`: An identifier for a [Kubernetes service account](https://cloud.google.com/kubernetes-engine/docs/how-to/kubernetes-service-accounts). For example, `my-project.svc.id.goog[my-namespace/my-kubernetes-sa]`. * `group:{emailid}`: An email address that represents a Google group. For example, `admins@example.com`. * `deleted:user:{emailid}?uid={uniqueid}`: An email address (plus unique identifier) representing a user that has been recently deleted. For example, `alice@example.com?uid=123456789012345678901`. If the user is recovered, this value reverts to `user:{emailid}` and the recovered user retains the role in the binding. * `deleted:serviceAccount:{emailid}?uid={uniqueid}`: An email address (plus unique identifier) representing a service account that has been recently deleted. For example, `my-other-app@appspot.gserviceaccount.com?uid=123456789012345678901`. If the service account is undeleted, this value reverts to `serviceAccount:{emailid}` and the undeleted service account retains the role in the binding. * `deleted:group:{emailid}?uid={uniqueid}`: An email address (plus unique identifier) representing a Google group that has been recently deleted. For example, `admins@example.com?uid=123456789012345678901`. If the group is recovered, this value reverts to `group:{emailid}` and the recovered group retains the role in the binding. * `domain:{domain}`: The G Suite domain (primary) that represents all the users of that domain. For example, `google.com` or `example.com`.
+      &quot;members&quot;: [ # Specifies the principals requesting access for a Google Cloud resource. `members` can have the following values: * `allUsers`: A special identifier that represents anyone who is on the internet; with or without a Google account. * `allAuthenticatedUsers`: A special identifier that represents anyone who is authenticated with a Google account or a service account. Does not include identities that come from external identity providers (IdPs) through identity federation. * `user:{emailid}`: An email address that represents a specific Google account. For example, `alice@example.com` . * `serviceAccount:{emailid}`: An email address that represents a Google service account. For example, `my-other-app@appspot.gserviceaccount.com`. * `serviceAccount:{projectid}.svc.id.goog[{namespace}/{kubernetes-sa}]`: An identifier for a [Kubernetes service account](https://cloud.google.com/kubernetes-engine/docs/how-to/kubernetes-service-accounts). For example, `my-project.svc.id.goog[my-namespace/my-kubernetes-sa]`. * `group:{emailid}`: An email address that represents a Google group. For example, `admins@example.com`. * `domain:{domain}`: The G Suite domain (primary) that represents all the users of that domain. For example, `google.com` or `example.com`. * `deleted:user:{emailid}?uid={uniqueid}`: An email address (plus unique identifier) representing a user that has been recently deleted. For example, `alice@example.com?uid=123456789012345678901`. If the user is recovered, this value reverts to `user:{emailid}` and the recovered user retains the role in the binding. * `deleted:serviceAccount:{emailid}?uid={uniqueid}`: An email address (plus unique identifier) representing a service account that has been recently deleted. For example, `my-other-app@appspot.gserviceaccount.com?uid=123456789012345678901`. If the service account is undeleted, this value reverts to `serviceAccount:{emailid}` and the undeleted service account retains the role in the binding. * `deleted:group:{emailid}?uid={uniqueid}`: An email address (plus unique identifier) representing a Google group that has been recently deleted. For example, `admins@example.com?uid=123456789012345678901`. If the group is recovered, this value reverts to `group:{emailid}` and the recovered group retains the role in the binding.
         &quot;A String&quot;,
       ],
       &quot;role&quot;: &quot;A String&quot;, # Role that is assigned to the list of `members`, or principals. For example, `roles/viewer`, `roles/editor`, or `roles/owner`.

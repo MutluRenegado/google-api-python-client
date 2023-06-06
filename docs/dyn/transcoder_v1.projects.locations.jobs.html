@@ -133,6 +133,8 @@ Args:
             &quot;A String&quot;,
           ],
           &quot;codec&quot;: &quot;A String&quot;, # The codec for this audio stream. The default is `aac`. Supported audio codecs: - `aac` - `aac-he` - `aac-he-v2` - `mp3` - `ac3` - `eac3`
+          &quot;displayName&quot;: &quot;A String&quot;, # The name for this particular audio stream that will be added to the HLS/DASH manifest. Not supported in MP4 files.
+          &quot;languageCode&quot;: &quot;A String&quot;, # The BCP-47 language code, such as `en-US` or `sr-Latn`. For more information, see https://www.unicode.org/reports/tr35/#Unicode_locale_identifier. Not supported in MP4 files.
           &quot;mapping&quot;: [ # The mapping for the `Job.edit_list` atoms with audio `EditAtom.inputs`.
             { # The mapping for the `Job.edit_list` atoms with audio `EditAtom.inputs`.
               &quot;atomKey&quot;: &quot;A String&quot;, # Required. The `EditAtom.key` that references the atom with audio inputs in the `Job.edit_list`.
@@ -148,6 +150,8 @@ Args:
         &quot;key&quot;: &quot;A String&quot;, # A unique key for this elementary stream.
         &quot;textStream&quot;: { # Encoding of a text stream. For example, closed captions or subtitles. # Encoding of a text stream. For example, closed captions or subtitles.
           &quot;codec&quot;: &quot;A String&quot;, # The codec for this text stream. The default is `webvtt`. Supported text codecs: - `srt` - `ttml` - `cea608` - `cea708` - `webvtt`
+          &quot;displayName&quot;: &quot;A String&quot;, # The name for this particular text stream that will be added to the HLS/DASH manifest. Not supported in MP4 files.
+          &quot;languageCode&quot;: &quot;A String&quot;, # The BCP-47 language code, such as `en-US` or `sr-Latn`. For more information, see https://www.unicode.org/reports/tr35/#Unicode_locale_identifier. Not supported in MP4 files.
           &quot;mapping&quot;: [ # The mapping for the `Job.edit_list` atoms with text `EditAtom.inputs`.
             { # The mapping for the `Job.edit_list` atoms with text `EditAtom.inputs`.
               &quot;atomKey&quot;: &quot;A String&quot;, # Required. The `EditAtom.key` that references atom with text inputs in the `Job.edit_list`.
@@ -272,7 +276,7 @@ Args:
         &quot;muxStreams&quot;: [ # Required. List of user given `MuxStream.key`s that should appear in this manifest. When `Manifest.type` is `HLS`, a media manifest with name `MuxStream.key` and `.m3u8` extension is generated for each element of the `Manifest.mux_streams`.
           &quot;A String&quot;,
         ],
-        &quot;type&quot;: &quot;A String&quot;, # Required. Type of the manifest, can be `HLS` or `DASH`.
+        &quot;type&quot;: &quot;A String&quot;, # Required. Type of the manifest.
       },
     ],
     &quot;muxStreams&quot;: [ # List of multiplexing settings for output streams.
@@ -317,13 +321,13 @@ Args:
             },
           },
         ],
-        &quot;image&quot;: { # Overlaid jpeg image. # Image overlay.
+        &quot;image&quot;: { # Overlaid image. # Image overlay.
           &quot;alpha&quot;: 3.14, # Target image opacity. Valid values are from `1.0` (solid, default) to `0.0` (transparent), exclusive. Set this to a value greater than `0.0`.
           &quot;resolution&quot;: { # 2D normalized coordinates. Default: `{0.0, 0.0}` # Normalized image resolution, based on output video resolution. Valid values: `0.0`–`1.0`. To respect the original image aspect ratio, set either `x` or `y` to `0.0`. To use the original image resolution, set both `x` and `y` to `0.0`.
             &quot;x&quot;: 3.14, # Normalized x coordinate.
             &quot;y&quot;: 3.14, # Normalized y coordinate.
           },
-          &quot;uri&quot;: &quot;A String&quot;, # Required. URI of the JPEG image in Cloud Storage. For example, `gs://bucket/inputs/image.jpeg`. JPEG is the only supported image type.
+          &quot;uri&quot;: &quot;A String&quot;, # Required. URI of the image in Cloud Storage. For example, `gs://bucket/inputs/image.png`. Only PNG and JPEG images are supported.
         },
       },
     ],
@@ -361,11 +365,12 @@ Args:
   &quot;labels&quot;: { # The labels associated with this job. You can use these to organize and group your jobs.
     &quot;a_key&quot;: &quot;A String&quot;,
   },
+  &quot;mode&quot;: &quot;A String&quot;, # The processing mode of the job. The default is `PROCESSING_MODE_INTERACTIVE`.
   &quot;name&quot;: &quot;A String&quot;, # The resource name of the job. Format: `projects/{project_number}/locations/{location}/jobs/{job}`
   &quot;outputUri&quot;: &quot;A String&quot;, # Input only. Specify the `output_uri` to populate an empty `Job.config.output.uri` or `JobTemplate.config.output.uri` when using template. URI for the output file(s). For example, `gs://my-bucket/outputs/`. See [Supported input and output formats](https://cloud.google.com/transcoder/docs/concepts/supported-input-and-output-formats).
   &quot;startTime&quot;: &quot;A String&quot;, # Output only. The time the transcoding started.
   &quot;state&quot;: &quot;A String&quot;, # Output only. The current state of the job.
-  &quot;templateId&quot;: &quot;A String&quot;, # Input only. Specify the `template_id` to use for populating `Job.config`. The default is `preset/web-hd`. Preset Transcoder templates: - `preset/{preset_id}` - User defined JobTemplate: `{job_template_id}`
+  &quot;templateId&quot;: &quot;A String&quot;, # Input only. Specify the `template_id` to use for populating `Job.config`. The default is `preset/web-hd`, which is the only supported preset. User defined JobTemplate: `{job_template_id}`
   &quot;ttlAfterCompletionDays&quot;: 42, # Job time to live value in days, which will be effective after job completion. Job should be deleted automatically after the given TTL. Enter a value between 1 and 90. The default is 30.
 }
 
@@ -403,6 +408,8 @@ Returns:
             &quot;A String&quot;,
           ],
           &quot;codec&quot;: &quot;A String&quot;, # The codec for this audio stream. The default is `aac`. Supported audio codecs: - `aac` - `aac-he` - `aac-he-v2` - `mp3` - `ac3` - `eac3`
+          &quot;displayName&quot;: &quot;A String&quot;, # The name for this particular audio stream that will be added to the HLS/DASH manifest. Not supported in MP4 files.
+          &quot;languageCode&quot;: &quot;A String&quot;, # The BCP-47 language code, such as `en-US` or `sr-Latn`. For more information, see https://www.unicode.org/reports/tr35/#Unicode_locale_identifier. Not supported in MP4 files.
           &quot;mapping&quot;: [ # The mapping for the `Job.edit_list` atoms with audio `EditAtom.inputs`.
             { # The mapping for the `Job.edit_list` atoms with audio `EditAtom.inputs`.
               &quot;atomKey&quot;: &quot;A String&quot;, # Required. The `EditAtom.key` that references the atom with audio inputs in the `Job.edit_list`.
@@ -418,6 +425,8 @@ Returns:
         &quot;key&quot;: &quot;A String&quot;, # A unique key for this elementary stream.
         &quot;textStream&quot;: { # Encoding of a text stream. For example, closed captions or subtitles. # Encoding of a text stream. For example, closed captions or subtitles.
           &quot;codec&quot;: &quot;A String&quot;, # The codec for this text stream. The default is `webvtt`. Supported text codecs: - `srt` - `ttml` - `cea608` - `cea708` - `webvtt`
+          &quot;displayName&quot;: &quot;A String&quot;, # The name for this particular text stream that will be added to the HLS/DASH manifest. Not supported in MP4 files.
+          &quot;languageCode&quot;: &quot;A String&quot;, # The BCP-47 language code, such as `en-US` or `sr-Latn`. For more information, see https://www.unicode.org/reports/tr35/#Unicode_locale_identifier. Not supported in MP4 files.
           &quot;mapping&quot;: [ # The mapping for the `Job.edit_list` atoms with text `EditAtom.inputs`.
             { # The mapping for the `Job.edit_list` atoms with text `EditAtom.inputs`.
               &quot;atomKey&quot;: &quot;A String&quot;, # Required. The `EditAtom.key` that references atom with text inputs in the `Job.edit_list`.
@@ -542,7 +551,7 @@ Returns:
         &quot;muxStreams&quot;: [ # Required. List of user given `MuxStream.key`s that should appear in this manifest. When `Manifest.type` is `HLS`, a media manifest with name `MuxStream.key` and `.m3u8` extension is generated for each element of the `Manifest.mux_streams`.
           &quot;A String&quot;,
         ],
-        &quot;type&quot;: &quot;A String&quot;, # Required. Type of the manifest, can be `HLS` or `DASH`.
+        &quot;type&quot;: &quot;A String&quot;, # Required. Type of the manifest.
       },
     ],
     &quot;muxStreams&quot;: [ # List of multiplexing settings for output streams.
@@ -587,13 +596,13 @@ Returns:
             },
           },
         ],
-        &quot;image&quot;: { # Overlaid jpeg image. # Image overlay.
+        &quot;image&quot;: { # Overlaid image. # Image overlay.
           &quot;alpha&quot;: 3.14, # Target image opacity. Valid values are from `1.0` (solid, default) to `0.0` (transparent), exclusive. Set this to a value greater than `0.0`.
           &quot;resolution&quot;: { # 2D normalized coordinates. Default: `{0.0, 0.0}` # Normalized image resolution, based on output video resolution. Valid values: `0.0`–`1.0`. To respect the original image aspect ratio, set either `x` or `y` to `0.0`. To use the original image resolution, set both `x` and `y` to `0.0`.
             &quot;x&quot;: 3.14, # Normalized x coordinate.
             &quot;y&quot;: 3.14, # Normalized y coordinate.
           },
-          &quot;uri&quot;: &quot;A String&quot;, # Required. URI of the JPEG image in Cloud Storage. For example, `gs://bucket/inputs/image.jpeg`. JPEG is the only supported image type.
+          &quot;uri&quot;: &quot;A String&quot;, # Required. URI of the image in Cloud Storage. For example, `gs://bucket/inputs/image.png`. Only PNG and JPEG images are supported.
         },
       },
     ],
@@ -631,11 +640,12 @@ Returns:
   &quot;labels&quot;: { # The labels associated with this job. You can use these to organize and group your jobs.
     &quot;a_key&quot;: &quot;A String&quot;,
   },
+  &quot;mode&quot;: &quot;A String&quot;, # The processing mode of the job. The default is `PROCESSING_MODE_INTERACTIVE`.
   &quot;name&quot;: &quot;A String&quot;, # The resource name of the job. Format: `projects/{project_number}/locations/{location}/jobs/{job}`
   &quot;outputUri&quot;: &quot;A String&quot;, # Input only. Specify the `output_uri` to populate an empty `Job.config.output.uri` or `JobTemplate.config.output.uri` when using template. URI for the output file(s). For example, `gs://my-bucket/outputs/`. See [Supported input and output formats](https://cloud.google.com/transcoder/docs/concepts/supported-input-and-output-formats).
   &quot;startTime&quot;: &quot;A String&quot;, # Output only. The time the transcoding started.
   &quot;state&quot;: &quot;A String&quot;, # Output only. The current state of the job.
-  &quot;templateId&quot;: &quot;A String&quot;, # Input only. Specify the `template_id` to use for populating `Job.config`. The default is `preset/web-hd`. Preset Transcoder templates: - `preset/{preset_id}` - User defined JobTemplate: `{job_template_id}`
+  &quot;templateId&quot;: &quot;A String&quot;, # Input only. Specify the `template_id` to use for populating `Job.config`. The default is `preset/web-hd`, which is the only supported preset. User defined JobTemplate: `{job_template_id}`
   &quot;ttlAfterCompletionDays&quot;: 42, # Job time to live value in days, which will be effective after job completion. Job should be deleted automatically after the given TTL. Enter a value between 1 and 90. The default is 30.
 }</pre>
 </div>
@@ -699,6 +709,8 @@ Returns:
             &quot;A String&quot;,
           ],
           &quot;codec&quot;: &quot;A String&quot;, # The codec for this audio stream. The default is `aac`. Supported audio codecs: - `aac` - `aac-he` - `aac-he-v2` - `mp3` - `ac3` - `eac3`
+          &quot;displayName&quot;: &quot;A String&quot;, # The name for this particular audio stream that will be added to the HLS/DASH manifest. Not supported in MP4 files.
+          &quot;languageCode&quot;: &quot;A String&quot;, # The BCP-47 language code, such as `en-US` or `sr-Latn`. For more information, see https://www.unicode.org/reports/tr35/#Unicode_locale_identifier. Not supported in MP4 files.
           &quot;mapping&quot;: [ # The mapping for the `Job.edit_list` atoms with audio `EditAtom.inputs`.
             { # The mapping for the `Job.edit_list` atoms with audio `EditAtom.inputs`.
               &quot;atomKey&quot;: &quot;A String&quot;, # Required. The `EditAtom.key` that references the atom with audio inputs in the `Job.edit_list`.
@@ -714,6 +726,8 @@ Returns:
         &quot;key&quot;: &quot;A String&quot;, # A unique key for this elementary stream.
         &quot;textStream&quot;: { # Encoding of a text stream. For example, closed captions or subtitles. # Encoding of a text stream. For example, closed captions or subtitles.
           &quot;codec&quot;: &quot;A String&quot;, # The codec for this text stream. The default is `webvtt`. Supported text codecs: - `srt` - `ttml` - `cea608` - `cea708` - `webvtt`
+          &quot;displayName&quot;: &quot;A String&quot;, # The name for this particular text stream that will be added to the HLS/DASH manifest. Not supported in MP4 files.
+          &quot;languageCode&quot;: &quot;A String&quot;, # The BCP-47 language code, such as `en-US` or `sr-Latn`. For more information, see https://www.unicode.org/reports/tr35/#Unicode_locale_identifier. Not supported in MP4 files.
           &quot;mapping&quot;: [ # The mapping for the `Job.edit_list` atoms with text `EditAtom.inputs`.
             { # The mapping for the `Job.edit_list` atoms with text `EditAtom.inputs`.
               &quot;atomKey&quot;: &quot;A String&quot;, # Required. The `EditAtom.key` that references atom with text inputs in the `Job.edit_list`.
@@ -838,7 +852,7 @@ Returns:
         &quot;muxStreams&quot;: [ # Required. List of user given `MuxStream.key`s that should appear in this manifest. When `Manifest.type` is `HLS`, a media manifest with name `MuxStream.key` and `.m3u8` extension is generated for each element of the `Manifest.mux_streams`.
           &quot;A String&quot;,
         ],
-        &quot;type&quot;: &quot;A String&quot;, # Required. Type of the manifest, can be `HLS` or `DASH`.
+        &quot;type&quot;: &quot;A String&quot;, # Required. Type of the manifest.
       },
     ],
     &quot;muxStreams&quot;: [ # List of multiplexing settings for output streams.
@@ -883,13 +897,13 @@ Returns:
             },
           },
         ],
-        &quot;image&quot;: { # Overlaid jpeg image. # Image overlay.
+        &quot;image&quot;: { # Overlaid image. # Image overlay.
           &quot;alpha&quot;: 3.14, # Target image opacity. Valid values are from `1.0` (solid, default) to `0.0` (transparent), exclusive. Set this to a value greater than `0.0`.
           &quot;resolution&quot;: { # 2D normalized coordinates. Default: `{0.0, 0.0}` # Normalized image resolution, based on output video resolution. Valid values: `0.0`–`1.0`. To respect the original image aspect ratio, set either `x` or `y` to `0.0`. To use the original image resolution, set both `x` and `y` to `0.0`.
             &quot;x&quot;: 3.14, # Normalized x coordinate.
             &quot;y&quot;: 3.14, # Normalized y coordinate.
           },
-          &quot;uri&quot;: &quot;A String&quot;, # Required. URI of the JPEG image in Cloud Storage. For example, `gs://bucket/inputs/image.jpeg`. JPEG is the only supported image type.
+          &quot;uri&quot;: &quot;A String&quot;, # Required. URI of the image in Cloud Storage. For example, `gs://bucket/inputs/image.png`. Only PNG and JPEG images are supported.
         },
       },
     ],
@@ -927,11 +941,12 @@ Returns:
   &quot;labels&quot;: { # The labels associated with this job. You can use these to organize and group your jobs.
     &quot;a_key&quot;: &quot;A String&quot;,
   },
+  &quot;mode&quot;: &quot;A String&quot;, # The processing mode of the job. The default is `PROCESSING_MODE_INTERACTIVE`.
   &quot;name&quot;: &quot;A String&quot;, # The resource name of the job. Format: `projects/{project_number}/locations/{location}/jobs/{job}`
   &quot;outputUri&quot;: &quot;A String&quot;, # Input only. Specify the `output_uri` to populate an empty `Job.config.output.uri` or `JobTemplate.config.output.uri` when using template. URI for the output file(s). For example, `gs://my-bucket/outputs/`. See [Supported input and output formats](https://cloud.google.com/transcoder/docs/concepts/supported-input-and-output-formats).
   &quot;startTime&quot;: &quot;A String&quot;, # Output only. The time the transcoding started.
   &quot;state&quot;: &quot;A String&quot;, # Output only. The current state of the job.
-  &quot;templateId&quot;: &quot;A String&quot;, # Input only. Specify the `template_id` to use for populating `Job.config`. The default is `preset/web-hd`. Preset Transcoder templates: - `preset/{preset_id}` - User defined JobTemplate: `{job_template_id}`
+  &quot;templateId&quot;: &quot;A String&quot;, # Input only. Specify the `template_id` to use for populating `Job.config`. The default is `preset/web-hd`, which is the only supported preset. User defined JobTemplate: `{job_template_id}`
   &quot;ttlAfterCompletionDays&quot;: 42, # Job time to live value in days, which will be effective after job completion. Job should be deleted automatically after the given TTL. Enter a value between 1 and 90. The default is 30.
 }</pre>
 </div>
@@ -982,6 +997,8 @@ Returns:
                 &quot;A String&quot;,
               ],
               &quot;codec&quot;: &quot;A String&quot;, # The codec for this audio stream. The default is `aac`. Supported audio codecs: - `aac` - `aac-he` - `aac-he-v2` - `mp3` - `ac3` - `eac3`
+              &quot;displayName&quot;: &quot;A String&quot;, # The name for this particular audio stream that will be added to the HLS/DASH manifest. Not supported in MP4 files.
+              &quot;languageCode&quot;: &quot;A String&quot;, # The BCP-47 language code, such as `en-US` or `sr-Latn`. For more information, see https://www.unicode.org/reports/tr35/#Unicode_locale_identifier. Not supported in MP4 files.
               &quot;mapping&quot;: [ # The mapping for the `Job.edit_list` atoms with audio `EditAtom.inputs`.
                 { # The mapping for the `Job.edit_list` atoms with audio `EditAtom.inputs`.
                   &quot;atomKey&quot;: &quot;A String&quot;, # Required. The `EditAtom.key` that references the atom with audio inputs in the `Job.edit_list`.
@@ -997,6 +1014,8 @@ Returns:
             &quot;key&quot;: &quot;A String&quot;, # A unique key for this elementary stream.
             &quot;textStream&quot;: { # Encoding of a text stream. For example, closed captions or subtitles. # Encoding of a text stream. For example, closed captions or subtitles.
               &quot;codec&quot;: &quot;A String&quot;, # The codec for this text stream. The default is `webvtt`. Supported text codecs: - `srt` - `ttml` - `cea608` - `cea708` - `webvtt`
+              &quot;displayName&quot;: &quot;A String&quot;, # The name for this particular text stream that will be added to the HLS/DASH manifest. Not supported in MP4 files.
+              &quot;languageCode&quot;: &quot;A String&quot;, # The BCP-47 language code, such as `en-US` or `sr-Latn`. For more information, see https://www.unicode.org/reports/tr35/#Unicode_locale_identifier. Not supported in MP4 files.
               &quot;mapping&quot;: [ # The mapping for the `Job.edit_list` atoms with text `EditAtom.inputs`.
                 { # The mapping for the `Job.edit_list` atoms with text `EditAtom.inputs`.
                   &quot;atomKey&quot;: &quot;A String&quot;, # Required. The `EditAtom.key` that references atom with text inputs in the `Job.edit_list`.
@@ -1121,7 +1140,7 @@ Returns:
             &quot;muxStreams&quot;: [ # Required. List of user given `MuxStream.key`s that should appear in this manifest. When `Manifest.type` is `HLS`, a media manifest with name `MuxStream.key` and `.m3u8` extension is generated for each element of the `Manifest.mux_streams`.
               &quot;A String&quot;,
             ],
-            &quot;type&quot;: &quot;A String&quot;, # Required. Type of the manifest, can be `HLS` or `DASH`.
+            &quot;type&quot;: &quot;A String&quot;, # Required. Type of the manifest.
           },
         ],
         &quot;muxStreams&quot;: [ # List of multiplexing settings for output streams.
@@ -1166,13 +1185,13 @@ Returns:
                 },
               },
             ],
-            &quot;image&quot;: { # Overlaid jpeg image. # Image overlay.
+            &quot;image&quot;: { # Overlaid image. # Image overlay.
               &quot;alpha&quot;: 3.14, # Target image opacity. Valid values are from `1.0` (solid, default) to `0.0` (transparent), exclusive. Set this to a value greater than `0.0`.
               &quot;resolution&quot;: { # 2D normalized coordinates. Default: `{0.0, 0.0}` # Normalized image resolution, based on output video resolution. Valid values: `0.0`–`1.0`. To respect the original image aspect ratio, set either `x` or `y` to `0.0`. To use the original image resolution, set both `x` and `y` to `0.0`.
                 &quot;x&quot;: 3.14, # Normalized x coordinate.
                 &quot;y&quot;: 3.14, # Normalized y coordinate.
               },
-              &quot;uri&quot;: &quot;A String&quot;, # Required. URI of the JPEG image in Cloud Storage. For example, `gs://bucket/inputs/image.jpeg`. JPEG is the only supported image type.
+              &quot;uri&quot;: &quot;A String&quot;, # Required. URI of the image in Cloud Storage. For example, `gs://bucket/inputs/image.png`. Only PNG and JPEG images are supported.
             },
           },
         ],
@@ -1210,11 +1229,12 @@ Returns:
       &quot;labels&quot;: { # The labels associated with this job. You can use these to organize and group your jobs.
         &quot;a_key&quot;: &quot;A String&quot;,
       },
+      &quot;mode&quot;: &quot;A String&quot;, # The processing mode of the job. The default is `PROCESSING_MODE_INTERACTIVE`.
       &quot;name&quot;: &quot;A String&quot;, # The resource name of the job. Format: `projects/{project_number}/locations/{location}/jobs/{job}`
       &quot;outputUri&quot;: &quot;A String&quot;, # Input only. Specify the `output_uri` to populate an empty `Job.config.output.uri` or `JobTemplate.config.output.uri` when using template. URI for the output file(s). For example, `gs://my-bucket/outputs/`. See [Supported input and output formats](https://cloud.google.com/transcoder/docs/concepts/supported-input-and-output-formats).
       &quot;startTime&quot;: &quot;A String&quot;, # Output only. The time the transcoding started.
       &quot;state&quot;: &quot;A String&quot;, # Output only. The current state of the job.
-      &quot;templateId&quot;: &quot;A String&quot;, # Input only. Specify the `template_id` to use for populating `Job.config`. The default is `preset/web-hd`. Preset Transcoder templates: - `preset/{preset_id}` - User defined JobTemplate: `{job_template_id}`
+      &quot;templateId&quot;: &quot;A String&quot;, # Input only. Specify the `template_id` to use for populating `Job.config`. The default is `preset/web-hd`, which is the only supported preset. User defined JobTemplate: `{job_template_id}`
       &quot;ttlAfterCompletionDays&quot;: 42, # Job time to live value in days, which will be effective after job completion. Job should be deleted automatically after the given TTL. Enter a value between 1 and 90. The default is 30.
     },
   ],

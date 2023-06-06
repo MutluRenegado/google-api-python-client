@@ -184,6 +184,17 @@ Returns:
   &quot;httpErrorStatusCode&quot;: 42, # [Output Only] If the operation fails, this field contains the HTTP error status code that was returned. For example, a `404` means the resource was not found.
   &quot;id&quot;: &quot;A String&quot;, # [Output Only] The unique identifier for the operation. This identifier is defined by the server.
   &quot;insertTime&quot;: &quot;A String&quot;, # [Output Only] The time that this operation was requested. This value is in RFC3339 text format.
+  &quot;instancesBulkInsertOperationMetadata&quot;: {
+    &quot;perLocationStatus&quot;: { # Status information per location (location name is key). Example key: zones/us-central1-a
+      &quot;a_key&quot;: {
+        &quot;createdVmCount&quot;: 42, # [Output Only] Count of VMs successfully created so far.
+        &quot;deletedVmCount&quot;: 42, # [Output Only] Count of VMs that got deleted during rollback.
+        &quot;failedToCreateVmCount&quot;: 42, # [Output Only] Count of VMs that started creating but encountered an error.
+        &quot;status&quot;: &quot;A String&quot;, # [Output Only] Creation status of BulkInsert operation - information if the flow is rolling forward or rolling back.
+        &quot;targetVmCount&quot;: 42, # [Output Only] Count of VMs originally planned to be created.
+      },
+    },
+  },
   &quot;kind&quot;: &quot;compute#operation&quot;, # [Output Only] Type of the resource. Always `compute#operation` for Operation resources.
   &quot;name&quot;: &quot;A String&quot;, # [Output Only] Name of the operation.
   &quot;operationGroupId&quot;: &quot;A String&quot;, # [Output Only] An ID that represents a group of operations, such as when a group of operations results from a `bulkInsert` API request.
@@ -192,6 +203,23 @@ Returns:
   &quot;region&quot;: &quot;A String&quot;, # [Output Only] The URL of the region where the operation resides. Only applicable when performing regional operations.
   &quot;selfLink&quot;: &quot;A String&quot;, # [Output Only] Server-defined URL for the resource.
   &quot;selfLinkWithId&quot;: &quot;A String&quot;, # [Output Only] Server-defined URL for this resource with the resource id.
+  &quot;setCommonInstanceMetadataOperationMetadata&quot;: { # Encapsulates partial completion metadata for SetCommonInstanceMetadata. Will be propagated on Operation.metadata.
+    &quot;clientOperationId&quot;: &quot;A String&quot;,
+    &quot;perLocationOperations&quot;: {
+      &quot;a_key&quot;: {
+        &quot;error&quot;: { # The `Status` type defines a logical error model that is suitable for different programming environments, including REST APIs and RPC APIs. It is used by [gRPC](https://github.com/grpc). Each `Status` message contains three pieces of data: error code, error message, and error details. You can find out more about this error model and how to work with it in the [API Design Guide](https://cloud.google.com/apis/design/errors).
+          &quot;code&quot;: 42, # The status code, which should be an enum value of google.rpc.Code.
+          &quot;details&quot;: [ # A list of messages that carry the error details. There is a common set of message types for APIs to use.
+            {
+              &quot;a_key&quot;: &quot;&quot;, # Properties of the object. Contains field @type with type URL.
+            },
+          ],
+          &quot;message&quot;: &quot;A String&quot;, # A developer-facing error message, which should be in English. Any user-facing error message should be localized and sent in the google.rpc.Status.details field, or localized by the client.
+        },
+        &quot;state&quot;: &quot;A String&quot;,
+      },
+    },
+  },
   &quot;startTime&quot;: &quot;A String&quot;, # [Output Only] The time that this operation was started by the server. This value is in RFC3339 text format.
   &quot;status&quot;: &quot;A String&quot;, # [Output Only] The status of the operation, which can be one of the following: `PENDING`, `RUNNING`, or `DONE`.
   &quot;statusMessage&quot;: &quot;A String&quot;, # [Output Only] An optional textual description of the current status of the operation.
@@ -229,8 +257,11 @@ Args:
 Returns:
   An object of the form:
 
-    { # Represents an Interconnect resource. An Interconnect resource is a dedicated connection between the GCP network and your on-premises network. For more information, read the Dedicated Interconnect Overview.
+    { # Represents an Interconnect resource. An Interconnect resource is a dedicated connection between the Google Cloud network and your on-premises network. For more information, read the Dedicated Interconnect Overview.
   &quot;adminEnabled&quot;: True or False, # Administrative status of the interconnect. When this is set to true, the Interconnect is functional and can carry traffic. When set to false, no packets can be carried over the interconnect and no BGP routes are exchanged over it. By default, the status is set to true.
+  &quot;availableFeatures&quot;: [ # [Output only] List of features available for this interconnect, which can take one of the following values: - MACSEC If present then the interconnect was created on MACsec capable hardware ports. If not present then the interconnect is provisioned on non-MACsec capable ports and MACsec enablement will fail.
+    &quot;A String&quot;,
+  ],
   &quot;circuitInfos&quot;: [ # [Output Only] A list of CircuitInfo objects, that describe the individual circuits in this LAG.
     { # Describes a single physical circuit between the Customer and Google. CircuitInfo objects are created by Google, so all fields are output only.
       &quot;customerDemarcId&quot;: &quot;A String&quot;, # Customer-side demarc ID for this circuit.
@@ -285,8 +316,11 @@ Returns:
   &quot;peerIpAddress&quot;: &quot;A String&quot;, # [Output Only] IP address configured on the customer side of the Interconnect link. The customer should configure this IP address during turnup when prompted by Google NOC. This can be used only for ping tests.
   &quot;provisionedLinkCount&quot;: 42, # [Output Only] Number of links actually provisioned in this interconnect.
   &quot;remoteLocation&quot;: &quot;A String&quot;, # Indicates that this is a Cross-Cloud Interconnect. This field specifies the location outside of Google&#x27;s network that the interconnect is connected to.
+  &quot;requestedFeatures&quot;: [ # Optional. List of features requested for this interconnect, which can take one of the following values: - MACSEC If specified then the interconnect will be created on MACsec capable hardware ports. If not specified, the default value is false, which will allocate non-MACsec capable ports first if available. This parameter can only be provided during interconnect INSERT and cannot be changed using interconnect PATCH. Please review Interconnect Pricing for implications on enabling this flag.
+    &quot;A String&quot;,
+  ],
   &quot;requestedLinkCount&quot;: 42, # Target number of physical links in the link bundle, as requested by the customer.
-  &quot;satisfiesPzs&quot;: True or False, # [Output Only] Set to true if the resource satisfies the zone separation organization policy constraints and false otherwise. Defaults to false if the field is not present.
+  &quot;satisfiesPzs&quot;: True or False, # [Output Only] Reserved for future use.
   &quot;selfLink&quot;: &quot;A String&quot;, # [Output Only] Server-defined URL for the resource.
   &quot;selfLinkWithId&quot;: &quot;A String&quot;, # [Output Only] Server-defined URL for this resource with the resource id.
   &quot;state&quot;: &quot;A String&quot;, # [Output Only] The current state of Interconnect functionality, which can take one of the following values: - ACTIVE: The Interconnect is valid, turned up and ready to use. Attachments may be provisioned on this Interconnect. - UNPROVISIONED: The Interconnect has not completed turnup. No attachments may be provisioned on this Interconnect. - UNDER_MAINTENANCE: The Interconnect is undergoing internal maintenance. No attachments may be provisioned or updated on this Interconnect.
@@ -396,7 +430,7 @@ Returns:
         &quot;location&quot;: &quot;A String&quot;, # Optional. String indicating the location of the expression for error reporting, e.g. a file name and a position in the file.
         &quot;title&quot;: &quot;A String&quot;, # Optional. Title for the expression, i.e. a short string describing its purpose. This can be used e.g. in UIs which allow to enter the expression.
       },
-      &quot;members&quot;: [ # Specifies the principals requesting access for a Google Cloud resource. `members` can have the following values: * `allUsers`: A special identifier that represents anyone who is on the internet; with or without a Google account. * `allAuthenticatedUsers`: A special identifier that represents anyone who is authenticated with a Google account or a service account. Does not include identities that come from external identity providers (IdPs) through identity federation. * `user:{emailid}`: An email address that represents a specific Google account. For example, `alice@example.com` . * `serviceAccount:{emailid}`: An email address that represents a Google service account. For example, `my-other-app@appspot.gserviceaccount.com`. * `serviceAccount:{projectid}.svc.id.goog[{namespace}/{kubernetes-sa}]`: An identifier for a [Kubernetes service account](https://cloud.google.com/kubernetes-engine/docs/how-to/kubernetes-service-accounts). For example, `my-project.svc.id.goog[my-namespace/my-kubernetes-sa]`. * `group:{emailid}`: An email address that represents a Google group. For example, `admins@example.com`. * `deleted:user:{emailid}?uid={uniqueid}`: An email address (plus unique identifier) representing a user that has been recently deleted. For example, `alice@example.com?uid=123456789012345678901`. If the user is recovered, this value reverts to `user:{emailid}` and the recovered user retains the role in the binding. * `deleted:serviceAccount:{emailid}?uid={uniqueid}`: An email address (plus unique identifier) representing a service account that has been recently deleted. For example, `my-other-app@appspot.gserviceaccount.com?uid=123456789012345678901`. If the service account is undeleted, this value reverts to `serviceAccount:{emailid}` and the undeleted service account retains the role in the binding. * `deleted:group:{emailid}?uid={uniqueid}`: An email address (plus unique identifier) representing a Google group that has been recently deleted. For example, `admins@example.com?uid=123456789012345678901`. If the group is recovered, this value reverts to `group:{emailid}` and the recovered group retains the role in the binding. * `domain:{domain}`: The G Suite domain (primary) that represents all the users of that domain. For example, `google.com` or `example.com`.
+      &quot;members&quot;: [ # Specifies the principals requesting access for a Google Cloud resource. `members` can have the following values: * `allUsers`: A special identifier that represents anyone who is on the internet; with or without a Google account. * `allAuthenticatedUsers`: A special identifier that represents anyone who is authenticated with a Google account or a service account. Does not include identities that come from external identity providers (IdPs) through identity federation. * `user:{emailid}`: An email address that represents a specific Google account. For example, `alice@example.com` . * `serviceAccount:{emailid}`: An email address that represents a Google service account. For example, `my-other-app@appspot.gserviceaccount.com`. * `serviceAccount:{projectid}.svc.id.goog[{namespace}/{kubernetes-sa}]`: An identifier for a [Kubernetes service account](https://cloud.google.com/kubernetes-engine/docs/how-to/kubernetes-service-accounts). For example, `my-project.svc.id.goog[my-namespace/my-kubernetes-sa]`. * `group:{emailid}`: An email address that represents a Google group. For example, `admins@example.com`. * `domain:{domain}`: The G Suite domain (primary) that represents all the users of that domain. For example, `google.com` or `example.com`. * `deleted:user:{emailid}?uid={uniqueid}`: An email address (plus unique identifier) representing a user that has been recently deleted. For example, `alice@example.com?uid=123456789012345678901`. If the user is recovered, this value reverts to `user:{emailid}` and the recovered user retains the role in the binding. * `deleted:serviceAccount:{emailid}?uid={uniqueid}`: An email address (plus unique identifier) representing a service account that has been recently deleted. For example, `my-other-app@appspot.gserviceaccount.com?uid=123456789012345678901`. If the service account is undeleted, this value reverts to `serviceAccount:{emailid}` and the undeleted service account retains the role in the binding. * `deleted:group:{emailid}?uid={uniqueid}`: An email address (plus unique identifier) representing a Google group that has been recently deleted. For example, `admins@example.com?uid=123456789012345678901`. If the group is recovered, this value reverts to `group:{emailid}` and the recovered group retains the role in the binding.
         &quot;A String&quot;,
       ],
       &quot;role&quot;: &quot;A String&quot;, # Role that is assigned to the list of `members`, or principals. For example, `roles/viewer`, `roles/editor`, or `roles/owner`.
@@ -495,8 +529,11 @@ Args:
   body: object, The request body.
     The object takes the form of:
 
-{ # Represents an Interconnect resource. An Interconnect resource is a dedicated connection between the GCP network and your on-premises network. For more information, read the Dedicated Interconnect Overview.
+{ # Represents an Interconnect resource. An Interconnect resource is a dedicated connection between the Google Cloud network and your on-premises network. For more information, read the Dedicated Interconnect Overview.
   &quot;adminEnabled&quot;: True or False, # Administrative status of the interconnect. When this is set to true, the Interconnect is functional and can carry traffic. When set to false, no packets can be carried over the interconnect and no BGP routes are exchanged over it. By default, the status is set to true.
+  &quot;availableFeatures&quot;: [ # [Output only] List of features available for this interconnect, which can take one of the following values: - MACSEC If present then the interconnect was created on MACsec capable hardware ports. If not present then the interconnect is provisioned on non-MACsec capable ports and MACsec enablement will fail.
+    &quot;A String&quot;,
+  ],
   &quot;circuitInfos&quot;: [ # [Output Only] A list of CircuitInfo objects, that describe the individual circuits in this LAG.
     { # Describes a single physical circuit between the Customer and Google. CircuitInfo objects are created by Google, so all fields are output only.
       &quot;customerDemarcId&quot;: &quot;A String&quot;, # Customer-side demarc ID for this circuit.
@@ -551,8 +588,11 @@ Args:
   &quot;peerIpAddress&quot;: &quot;A String&quot;, # [Output Only] IP address configured on the customer side of the Interconnect link. The customer should configure this IP address during turnup when prompted by Google NOC. This can be used only for ping tests.
   &quot;provisionedLinkCount&quot;: 42, # [Output Only] Number of links actually provisioned in this interconnect.
   &quot;remoteLocation&quot;: &quot;A String&quot;, # Indicates that this is a Cross-Cloud Interconnect. This field specifies the location outside of Google&#x27;s network that the interconnect is connected to.
+  &quot;requestedFeatures&quot;: [ # Optional. List of features requested for this interconnect, which can take one of the following values: - MACSEC If specified then the interconnect will be created on MACsec capable hardware ports. If not specified, the default value is false, which will allocate non-MACsec capable ports first if available. This parameter can only be provided during interconnect INSERT and cannot be changed using interconnect PATCH. Please review Interconnect Pricing for implications on enabling this flag.
+    &quot;A String&quot;,
+  ],
   &quot;requestedLinkCount&quot;: 42, # Target number of physical links in the link bundle, as requested by the customer.
-  &quot;satisfiesPzs&quot;: True or False, # [Output Only] Set to true if the resource satisfies the zone separation organization policy constraints and false otherwise. Defaults to false if the field is not present.
+  &quot;satisfiesPzs&quot;: True or False, # [Output Only] Reserved for future use.
   &quot;selfLink&quot;: &quot;A String&quot;, # [Output Only] Server-defined URL for the resource.
   &quot;selfLinkWithId&quot;: &quot;A String&quot;, # [Output Only] Server-defined URL for this resource with the resource id.
   &quot;state&quot;: &quot;A String&quot;, # [Output Only] The current state of Interconnect functionality, which can take one of the following values: - ACTIVE: The Interconnect is valid, turned up and ready to use. Attachments may be provisioned on this Interconnect. - UNPROVISIONED: The Interconnect has not completed turnup. No attachments may be provisioned on this Interconnect. - UNDER_MAINTENANCE: The Interconnect is undergoing internal maintenance. No attachments may be provisioned or updated on this Interconnect.
@@ -616,6 +656,17 @@ Returns:
   &quot;httpErrorStatusCode&quot;: 42, # [Output Only] If the operation fails, this field contains the HTTP error status code that was returned. For example, a `404` means the resource was not found.
   &quot;id&quot;: &quot;A String&quot;, # [Output Only] The unique identifier for the operation. This identifier is defined by the server.
   &quot;insertTime&quot;: &quot;A String&quot;, # [Output Only] The time that this operation was requested. This value is in RFC3339 text format.
+  &quot;instancesBulkInsertOperationMetadata&quot;: {
+    &quot;perLocationStatus&quot;: { # Status information per location (location name is key). Example key: zones/us-central1-a
+      &quot;a_key&quot;: {
+        &quot;createdVmCount&quot;: 42, # [Output Only] Count of VMs successfully created so far.
+        &quot;deletedVmCount&quot;: 42, # [Output Only] Count of VMs that got deleted during rollback.
+        &quot;failedToCreateVmCount&quot;: 42, # [Output Only] Count of VMs that started creating but encountered an error.
+        &quot;status&quot;: &quot;A String&quot;, # [Output Only] Creation status of BulkInsert operation - information if the flow is rolling forward or rolling back.
+        &quot;targetVmCount&quot;: 42, # [Output Only] Count of VMs originally planned to be created.
+      },
+    },
+  },
   &quot;kind&quot;: &quot;compute#operation&quot;, # [Output Only] Type of the resource. Always `compute#operation` for Operation resources.
   &quot;name&quot;: &quot;A String&quot;, # [Output Only] Name of the operation.
   &quot;operationGroupId&quot;: &quot;A String&quot;, # [Output Only] An ID that represents a group of operations, such as when a group of operations results from a `bulkInsert` API request.
@@ -624,6 +675,23 @@ Returns:
   &quot;region&quot;: &quot;A String&quot;, # [Output Only] The URL of the region where the operation resides. Only applicable when performing regional operations.
   &quot;selfLink&quot;: &quot;A String&quot;, # [Output Only] Server-defined URL for the resource.
   &quot;selfLinkWithId&quot;: &quot;A String&quot;, # [Output Only] Server-defined URL for this resource with the resource id.
+  &quot;setCommonInstanceMetadataOperationMetadata&quot;: { # Encapsulates partial completion metadata for SetCommonInstanceMetadata. Will be propagated on Operation.metadata.
+    &quot;clientOperationId&quot;: &quot;A String&quot;,
+    &quot;perLocationOperations&quot;: {
+      &quot;a_key&quot;: {
+        &quot;error&quot;: { # The `Status` type defines a logical error model that is suitable for different programming environments, including REST APIs and RPC APIs. It is used by [gRPC](https://github.com/grpc). Each `Status` message contains three pieces of data: error code, error message, and error details. You can find out more about this error model and how to work with it in the [API Design Guide](https://cloud.google.com/apis/design/errors).
+          &quot;code&quot;: 42, # The status code, which should be an enum value of google.rpc.Code.
+          &quot;details&quot;: [ # A list of messages that carry the error details. There is a common set of message types for APIs to use.
+            {
+              &quot;a_key&quot;: &quot;&quot;, # Properties of the object. Contains field @type with type URL.
+            },
+          ],
+          &quot;message&quot;: &quot;A String&quot;, # A developer-facing error message, which should be in English. Any user-facing error message should be localized and sent in the google.rpc.Status.details field, or localized by the client.
+        },
+        &quot;state&quot;: &quot;A String&quot;,
+      },
+    },
+  },
   &quot;startTime&quot;: &quot;A String&quot;, # [Output Only] The time that this operation was started by the server. This value is in RFC3339 text format.
   &quot;status&quot;: &quot;A String&quot;, # [Output Only] The status of the operation, which can be one of the following: `PENDING`, `RUNNING`, or `DONE`.
   &quot;statusMessage&quot;: &quot;A String&quot;, # [Output Only] An optional textual description of the current status of the operation.
@@ -668,8 +736,11 @@ Returns:
     { # Response to the list request, and contains a list of interconnects.
   &quot;id&quot;: &quot;A String&quot;, # [Output Only] Unique identifier for the resource; defined by the server.
   &quot;items&quot;: [ # A list of Interconnect resources.
-    { # Represents an Interconnect resource. An Interconnect resource is a dedicated connection between the GCP network and your on-premises network. For more information, read the Dedicated Interconnect Overview.
+    { # Represents an Interconnect resource. An Interconnect resource is a dedicated connection between the Google Cloud network and your on-premises network. For more information, read the Dedicated Interconnect Overview.
       &quot;adminEnabled&quot;: True or False, # Administrative status of the interconnect. When this is set to true, the Interconnect is functional and can carry traffic. When set to false, no packets can be carried over the interconnect and no BGP routes are exchanged over it. By default, the status is set to true.
+      &quot;availableFeatures&quot;: [ # [Output only] List of features available for this interconnect, which can take one of the following values: - MACSEC If present then the interconnect was created on MACsec capable hardware ports. If not present then the interconnect is provisioned on non-MACsec capable ports and MACsec enablement will fail.
+        &quot;A String&quot;,
+      ],
       &quot;circuitInfos&quot;: [ # [Output Only] A list of CircuitInfo objects, that describe the individual circuits in this LAG.
         { # Describes a single physical circuit between the Customer and Google. CircuitInfo objects are created by Google, so all fields are output only.
           &quot;customerDemarcId&quot;: &quot;A String&quot;, # Customer-side demarc ID for this circuit.
@@ -724,8 +795,11 @@ Returns:
       &quot;peerIpAddress&quot;: &quot;A String&quot;, # [Output Only] IP address configured on the customer side of the Interconnect link. The customer should configure this IP address during turnup when prompted by Google NOC. This can be used only for ping tests.
       &quot;provisionedLinkCount&quot;: 42, # [Output Only] Number of links actually provisioned in this interconnect.
       &quot;remoteLocation&quot;: &quot;A String&quot;, # Indicates that this is a Cross-Cloud Interconnect. This field specifies the location outside of Google&#x27;s network that the interconnect is connected to.
+      &quot;requestedFeatures&quot;: [ # Optional. List of features requested for this interconnect, which can take one of the following values: - MACSEC If specified then the interconnect will be created on MACsec capable hardware ports. If not specified, the default value is false, which will allocate non-MACsec capable ports first if available. This parameter can only be provided during interconnect INSERT and cannot be changed using interconnect PATCH. Please review Interconnect Pricing for implications on enabling this flag.
+        &quot;A String&quot;,
+      ],
       &quot;requestedLinkCount&quot;: 42, # Target number of physical links in the link bundle, as requested by the customer.
-      &quot;satisfiesPzs&quot;: True or False, # [Output Only] Set to true if the resource satisfies the zone separation organization policy constraints and false otherwise. Defaults to false if the field is not present.
+      &quot;satisfiesPzs&quot;: True or False, # [Output Only] Reserved for future use.
       &quot;selfLink&quot;: &quot;A String&quot;, # [Output Only] Server-defined URL for the resource.
       &quot;selfLinkWithId&quot;: &quot;A String&quot;, # [Output Only] Server-defined URL for this resource with the resource id.
       &quot;state&quot;: &quot;A String&quot;, # [Output Only] The current state of Interconnect functionality, which can take one of the following values: - ACTIVE: The Interconnect is valid, turned up and ready to use. Attachments may be provisioned on this Interconnect. - UNPROVISIONED: The Interconnect has not completed turnup. No attachments may be provisioned on this Interconnect. - UNDER_MAINTENANCE: The Interconnect is undergoing internal maintenance. No attachments may be provisioned or updated on this Interconnect.
@@ -771,8 +845,11 @@ Args:
   body: object, The request body.
     The object takes the form of:
 
-{ # Represents an Interconnect resource. An Interconnect resource is a dedicated connection between the GCP network and your on-premises network. For more information, read the Dedicated Interconnect Overview.
+{ # Represents an Interconnect resource. An Interconnect resource is a dedicated connection between the Google Cloud network and your on-premises network. For more information, read the Dedicated Interconnect Overview.
   &quot;adminEnabled&quot;: True or False, # Administrative status of the interconnect. When this is set to true, the Interconnect is functional and can carry traffic. When set to false, no packets can be carried over the interconnect and no BGP routes are exchanged over it. By default, the status is set to true.
+  &quot;availableFeatures&quot;: [ # [Output only] List of features available for this interconnect, which can take one of the following values: - MACSEC If present then the interconnect was created on MACsec capable hardware ports. If not present then the interconnect is provisioned on non-MACsec capable ports and MACsec enablement will fail.
+    &quot;A String&quot;,
+  ],
   &quot;circuitInfos&quot;: [ # [Output Only] A list of CircuitInfo objects, that describe the individual circuits in this LAG.
     { # Describes a single physical circuit between the Customer and Google. CircuitInfo objects are created by Google, so all fields are output only.
       &quot;customerDemarcId&quot;: &quot;A String&quot;, # Customer-side demarc ID for this circuit.
@@ -827,8 +904,11 @@ Args:
   &quot;peerIpAddress&quot;: &quot;A String&quot;, # [Output Only] IP address configured on the customer side of the Interconnect link. The customer should configure this IP address during turnup when prompted by Google NOC. This can be used only for ping tests.
   &quot;provisionedLinkCount&quot;: 42, # [Output Only] Number of links actually provisioned in this interconnect.
   &quot;remoteLocation&quot;: &quot;A String&quot;, # Indicates that this is a Cross-Cloud Interconnect. This field specifies the location outside of Google&#x27;s network that the interconnect is connected to.
+  &quot;requestedFeatures&quot;: [ # Optional. List of features requested for this interconnect, which can take one of the following values: - MACSEC If specified then the interconnect will be created on MACsec capable hardware ports. If not specified, the default value is false, which will allocate non-MACsec capable ports first if available. This parameter can only be provided during interconnect INSERT and cannot be changed using interconnect PATCH. Please review Interconnect Pricing for implications on enabling this flag.
+    &quot;A String&quot;,
+  ],
   &quot;requestedLinkCount&quot;: 42, # Target number of physical links in the link bundle, as requested by the customer.
-  &quot;satisfiesPzs&quot;: True or False, # [Output Only] Set to true if the resource satisfies the zone separation organization policy constraints and false otherwise. Defaults to false if the field is not present.
+  &quot;satisfiesPzs&quot;: True or False, # [Output Only] Reserved for future use.
   &quot;selfLink&quot;: &quot;A String&quot;, # [Output Only] Server-defined URL for the resource.
   &quot;selfLinkWithId&quot;: &quot;A String&quot;, # [Output Only] Server-defined URL for this resource with the resource id.
   &quot;state&quot;: &quot;A String&quot;, # [Output Only] The current state of Interconnect functionality, which can take one of the following values: - ACTIVE: The Interconnect is valid, turned up and ready to use. Attachments may be provisioned on this Interconnect. - UNPROVISIONED: The Interconnect has not completed turnup. No attachments may be provisioned on this Interconnect. - UNDER_MAINTENANCE: The Interconnect is undergoing internal maintenance. No attachments may be provisioned or updated on this Interconnect.
@@ -892,6 +972,17 @@ Returns:
   &quot;httpErrorStatusCode&quot;: 42, # [Output Only] If the operation fails, this field contains the HTTP error status code that was returned. For example, a `404` means the resource was not found.
   &quot;id&quot;: &quot;A String&quot;, # [Output Only] The unique identifier for the operation. This identifier is defined by the server.
   &quot;insertTime&quot;: &quot;A String&quot;, # [Output Only] The time that this operation was requested. This value is in RFC3339 text format.
+  &quot;instancesBulkInsertOperationMetadata&quot;: {
+    &quot;perLocationStatus&quot;: { # Status information per location (location name is key). Example key: zones/us-central1-a
+      &quot;a_key&quot;: {
+        &quot;createdVmCount&quot;: 42, # [Output Only] Count of VMs successfully created so far.
+        &quot;deletedVmCount&quot;: 42, # [Output Only] Count of VMs that got deleted during rollback.
+        &quot;failedToCreateVmCount&quot;: 42, # [Output Only] Count of VMs that started creating but encountered an error.
+        &quot;status&quot;: &quot;A String&quot;, # [Output Only] Creation status of BulkInsert operation - information if the flow is rolling forward or rolling back.
+        &quot;targetVmCount&quot;: 42, # [Output Only] Count of VMs originally planned to be created.
+      },
+    },
+  },
   &quot;kind&quot;: &quot;compute#operation&quot;, # [Output Only] Type of the resource. Always `compute#operation` for Operation resources.
   &quot;name&quot;: &quot;A String&quot;, # [Output Only] Name of the operation.
   &quot;operationGroupId&quot;: &quot;A String&quot;, # [Output Only] An ID that represents a group of operations, such as when a group of operations results from a `bulkInsert` API request.
@@ -900,6 +991,23 @@ Returns:
   &quot;region&quot;: &quot;A String&quot;, # [Output Only] The URL of the region where the operation resides. Only applicable when performing regional operations.
   &quot;selfLink&quot;: &quot;A String&quot;, # [Output Only] Server-defined URL for the resource.
   &quot;selfLinkWithId&quot;: &quot;A String&quot;, # [Output Only] Server-defined URL for this resource with the resource id.
+  &quot;setCommonInstanceMetadataOperationMetadata&quot;: { # Encapsulates partial completion metadata for SetCommonInstanceMetadata. Will be propagated on Operation.metadata.
+    &quot;clientOperationId&quot;: &quot;A String&quot;,
+    &quot;perLocationOperations&quot;: {
+      &quot;a_key&quot;: {
+        &quot;error&quot;: { # The `Status` type defines a logical error model that is suitable for different programming environments, including REST APIs and RPC APIs. It is used by [gRPC](https://github.com/grpc). Each `Status` message contains three pieces of data: error code, error message, and error details. You can find out more about this error model and how to work with it in the [API Design Guide](https://cloud.google.com/apis/design/errors).
+          &quot;code&quot;: 42, # The status code, which should be an enum value of google.rpc.Code.
+          &quot;details&quot;: [ # A list of messages that carry the error details. There is a common set of message types for APIs to use.
+            {
+              &quot;a_key&quot;: &quot;&quot;, # Properties of the object. Contains field @type with type URL.
+            },
+          ],
+          &quot;message&quot;: &quot;A String&quot;, # A developer-facing error message, which should be in English. Any user-facing error message should be localized and sent in the google.rpc.Status.details field, or localized by the client.
+        },
+        &quot;state&quot;: &quot;A String&quot;,
+      },
+    },
+  },
   &quot;startTime&quot;: &quot;A String&quot;, # [Output Only] The time that this operation was started by the server. This value is in RFC3339 text format.
   &quot;status&quot;: &quot;A String&quot;, # [Output Only] The status of the operation, which can be one of the following: `PENDING`, `RUNNING`, or `DONE`.
   &quot;statusMessage&quot;: &quot;A String&quot;, # [Output Only] An optional textual description of the current status of the operation.
@@ -942,7 +1050,7 @@ Args:
         &quot;location&quot;: &quot;A String&quot;, # Optional. String indicating the location of the expression for error reporting, e.g. a file name and a position in the file.
         &quot;title&quot;: &quot;A String&quot;, # Optional. Title for the expression, i.e. a short string describing its purpose. This can be used e.g. in UIs which allow to enter the expression.
       },
-      &quot;members&quot;: [ # Specifies the principals requesting access for a Google Cloud resource. `members` can have the following values: * `allUsers`: A special identifier that represents anyone who is on the internet; with or without a Google account. * `allAuthenticatedUsers`: A special identifier that represents anyone who is authenticated with a Google account or a service account. Does not include identities that come from external identity providers (IdPs) through identity federation. * `user:{emailid}`: An email address that represents a specific Google account. For example, `alice@example.com` . * `serviceAccount:{emailid}`: An email address that represents a Google service account. For example, `my-other-app@appspot.gserviceaccount.com`. * `serviceAccount:{projectid}.svc.id.goog[{namespace}/{kubernetes-sa}]`: An identifier for a [Kubernetes service account](https://cloud.google.com/kubernetes-engine/docs/how-to/kubernetes-service-accounts). For example, `my-project.svc.id.goog[my-namespace/my-kubernetes-sa]`. * `group:{emailid}`: An email address that represents a Google group. For example, `admins@example.com`. * `deleted:user:{emailid}?uid={uniqueid}`: An email address (plus unique identifier) representing a user that has been recently deleted. For example, `alice@example.com?uid=123456789012345678901`. If the user is recovered, this value reverts to `user:{emailid}` and the recovered user retains the role in the binding. * `deleted:serviceAccount:{emailid}?uid={uniqueid}`: An email address (plus unique identifier) representing a service account that has been recently deleted. For example, `my-other-app@appspot.gserviceaccount.com?uid=123456789012345678901`. If the service account is undeleted, this value reverts to `serviceAccount:{emailid}` and the undeleted service account retains the role in the binding. * `deleted:group:{emailid}?uid={uniqueid}`: An email address (plus unique identifier) representing a Google group that has been recently deleted. For example, `admins@example.com?uid=123456789012345678901`. If the group is recovered, this value reverts to `group:{emailid}` and the recovered group retains the role in the binding. * `domain:{domain}`: The G Suite domain (primary) that represents all the users of that domain. For example, `google.com` or `example.com`.
+      &quot;members&quot;: [ # Specifies the principals requesting access for a Google Cloud resource. `members` can have the following values: * `allUsers`: A special identifier that represents anyone who is on the internet; with or without a Google account. * `allAuthenticatedUsers`: A special identifier that represents anyone who is authenticated with a Google account or a service account. Does not include identities that come from external identity providers (IdPs) through identity federation. * `user:{emailid}`: An email address that represents a specific Google account. For example, `alice@example.com` . * `serviceAccount:{emailid}`: An email address that represents a Google service account. For example, `my-other-app@appspot.gserviceaccount.com`. * `serviceAccount:{projectid}.svc.id.goog[{namespace}/{kubernetes-sa}]`: An identifier for a [Kubernetes service account](https://cloud.google.com/kubernetes-engine/docs/how-to/kubernetes-service-accounts). For example, `my-project.svc.id.goog[my-namespace/my-kubernetes-sa]`. * `group:{emailid}`: An email address that represents a Google group. For example, `admins@example.com`. * `domain:{domain}`: The G Suite domain (primary) that represents all the users of that domain. For example, `google.com` or `example.com`. * `deleted:user:{emailid}?uid={uniqueid}`: An email address (plus unique identifier) representing a user that has been recently deleted. For example, `alice@example.com?uid=123456789012345678901`. If the user is recovered, this value reverts to `user:{emailid}` and the recovered user retains the role in the binding. * `deleted:serviceAccount:{emailid}?uid={uniqueid}`: An email address (plus unique identifier) representing a service account that has been recently deleted. For example, `my-other-app@appspot.gserviceaccount.com?uid=123456789012345678901`. If the service account is undeleted, this value reverts to `serviceAccount:{emailid}` and the undeleted service account retains the role in the binding. * `deleted:group:{emailid}?uid={uniqueid}`: An email address (plus unique identifier) representing a Google group that has been recently deleted. For example, `admins@example.com?uid=123456789012345678901`. If the group is recovered, this value reverts to `group:{emailid}` and the recovered group retains the role in the binding.
         &quot;A String&quot;,
       ],
       &quot;role&quot;: &quot;A String&quot;, # Role that is assigned to the list of `members`, or principals. For example, `roles/viewer`, `roles/editor`, or `roles/owner`.
@@ -976,7 +1084,7 @@ Args:
           &quot;location&quot;: &quot;A String&quot;, # Optional. String indicating the location of the expression for error reporting, e.g. a file name and a position in the file.
           &quot;title&quot;: &quot;A String&quot;, # Optional. Title for the expression, i.e. a short string describing its purpose. This can be used e.g. in UIs which allow to enter the expression.
         },
-        &quot;members&quot;: [ # Specifies the principals requesting access for a Google Cloud resource. `members` can have the following values: * `allUsers`: A special identifier that represents anyone who is on the internet; with or without a Google account. * `allAuthenticatedUsers`: A special identifier that represents anyone who is authenticated with a Google account or a service account. Does not include identities that come from external identity providers (IdPs) through identity federation. * `user:{emailid}`: An email address that represents a specific Google account. For example, `alice@example.com` . * `serviceAccount:{emailid}`: An email address that represents a Google service account. For example, `my-other-app@appspot.gserviceaccount.com`. * `serviceAccount:{projectid}.svc.id.goog[{namespace}/{kubernetes-sa}]`: An identifier for a [Kubernetes service account](https://cloud.google.com/kubernetes-engine/docs/how-to/kubernetes-service-accounts). For example, `my-project.svc.id.goog[my-namespace/my-kubernetes-sa]`. * `group:{emailid}`: An email address that represents a Google group. For example, `admins@example.com`. * `deleted:user:{emailid}?uid={uniqueid}`: An email address (plus unique identifier) representing a user that has been recently deleted. For example, `alice@example.com?uid=123456789012345678901`. If the user is recovered, this value reverts to `user:{emailid}` and the recovered user retains the role in the binding. * `deleted:serviceAccount:{emailid}?uid={uniqueid}`: An email address (plus unique identifier) representing a service account that has been recently deleted. For example, `my-other-app@appspot.gserviceaccount.com?uid=123456789012345678901`. If the service account is undeleted, this value reverts to `serviceAccount:{emailid}` and the undeleted service account retains the role in the binding. * `deleted:group:{emailid}?uid={uniqueid}`: An email address (plus unique identifier) representing a Google group that has been recently deleted. For example, `admins@example.com?uid=123456789012345678901`. If the group is recovered, this value reverts to `group:{emailid}` and the recovered group retains the role in the binding. * `domain:{domain}`: The G Suite domain (primary) that represents all the users of that domain. For example, `google.com` or `example.com`.
+        &quot;members&quot;: [ # Specifies the principals requesting access for a Google Cloud resource. `members` can have the following values: * `allUsers`: A special identifier that represents anyone who is on the internet; with or without a Google account. * `allAuthenticatedUsers`: A special identifier that represents anyone who is authenticated with a Google account or a service account. Does not include identities that come from external identity providers (IdPs) through identity federation. * `user:{emailid}`: An email address that represents a specific Google account. For example, `alice@example.com` . * `serviceAccount:{emailid}`: An email address that represents a Google service account. For example, `my-other-app@appspot.gserviceaccount.com`. * `serviceAccount:{projectid}.svc.id.goog[{namespace}/{kubernetes-sa}]`: An identifier for a [Kubernetes service account](https://cloud.google.com/kubernetes-engine/docs/how-to/kubernetes-service-accounts). For example, `my-project.svc.id.goog[my-namespace/my-kubernetes-sa]`. * `group:{emailid}`: An email address that represents a Google group. For example, `admins@example.com`. * `domain:{domain}`: The G Suite domain (primary) that represents all the users of that domain. For example, `google.com` or `example.com`. * `deleted:user:{emailid}?uid={uniqueid}`: An email address (plus unique identifier) representing a user that has been recently deleted. For example, `alice@example.com?uid=123456789012345678901`. If the user is recovered, this value reverts to `user:{emailid}` and the recovered user retains the role in the binding. * `deleted:serviceAccount:{emailid}?uid={uniqueid}`: An email address (plus unique identifier) representing a service account that has been recently deleted. For example, `my-other-app@appspot.gserviceaccount.com?uid=123456789012345678901`. If the service account is undeleted, this value reverts to `serviceAccount:{emailid}` and the undeleted service account retains the role in the binding. * `deleted:group:{emailid}?uid={uniqueid}`: An email address (plus unique identifier) representing a Google group that has been recently deleted. For example, `admins@example.com?uid=123456789012345678901`. If the group is recovered, this value reverts to `group:{emailid}` and the recovered group retains the role in the binding.
           &quot;A String&quot;,
         ],
         &quot;role&quot;: &quot;A String&quot;, # Role that is assigned to the list of `members`, or principals. For example, `roles/viewer`, `roles/editor`, or `roles/owner`.
@@ -1071,7 +1179,7 @@ Returns:
         &quot;location&quot;: &quot;A String&quot;, # Optional. String indicating the location of the expression for error reporting, e.g. a file name and a position in the file.
         &quot;title&quot;: &quot;A String&quot;, # Optional. Title for the expression, i.e. a short string describing its purpose. This can be used e.g. in UIs which allow to enter the expression.
       },
-      &quot;members&quot;: [ # Specifies the principals requesting access for a Google Cloud resource. `members` can have the following values: * `allUsers`: A special identifier that represents anyone who is on the internet; with or without a Google account. * `allAuthenticatedUsers`: A special identifier that represents anyone who is authenticated with a Google account or a service account. Does not include identities that come from external identity providers (IdPs) through identity federation. * `user:{emailid}`: An email address that represents a specific Google account. For example, `alice@example.com` . * `serviceAccount:{emailid}`: An email address that represents a Google service account. For example, `my-other-app@appspot.gserviceaccount.com`. * `serviceAccount:{projectid}.svc.id.goog[{namespace}/{kubernetes-sa}]`: An identifier for a [Kubernetes service account](https://cloud.google.com/kubernetes-engine/docs/how-to/kubernetes-service-accounts). For example, `my-project.svc.id.goog[my-namespace/my-kubernetes-sa]`. * `group:{emailid}`: An email address that represents a Google group. For example, `admins@example.com`. * `deleted:user:{emailid}?uid={uniqueid}`: An email address (plus unique identifier) representing a user that has been recently deleted. For example, `alice@example.com?uid=123456789012345678901`. If the user is recovered, this value reverts to `user:{emailid}` and the recovered user retains the role in the binding. * `deleted:serviceAccount:{emailid}?uid={uniqueid}`: An email address (plus unique identifier) representing a service account that has been recently deleted. For example, `my-other-app@appspot.gserviceaccount.com?uid=123456789012345678901`. If the service account is undeleted, this value reverts to `serviceAccount:{emailid}` and the undeleted service account retains the role in the binding. * `deleted:group:{emailid}?uid={uniqueid}`: An email address (plus unique identifier) representing a Google group that has been recently deleted. For example, `admins@example.com?uid=123456789012345678901`. If the group is recovered, this value reverts to `group:{emailid}` and the recovered group retains the role in the binding. * `domain:{domain}`: The G Suite domain (primary) that represents all the users of that domain. For example, `google.com` or `example.com`.
+      &quot;members&quot;: [ # Specifies the principals requesting access for a Google Cloud resource. `members` can have the following values: * `allUsers`: A special identifier that represents anyone who is on the internet; with or without a Google account. * `allAuthenticatedUsers`: A special identifier that represents anyone who is authenticated with a Google account or a service account. Does not include identities that come from external identity providers (IdPs) through identity federation. * `user:{emailid}`: An email address that represents a specific Google account. For example, `alice@example.com` . * `serviceAccount:{emailid}`: An email address that represents a Google service account. For example, `my-other-app@appspot.gserviceaccount.com`. * `serviceAccount:{projectid}.svc.id.goog[{namespace}/{kubernetes-sa}]`: An identifier for a [Kubernetes service account](https://cloud.google.com/kubernetes-engine/docs/how-to/kubernetes-service-accounts). For example, `my-project.svc.id.goog[my-namespace/my-kubernetes-sa]`. * `group:{emailid}`: An email address that represents a Google group. For example, `admins@example.com`. * `domain:{domain}`: The G Suite domain (primary) that represents all the users of that domain. For example, `google.com` or `example.com`. * `deleted:user:{emailid}?uid={uniqueid}`: An email address (plus unique identifier) representing a user that has been recently deleted. For example, `alice@example.com?uid=123456789012345678901`. If the user is recovered, this value reverts to `user:{emailid}` and the recovered user retains the role in the binding. * `deleted:serviceAccount:{emailid}?uid={uniqueid}`: An email address (plus unique identifier) representing a service account that has been recently deleted. For example, `my-other-app@appspot.gserviceaccount.com?uid=123456789012345678901`. If the service account is undeleted, this value reverts to `serviceAccount:{emailid}` and the undeleted service account retains the role in the binding. * `deleted:group:{emailid}?uid={uniqueid}`: An email address (plus unique identifier) representing a Google group that has been recently deleted. For example, `admins@example.com?uid=123456789012345678901`. If the group is recovered, this value reverts to `group:{emailid}` and the recovered group retains the role in the binding.
         &quot;A String&quot;,
       ],
       &quot;role&quot;: &quot;A String&quot;, # Role that is assigned to the list of `members`, or principals. For example, `roles/viewer`, `roles/editor`, or `roles/owner`.
@@ -1205,6 +1313,17 @@ Returns:
   &quot;httpErrorStatusCode&quot;: 42, # [Output Only] If the operation fails, this field contains the HTTP error status code that was returned. For example, a `404` means the resource was not found.
   &quot;id&quot;: &quot;A String&quot;, # [Output Only] The unique identifier for the operation. This identifier is defined by the server.
   &quot;insertTime&quot;: &quot;A String&quot;, # [Output Only] The time that this operation was requested. This value is in RFC3339 text format.
+  &quot;instancesBulkInsertOperationMetadata&quot;: {
+    &quot;perLocationStatus&quot;: { # Status information per location (location name is key). Example key: zones/us-central1-a
+      &quot;a_key&quot;: {
+        &quot;createdVmCount&quot;: 42, # [Output Only] Count of VMs successfully created so far.
+        &quot;deletedVmCount&quot;: 42, # [Output Only] Count of VMs that got deleted during rollback.
+        &quot;failedToCreateVmCount&quot;: 42, # [Output Only] Count of VMs that started creating but encountered an error.
+        &quot;status&quot;: &quot;A String&quot;, # [Output Only] Creation status of BulkInsert operation - information if the flow is rolling forward or rolling back.
+        &quot;targetVmCount&quot;: 42, # [Output Only] Count of VMs originally planned to be created.
+      },
+    },
+  },
   &quot;kind&quot;: &quot;compute#operation&quot;, # [Output Only] Type of the resource. Always `compute#operation` for Operation resources.
   &quot;name&quot;: &quot;A String&quot;, # [Output Only] Name of the operation.
   &quot;operationGroupId&quot;: &quot;A String&quot;, # [Output Only] An ID that represents a group of operations, such as when a group of operations results from a `bulkInsert` API request.
@@ -1213,6 +1332,23 @@ Returns:
   &quot;region&quot;: &quot;A String&quot;, # [Output Only] The URL of the region where the operation resides. Only applicable when performing regional operations.
   &quot;selfLink&quot;: &quot;A String&quot;, # [Output Only] Server-defined URL for the resource.
   &quot;selfLinkWithId&quot;: &quot;A String&quot;, # [Output Only] Server-defined URL for this resource with the resource id.
+  &quot;setCommonInstanceMetadataOperationMetadata&quot;: { # Encapsulates partial completion metadata for SetCommonInstanceMetadata. Will be propagated on Operation.metadata.
+    &quot;clientOperationId&quot;: &quot;A String&quot;,
+    &quot;perLocationOperations&quot;: {
+      &quot;a_key&quot;: {
+        &quot;error&quot;: { # The `Status` type defines a logical error model that is suitable for different programming environments, including REST APIs and RPC APIs. It is used by [gRPC](https://github.com/grpc). Each `Status` message contains three pieces of data: error code, error message, and error details. You can find out more about this error model and how to work with it in the [API Design Guide](https://cloud.google.com/apis/design/errors).
+          &quot;code&quot;: 42, # The status code, which should be an enum value of google.rpc.Code.
+          &quot;details&quot;: [ # A list of messages that carry the error details. There is a common set of message types for APIs to use.
+            {
+              &quot;a_key&quot;: &quot;&quot;, # Properties of the object. Contains field @type with type URL.
+            },
+          ],
+          &quot;message&quot;: &quot;A String&quot;, # A developer-facing error message, which should be in English. Any user-facing error message should be localized and sent in the google.rpc.Status.details field, or localized by the client.
+        },
+        &quot;state&quot;: &quot;A String&quot;,
+      },
+    },
+  },
   &quot;startTime&quot;: &quot;A String&quot;, # [Output Only] The time that this operation was started by the server. This value is in RFC3339 text format.
   &quot;status&quot;: &quot;A String&quot;, # [Output Only] The status of the operation, which can be one of the following: `PENDING`, `RUNNING`, or `DONE`.
   &quot;statusMessage&quot;: &quot;A String&quot;, # [Output Only] An optional textual description of the current status of the operation.

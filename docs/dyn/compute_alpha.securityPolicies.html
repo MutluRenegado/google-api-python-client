@@ -111,7 +111,7 @@ h1, h2, h3 {
   <code><a href="#patch">patch(project, securityPolicy, body=None, paths=None, requestId=None, updateMask=None, x__xgafv=None)</a></code></p>
 <p class="firstline">Patches the specified policy with the data included in the request. To clear fields in the rule, leave the fields empty and specify them in the updateMask. This cannot be used to be update the rules in the policy. Please use the per rule methods like addRule, patchRule, and removeRule instead.</p>
 <p class="toc_element">
-  <code><a href="#patchRule">patchRule(project, securityPolicy, body=None, priority=None, validateOnly=None, x__xgafv=None)</a></code></p>
+  <code><a href="#patchRule">patchRule(project, securityPolicy, body=None, priority=None, updateMask=None, validateOnly=None, x__xgafv=None)</a></code></p>
 <p class="firstline">Patches a rule at the specified priority.</p>
 <p class="toc_element">
   <code><a href="#removeRule">removeRule(project, securityPolicy, priority=None, x__xgafv=None)</a></code></p>
@@ -134,11 +134,11 @@ Args:
     The object takes the form of:
 
 { # Represents a rule that describes one or more match conditions along with the action to be taken when traffic matches this condition (allow or deny).
-  &quot;action&quot;: &quot;A String&quot;, # The Action to perform when the rule is matched. The following are the valid actions: - allow: allow access to target. - deny(STATUS): deny access to target, returns the HTTP response code specified. Valid values for `STATUS` are 403, 404, and 502. - rate_based_ban: limit client traffic to the configured threshold and ban the client if the traffic exceeds the threshold. Configure parameters for this action in RateLimitOptions. Requires rate_limit_options to be set. - redirect: redirect to a different target. This can either be an internal reCAPTCHA redirect, or an external URL-based redirect via a 302 response. Parameters for this action can be configured via redirectOptions. - throttle: limit client traffic to the configured threshold. Configure parameters for this action in rateLimitOptions. Requires rate_limit_options to be set for this.
+  &quot;action&quot;: &quot;A String&quot;, # The Action to perform when the rule is matched. The following are the valid actions: - allow: allow access to target. - deny(STATUS): deny access to target, returns the HTTP response code specified. Valid values for `STATUS` are 403, 404, and 502. - rate_based_ban: limit client traffic to the configured threshold and ban the client if the traffic exceeds the threshold. Configure parameters for this action in RateLimitOptions. Requires rate_limit_options to be set. - redirect: redirect to a different target. This can either be an internal reCAPTCHA redirect, or an external URL-based redirect via a 302 response. Parameters for this action can be configured via redirectOptions. This action is only supported in Global Security Policies of type CLOUD_ARMOR. - throttle: limit client traffic to the configured threshold. Configure parameters for this action in rateLimitOptions. Requires rate_limit_options to be set for this.
   &quot;description&quot;: &quot;A String&quot;, # An optional description of this resource. Provide this property when you create the resource.
   &quot;direction&quot;: &quot;A String&quot;, # The direction in which this rule applies. This field may only be specified when versioned_expr is set to FIREWALL.
   &quot;enableLogging&quot;: True or False, # Denotes whether to enable logging for a particular rule. If logging is enabled, logs will be exported to the configured export destination in Stackdriver. Logs may be exported to BigQuery or Pub/Sub. Note: you cannot enable logging on &quot;goto_next&quot; rules. This field may only be specified when the versioned_expr is set to FIREWALL.
-  &quot;headerAction&quot;: { # Optional, additional actions that are performed on headers.
+  &quot;headerAction&quot;: { # Optional, additional actions that are performed on headers. This field is only supported in Global Security Policies of type CLOUD_ARMOR.
     &quot;requestHeadersToAdds&quot;: [ # The list of request headers to add or overwrite if they&#x27;re already present.
       {
         &quot;headerName&quot;: &quot;A String&quot;, # The name of the header to set.
@@ -172,11 +172,21 @@ Args:
         &quot;A String&quot;,
       ],
     },
-    &quot;expr&quot;: { # Represents a textual expression in the Common Expression Language (CEL) syntax. CEL is a C-like expression language. The syntax and semantics of CEL are documented at https://github.com/google/cel-spec. Example (Comparison): title: &quot;Summary size limit&quot; description: &quot;Determines if a summary is less than 100 chars&quot; expression: &quot;document.summary.size() &lt; 100&quot; Example (Equality): title: &quot;Requestor is owner&quot; description: &quot;Determines if requestor is the document owner&quot; expression: &quot;document.owner == request.auth.claims.email&quot; Example (Logic): title: &quot;Public documents&quot; description: &quot;Determine whether the document should be publicly visible&quot; expression: &quot;document.type != &#x27;private&#x27; &amp;&amp; document.type != &#x27;internal&#x27;&quot; Example (Data Manipulation): title: &quot;Notification string&quot; description: &quot;Create a notification string with a timestamp.&quot; expression: &quot;&#x27;New message received at &#x27; + string(document.create_time)&quot; The exact variables and functions that may be referenced within an expression are determined by the service that evaluates it. See the service documentation for additional information. # User defined CEVAL expression. A CEVAL expression is used to specify match criteria such as origin.ip, source.region_code and contents in the request header.
+    &quot;expr&quot;: { # Represents a textual expression in the Common Expression Language (CEL) syntax. CEL is a C-like expression language. The syntax and semantics of CEL are documented at https://github.com/google/cel-spec. Example (Comparison): title: &quot;Summary size limit&quot; description: &quot;Determines if a summary is less than 100 chars&quot; expression: &quot;document.summary.size() &lt; 100&quot; Example (Equality): title: &quot;Requestor is owner&quot; description: &quot;Determines if requestor is the document owner&quot; expression: &quot;document.owner == request.auth.claims.email&quot; Example (Logic): title: &quot;Public documents&quot; description: &quot;Determine whether the document should be publicly visible&quot; expression: &quot;document.type != &#x27;private&#x27; &amp;&amp; document.type != &#x27;internal&#x27;&quot; Example (Data Manipulation): title: &quot;Notification string&quot; description: &quot;Create a notification string with a timestamp.&quot; expression: &quot;&#x27;New message received at &#x27; + string(document.create_time)&quot; The exact variables and functions that may be referenced within an expression are determined by the service that evaluates it. See the service documentation for additional information. # User defined CEVAL expression. A CEVAL expression is used to specify match criteria such as origin.ip, source.region_code and contents in the request header. Expressions containing `evaluateThreatIntelligence` require Cloud Armor Managed Protection Plus tier and are not supported in Edge Policies nor in Regional Policies. Expressions containing `evaluatePreconfiguredExpr(&#x27;sourceiplist-*&#x27;)` require Cloud Armor Managed Protection Plus tier and are only supported in Global Security Policies.
       &quot;description&quot;: &quot;A String&quot;, # Optional. Description of the expression. This is a longer text which describes the expression, e.g. when hovered over it in a UI.
       &quot;expression&quot;: &quot;A String&quot;, # Textual representation of an expression in Common Expression Language syntax.
       &quot;location&quot;: &quot;A String&quot;, # Optional. String indicating the location of the expression for error reporting, e.g. a file name and a position in the file.
       &quot;title&quot;: &quot;A String&quot;, # Optional. Title for the expression, i.e. a short string describing its purpose. This can be used e.g. in UIs which allow to enter the expression.
+    },
+    &quot;exprOptions&quot;: { # The configuration options available when specifying a user defined CEVAL expression (i.e., &#x27;expr&#x27;).
+      &quot;recaptchaOptions&quot;: { # reCAPTCHA configuration options to be applied for the rule. If the rule does not evaluate reCAPTCHA tokens, this field will have no effect.
+        &quot;actionTokenSiteKeys&quot;: [ # A list of site keys to be used during the validation of reCAPTCHA action-tokens. The provided site keys need to be created from reCAPTCHA API under the same project where the security policy is created.
+          &quot;A String&quot;,
+        ],
+        &quot;sessionTokenSiteKeys&quot;: [ # A list of site keys to be used during the validation of reCAPTCHA session-tokens. The provided site keys need to be created from reCAPTCHA API under the same project where the security policy is created.
+          &quot;A String&quot;,
+        ],
+      },
     },
     &quot;versionedExpr&quot;: &quot;A String&quot;, # Preconfigured versioned expression. If this field is specified, config must also be specified. Available preconfigured expressions along with their requirements are: SRC_IPS_V1 - must specify the corresponding src_ip_range field in config.
   },
@@ -262,12 +272,12 @@ Args:
       },
     ],
     &quot;enforceOnKeyName&quot;: &quot;A String&quot;, # Rate limit key name applicable only for the following key types: HTTP_HEADER -- Name of the HTTP header whose value is taken as the key value. HTTP_COOKIE -- Name of the HTTP cookie whose value is taken as the key value.
-    &quot;exceedAction&quot;: &quot;A String&quot;, # Action to take for requests that are above the configured rate limit threshold, to either deny with a specified HTTP response code, or redirect to a different endpoint. Valid options are `deny(STATUS)`, where valid values for `STATUS` are 403, 404, 429, and 502, and `redirect`, where the redirect parameters come from `exceedRedirectOptions` below.
+    &quot;exceedAction&quot;: &quot;A String&quot;, # Action to take for requests that are above the configured rate limit threshold, to either deny with a specified HTTP response code, or redirect to a different endpoint. Valid options are `deny(STATUS)`, where valid values for `STATUS` are 403, 404, 429, and 502, and `redirect`, where the redirect parameters come from `exceedRedirectOptions` below. The `redirect` action is only supported in Global Security Policies of type CLOUD_ARMOR.
     &quot;exceedActionRpcStatus&quot;: { # Simplified google.rpc.Status type (omitting details). # Specified gRPC response status for proxyless gRPC requests that are above the configured rate limit threshold
       &quot;code&quot;: 42, # The status code, which should be an enum value of google.rpc.Code.
       &quot;message&quot;: &quot;A String&quot;, # A developer-facing error message, which should be in English.
     },
-    &quot;exceedRedirectOptions&quot;: { # Parameters defining the redirect action that is used as the exceed action. Cannot be specified if the exceed action is not redirect.
+    &quot;exceedRedirectOptions&quot;: { # Parameters defining the redirect action that is used as the exceed action. Cannot be specified if the exceed action is not redirect. This field is only supported in Global Security Policies of type CLOUD_ARMOR.
       &quot;target&quot;: &quot;A String&quot;, # Target for the redirect action. This is required if the type is EXTERNAL_302 and cannot be specified for GOOGLE_RECAPTCHA.
       &quot;type&quot;: &quot;A String&quot;, # Type of the redirect action.
     },
@@ -276,7 +286,7 @@ Args:
       &quot;intervalSec&quot;: 42, # Interval over which the threshold is computed.
     },
   },
-  &quot;redirectOptions&quot;: { # Parameters defining the redirect action. Cannot be specified for any other actions.
+  &quot;redirectOptions&quot;: { # Parameters defining the redirect action. Cannot be specified for any other actions. This field is only supported in Global Security Policies of type CLOUD_ARMOR.
     &quot;target&quot;: &quot;A String&quot;, # Target for the redirect action. This is required if the type is EXTERNAL_302 and cannot be specified for GOOGLE_RECAPTCHA.
     &quot;type&quot;: &quot;A String&quot;, # Type of the redirect action.
   },
@@ -350,6 +360,17 @@ Returns:
   &quot;httpErrorStatusCode&quot;: 42, # [Output Only] If the operation fails, this field contains the HTTP error status code that was returned. For example, a `404` means the resource was not found.
   &quot;id&quot;: &quot;A String&quot;, # [Output Only] The unique identifier for the operation. This identifier is defined by the server.
   &quot;insertTime&quot;: &quot;A String&quot;, # [Output Only] The time that this operation was requested. This value is in RFC3339 text format.
+  &quot;instancesBulkInsertOperationMetadata&quot;: {
+    &quot;perLocationStatus&quot;: { # Status information per location (location name is key). Example key: zones/us-central1-a
+      &quot;a_key&quot;: {
+        &quot;createdVmCount&quot;: 42, # [Output Only] Count of VMs successfully created so far.
+        &quot;deletedVmCount&quot;: 42, # [Output Only] Count of VMs that got deleted during rollback.
+        &quot;failedToCreateVmCount&quot;: 42, # [Output Only] Count of VMs that started creating but encountered an error.
+        &quot;status&quot;: &quot;A String&quot;, # [Output Only] Creation status of BulkInsert operation - information if the flow is rolling forward or rolling back.
+        &quot;targetVmCount&quot;: 42, # [Output Only] Count of VMs originally planned to be created.
+      },
+    },
+  },
   &quot;kind&quot;: &quot;compute#operation&quot;, # [Output Only] Type of the resource. Always `compute#operation` for Operation resources.
   &quot;name&quot;: &quot;A String&quot;, # [Output Only] Name of the operation.
   &quot;operationGroupId&quot;: &quot;A String&quot;, # [Output Only] An ID that represents a group of operations, such as when a group of operations results from a `bulkInsert` API request.
@@ -358,6 +379,23 @@ Returns:
   &quot;region&quot;: &quot;A String&quot;, # [Output Only] The URL of the region where the operation resides. Only applicable when performing regional operations.
   &quot;selfLink&quot;: &quot;A String&quot;, # [Output Only] Server-defined URL for the resource.
   &quot;selfLinkWithId&quot;: &quot;A String&quot;, # [Output Only] Server-defined URL for this resource with the resource id.
+  &quot;setCommonInstanceMetadataOperationMetadata&quot;: { # Encapsulates partial completion metadata for SetCommonInstanceMetadata. Will be propagated on Operation.metadata.
+    &quot;clientOperationId&quot;: &quot;A String&quot;,
+    &quot;perLocationOperations&quot;: {
+      &quot;a_key&quot;: {
+        &quot;error&quot;: { # The `Status` type defines a logical error model that is suitable for different programming environments, including REST APIs and RPC APIs. It is used by [gRPC](https://github.com/grpc). Each `Status` message contains three pieces of data: error code, error message, and error details. You can find out more about this error model and how to work with it in the [API Design Guide](https://cloud.google.com/apis/design/errors).
+          &quot;code&quot;: 42, # The status code, which should be an enum value of google.rpc.Code.
+          &quot;details&quot;: [ # A list of messages that carry the error details. There is a common set of message types for APIs to use.
+            {
+              &quot;a_key&quot;: &quot;&quot;, # Properties of the object. Contains field @type with type URL.
+            },
+          ],
+          &quot;message&quot;: &quot;A String&quot;, # A developer-facing error message, which should be in English. Any user-facing error message should be localized and sent in the google.rpc.Status.details field, or localized by the client.
+        },
+        &quot;state&quot;: &quot;A String&quot;,
+      },
+    },
+  },
   &quot;startTime&quot;: &quot;A String&quot;, # [Output Only] The time that this operation was started by the server. This value is in RFC3339 text format.
   &quot;status&quot;: &quot;A String&quot;, # [Output Only] The status of the operation, which can be one of the following: `PENDING`, `RUNNING`, or `DONE`.
   &quot;statusMessage&quot;: &quot;A String&quot;, # [Output Only] An optional textual description of the current status of the operation.
@@ -414,9 +452,9 @@ Returns:
               &quot;impactedBaselineThreshold&quot;: 3.14,
               &quot;loadThreshold&quot;: 3.14,
             },
-            &quot;layer7DdosDefenseConfig&quot;: { # Configuration options for L7 DDoS detection. # If set to true, enables Cloud Armor Machine Learning.
-              &quot;enable&quot;: True or False, # If set to true, enables CAAP for L7 DDoS detection.
-              &quot;ruleVisibility&quot;: &quot;A String&quot;, # Rule visibility can be one of the following: STANDARD - opaque rules. (default) PREMIUM - transparent rules.
+            &quot;layer7DdosDefenseConfig&quot;: { # Configuration options for L7 DDoS detection. This field is only supported in Global Security Policies of type CLOUD_ARMOR. # If set to true, enables Cloud Armor Machine Learning.
+              &quot;enable&quot;: True or False, # If set to true, enables CAAP for L7 DDoS detection. This field is only supported in Global Security Policies of type CLOUD_ARMOR.
+              &quot;ruleVisibility&quot;: &quot;A String&quot;, # Rule visibility can be one of the following: STANDARD - opaque rules. (default) PREMIUM - transparent rules. This field is only supported in Global Security Policies of type CLOUD_ARMOR.
             },
           },
           &quot;advancedOptionsConfig&quot;: {
@@ -427,6 +465,9 @@ Returns:
             },
             &quot;jsonParsing&quot;: &quot;A String&quot;,
             &quot;logLevel&quot;: &quot;A String&quot;,
+            &quot;userIpRequestHeaders&quot;: [ # An optional list of case-insensitive request header names to use for resolving the callers client IP address.
+              &quot;A String&quot;,
+            ],
           },
           &quot;associations&quot;: [ # A list of associations that belong to this policy.
             {
@@ -455,17 +496,17 @@ Returns:
           &quot;name&quot;: &quot;A String&quot;, # Name of the resource. Provided by the client when the resource is created. The name must be 1-63 characters long, and comply with RFC1035. Specifically, the name must be 1-63 characters long and match the regular expression `[a-z]([-a-z0-9]*[a-z0-9])?` which means the first character must be a lowercase letter, and all following characters must be a dash, lowercase letter, or digit, except the last character, which cannot be a dash.
           &quot;parent&quot;: &quot;A String&quot;, # [Output Only] The parent of the security policy.
           &quot;recaptchaOptionsConfig&quot;: {
-            &quot;redirectSiteKey&quot;: &quot;A String&quot;, # An optional field to supply a reCAPTCHA site key to be used for all the rules using the redirect action with the type of GOOGLE_RECAPTCHA under the security policy. The specified site key needs to be created from the reCAPTCHA API. The user is responsible for the validity of the specified site key. If not specified, a Google-managed site key is used.
+            &quot;redirectSiteKey&quot;: &quot;A String&quot;, # An optional field to supply a reCAPTCHA site key to be used for all the rules using the redirect action with the type of GOOGLE_RECAPTCHA under the security policy. The specified site key needs to be created from the reCAPTCHA API. The user is responsible for the validity of the specified site key. If not specified, a Google-managed site key is used. This field is only supported in Global Security Policies of type CLOUD_ARMOR.
           },
           &quot;region&quot;: &quot;A String&quot;, # [Output Only] URL of the region where the regional security policy resides. This field is not applicable to global security policies.
           &quot;ruleTupleCount&quot;: 42, # [Output Only] Total count of all security policy rule tuples. A security policy can not exceed a set number of tuples.
           &quot;rules&quot;: [ # A list of rules that belong to this policy. There must always be a default rule which is a rule with priority 2147483647 and match all condition (for the match condition this means match &quot;*&quot; for srcIpRanges and for the networkMatch condition every field must be either match &quot;*&quot; or not set). If no rules are provided when creating a security policy, a default rule with action &quot;allow&quot; will be added.
             { # Represents a rule that describes one or more match conditions along with the action to be taken when traffic matches this condition (allow or deny).
-              &quot;action&quot;: &quot;A String&quot;, # The Action to perform when the rule is matched. The following are the valid actions: - allow: allow access to target. - deny(STATUS): deny access to target, returns the HTTP response code specified. Valid values for `STATUS` are 403, 404, and 502. - rate_based_ban: limit client traffic to the configured threshold and ban the client if the traffic exceeds the threshold. Configure parameters for this action in RateLimitOptions. Requires rate_limit_options to be set. - redirect: redirect to a different target. This can either be an internal reCAPTCHA redirect, or an external URL-based redirect via a 302 response. Parameters for this action can be configured via redirectOptions. - throttle: limit client traffic to the configured threshold. Configure parameters for this action in rateLimitOptions. Requires rate_limit_options to be set for this.
+              &quot;action&quot;: &quot;A String&quot;, # The Action to perform when the rule is matched. The following are the valid actions: - allow: allow access to target. - deny(STATUS): deny access to target, returns the HTTP response code specified. Valid values for `STATUS` are 403, 404, and 502. - rate_based_ban: limit client traffic to the configured threshold and ban the client if the traffic exceeds the threshold. Configure parameters for this action in RateLimitOptions. Requires rate_limit_options to be set. - redirect: redirect to a different target. This can either be an internal reCAPTCHA redirect, or an external URL-based redirect via a 302 response. Parameters for this action can be configured via redirectOptions. This action is only supported in Global Security Policies of type CLOUD_ARMOR. - throttle: limit client traffic to the configured threshold. Configure parameters for this action in rateLimitOptions. Requires rate_limit_options to be set for this.
               &quot;description&quot;: &quot;A String&quot;, # An optional description of this resource. Provide this property when you create the resource.
               &quot;direction&quot;: &quot;A String&quot;, # The direction in which this rule applies. This field may only be specified when versioned_expr is set to FIREWALL.
               &quot;enableLogging&quot;: True or False, # Denotes whether to enable logging for a particular rule. If logging is enabled, logs will be exported to the configured export destination in Stackdriver. Logs may be exported to BigQuery or Pub/Sub. Note: you cannot enable logging on &quot;goto_next&quot; rules. This field may only be specified when the versioned_expr is set to FIREWALL.
-              &quot;headerAction&quot;: { # Optional, additional actions that are performed on headers.
+              &quot;headerAction&quot;: { # Optional, additional actions that are performed on headers. This field is only supported in Global Security Policies of type CLOUD_ARMOR.
                 &quot;requestHeadersToAdds&quot;: [ # The list of request headers to add or overwrite if they&#x27;re already present.
                   {
                     &quot;headerName&quot;: &quot;A String&quot;, # The name of the header to set.
@@ -499,11 +540,21 @@ Returns:
                     &quot;A String&quot;,
                   ],
                 },
-                &quot;expr&quot;: { # Represents a textual expression in the Common Expression Language (CEL) syntax. CEL is a C-like expression language. The syntax and semantics of CEL are documented at https://github.com/google/cel-spec. Example (Comparison): title: &quot;Summary size limit&quot; description: &quot;Determines if a summary is less than 100 chars&quot; expression: &quot;document.summary.size() &lt; 100&quot; Example (Equality): title: &quot;Requestor is owner&quot; description: &quot;Determines if requestor is the document owner&quot; expression: &quot;document.owner == request.auth.claims.email&quot; Example (Logic): title: &quot;Public documents&quot; description: &quot;Determine whether the document should be publicly visible&quot; expression: &quot;document.type != &#x27;private&#x27; &amp;&amp; document.type != &#x27;internal&#x27;&quot; Example (Data Manipulation): title: &quot;Notification string&quot; description: &quot;Create a notification string with a timestamp.&quot; expression: &quot;&#x27;New message received at &#x27; + string(document.create_time)&quot; The exact variables and functions that may be referenced within an expression are determined by the service that evaluates it. See the service documentation for additional information. # User defined CEVAL expression. A CEVAL expression is used to specify match criteria such as origin.ip, source.region_code and contents in the request header.
+                &quot;expr&quot;: { # Represents a textual expression in the Common Expression Language (CEL) syntax. CEL is a C-like expression language. The syntax and semantics of CEL are documented at https://github.com/google/cel-spec. Example (Comparison): title: &quot;Summary size limit&quot; description: &quot;Determines if a summary is less than 100 chars&quot; expression: &quot;document.summary.size() &lt; 100&quot; Example (Equality): title: &quot;Requestor is owner&quot; description: &quot;Determines if requestor is the document owner&quot; expression: &quot;document.owner == request.auth.claims.email&quot; Example (Logic): title: &quot;Public documents&quot; description: &quot;Determine whether the document should be publicly visible&quot; expression: &quot;document.type != &#x27;private&#x27; &amp;&amp; document.type != &#x27;internal&#x27;&quot; Example (Data Manipulation): title: &quot;Notification string&quot; description: &quot;Create a notification string with a timestamp.&quot; expression: &quot;&#x27;New message received at &#x27; + string(document.create_time)&quot; The exact variables and functions that may be referenced within an expression are determined by the service that evaluates it. See the service documentation for additional information. # User defined CEVAL expression. A CEVAL expression is used to specify match criteria such as origin.ip, source.region_code and contents in the request header. Expressions containing `evaluateThreatIntelligence` require Cloud Armor Managed Protection Plus tier and are not supported in Edge Policies nor in Regional Policies. Expressions containing `evaluatePreconfiguredExpr(&#x27;sourceiplist-*&#x27;)` require Cloud Armor Managed Protection Plus tier and are only supported in Global Security Policies.
                   &quot;description&quot;: &quot;A String&quot;, # Optional. Description of the expression. This is a longer text which describes the expression, e.g. when hovered over it in a UI.
                   &quot;expression&quot;: &quot;A String&quot;, # Textual representation of an expression in Common Expression Language syntax.
                   &quot;location&quot;: &quot;A String&quot;, # Optional. String indicating the location of the expression for error reporting, e.g. a file name and a position in the file.
                   &quot;title&quot;: &quot;A String&quot;, # Optional. Title for the expression, i.e. a short string describing its purpose. This can be used e.g. in UIs which allow to enter the expression.
+                },
+                &quot;exprOptions&quot;: { # The configuration options available when specifying a user defined CEVAL expression (i.e., &#x27;expr&#x27;).
+                  &quot;recaptchaOptions&quot;: { # reCAPTCHA configuration options to be applied for the rule. If the rule does not evaluate reCAPTCHA tokens, this field will have no effect.
+                    &quot;actionTokenSiteKeys&quot;: [ # A list of site keys to be used during the validation of reCAPTCHA action-tokens. The provided site keys need to be created from reCAPTCHA API under the same project where the security policy is created.
+                      &quot;A String&quot;,
+                    ],
+                    &quot;sessionTokenSiteKeys&quot;: [ # A list of site keys to be used during the validation of reCAPTCHA session-tokens. The provided site keys need to be created from reCAPTCHA API under the same project where the security policy is created.
+                      &quot;A String&quot;,
+                    ],
+                  },
                 },
                 &quot;versionedExpr&quot;: &quot;A String&quot;, # Preconfigured versioned expression. If this field is specified, config must also be specified. Available preconfigured expressions along with their requirements are: SRC_IPS_V1 - must specify the corresponding src_ip_range field in config.
               },
@@ -589,12 +640,12 @@ Returns:
                   },
                 ],
                 &quot;enforceOnKeyName&quot;: &quot;A String&quot;, # Rate limit key name applicable only for the following key types: HTTP_HEADER -- Name of the HTTP header whose value is taken as the key value. HTTP_COOKIE -- Name of the HTTP cookie whose value is taken as the key value.
-                &quot;exceedAction&quot;: &quot;A String&quot;, # Action to take for requests that are above the configured rate limit threshold, to either deny with a specified HTTP response code, or redirect to a different endpoint. Valid options are `deny(STATUS)`, where valid values for `STATUS` are 403, 404, 429, and 502, and `redirect`, where the redirect parameters come from `exceedRedirectOptions` below.
+                &quot;exceedAction&quot;: &quot;A String&quot;, # Action to take for requests that are above the configured rate limit threshold, to either deny with a specified HTTP response code, or redirect to a different endpoint. Valid options are `deny(STATUS)`, where valid values for `STATUS` are 403, 404, 429, and 502, and `redirect`, where the redirect parameters come from `exceedRedirectOptions` below. The `redirect` action is only supported in Global Security Policies of type CLOUD_ARMOR.
                 &quot;exceedActionRpcStatus&quot;: { # Simplified google.rpc.Status type (omitting details). # Specified gRPC response status for proxyless gRPC requests that are above the configured rate limit threshold
                   &quot;code&quot;: 42, # The status code, which should be an enum value of google.rpc.Code.
                   &quot;message&quot;: &quot;A String&quot;, # A developer-facing error message, which should be in English.
                 },
-                &quot;exceedRedirectOptions&quot;: { # Parameters defining the redirect action that is used as the exceed action. Cannot be specified if the exceed action is not redirect.
+                &quot;exceedRedirectOptions&quot;: { # Parameters defining the redirect action that is used as the exceed action. Cannot be specified if the exceed action is not redirect. This field is only supported in Global Security Policies of type CLOUD_ARMOR.
                   &quot;target&quot;: &quot;A String&quot;, # Target for the redirect action. This is required if the type is EXTERNAL_302 and cannot be specified for GOOGLE_RECAPTCHA.
                   &quot;type&quot;: &quot;A String&quot;, # Type of the redirect action.
                 },
@@ -603,7 +654,7 @@ Returns:
                   &quot;intervalSec&quot;: 42, # Interval over which the threshold is computed.
                 },
               },
-              &quot;redirectOptions&quot;: { # Parameters defining the redirect action. Cannot be specified for any other actions.
+              &quot;redirectOptions&quot;: { # Parameters defining the redirect action. Cannot be specified for any other actions. This field is only supported in Global Security Policies of type CLOUD_ARMOR.
                 &quot;target&quot;: &quot;A String&quot;, # Target for the redirect action. This is required if the type is EXTERNAL_302 and cannot be specified for GOOGLE_RECAPTCHA.
                 &quot;type&quot;: &quot;A String&quot;, # Type of the redirect action.
               },
@@ -621,7 +672,7 @@ Returns:
           ],
           &quot;selfLink&quot;: &quot;A String&quot;, # [Output Only] Server-defined URL for the resource.
           &quot;selfLinkWithId&quot;: &quot;A String&quot;, # [Output Only] Server-defined URL for this resource with the resource id.
-          &quot;type&quot;: &quot;A String&quot;, # The type indicates the intended use of the security policy. - CLOUD_ARMOR: Cloud Armor backend security policies can be configured to filter incoming HTTP requests targeting backend services. They filter requests before they hit the origin servers. - CLOUD_ARMOR_EDGE: Cloud Armor edge security policies can be configured to filter incoming HTTP requests targeting backend services (including Cloud CDN-enabled) as well as backend buckets (Cloud Storage). They filter requests before the request is served from Google&#x27;s cache. - CLOUD_ARMOR_INTERNAL_SERVICE: Cloud Armor internal service policies can be configured to filter HTTP requests targeting services managed by Traffic Director in a service mesh. They filter requests before the request is served from the application. This field can be set only at resource creation time.
+          &quot;type&quot;: &quot;A String&quot;, # The type indicates the intended use of the security policy. - CLOUD_ARMOR: Cloud Armor backend security policies can be configured to filter incoming HTTP requests targeting backend services. They filter requests before they hit the origin servers. - CLOUD_ARMOR_EDGE: Cloud Armor edge security policies can be configured to filter incoming HTTP requests targeting backend services (including Cloud CDN-enabled) as well as backend buckets (Cloud Storage). They filter requests before the request is served from Google&#x27;s cache. - CLOUD_ARMOR_INTERNAL_SERVICE: Cloud Armor internal service policies can be configured to filter HTTP requests targeting services managed by Traffic Director in a service mesh. They filter requests before the request is served from the application. - CLOUD_ARMOR_NETWORK: Cloud Armor network policies can be configured to filter packets targeting network load balancing resources such as backend services, target pools, target instances, and instances with external IPs. They filter requests before the request is served from the application. This field can be set only at resource creation time.
           &quot;userDefinedFields&quot;: [ # Definitions of user-defined fields for CLOUD_ARMOR_NETWORK policies. A user-defined field consists of up to 4 bytes extracted from a fixed offset in the packet, relative to the IPv4, IPv6, TCP, or UDP header, with an optional mask to select certain bits. Rules may then specify matching values for these fields. Example: userDefinedFields: - name: &quot;ipv4_fragment_offset&quot; base: IPV4 offset: 6 size: 2 mask: &quot;0x1fff&quot;
             {
               &quot;base&quot;: &quot;A String&quot;, # The base relative to which &#x27;offset&#x27; is measured. Possible values are: - IPV4: Points to the beginning of the IPv4 header. - IPV6: Points to the beginning of the IPv6 header. - TCP: Points to the beginning of the TCP header, skipping over any IPv4 options or IPv6 extension headers. Not present for non-first fragments. - UDP: Points to the beginning of the UDP header, skipping over any IPv4 options or IPv6 extension headers. Not present for non-first fragments. required
@@ -748,6 +799,17 @@ Returns:
   &quot;httpErrorStatusCode&quot;: 42, # [Output Only] If the operation fails, this field contains the HTTP error status code that was returned. For example, a `404` means the resource was not found.
   &quot;id&quot;: &quot;A String&quot;, # [Output Only] The unique identifier for the operation. This identifier is defined by the server.
   &quot;insertTime&quot;: &quot;A String&quot;, # [Output Only] The time that this operation was requested. This value is in RFC3339 text format.
+  &quot;instancesBulkInsertOperationMetadata&quot;: {
+    &quot;perLocationStatus&quot;: { # Status information per location (location name is key). Example key: zones/us-central1-a
+      &quot;a_key&quot;: {
+        &quot;createdVmCount&quot;: 42, # [Output Only] Count of VMs successfully created so far.
+        &quot;deletedVmCount&quot;: 42, # [Output Only] Count of VMs that got deleted during rollback.
+        &quot;failedToCreateVmCount&quot;: 42, # [Output Only] Count of VMs that started creating but encountered an error.
+        &quot;status&quot;: &quot;A String&quot;, # [Output Only] Creation status of BulkInsert operation - information if the flow is rolling forward or rolling back.
+        &quot;targetVmCount&quot;: 42, # [Output Only] Count of VMs originally planned to be created.
+      },
+    },
+  },
   &quot;kind&quot;: &quot;compute#operation&quot;, # [Output Only] Type of the resource. Always `compute#operation` for Operation resources.
   &quot;name&quot;: &quot;A String&quot;, # [Output Only] Name of the operation.
   &quot;operationGroupId&quot;: &quot;A String&quot;, # [Output Only] An ID that represents a group of operations, such as when a group of operations results from a `bulkInsert` API request.
@@ -756,6 +818,23 @@ Returns:
   &quot;region&quot;: &quot;A String&quot;, # [Output Only] The URL of the region where the operation resides. Only applicable when performing regional operations.
   &quot;selfLink&quot;: &quot;A String&quot;, # [Output Only] Server-defined URL for the resource.
   &quot;selfLinkWithId&quot;: &quot;A String&quot;, # [Output Only] Server-defined URL for this resource with the resource id.
+  &quot;setCommonInstanceMetadataOperationMetadata&quot;: { # Encapsulates partial completion metadata for SetCommonInstanceMetadata. Will be propagated on Operation.metadata.
+    &quot;clientOperationId&quot;: &quot;A String&quot;,
+    &quot;perLocationOperations&quot;: {
+      &quot;a_key&quot;: {
+        &quot;error&quot;: { # The `Status` type defines a logical error model that is suitable for different programming environments, including REST APIs and RPC APIs. It is used by [gRPC](https://github.com/grpc). Each `Status` message contains three pieces of data: error code, error message, and error details. You can find out more about this error model and how to work with it in the [API Design Guide](https://cloud.google.com/apis/design/errors).
+          &quot;code&quot;: 42, # The status code, which should be an enum value of google.rpc.Code.
+          &quot;details&quot;: [ # A list of messages that carry the error details. There is a common set of message types for APIs to use.
+            {
+              &quot;a_key&quot;: &quot;&quot;, # Properties of the object. Contains field @type with type URL.
+            },
+          ],
+          &quot;message&quot;: &quot;A String&quot;, # A developer-facing error message, which should be in English. Any user-facing error message should be localized and sent in the google.rpc.Status.details field, or localized by the client.
+        },
+        &quot;state&quot;: &quot;A String&quot;,
+      },
+    },
+  },
   &quot;startTime&quot;: &quot;A String&quot;, # [Output Only] The time that this operation was started by the server. This value is in RFC3339 text format.
   &quot;status&quot;: &quot;A String&quot;, # [Output Only] The status of the operation, which can be one of the following: `PENDING`, `RUNNING`, or `DONE`.
   &quot;statusMessage&quot;: &quot;A String&quot;, # [Output Only] An optional textual description of the current status of the operation.
@@ -801,9 +880,9 @@ Returns:
       &quot;impactedBaselineThreshold&quot;: 3.14,
       &quot;loadThreshold&quot;: 3.14,
     },
-    &quot;layer7DdosDefenseConfig&quot;: { # Configuration options for L7 DDoS detection. # If set to true, enables Cloud Armor Machine Learning.
-      &quot;enable&quot;: True or False, # If set to true, enables CAAP for L7 DDoS detection.
-      &quot;ruleVisibility&quot;: &quot;A String&quot;, # Rule visibility can be one of the following: STANDARD - opaque rules. (default) PREMIUM - transparent rules.
+    &quot;layer7DdosDefenseConfig&quot;: { # Configuration options for L7 DDoS detection. This field is only supported in Global Security Policies of type CLOUD_ARMOR. # If set to true, enables Cloud Armor Machine Learning.
+      &quot;enable&quot;: True or False, # If set to true, enables CAAP for L7 DDoS detection. This field is only supported in Global Security Policies of type CLOUD_ARMOR.
+      &quot;ruleVisibility&quot;: &quot;A String&quot;, # Rule visibility can be one of the following: STANDARD - opaque rules. (default) PREMIUM - transparent rules. This field is only supported in Global Security Policies of type CLOUD_ARMOR.
     },
   },
   &quot;advancedOptionsConfig&quot;: {
@@ -814,6 +893,9 @@ Returns:
     },
     &quot;jsonParsing&quot;: &quot;A String&quot;,
     &quot;logLevel&quot;: &quot;A String&quot;,
+    &quot;userIpRequestHeaders&quot;: [ # An optional list of case-insensitive request header names to use for resolving the callers client IP address.
+      &quot;A String&quot;,
+    ],
   },
   &quot;associations&quot;: [ # A list of associations that belong to this policy.
     {
@@ -842,17 +924,17 @@ Returns:
   &quot;name&quot;: &quot;A String&quot;, # Name of the resource. Provided by the client when the resource is created. The name must be 1-63 characters long, and comply with RFC1035. Specifically, the name must be 1-63 characters long and match the regular expression `[a-z]([-a-z0-9]*[a-z0-9])?` which means the first character must be a lowercase letter, and all following characters must be a dash, lowercase letter, or digit, except the last character, which cannot be a dash.
   &quot;parent&quot;: &quot;A String&quot;, # [Output Only] The parent of the security policy.
   &quot;recaptchaOptionsConfig&quot;: {
-    &quot;redirectSiteKey&quot;: &quot;A String&quot;, # An optional field to supply a reCAPTCHA site key to be used for all the rules using the redirect action with the type of GOOGLE_RECAPTCHA under the security policy. The specified site key needs to be created from the reCAPTCHA API. The user is responsible for the validity of the specified site key. If not specified, a Google-managed site key is used.
+    &quot;redirectSiteKey&quot;: &quot;A String&quot;, # An optional field to supply a reCAPTCHA site key to be used for all the rules using the redirect action with the type of GOOGLE_RECAPTCHA under the security policy. The specified site key needs to be created from the reCAPTCHA API. The user is responsible for the validity of the specified site key. If not specified, a Google-managed site key is used. This field is only supported in Global Security Policies of type CLOUD_ARMOR.
   },
   &quot;region&quot;: &quot;A String&quot;, # [Output Only] URL of the region where the regional security policy resides. This field is not applicable to global security policies.
   &quot;ruleTupleCount&quot;: 42, # [Output Only] Total count of all security policy rule tuples. A security policy can not exceed a set number of tuples.
   &quot;rules&quot;: [ # A list of rules that belong to this policy. There must always be a default rule which is a rule with priority 2147483647 and match all condition (for the match condition this means match &quot;*&quot; for srcIpRanges and for the networkMatch condition every field must be either match &quot;*&quot; or not set). If no rules are provided when creating a security policy, a default rule with action &quot;allow&quot; will be added.
     { # Represents a rule that describes one or more match conditions along with the action to be taken when traffic matches this condition (allow or deny).
-      &quot;action&quot;: &quot;A String&quot;, # The Action to perform when the rule is matched. The following are the valid actions: - allow: allow access to target. - deny(STATUS): deny access to target, returns the HTTP response code specified. Valid values for `STATUS` are 403, 404, and 502. - rate_based_ban: limit client traffic to the configured threshold and ban the client if the traffic exceeds the threshold. Configure parameters for this action in RateLimitOptions. Requires rate_limit_options to be set. - redirect: redirect to a different target. This can either be an internal reCAPTCHA redirect, or an external URL-based redirect via a 302 response. Parameters for this action can be configured via redirectOptions. - throttle: limit client traffic to the configured threshold. Configure parameters for this action in rateLimitOptions. Requires rate_limit_options to be set for this.
+      &quot;action&quot;: &quot;A String&quot;, # The Action to perform when the rule is matched. The following are the valid actions: - allow: allow access to target. - deny(STATUS): deny access to target, returns the HTTP response code specified. Valid values for `STATUS` are 403, 404, and 502. - rate_based_ban: limit client traffic to the configured threshold and ban the client if the traffic exceeds the threshold. Configure parameters for this action in RateLimitOptions. Requires rate_limit_options to be set. - redirect: redirect to a different target. This can either be an internal reCAPTCHA redirect, or an external URL-based redirect via a 302 response. Parameters for this action can be configured via redirectOptions. This action is only supported in Global Security Policies of type CLOUD_ARMOR. - throttle: limit client traffic to the configured threshold. Configure parameters for this action in rateLimitOptions. Requires rate_limit_options to be set for this.
       &quot;description&quot;: &quot;A String&quot;, # An optional description of this resource. Provide this property when you create the resource.
       &quot;direction&quot;: &quot;A String&quot;, # The direction in which this rule applies. This field may only be specified when versioned_expr is set to FIREWALL.
       &quot;enableLogging&quot;: True or False, # Denotes whether to enable logging for a particular rule. If logging is enabled, logs will be exported to the configured export destination in Stackdriver. Logs may be exported to BigQuery or Pub/Sub. Note: you cannot enable logging on &quot;goto_next&quot; rules. This field may only be specified when the versioned_expr is set to FIREWALL.
-      &quot;headerAction&quot;: { # Optional, additional actions that are performed on headers.
+      &quot;headerAction&quot;: { # Optional, additional actions that are performed on headers. This field is only supported in Global Security Policies of type CLOUD_ARMOR.
         &quot;requestHeadersToAdds&quot;: [ # The list of request headers to add or overwrite if they&#x27;re already present.
           {
             &quot;headerName&quot;: &quot;A String&quot;, # The name of the header to set.
@@ -886,11 +968,21 @@ Returns:
             &quot;A String&quot;,
           ],
         },
-        &quot;expr&quot;: { # Represents a textual expression in the Common Expression Language (CEL) syntax. CEL is a C-like expression language. The syntax and semantics of CEL are documented at https://github.com/google/cel-spec. Example (Comparison): title: &quot;Summary size limit&quot; description: &quot;Determines if a summary is less than 100 chars&quot; expression: &quot;document.summary.size() &lt; 100&quot; Example (Equality): title: &quot;Requestor is owner&quot; description: &quot;Determines if requestor is the document owner&quot; expression: &quot;document.owner == request.auth.claims.email&quot; Example (Logic): title: &quot;Public documents&quot; description: &quot;Determine whether the document should be publicly visible&quot; expression: &quot;document.type != &#x27;private&#x27; &amp;&amp; document.type != &#x27;internal&#x27;&quot; Example (Data Manipulation): title: &quot;Notification string&quot; description: &quot;Create a notification string with a timestamp.&quot; expression: &quot;&#x27;New message received at &#x27; + string(document.create_time)&quot; The exact variables and functions that may be referenced within an expression are determined by the service that evaluates it. See the service documentation for additional information. # User defined CEVAL expression. A CEVAL expression is used to specify match criteria such as origin.ip, source.region_code and contents in the request header.
+        &quot;expr&quot;: { # Represents a textual expression in the Common Expression Language (CEL) syntax. CEL is a C-like expression language. The syntax and semantics of CEL are documented at https://github.com/google/cel-spec. Example (Comparison): title: &quot;Summary size limit&quot; description: &quot;Determines if a summary is less than 100 chars&quot; expression: &quot;document.summary.size() &lt; 100&quot; Example (Equality): title: &quot;Requestor is owner&quot; description: &quot;Determines if requestor is the document owner&quot; expression: &quot;document.owner == request.auth.claims.email&quot; Example (Logic): title: &quot;Public documents&quot; description: &quot;Determine whether the document should be publicly visible&quot; expression: &quot;document.type != &#x27;private&#x27; &amp;&amp; document.type != &#x27;internal&#x27;&quot; Example (Data Manipulation): title: &quot;Notification string&quot; description: &quot;Create a notification string with a timestamp.&quot; expression: &quot;&#x27;New message received at &#x27; + string(document.create_time)&quot; The exact variables and functions that may be referenced within an expression are determined by the service that evaluates it. See the service documentation for additional information. # User defined CEVAL expression. A CEVAL expression is used to specify match criteria such as origin.ip, source.region_code and contents in the request header. Expressions containing `evaluateThreatIntelligence` require Cloud Armor Managed Protection Plus tier and are not supported in Edge Policies nor in Regional Policies. Expressions containing `evaluatePreconfiguredExpr(&#x27;sourceiplist-*&#x27;)` require Cloud Armor Managed Protection Plus tier and are only supported in Global Security Policies.
           &quot;description&quot;: &quot;A String&quot;, # Optional. Description of the expression. This is a longer text which describes the expression, e.g. when hovered over it in a UI.
           &quot;expression&quot;: &quot;A String&quot;, # Textual representation of an expression in Common Expression Language syntax.
           &quot;location&quot;: &quot;A String&quot;, # Optional. String indicating the location of the expression for error reporting, e.g. a file name and a position in the file.
           &quot;title&quot;: &quot;A String&quot;, # Optional. Title for the expression, i.e. a short string describing its purpose. This can be used e.g. in UIs which allow to enter the expression.
+        },
+        &quot;exprOptions&quot;: { # The configuration options available when specifying a user defined CEVAL expression (i.e., &#x27;expr&#x27;).
+          &quot;recaptchaOptions&quot;: { # reCAPTCHA configuration options to be applied for the rule. If the rule does not evaluate reCAPTCHA tokens, this field will have no effect.
+            &quot;actionTokenSiteKeys&quot;: [ # A list of site keys to be used during the validation of reCAPTCHA action-tokens. The provided site keys need to be created from reCAPTCHA API under the same project where the security policy is created.
+              &quot;A String&quot;,
+            ],
+            &quot;sessionTokenSiteKeys&quot;: [ # A list of site keys to be used during the validation of reCAPTCHA session-tokens. The provided site keys need to be created from reCAPTCHA API under the same project where the security policy is created.
+              &quot;A String&quot;,
+            ],
+          },
         },
         &quot;versionedExpr&quot;: &quot;A String&quot;, # Preconfigured versioned expression. If this field is specified, config must also be specified. Available preconfigured expressions along with their requirements are: SRC_IPS_V1 - must specify the corresponding src_ip_range field in config.
       },
@@ -976,12 +1068,12 @@ Returns:
           },
         ],
         &quot;enforceOnKeyName&quot;: &quot;A String&quot;, # Rate limit key name applicable only for the following key types: HTTP_HEADER -- Name of the HTTP header whose value is taken as the key value. HTTP_COOKIE -- Name of the HTTP cookie whose value is taken as the key value.
-        &quot;exceedAction&quot;: &quot;A String&quot;, # Action to take for requests that are above the configured rate limit threshold, to either deny with a specified HTTP response code, or redirect to a different endpoint. Valid options are `deny(STATUS)`, where valid values for `STATUS` are 403, 404, 429, and 502, and `redirect`, where the redirect parameters come from `exceedRedirectOptions` below.
+        &quot;exceedAction&quot;: &quot;A String&quot;, # Action to take for requests that are above the configured rate limit threshold, to either deny with a specified HTTP response code, or redirect to a different endpoint. Valid options are `deny(STATUS)`, where valid values for `STATUS` are 403, 404, 429, and 502, and `redirect`, where the redirect parameters come from `exceedRedirectOptions` below. The `redirect` action is only supported in Global Security Policies of type CLOUD_ARMOR.
         &quot;exceedActionRpcStatus&quot;: { # Simplified google.rpc.Status type (omitting details). # Specified gRPC response status for proxyless gRPC requests that are above the configured rate limit threshold
           &quot;code&quot;: 42, # The status code, which should be an enum value of google.rpc.Code.
           &quot;message&quot;: &quot;A String&quot;, # A developer-facing error message, which should be in English.
         },
-        &quot;exceedRedirectOptions&quot;: { # Parameters defining the redirect action that is used as the exceed action. Cannot be specified if the exceed action is not redirect.
+        &quot;exceedRedirectOptions&quot;: { # Parameters defining the redirect action that is used as the exceed action. Cannot be specified if the exceed action is not redirect. This field is only supported in Global Security Policies of type CLOUD_ARMOR.
           &quot;target&quot;: &quot;A String&quot;, # Target for the redirect action. This is required if the type is EXTERNAL_302 and cannot be specified for GOOGLE_RECAPTCHA.
           &quot;type&quot;: &quot;A String&quot;, # Type of the redirect action.
         },
@@ -990,7 +1082,7 @@ Returns:
           &quot;intervalSec&quot;: 42, # Interval over which the threshold is computed.
         },
       },
-      &quot;redirectOptions&quot;: { # Parameters defining the redirect action. Cannot be specified for any other actions.
+      &quot;redirectOptions&quot;: { # Parameters defining the redirect action. Cannot be specified for any other actions. This field is only supported in Global Security Policies of type CLOUD_ARMOR.
         &quot;target&quot;: &quot;A String&quot;, # Target for the redirect action. This is required if the type is EXTERNAL_302 and cannot be specified for GOOGLE_RECAPTCHA.
         &quot;type&quot;: &quot;A String&quot;, # Type of the redirect action.
       },
@@ -1008,7 +1100,7 @@ Returns:
   ],
   &quot;selfLink&quot;: &quot;A String&quot;, # [Output Only] Server-defined URL for the resource.
   &quot;selfLinkWithId&quot;: &quot;A String&quot;, # [Output Only] Server-defined URL for this resource with the resource id.
-  &quot;type&quot;: &quot;A String&quot;, # The type indicates the intended use of the security policy. - CLOUD_ARMOR: Cloud Armor backend security policies can be configured to filter incoming HTTP requests targeting backend services. They filter requests before they hit the origin servers. - CLOUD_ARMOR_EDGE: Cloud Armor edge security policies can be configured to filter incoming HTTP requests targeting backend services (including Cloud CDN-enabled) as well as backend buckets (Cloud Storage). They filter requests before the request is served from Google&#x27;s cache. - CLOUD_ARMOR_INTERNAL_SERVICE: Cloud Armor internal service policies can be configured to filter HTTP requests targeting services managed by Traffic Director in a service mesh. They filter requests before the request is served from the application. This field can be set only at resource creation time.
+  &quot;type&quot;: &quot;A String&quot;, # The type indicates the intended use of the security policy. - CLOUD_ARMOR: Cloud Armor backend security policies can be configured to filter incoming HTTP requests targeting backend services. They filter requests before they hit the origin servers. - CLOUD_ARMOR_EDGE: Cloud Armor edge security policies can be configured to filter incoming HTTP requests targeting backend services (including Cloud CDN-enabled) as well as backend buckets (Cloud Storage). They filter requests before the request is served from Google&#x27;s cache. - CLOUD_ARMOR_INTERNAL_SERVICE: Cloud Armor internal service policies can be configured to filter HTTP requests targeting services managed by Traffic Director in a service mesh. They filter requests before the request is served from the application. - CLOUD_ARMOR_NETWORK: Cloud Armor network policies can be configured to filter packets targeting network load balancing resources such as backend services, target pools, target instances, and instances with external IPs. They filter requests before the request is served from the application. This field can be set only at resource creation time.
   &quot;userDefinedFields&quot;: [ # Definitions of user-defined fields for CLOUD_ARMOR_NETWORK policies. A user-defined field consists of up to 4 bytes extracted from a fixed offset in the packet, relative to the IPv4, IPv6, TCP, or UDP header, with an optional mask to select certain bits. Rules may then specify matching values for these fields. Example: userDefinedFields: - name: &quot;ipv4_fragment_offset&quot; base: IPV4 offset: 6 size: 2 mask: &quot;0x1fff&quot;
     {
       &quot;base&quot;: &quot;A String&quot;, # The base relative to which &#x27;offset&#x27; is measured. Possible values are: - IPV4: Points to the beginning of the IPv4 header. - IPV6: Points to the beginning of the IPv6 header. - TCP: Points to the beginning of the TCP header, skipping over any IPv4 options or IPv6 extension headers. Not present for non-first fragments. - UDP: Points to the beginning of the UDP header, skipping over any IPv4 options or IPv6 extension headers. Not present for non-first fragments. required
@@ -1038,11 +1130,11 @@ Returns:
   An object of the form:
 
     { # Represents a rule that describes one or more match conditions along with the action to be taken when traffic matches this condition (allow or deny).
-  &quot;action&quot;: &quot;A String&quot;, # The Action to perform when the rule is matched. The following are the valid actions: - allow: allow access to target. - deny(STATUS): deny access to target, returns the HTTP response code specified. Valid values for `STATUS` are 403, 404, and 502. - rate_based_ban: limit client traffic to the configured threshold and ban the client if the traffic exceeds the threshold. Configure parameters for this action in RateLimitOptions. Requires rate_limit_options to be set. - redirect: redirect to a different target. This can either be an internal reCAPTCHA redirect, or an external URL-based redirect via a 302 response. Parameters for this action can be configured via redirectOptions. - throttle: limit client traffic to the configured threshold. Configure parameters for this action in rateLimitOptions. Requires rate_limit_options to be set for this.
+  &quot;action&quot;: &quot;A String&quot;, # The Action to perform when the rule is matched. The following are the valid actions: - allow: allow access to target. - deny(STATUS): deny access to target, returns the HTTP response code specified. Valid values for `STATUS` are 403, 404, and 502. - rate_based_ban: limit client traffic to the configured threshold and ban the client if the traffic exceeds the threshold. Configure parameters for this action in RateLimitOptions. Requires rate_limit_options to be set. - redirect: redirect to a different target. This can either be an internal reCAPTCHA redirect, or an external URL-based redirect via a 302 response. Parameters for this action can be configured via redirectOptions. This action is only supported in Global Security Policies of type CLOUD_ARMOR. - throttle: limit client traffic to the configured threshold. Configure parameters for this action in rateLimitOptions. Requires rate_limit_options to be set for this.
   &quot;description&quot;: &quot;A String&quot;, # An optional description of this resource. Provide this property when you create the resource.
   &quot;direction&quot;: &quot;A String&quot;, # The direction in which this rule applies. This field may only be specified when versioned_expr is set to FIREWALL.
   &quot;enableLogging&quot;: True or False, # Denotes whether to enable logging for a particular rule. If logging is enabled, logs will be exported to the configured export destination in Stackdriver. Logs may be exported to BigQuery or Pub/Sub. Note: you cannot enable logging on &quot;goto_next&quot; rules. This field may only be specified when the versioned_expr is set to FIREWALL.
-  &quot;headerAction&quot;: { # Optional, additional actions that are performed on headers.
+  &quot;headerAction&quot;: { # Optional, additional actions that are performed on headers. This field is only supported in Global Security Policies of type CLOUD_ARMOR.
     &quot;requestHeadersToAdds&quot;: [ # The list of request headers to add or overwrite if they&#x27;re already present.
       {
         &quot;headerName&quot;: &quot;A String&quot;, # The name of the header to set.
@@ -1076,11 +1168,21 @@ Returns:
         &quot;A String&quot;,
       ],
     },
-    &quot;expr&quot;: { # Represents a textual expression in the Common Expression Language (CEL) syntax. CEL is a C-like expression language. The syntax and semantics of CEL are documented at https://github.com/google/cel-spec. Example (Comparison): title: &quot;Summary size limit&quot; description: &quot;Determines if a summary is less than 100 chars&quot; expression: &quot;document.summary.size() &lt; 100&quot; Example (Equality): title: &quot;Requestor is owner&quot; description: &quot;Determines if requestor is the document owner&quot; expression: &quot;document.owner == request.auth.claims.email&quot; Example (Logic): title: &quot;Public documents&quot; description: &quot;Determine whether the document should be publicly visible&quot; expression: &quot;document.type != &#x27;private&#x27; &amp;&amp; document.type != &#x27;internal&#x27;&quot; Example (Data Manipulation): title: &quot;Notification string&quot; description: &quot;Create a notification string with a timestamp.&quot; expression: &quot;&#x27;New message received at &#x27; + string(document.create_time)&quot; The exact variables and functions that may be referenced within an expression are determined by the service that evaluates it. See the service documentation for additional information. # User defined CEVAL expression. A CEVAL expression is used to specify match criteria such as origin.ip, source.region_code and contents in the request header.
+    &quot;expr&quot;: { # Represents a textual expression in the Common Expression Language (CEL) syntax. CEL is a C-like expression language. The syntax and semantics of CEL are documented at https://github.com/google/cel-spec. Example (Comparison): title: &quot;Summary size limit&quot; description: &quot;Determines if a summary is less than 100 chars&quot; expression: &quot;document.summary.size() &lt; 100&quot; Example (Equality): title: &quot;Requestor is owner&quot; description: &quot;Determines if requestor is the document owner&quot; expression: &quot;document.owner == request.auth.claims.email&quot; Example (Logic): title: &quot;Public documents&quot; description: &quot;Determine whether the document should be publicly visible&quot; expression: &quot;document.type != &#x27;private&#x27; &amp;&amp; document.type != &#x27;internal&#x27;&quot; Example (Data Manipulation): title: &quot;Notification string&quot; description: &quot;Create a notification string with a timestamp.&quot; expression: &quot;&#x27;New message received at &#x27; + string(document.create_time)&quot; The exact variables and functions that may be referenced within an expression are determined by the service that evaluates it. See the service documentation for additional information. # User defined CEVAL expression. A CEVAL expression is used to specify match criteria such as origin.ip, source.region_code and contents in the request header. Expressions containing `evaluateThreatIntelligence` require Cloud Armor Managed Protection Plus tier and are not supported in Edge Policies nor in Regional Policies. Expressions containing `evaluatePreconfiguredExpr(&#x27;sourceiplist-*&#x27;)` require Cloud Armor Managed Protection Plus tier and are only supported in Global Security Policies.
       &quot;description&quot;: &quot;A String&quot;, # Optional. Description of the expression. This is a longer text which describes the expression, e.g. when hovered over it in a UI.
       &quot;expression&quot;: &quot;A String&quot;, # Textual representation of an expression in Common Expression Language syntax.
       &quot;location&quot;: &quot;A String&quot;, # Optional. String indicating the location of the expression for error reporting, e.g. a file name and a position in the file.
       &quot;title&quot;: &quot;A String&quot;, # Optional. Title for the expression, i.e. a short string describing its purpose. This can be used e.g. in UIs which allow to enter the expression.
+    },
+    &quot;exprOptions&quot;: { # The configuration options available when specifying a user defined CEVAL expression (i.e., &#x27;expr&#x27;).
+      &quot;recaptchaOptions&quot;: { # reCAPTCHA configuration options to be applied for the rule. If the rule does not evaluate reCAPTCHA tokens, this field will have no effect.
+        &quot;actionTokenSiteKeys&quot;: [ # A list of site keys to be used during the validation of reCAPTCHA action-tokens. The provided site keys need to be created from reCAPTCHA API under the same project where the security policy is created.
+          &quot;A String&quot;,
+        ],
+        &quot;sessionTokenSiteKeys&quot;: [ # A list of site keys to be used during the validation of reCAPTCHA session-tokens. The provided site keys need to be created from reCAPTCHA API under the same project where the security policy is created.
+          &quot;A String&quot;,
+        ],
+      },
     },
     &quot;versionedExpr&quot;: &quot;A String&quot;, # Preconfigured versioned expression. If this field is specified, config must also be specified. Available preconfigured expressions along with their requirements are: SRC_IPS_V1 - must specify the corresponding src_ip_range field in config.
   },
@@ -1166,12 +1268,12 @@ Returns:
       },
     ],
     &quot;enforceOnKeyName&quot;: &quot;A String&quot;, # Rate limit key name applicable only for the following key types: HTTP_HEADER -- Name of the HTTP header whose value is taken as the key value. HTTP_COOKIE -- Name of the HTTP cookie whose value is taken as the key value.
-    &quot;exceedAction&quot;: &quot;A String&quot;, # Action to take for requests that are above the configured rate limit threshold, to either deny with a specified HTTP response code, or redirect to a different endpoint. Valid options are `deny(STATUS)`, where valid values for `STATUS` are 403, 404, 429, and 502, and `redirect`, where the redirect parameters come from `exceedRedirectOptions` below.
+    &quot;exceedAction&quot;: &quot;A String&quot;, # Action to take for requests that are above the configured rate limit threshold, to either deny with a specified HTTP response code, or redirect to a different endpoint. Valid options are `deny(STATUS)`, where valid values for `STATUS` are 403, 404, 429, and 502, and `redirect`, where the redirect parameters come from `exceedRedirectOptions` below. The `redirect` action is only supported in Global Security Policies of type CLOUD_ARMOR.
     &quot;exceedActionRpcStatus&quot;: { # Simplified google.rpc.Status type (omitting details). # Specified gRPC response status for proxyless gRPC requests that are above the configured rate limit threshold
       &quot;code&quot;: 42, # The status code, which should be an enum value of google.rpc.Code.
       &quot;message&quot;: &quot;A String&quot;, # A developer-facing error message, which should be in English.
     },
-    &quot;exceedRedirectOptions&quot;: { # Parameters defining the redirect action that is used as the exceed action. Cannot be specified if the exceed action is not redirect.
+    &quot;exceedRedirectOptions&quot;: { # Parameters defining the redirect action that is used as the exceed action. Cannot be specified if the exceed action is not redirect. This field is only supported in Global Security Policies of type CLOUD_ARMOR.
       &quot;target&quot;: &quot;A String&quot;, # Target for the redirect action. This is required if the type is EXTERNAL_302 and cannot be specified for GOOGLE_RECAPTCHA.
       &quot;type&quot;: &quot;A String&quot;, # Type of the redirect action.
     },
@@ -1180,7 +1282,7 @@ Returns:
       &quot;intervalSec&quot;: 42, # Interval over which the threshold is computed.
     },
   },
-  &quot;redirectOptions&quot;: { # Parameters defining the redirect action. Cannot be specified for any other actions.
+  &quot;redirectOptions&quot;: { # Parameters defining the redirect action. Cannot be specified for any other actions. This field is only supported in Global Security Policies of type CLOUD_ARMOR.
     &quot;target&quot;: &quot;A String&quot;, # Target for the redirect action. This is required if the type is EXTERNAL_302 and cannot be specified for GOOGLE_RECAPTCHA.
     &quot;type&quot;: &quot;A String&quot;, # Type of the redirect action.
   },
@@ -1214,9 +1316,9 @@ Args:
       &quot;impactedBaselineThreshold&quot;: 3.14,
       &quot;loadThreshold&quot;: 3.14,
     },
-    &quot;layer7DdosDefenseConfig&quot;: { # Configuration options for L7 DDoS detection. # If set to true, enables Cloud Armor Machine Learning.
-      &quot;enable&quot;: True or False, # If set to true, enables CAAP for L7 DDoS detection.
-      &quot;ruleVisibility&quot;: &quot;A String&quot;, # Rule visibility can be one of the following: STANDARD - opaque rules. (default) PREMIUM - transparent rules.
+    &quot;layer7DdosDefenseConfig&quot;: { # Configuration options for L7 DDoS detection. This field is only supported in Global Security Policies of type CLOUD_ARMOR. # If set to true, enables Cloud Armor Machine Learning.
+      &quot;enable&quot;: True or False, # If set to true, enables CAAP for L7 DDoS detection. This field is only supported in Global Security Policies of type CLOUD_ARMOR.
+      &quot;ruleVisibility&quot;: &quot;A String&quot;, # Rule visibility can be one of the following: STANDARD - opaque rules. (default) PREMIUM - transparent rules. This field is only supported in Global Security Policies of type CLOUD_ARMOR.
     },
   },
   &quot;advancedOptionsConfig&quot;: {
@@ -1227,6 +1329,9 @@ Args:
     },
     &quot;jsonParsing&quot;: &quot;A String&quot;,
     &quot;logLevel&quot;: &quot;A String&quot;,
+    &quot;userIpRequestHeaders&quot;: [ # An optional list of case-insensitive request header names to use for resolving the callers client IP address.
+      &quot;A String&quot;,
+    ],
   },
   &quot;associations&quot;: [ # A list of associations that belong to this policy.
     {
@@ -1255,17 +1360,17 @@ Args:
   &quot;name&quot;: &quot;A String&quot;, # Name of the resource. Provided by the client when the resource is created. The name must be 1-63 characters long, and comply with RFC1035. Specifically, the name must be 1-63 characters long and match the regular expression `[a-z]([-a-z0-9]*[a-z0-9])?` which means the first character must be a lowercase letter, and all following characters must be a dash, lowercase letter, or digit, except the last character, which cannot be a dash.
   &quot;parent&quot;: &quot;A String&quot;, # [Output Only] The parent of the security policy.
   &quot;recaptchaOptionsConfig&quot;: {
-    &quot;redirectSiteKey&quot;: &quot;A String&quot;, # An optional field to supply a reCAPTCHA site key to be used for all the rules using the redirect action with the type of GOOGLE_RECAPTCHA under the security policy. The specified site key needs to be created from the reCAPTCHA API. The user is responsible for the validity of the specified site key. If not specified, a Google-managed site key is used.
+    &quot;redirectSiteKey&quot;: &quot;A String&quot;, # An optional field to supply a reCAPTCHA site key to be used for all the rules using the redirect action with the type of GOOGLE_RECAPTCHA under the security policy. The specified site key needs to be created from the reCAPTCHA API. The user is responsible for the validity of the specified site key. If not specified, a Google-managed site key is used. This field is only supported in Global Security Policies of type CLOUD_ARMOR.
   },
   &quot;region&quot;: &quot;A String&quot;, # [Output Only] URL of the region where the regional security policy resides. This field is not applicable to global security policies.
   &quot;ruleTupleCount&quot;: 42, # [Output Only] Total count of all security policy rule tuples. A security policy can not exceed a set number of tuples.
   &quot;rules&quot;: [ # A list of rules that belong to this policy. There must always be a default rule which is a rule with priority 2147483647 and match all condition (for the match condition this means match &quot;*&quot; for srcIpRanges and for the networkMatch condition every field must be either match &quot;*&quot; or not set). If no rules are provided when creating a security policy, a default rule with action &quot;allow&quot; will be added.
     { # Represents a rule that describes one or more match conditions along with the action to be taken when traffic matches this condition (allow or deny).
-      &quot;action&quot;: &quot;A String&quot;, # The Action to perform when the rule is matched. The following are the valid actions: - allow: allow access to target. - deny(STATUS): deny access to target, returns the HTTP response code specified. Valid values for `STATUS` are 403, 404, and 502. - rate_based_ban: limit client traffic to the configured threshold and ban the client if the traffic exceeds the threshold. Configure parameters for this action in RateLimitOptions. Requires rate_limit_options to be set. - redirect: redirect to a different target. This can either be an internal reCAPTCHA redirect, or an external URL-based redirect via a 302 response. Parameters for this action can be configured via redirectOptions. - throttle: limit client traffic to the configured threshold. Configure parameters for this action in rateLimitOptions. Requires rate_limit_options to be set for this.
+      &quot;action&quot;: &quot;A String&quot;, # The Action to perform when the rule is matched. The following are the valid actions: - allow: allow access to target. - deny(STATUS): deny access to target, returns the HTTP response code specified. Valid values for `STATUS` are 403, 404, and 502. - rate_based_ban: limit client traffic to the configured threshold and ban the client if the traffic exceeds the threshold. Configure parameters for this action in RateLimitOptions. Requires rate_limit_options to be set. - redirect: redirect to a different target. This can either be an internal reCAPTCHA redirect, or an external URL-based redirect via a 302 response. Parameters for this action can be configured via redirectOptions. This action is only supported in Global Security Policies of type CLOUD_ARMOR. - throttle: limit client traffic to the configured threshold. Configure parameters for this action in rateLimitOptions. Requires rate_limit_options to be set for this.
       &quot;description&quot;: &quot;A String&quot;, # An optional description of this resource. Provide this property when you create the resource.
       &quot;direction&quot;: &quot;A String&quot;, # The direction in which this rule applies. This field may only be specified when versioned_expr is set to FIREWALL.
       &quot;enableLogging&quot;: True or False, # Denotes whether to enable logging for a particular rule. If logging is enabled, logs will be exported to the configured export destination in Stackdriver. Logs may be exported to BigQuery or Pub/Sub. Note: you cannot enable logging on &quot;goto_next&quot; rules. This field may only be specified when the versioned_expr is set to FIREWALL.
-      &quot;headerAction&quot;: { # Optional, additional actions that are performed on headers.
+      &quot;headerAction&quot;: { # Optional, additional actions that are performed on headers. This field is only supported in Global Security Policies of type CLOUD_ARMOR.
         &quot;requestHeadersToAdds&quot;: [ # The list of request headers to add or overwrite if they&#x27;re already present.
           {
             &quot;headerName&quot;: &quot;A String&quot;, # The name of the header to set.
@@ -1299,11 +1404,21 @@ Args:
             &quot;A String&quot;,
           ],
         },
-        &quot;expr&quot;: { # Represents a textual expression in the Common Expression Language (CEL) syntax. CEL is a C-like expression language. The syntax and semantics of CEL are documented at https://github.com/google/cel-spec. Example (Comparison): title: &quot;Summary size limit&quot; description: &quot;Determines if a summary is less than 100 chars&quot; expression: &quot;document.summary.size() &lt; 100&quot; Example (Equality): title: &quot;Requestor is owner&quot; description: &quot;Determines if requestor is the document owner&quot; expression: &quot;document.owner == request.auth.claims.email&quot; Example (Logic): title: &quot;Public documents&quot; description: &quot;Determine whether the document should be publicly visible&quot; expression: &quot;document.type != &#x27;private&#x27; &amp;&amp; document.type != &#x27;internal&#x27;&quot; Example (Data Manipulation): title: &quot;Notification string&quot; description: &quot;Create a notification string with a timestamp.&quot; expression: &quot;&#x27;New message received at &#x27; + string(document.create_time)&quot; The exact variables and functions that may be referenced within an expression are determined by the service that evaluates it. See the service documentation for additional information. # User defined CEVAL expression. A CEVAL expression is used to specify match criteria such as origin.ip, source.region_code and contents in the request header.
+        &quot;expr&quot;: { # Represents a textual expression in the Common Expression Language (CEL) syntax. CEL is a C-like expression language. The syntax and semantics of CEL are documented at https://github.com/google/cel-spec. Example (Comparison): title: &quot;Summary size limit&quot; description: &quot;Determines if a summary is less than 100 chars&quot; expression: &quot;document.summary.size() &lt; 100&quot; Example (Equality): title: &quot;Requestor is owner&quot; description: &quot;Determines if requestor is the document owner&quot; expression: &quot;document.owner == request.auth.claims.email&quot; Example (Logic): title: &quot;Public documents&quot; description: &quot;Determine whether the document should be publicly visible&quot; expression: &quot;document.type != &#x27;private&#x27; &amp;&amp; document.type != &#x27;internal&#x27;&quot; Example (Data Manipulation): title: &quot;Notification string&quot; description: &quot;Create a notification string with a timestamp.&quot; expression: &quot;&#x27;New message received at &#x27; + string(document.create_time)&quot; The exact variables and functions that may be referenced within an expression are determined by the service that evaluates it. See the service documentation for additional information. # User defined CEVAL expression. A CEVAL expression is used to specify match criteria such as origin.ip, source.region_code and contents in the request header. Expressions containing `evaluateThreatIntelligence` require Cloud Armor Managed Protection Plus tier and are not supported in Edge Policies nor in Regional Policies. Expressions containing `evaluatePreconfiguredExpr(&#x27;sourceiplist-*&#x27;)` require Cloud Armor Managed Protection Plus tier and are only supported in Global Security Policies.
           &quot;description&quot;: &quot;A String&quot;, # Optional. Description of the expression. This is a longer text which describes the expression, e.g. when hovered over it in a UI.
           &quot;expression&quot;: &quot;A String&quot;, # Textual representation of an expression in Common Expression Language syntax.
           &quot;location&quot;: &quot;A String&quot;, # Optional. String indicating the location of the expression for error reporting, e.g. a file name and a position in the file.
           &quot;title&quot;: &quot;A String&quot;, # Optional. Title for the expression, i.e. a short string describing its purpose. This can be used e.g. in UIs which allow to enter the expression.
+        },
+        &quot;exprOptions&quot;: { # The configuration options available when specifying a user defined CEVAL expression (i.e., &#x27;expr&#x27;).
+          &quot;recaptchaOptions&quot;: { # reCAPTCHA configuration options to be applied for the rule. If the rule does not evaluate reCAPTCHA tokens, this field will have no effect.
+            &quot;actionTokenSiteKeys&quot;: [ # A list of site keys to be used during the validation of reCAPTCHA action-tokens. The provided site keys need to be created from reCAPTCHA API under the same project where the security policy is created.
+              &quot;A String&quot;,
+            ],
+            &quot;sessionTokenSiteKeys&quot;: [ # A list of site keys to be used during the validation of reCAPTCHA session-tokens. The provided site keys need to be created from reCAPTCHA API under the same project where the security policy is created.
+              &quot;A String&quot;,
+            ],
+          },
         },
         &quot;versionedExpr&quot;: &quot;A String&quot;, # Preconfigured versioned expression. If this field is specified, config must also be specified. Available preconfigured expressions along with their requirements are: SRC_IPS_V1 - must specify the corresponding src_ip_range field in config.
       },
@@ -1389,12 +1504,12 @@ Args:
           },
         ],
         &quot;enforceOnKeyName&quot;: &quot;A String&quot;, # Rate limit key name applicable only for the following key types: HTTP_HEADER -- Name of the HTTP header whose value is taken as the key value. HTTP_COOKIE -- Name of the HTTP cookie whose value is taken as the key value.
-        &quot;exceedAction&quot;: &quot;A String&quot;, # Action to take for requests that are above the configured rate limit threshold, to either deny with a specified HTTP response code, or redirect to a different endpoint. Valid options are `deny(STATUS)`, where valid values for `STATUS` are 403, 404, 429, and 502, and `redirect`, where the redirect parameters come from `exceedRedirectOptions` below.
+        &quot;exceedAction&quot;: &quot;A String&quot;, # Action to take for requests that are above the configured rate limit threshold, to either deny with a specified HTTP response code, or redirect to a different endpoint. Valid options are `deny(STATUS)`, where valid values for `STATUS` are 403, 404, 429, and 502, and `redirect`, where the redirect parameters come from `exceedRedirectOptions` below. The `redirect` action is only supported in Global Security Policies of type CLOUD_ARMOR.
         &quot;exceedActionRpcStatus&quot;: { # Simplified google.rpc.Status type (omitting details). # Specified gRPC response status for proxyless gRPC requests that are above the configured rate limit threshold
           &quot;code&quot;: 42, # The status code, which should be an enum value of google.rpc.Code.
           &quot;message&quot;: &quot;A String&quot;, # A developer-facing error message, which should be in English.
         },
-        &quot;exceedRedirectOptions&quot;: { # Parameters defining the redirect action that is used as the exceed action. Cannot be specified if the exceed action is not redirect.
+        &quot;exceedRedirectOptions&quot;: { # Parameters defining the redirect action that is used as the exceed action. Cannot be specified if the exceed action is not redirect. This field is only supported in Global Security Policies of type CLOUD_ARMOR.
           &quot;target&quot;: &quot;A String&quot;, # Target for the redirect action. This is required if the type is EXTERNAL_302 and cannot be specified for GOOGLE_RECAPTCHA.
           &quot;type&quot;: &quot;A String&quot;, # Type of the redirect action.
         },
@@ -1403,7 +1518,7 @@ Args:
           &quot;intervalSec&quot;: 42, # Interval over which the threshold is computed.
         },
       },
-      &quot;redirectOptions&quot;: { # Parameters defining the redirect action. Cannot be specified for any other actions.
+      &quot;redirectOptions&quot;: { # Parameters defining the redirect action. Cannot be specified for any other actions. This field is only supported in Global Security Policies of type CLOUD_ARMOR.
         &quot;target&quot;: &quot;A String&quot;, # Target for the redirect action. This is required if the type is EXTERNAL_302 and cannot be specified for GOOGLE_RECAPTCHA.
         &quot;type&quot;: &quot;A String&quot;, # Type of the redirect action.
       },
@@ -1421,7 +1536,7 @@ Args:
   ],
   &quot;selfLink&quot;: &quot;A String&quot;, # [Output Only] Server-defined URL for the resource.
   &quot;selfLinkWithId&quot;: &quot;A String&quot;, # [Output Only] Server-defined URL for this resource with the resource id.
-  &quot;type&quot;: &quot;A String&quot;, # The type indicates the intended use of the security policy. - CLOUD_ARMOR: Cloud Armor backend security policies can be configured to filter incoming HTTP requests targeting backend services. They filter requests before they hit the origin servers. - CLOUD_ARMOR_EDGE: Cloud Armor edge security policies can be configured to filter incoming HTTP requests targeting backend services (including Cloud CDN-enabled) as well as backend buckets (Cloud Storage). They filter requests before the request is served from Google&#x27;s cache. - CLOUD_ARMOR_INTERNAL_SERVICE: Cloud Armor internal service policies can be configured to filter HTTP requests targeting services managed by Traffic Director in a service mesh. They filter requests before the request is served from the application. This field can be set only at resource creation time.
+  &quot;type&quot;: &quot;A String&quot;, # The type indicates the intended use of the security policy. - CLOUD_ARMOR: Cloud Armor backend security policies can be configured to filter incoming HTTP requests targeting backend services. They filter requests before they hit the origin servers. - CLOUD_ARMOR_EDGE: Cloud Armor edge security policies can be configured to filter incoming HTTP requests targeting backend services (including Cloud CDN-enabled) as well as backend buckets (Cloud Storage). They filter requests before the request is served from Google&#x27;s cache. - CLOUD_ARMOR_INTERNAL_SERVICE: Cloud Armor internal service policies can be configured to filter HTTP requests targeting services managed by Traffic Director in a service mesh. They filter requests before the request is served from the application. - CLOUD_ARMOR_NETWORK: Cloud Armor network policies can be configured to filter packets targeting network load balancing resources such as backend services, target pools, target instances, and instances with external IPs. They filter requests before the request is served from the application. This field can be set only at resource creation time.
   &quot;userDefinedFields&quot;: [ # Definitions of user-defined fields for CLOUD_ARMOR_NETWORK policies. A user-defined field consists of up to 4 bytes extracted from a fixed offset in the packet, relative to the IPv4, IPv6, TCP, or UDP header, with an optional mask to select certain bits. Rules may then specify matching values for these fields. Example: userDefinedFields: - name: &quot;ipv4_fragment_offset&quot; base: IPV4 offset: 6 size: 2 mask: &quot;0x1fff&quot;
     {
       &quot;base&quot;: &quot;A String&quot;, # The base relative to which &#x27;offset&#x27; is measured. Possible values are: - IPV4: Points to the beginning of the IPv4 header. - IPV6: Points to the beginning of the IPv6 header. - TCP: Points to the beginning of the TCP header, skipping over any IPv4 options or IPv6 extension headers. Not present for non-first fragments. - UDP: Points to the beginning of the UDP header, skipping over any IPv4 options or IPv6 extension headers. Not present for non-first fragments. required
@@ -1492,6 +1607,17 @@ Returns:
   &quot;httpErrorStatusCode&quot;: 42, # [Output Only] If the operation fails, this field contains the HTTP error status code that was returned. For example, a `404` means the resource was not found.
   &quot;id&quot;: &quot;A String&quot;, # [Output Only] The unique identifier for the operation. This identifier is defined by the server.
   &quot;insertTime&quot;: &quot;A String&quot;, # [Output Only] The time that this operation was requested. This value is in RFC3339 text format.
+  &quot;instancesBulkInsertOperationMetadata&quot;: {
+    &quot;perLocationStatus&quot;: { # Status information per location (location name is key). Example key: zones/us-central1-a
+      &quot;a_key&quot;: {
+        &quot;createdVmCount&quot;: 42, # [Output Only] Count of VMs successfully created so far.
+        &quot;deletedVmCount&quot;: 42, # [Output Only] Count of VMs that got deleted during rollback.
+        &quot;failedToCreateVmCount&quot;: 42, # [Output Only] Count of VMs that started creating but encountered an error.
+        &quot;status&quot;: &quot;A String&quot;, # [Output Only] Creation status of BulkInsert operation - information if the flow is rolling forward or rolling back.
+        &quot;targetVmCount&quot;: 42, # [Output Only] Count of VMs originally planned to be created.
+      },
+    },
+  },
   &quot;kind&quot;: &quot;compute#operation&quot;, # [Output Only] Type of the resource. Always `compute#operation` for Operation resources.
   &quot;name&quot;: &quot;A String&quot;, # [Output Only] Name of the operation.
   &quot;operationGroupId&quot;: &quot;A String&quot;, # [Output Only] An ID that represents a group of operations, such as when a group of operations results from a `bulkInsert` API request.
@@ -1500,6 +1626,23 @@ Returns:
   &quot;region&quot;: &quot;A String&quot;, # [Output Only] The URL of the region where the operation resides. Only applicable when performing regional operations.
   &quot;selfLink&quot;: &quot;A String&quot;, # [Output Only] Server-defined URL for the resource.
   &quot;selfLinkWithId&quot;: &quot;A String&quot;, # [Output Only] Server-defined URL for this resource with the resource id.
+  &quot;setCommonInstanceMetadataOperationMetadata&quot;: { # Encapsulates partial completion metadata for SetCommonInstanceMetadata. Will be propagated on Operation.metadata.
+    &quot;clientOperationId&quot;: &quot;A String&quot;,
+    &quot;perLocationOperations&quot;: {
+      &quot;a_key&quot;: {
+        &quot;error&quot;: { # The `Status` type defines a logical error model that is suitable for different programming environments, including REST APIs and RPC APIs. It is used by [gRPC](https://github.com/grpc). Each `Status` message contains three pieces of data: error code, error message, and error details. You can find out more about this error model and how to work with it in the [API Design Guide](https://cloud.google.com/apis/design/errors).
+          &quot;code&quot;: 42, # The status code, which should be an enum value of google.rpc.Code.
+          &quot;details&quot;: [ # A list of messages that carry the error details. There is a common set of message types for APIs to use.
+            {
+              &quot;a_key&quot;: &quot;&quot;, # Properties of the object. Contains field @type with type URL.
+            },
+          ],
+          &quot;message&quot;: &quot;A String&quot;, # A developer-facing error message, which should be in English. Any user-facing error message should be localized and sent in the google.rpc.Status.details field, or localized by the client.
+        },
+        &quot;state&quot;: &quot;A String&quot;,
+      },
+    },
+  },
   &quot;startTime&quot;: &quot;A String&quot;, # [Output Only] The time that this operation was started by the server. This value is in RFC3339 text format.
   &quot;status&quot;: &quot;A String&quot;, # [Output Only] The status of the operation, which can be one of the following: `PENDING`, `RUNNING`, or `DONE`.
   &quot;statusMessage&quot;: &quot;A String&quot;, # [Output Only] An optional textual description of the current status of the operation.
@@ -1553,9 +1696,9 @@ Returns:
           &quot;impactedBaselineThreshold&quot;: 3.14,
           &quot;loadThreshold&quot;: 3.14,
         },
-        &quot;layer7DdosDefenseConfig&quot;: { # Configuration options for L7 DDoS detection. # If set to true, enables Cloud Armor Machine Learning.
-          &quot;enable&quot;: True or False, # If set to true, enables CAAP for L7 DDoS detection.
-          &quot;ruleVisibility&quot;: &quot;A String&quot;, # Rule visibility can be one of the following: STANDARD - opaque rules. (default) PREMIUM - transparent rules.
+        &quot;layer7DdosDefenseConfig&quot;: { # Configuration options for L7 DDoS detection. This field is only supported in Global Security Policies of type CLOUD_ARMOR. # If set to true, enables Cloud Armor Machine Learning.
+          &quot;enable&quot;: True or False, # If set to true, enables CAAP for L7 DDoS detection. This field is only supported in Global Security Policies of type CLOUD_ARMOR.
+          &quot;ruleVisibility&quot;: &quot;A String&quot;, # Rule visibility can be one of the following: STANDARD - opaque rules. (default) PREMIUM - transparent rules. This field is only supported in Global Security Policies of type CLOUD_ARMOR.
         },
       },
       &quot;advancedOptionsConfig&quot;: {
@@ -1566,6 +1709,9 @@ Returns:
         },
         &quot;jsonParsing&quot;: &quot;A String&quot;,
         &quot;logLevel&quot;: &quot;A String&quot;,
+        &quot;userIpRequestHeaders&quot;: [ # An optional list of case-insensitive request header names to use for resolving the callers client IP address.
+          &quot;A String&quot;,
+        ],
       },
       &quot;associations&quot;: [ # A list of associations that belong to this policy.
         {
@@ -1594,17 +1740,17 @@ Returns:
       &quot;name&quot;: &quot;A String&quot;, # Name of the resource. Provided by the client when the resource is created. The name must be 1-63 characters long, and comply with RFC1035. Specifically, the name must be 1-63 characters long and match the regular expression `[a-z]([-a-z0-9]*[a-z0-9])?` which means the first character must be a lowercase letter, and all following characters must be a dash, lowercase letter, or digit, except the last character, which cannot be a dash.
       &quot;parent&quot;: &quot;A String&quot;, # [Output Only] The parent of the security policy.
       &quot;recaptchaOptionsConfig&quot;: {
-        &quot;redirectSiteKey&quot;: &quot;A String&quot;, # An optional field to supply a reCAPTCHA site key to be used for all the rules using the redirect action with the type of GOOGLE_RECAPTCHA under the security policy. The specified site key needs to be created from the reCAPTCHA API. The user is responsible for the validity of the specified site key. If not specified, a Google-managed site key is used.
+        &quot;redirectSiteKey&quot;: &quot;A String&quot;, # An optional field to supply a reCAPTCHA site key to be used for all the rules using the redirect action with the type of GOOGLE_RECAPTCHA under the security policy. The specified site key needs to be created from the reCAPTCHA API. The user is responsible for the validity of the specified site key. If not specified, a Google-managed site key is used. This field is only supported in Global Security Policies of type CLOUD_ARMOR.
       },
       &quot;region&quot;: &quot;A String&quot;, # [Output Only] URL of the region where the regional security policy resides. This field is not applicable to global security policies.
       &quot;ruleTupleCount&quot;: 42, # [Output Only] Total count of all security policy rule tuples. A security policy can not exceed a set number of tuples.
       &quot;rules&quot;: [ # A list of rules that belong to this policy. There must always be a default rule which is a rule with priority 2147483647 and match all condition (for the match condition this means match &quot;*&quot; for srcIpRanges and for the networkMatch condition every field must be either match &quot;*&quot; or not set). If no rules are provided when creating a security policy, a default rule with action &quot;allow&quot; will be added.
         { # Represents a rule that describes one or more match conditions along with the action to be taken when traffic matches this condition (allow or deny).
-          &quot;action&quot;: &quot;A String&quot;, # The Action to perform when the rule is matched. The following are the valid actions: - allow: allow access to target. - deny(STATUS): deny access to target, returns the HTTP response code specified. Valid values for `STATUS` are 403, 404, and 502. - rate_based_ban: limit client traffic to the configured threshold and ban the client if the traffic exceeds the threshold. Configure parameters for this action in RateLimitOptions. Requires rate_limit_options to be set. - redirect: redirect to a different target. This can either be an internal reCAPTCHA redirect, or an external URL-based redirect via a 302 response. Parameters for this action can be configured via redirectOptions. - throttle: limit client traffic to the configured threshold. Configure parameters for this action in rateLimitOptions. Requires rate_limit_options to be set for this.
+          &quot;action&quot;: &quot;A String&quot;, # The Action to perform when the rule is matched. The following are the valid actions: - allow: allow access to target. - deny(STATUS): deny access to target, returns the HTTP response code specified. Valid values for `STATUS` are 403, 404, and 502. - rate_based_ban: limit client traffic to the configured threshold and ban the client if the traffic exceeds the threshold. Configure parameters for this action in RateLimitOptions. Requires rate_limit_options to be set. - redirect: redirect to a different target. This can either be an internal reCAPTCHA redirect, or an external URL-based redirect via a 302 response. Parameters for this action can be configured via redirectOptions. This action is only supported in Global Security Policies of type CLOUD_ARMOR. - throttle: limit client traffic to the configured threshold. Configure parameters for this action in rateLimitOptions. Requires rate_limit_options to be set for this.
           &quot;description&quot;: &quot;A String&quot;, # An optional description of this resource. Provide this property when you create the resource.
           &quot;direction&quot;: &quot;A String&quot;, # The direction in which this rule applies. This field may only be specified when versioned_expr is set to FIREWALL.
           &quot;enableLogging&quot;: True or False, # Denotes whether to enable logging for a particular rule. If logging is enabled, logs will be exported to the configured export destination in Stackdriver. Logs may be exported to BigQuery or Pub/Sub. Note: you cannot enable logging on &quot;goto_next&quot; rules. This field may only be specified when the versioned_expr is set to FIREWALL.
-          &quot;headerAction&quot;: { # Optional, additional actions that are performed on headers.
+          &quot;headerAction&quot;: { # Optional, additional actions that are performed on headers. This field is only supported in Global Security Policies of type CLOUD_ARMOR.
             &quot;requestHeadersToAdds&quot;: [ # The list of request headers to add or overwrite if they&#x27;re already present.
               {
                 &quot;headerName&quot;: &quot;A String&quot;, # The name of the header to set.
@@ -1638,11 +1784,21 @@ Returns:
                 &quot;A String&quot;,
               ],
             },
-            &quot;expr&quot;: { # Represents a textual expression in the Common Expression Language (CEL) syntax. CEL is a C-like expression language. The syntax and semantics of CEL are documented at https://github.com/google/cel-spec. Example (Comparison): title: &quot;Summary size limit&quot; description: &quot;Determines if a summary is less than 100 chars&quot; expression: &quot;document.summary.size() &lt; 100&quot; Example (Equality): title: &quot;Requestor is owner&quot; description: &quot;Determines if requestor is the document owner&quot; expression: &quot;document.owner == request.auth.claims.email&quot; Example (Logic): title: &quot;Public documents&quot; description: &quot;Determine whether the document should be publicly visible&quot; expression: &quot;document.type != &#x27;private&#x27; &amp;&amp; document.type != &#x27;internal&#x27;&quot; Example (Data Manipulation): title: &quot;Notification string&quot; description: &quot;Create a notification string with a timestamp.&quot; expression: &quot;&#x27;New message received at &#x27; + string(document.create_time)&quot; The exact variables and functions that may be referenced within an expression are determined by the service that evaluates it. See the service documentation for additional information. # User defined CEVAL expression. A CEVAL expression is used to specify match criteria such as origin.ip, source.region_code and contents in the request header.
+            &quot;expr&quot;: { # Represents a textual expression in the Common Expression Language (CEL) syntax. CEL is a C-like expression language. The syntax and semantics of CEL are documented at https://github.com/google/cel-spec. Example (Comparison): title: &quot;Summary size limit&quot; description: &quot;Determines if a summary is less than 100 chars&quot; expression: &quot;document.summary.size() &lt; 100&quot; Example (Equality): title: &quot;Requestor is owner&quot; description: &quot;Determines if requestor is the document owner&quot; expression: &quot;document.owner == request.auth.claims.email&quot; Example (Logic): title: &quot;Public documents&quot; description: &quot;Determine whether the document should be publicly visible&quot; expression: &quot;document.type != &#x27;private&#x27; &amp;&amp; document.type != &#x27;internal&#x27;&quot; Example (Data Manipulation): title: &quot;Notification string&quot; description: &quot;Create a notification string with a timestamp.&quot; expression: &quot;&#x27;New message received at &#x27; + string(document.create_time)&quot; The exact variables and functions that may be referenced within an expression are determined by the service that evaluates it. See the service documentation for additional information. # User defined CEVAL expression. A CEVAL expression is used to specify match criteria such as origin.ip, source.region_code and contents in the request header. Expressions containing `evaluateThreatIntelligence` require Cloud Armor Managed Protection Plus tier and are not supported in Edge Policies nor in Regional Policies. Expressions containing `evaluatePreconfiguredExpr(&#x27;sourceiplist-*&#x27;)` require Cloud Armor Managed Protection Plus tier and are only supported in Global Security Policies.
               &quot;description&quot;: &quot;A String&quot;, # Optional. Description of the expression. This is a longer text which describes the expression, e.g. when hovered over it in a UI.
               &quot;expression&quot;: &quot;A String&quot;, # Textual representation of an expression in Common Expression Language syntax.
               &quot;location&quot;: &quot;A String&quot;, # Optional. String indicating the location of the expression for error reporting, e.g. a file name and a position in the file.
               &quot;title&quot;: &quot;A String&quot;, # Optional. Title for the expression, i.e. a short string describing its purpose. This can be used e.g. in UIs which allow to enter the expression.
+            },
+            &quot;exprOptions&quot;: { # The configuration options available when specifying a user defined CEVAL expression (i.e., &#x27;expr&#x27;).
+              &quot;recaptchaOptions&quot;: { # reCAPTCHA configuration options to be applied for the rule. If the rule does not evaluate reCAPTCHA tokens, this field will have no effect.
+                &quot;actionTokenSiteKeys&quot;: [ # A list of site keys to be used during the validation of reCAPTCHA action-tokens. The provided site keys need to be created from reCAPTCHA API under the same project where the security policy is created.
+                  &quot;A String&quot;,
+                ],
+                &quot;sessionTokenSiteKeys&quot;: [ # A list of site keys to be used during the validation of reCAPTCHA session-tokens. The provided site keys need to be created from reCAPTCHA API under the same project where the security policy is created.
+                  &quot;A String&quot;,
+                ],
+              },
             },
             &quot;versionedExpr&quot;: &quot;A String&quot;, # Preconfigured versioned expression. If this field is specified, config must also be specified. Available preconfigured expressions along with their requirements are: SRC_IPS_V1 - must specify the corresponding src_ip_range field in config.
           },
@@ -1728,12 +1884,12 @@ Returns:
               },
             ],
             &quot;enforceOnKeyName&quot;: &quot;A String&quot;, # Rate limit key name applicable only for the following key types: HTTP_HEADER -- Name of the HTTP header whose value is taken as the key value. HTTP_COOKIE -- Name of the HTTP cookie whose value is taken as the key value.
-            &quot;exceedAction&quot;: &quot;A String&quot;, # Action to take for requests that are above the configured rate limit threshold, to either deny with a specified HTTP response code, or redirect to a different endpoint. Valid options are `deny(STATUS)`, where valid values for `STATUS` are 403, 404, 429, and 502, and `redirect`, where the redirect parameters come from `exceedRedirectOptions` below.
+            &quot;exceedAction&quot;: &quot;A String&quot;, # Action to take for requests that are above the configured rate limit threshold, to either deny with a specified HTTP response code, or redirect to a different endpoint. Valid options are `deny(STATUS)`, where valid values for `STATUS` are 403, 404, 429, and 502, and `redirect`, where the redirect parameters come from `exceedRedirectOptions` below. The `redirect` action is only supported in Global Security Policies of type CLOUD_ARMOR.
             &quot;exceedActionRpcStatus&quot;: { # Simplified google.rpc.Status type (omitting details). # Specified gRPC response status for proxyless gRPC requests that are above the configured rate limit threshold
               &quot;code&quot;: 42, # The status code, which should be an enum value of google.rpc.Code.
               &quot;message&quot;: &quot;A String&quot;, # A developer-facing error message, which should be in English.
             },
-            &quot;exceedRedirectOptions&quot;: { # Parameters defining the redirect action that is used as the exceed action. Cannot be specified if the exceed action is not redirect.
+            &quot;exceedRedirectOptions&quot;: { # Parameters defining the redirect action that is used as the exceed action. Cannot be specified if the exceed action is not redirect. This field is only supported in Global Security Policies of type CLOUD_ARMOR.
               &quot;target&quot;: &quot;A String&quot;, # Target for the redirect action. This is required if the type is EXTERNAL_302 and cannot be specified for GOOGLE_RECAPTCHA.
               &quot;type&quot;: &quot;A String&quot;, # Type of the redirect action.
             },
@@ -1742,7 +1898,7 @@ Returns:
               &quot;intervalSec&quot;: 42, # Interval over which the threshold is computed.
             },
           },
-          &quot;redirectOptions&quot;: { # Parameters defining the redirect action. Cannot be specified for any other actions.
+          &quot;redirectOptions&quot;: { # Parameters defining the redirect action. Cannot be specified for any other actions. This field is only supported in Global Security Policies of type CLOUD_ARMOR.
             &quot;target&quot;: &quot;A String&quot;, # Target for the redirect action. This is required if the type is EXTERNAL_302 and cannot be specified for GOOGLE_RECAPTCHA.
             &quot;type&quot;: &quot;A String&quot;, # Type of the redirect action.
           },
@@ -1760,7 +1916,7 @@ Returns:
       ],
       &quot;selfLink&quot;: &quot;A String&quot;, # [Output Only] Server-defined URL for the resource.
       &quot;selfLinkWithId&quot;: &quot;A String&quot;, # [Output Only] Server-defined URL for this resource with the resource id.
-      &quot;type&quot;: &quot;A String&quot;, # The type indicates the intended use of the security policy. - CLOUD_ARMOR: Cloud Armor backend security policies can be configured to filter incoming HTTP requests targeting backend services. They filter requests before they hit the origin servers. - CLOUD_ARMOR_EDGE: Cloud Armor edge security policies can be configured to filter incoming HTTP requests targeting backend services (including Cloud CDN-enabled) as well as backend buckets (Cloud Storage). They filter requests before the request is served from Google&#x27;s cache. - CLOUD_ARMOR_INTERNAL_SERVICE: Cloud Armor internal service policies can be configured to filter HTTP requests targeting services managed by Traffic Director in a service mesh. They filter requests before the request is served from the application. This field can be set only at resource creation time.
+      &quot;type&quot;: &quot;A String&quot;, # The type indicates the intended use of the security policy. - CLOUD_ARMOR: Cloud Armor backend security policies can be configured to filter incoming HTTP requests targeting backend services. They filter requests before they hit the origin servers. - CLOUD_ARMOR_EDGE: Cloud Armor edge security policies can be configured to filter incoming HTTP requests targeting backend services (including Cloud CDN-enabled) as well as backend buckets (Cloud Storage). They filter requests before the request is served from Google&#x27;s cache. - CLOUD_ARMOR_INTERNAL_SERVICE: Cloud Armor internal service policies can be configured to filter HTTP requests targeting services managed by Traffic Director in a service mesh. They filter requests before the request is served from the application. - CLOUD_ARMOR_NETWORK: Cloud Armor network policies can be configured to filter packets targeting network load balancing resources such as backend services, target pools, target instances, and instances with external IPs. They filter requests before the request is served from the application. This field can be set only at resource creation time.
       &quot;userDefinedFields&quot;: [ # Definitions of user-defined fields for CLOUD_ARMOR_NETWORK policies. A user-defined field consists of up to 4 bytes extracted from a fixed offset in the packet, relative to the IPv4, IPv6, TCP, or UDP header, with an optional mask to select certain bits. Rules may then specify matching values for these fields. Example: userDefinedFields: - name: &quot;ipv4_fragment_offset&quot; base: IPV4 offset: 6 size: 2 mask: &quot;0x1fff&quot;
         {
           &quot;base&quot;: &quot;A String&quot;, # The base relative to which &#x27;offset&#x27; is measured. Possible values are: - IPV4: Points to the beginning of the IPv4 header. - IPV6: Points to the beginning of the IPv6 header. - TCP: Points to the beginning of the TCP header, skipping over any IPv4 options or IPv6 extension headers. Not present for non-first fragments. - UDP: Points to the beginning of the UDP header, skipping over any IPv4 options or IPv6 extension headers. Not present for non-first fragments. required
@@ -1863,9 +2019,9 @@ Args:
       &quot;impactedBaselineThreshold&quot;: 3.14,
       &quot;loadThreshold&quot;: 3.14,
     },
-    &quot;layer7DdosDefenseConfig&quot;: { # Configuration options for L7 DDoS detection. # If set to true, enables Cloud Armor Machine Learning.
-      &quot;enable&quot;: True or False, # If set to true, enables CAAP for L7 DDoS detection.
-      &quot;ruleVisibility&quot;: &quot;A String&quot;, # Rule visibility can be one of the following: STANDARD - opaque rules. (default) PREMIUM - transparent rules.
+    &quot;layer7DdosDefenseConfig&quot;: { # Configuration options for L7 DDoS detection. This field is only supported in Global Security Policies of type CLOUD_ARMOR. # If set to true, enables Cloud Armor Machine Learning.
+      &quot;enable&quot;: True or False, # If set to true, enables CAAP for L7 DDoS detection. This field is only supported in Global Security Policies of type CLOUD_ARMOR.
+      &quot;ruleVisibility&quot;: &quot;A String&quot;, # Rule visibility can be one of the following: STANDARD - opaque rules. (default) PREMIUM - transparent rules. This field is only supported in Global Security Policies of type CLOUD_ARMOR.
     },
   },
   &quot;advancedOptionsConfig&quot;: {
@@ -1876,6 +2032,9 @@ Args:
     },
     &quot;jsonParsing&quot;: &quot;A String&quot;,
     &quot;logLevel&quot;: &quot;A String&quot;,
+    &quot;userIpRequestHeaders&quot;: [ # An optional list of case-insensitive request header names to use for resolving the callers client IP address.
+      &quot;A String&quot;,
+    ],
   },
   &quot;associations&quot;: [ # A list of associations that belong to this policy.
     {
@@ -1904,17 +2063,17 @@ Args:
   &quot;name&quot;: &quot;A String&quot;, # Name of the resource. Provided by the client when the resource is created. The name must be 1-63 characters long, and comply with RFC1035. Specifically, the name must be 1-63 characters long and match the regular expression `[a-z]([-a-z0-9]*[a-z0-9])?` which means the first character must be a lowercase letter, and all following characters must be a dash, lowercase letter, or digit, except the last character, which cannot be a dash.
   &quot;parent&quot;: &quot;A String&quot;, # [Output Only] The parent of the security policy.
   &quot;recaptchaOptionsConfig&quot;: {
-    &quot;redirectSiteKey&quot;: &quot;A String&quot;, # An optional field to supply a reCAPTCHA site key to be used for all the rules using the redirect action with the type of GOOGLE_RECAPTCHA under the security policy. The specified site key needs to be created from the reCAPTCHA API. The user is responsible for the validity of the specified site key. If not specified, a Google-managed site key is used.
+    &quot;redirectSiteKey&quot;: &quot;A String&quot;, # An optional field to supply a reCAPTCHA site key to be used for all the rules using the redirect action with the type of GOOGLE_RECAPTCHA under the security policy. The specified site key needs to be created from the reCAPTCHA API. The user is responsible for the validity of the specified site key. If not specified, a Google-managed site key is used. This field is only supported in Global Security Policies of type CLOUD_ARMOR.
   },
   &quot;region&quot;: &quot;A String&quot;, # [Output Only] URL of the region where the regional security policy resides. This field is not applicable to global security policies.
   &quot;ruleTupleCount&quot;: 42, # [Output Only] Total count of all security policy rule tuples. A security policy can not exceed a set number of tuples.
   &quot;rules&quot;: [ # A list of rules that belong to this policy. There must always be a default rule which is a rule with priority 2147483647 and match all condition (for the match condition this means match &quot;*&quot; for srcIpRanges and for the networkMatch condition every field must be either match &quot;*&quot; or not set). If no rules are provided when creating a security policy, a default rule with action &quot;allow&quot; will be added.
     { # Represents a rule that describes one or more match conditions along with the action to be taken when traffic matches this condition (allow or deny).
-      &quot;action&quot;: &quot;A String&quot;, # The Action to perform when the rule is matched. The following are the valid actions: - allow: allow access to target. - deny(STATUS): deny access to target, returns the HTTP response code specified. Valid values for `STATUS` are 403, 404, and 502. - rate_based_ban: limit client traffic to the configured threshold and ban the client if the traffic exceeds the threshold. Configure parameters for this action in RateLimitOptions. Requires rate_limit_options to be set. - redirect: redirect to a different target. This can either be an internal reCAPTCHA redirect, or an external URL-based redirect via a 302 response. Parameters for this action can be configured via redirectOptions. - throttle: limit client traffic to the configured threshold. Configure parameters for this action in rateLimitOptions. Requires rate_limit_options to be set for this.
+      &quot;action&quot;: &quot;A String&quot;, # The Action to perform when the rule is matched. The following are the valid actions: - allow: allow access to target. - deny(STATUS): deny access to target, returns the HTTP response code specified. Valid values for `STATUS` are 403, 404, and 502. - rate_based_ban: limit client traffic to the configured threshold and ban the client if the traffic exceeds the threshold. Configure parameters for this action in RateLimitOptions. Requires rate_limit_options to be set. - redirect: redirect to a different target. This can either be an internal reCAPTCHA redirect, or an external URL-based redirect via a 302 response. Parameters for this action can be configured via redirectOptions. This action is only supported in Global Security Policies of type CLOUD_ARMOR. - throttle: limit client traffic to the configured threshold. Configure parameters for this action in rateLimitOptions. Requires rate_limit_options to be set for this.
       &quot;description&quot;: &quot;A String&quot;, # An optional description of this resource. Provide this property when you create the resource.
       &quot;direction&quot;: &quot;A String&quot;, # The direction in which this rule applies. This field may only be specified when versioned_expr is set to FIREWALL.
       &quot;enableLogging&quot;: True or False, # Denotes whether to enable logging for a particular rule. If logging is enabled, logs will be exported to the configured export destination in Stackdriver. Logs may be exported to BigQuery or Pub/Sub. Note: you cannot enable logging on &quot;goto_next&quot; rules. This field may only be specified when the versioned_expr is set to FIREWALL.
-      &quot;headerAction&quot;: { # Optional, additional actions that are performed on headers.
+      &quot;headerAction&quot;: { # Optional, additional actions that are performed on headers. This field is only supported in Global Security Policies of type CLOUD_ARMOR.
         &quot;requestHeadersToAdds&quot;: [ # The list of request headers to add or overwrite if they&#x27;re already present.
           {
             &quot;headerName&quot;: &quot;A String&quot;, # The name of the header to set.
@@ -1948,11 +2107,21 @@ Args:
             &quot;A String&quot;,
           ],
         },
-        &quot;expr&quot;: { # Represents a textual expression in the Common Expression Language (CEL) syntax. CEL is a C-like expression language. The syntax and semantics of CEL are documented at https://github.com/google/cel-spec. Example (Comparison): title: &quot;Summary size limit&quot; description: &quot;Determines if a summary is less than 100 chars&quot; expression: &quot;document.summary.size() &lt; 100&quot; Example (Equality): title: &quot;Requestor is owner&quot; description: &quot;Determines if requestor is the document owner&quot; expression: &quot;document.owner == request.auth.claims.email&quot; Example (Logic): title: &quot;Public documents&quot; description: &quot;Determine whether the document should be publicly visible&quot; expression: &quot;document.type != &#x27;private&#x27; &amp;&amp; document.type != &#x27;internal&#x27;&quot; Example (Data Manipulation): title: &quot;Notification string&quot; description: &quot;Create a notification string with a timestamp.&quot; expression: &quot;&#x27;New message received at &#x27; + string(document.create_time)&quot; The exact variables and functions that may be referenced within an expression are determined by the service that evaluates it. See the service documentation for additional information. # User defined CEVAL expression. A CEVAL expression is used to specify match criteria such as origin.ip, source.region_code and contents in the request header.
+        &quot;expr&quot;: { # Represents a textual expression in the Common Expression Language (CEL) syntax. CEL is a C-like expression language. The syntax and semantics of CEL are documented at https://github.com/google/cel-spec. Example (Comparison): title: &quot;Summary size limit&quot; description: &quot;Determines if a summary is less than 100 chars&quot; expression: &quot;document.summary.size() &lt; 100&quot; Example (Equality): title: &quot;Requestor is owner&quot; description: &quot;Determines if requestor is the document owner&quot; expression: &quot;document.owner == request.auth.claims.email&quot; Example (Logic): title: &quot;Public documents&quot; description: &quot;Determine whether the document should be publicly visible&quot; expression: &quot;document.type != &#x27;private&#x27; &amp;&amp; document.type != &#x27;internal&#x27;&quot; Example (Data Manipulation): title: &quot;Notification string&quot; description: &quot;Create a notification string with a timestamp.&quot; expression: &quot;&#x27;New message received at &#x27; + string(document.create_time)&quot; The exact variables and functions that may be referenced within an expression are determined by the service that evaluates it. See the service documentation for additional information. # User defined CEVAL expression. A CEVAL expression is used to specify match criteria such as origin.ip, source.region_code and contents in the request header. Expressions containing `evaluateThreatIntelligence` require Cloud Armor Managed Protection Plus tier and are not supported in Edge Policies nor in Regional Policies. Expressions containing `evaluatePreconfiguredExpr(&#x27;sourceiplist-*&#x27;)` require Cloud Armor Managed Protection Plus tier and are only supported in Global Security Policies.
           &quot;description&quot;: &quot;A String&quot;, # Optional. Description of the expression. This is a longer text which describes the expression, e.g. when hovered over it in a UI.
           &quot;expression&quot;: &quot;A String&quot;, # Textual representation of an expression in Common Expression Language syntax.
           &quot;location&quot;: &quot;A String&quot;, # Optional. String indicating the location of the expression for error reporting, e.g. a file name and a position in the file.
           &quot;title&quot;: &quot;A String&quot;, # Optional. Title for the expression, i.e. a short string describing its purpose. This can be used e.g. in UIs which allow to enter the expression.
+        },
+        &quot;exprOptions&quot;: { # The configuration options available when specifying a user defined CEVAL expression (i.e., &#x27;expr&#x27;).
+          &quot;recaptchaOptions&quot;: { # reCAPTCHA configuration options to be applied for the rule. If the rule does not evaluate reCAPTCHA tokens, this field will have no effect.
+            &quot;actionTokenSiteKeys&quot;: [ # A list of site keys to be used during the validation of reCAPTCHA action-tokens. The provided site keys need to be created from reCAPTCHA API under the same project where the security policy is created.
+              &quot;A String&quot;,
+            ],
+            &quot;sessionTokenSiteKeys&quot;: [ # A list of site keys to be used during the validation of reCAPTCHA session-tokens. The provided site keys need to be created from reCAPTCHA API under the same project where the security policy is created.
+              &quot;A String&quot;,
+            ],
+          },
         },
         &quot;versionedExpr&quot;: &quot;A String&quot;, # Preconfigured versioned expression. If this field is specified, config must also be specified. Available preconfigured expressions along with their requirements are: SRC_IPS_V1 - must specify the corresponding src_ip_range field in config.
       },
@@ -2038,12 +2207,12 @@ Args:
           },
         ],
         &quot;enforceOnKeyName&quot;: &quot;A String&quot;, # Rate limit key name applicable only for the following key types: HTTP_HEADER -- Name of the HTTP header whose value is taken as the key value. HTTP_COOKIE -- Name of the HTTP cookie whose value is taken as the key value.
-        &quot;exceedAction&quot;: &quot;A String&quot;, # Action to take for requests that are above the configured rate limit threshold, to either deny with a specified HTTP response code, or redirect to a different endpoint. Valid options are `deny(STATUS)`, where valid values for `STATUS` are 403, 404, 429, and 502, and `redirect`, where the redirect parameters come from `exceedRedirectOptions` below.
+        &quot;exceedAction&quot;: &quot;A String&quot;, # Action to take for requests that are above the configured rate limit threshold, to either deny with a specified HTTP response code, or redirect to a different endpoint. Valid options are `deny(STATUS)`, where valid values for `STATUS` are 403, 404, 429, and 502, and `redirect`, where the redirect parameters come from `exceedRedirectOptions` below. The `redirect` action is only supported in Global Security Policies of type CLOUD_ARMOR.
         &quot;exceedActionRpcStatus&quot;: { # Simplified google.rpc.Status type (omitting details). # Specified gRPC response status for proxyless gRPC requests that are above the configured rate limit threshold
           &quot;code&quot;: 42, # The status code, which should be an enum value of google.rpc.Code.
           &quot;message&quot;: &quot;A String&quot;, # A developer-facing error message, which should be in English.
         },
-        &quot;exceedRedirectOptions&quot;: { # Parameters defining the redirect action that is used as the exceed action. Cannot be specified if the exceed action is not redirect.
+        &quot;exceedRedirectOptions&quot;: { # Parameters defining the redirect action that is used as the exceed action. Cannot be specified if the exceed action is not redirect. This field is only supported in Global Security Policies of type CLOUD_ARMOR.
           &quot;target&quot;: &quot;A String&quot;, # Target for the redirect action. This is required if the type is EXTERNAL_302 and cannot be specified for GOOGLE_RECAPTCHA.
           &quot;type&quot;: &quot;A String&quot;, # Type of the redirect action.
         },
@@ -2052,7 +2221,7 @@ Args:
           &quot;intervalSec&quot;: 42, # Interval over which the threshold is computed.
         },
       },
-      &quot;redirectOptions&quot;: { # Parameters defining the redirect action. Cannot be specified for any other actions.
+      &quot;redirectOptions&quot;: { # Parameters defining the redirect action. Cannot be specified for any other actions. This field is only supported in Global Security Policies of type CLOUD_ARMOR.
         &quot;target&quot;: &quot;A String&quot;, # Target for the redirect action. This is required if the type is EXTERNAL_302 and cannot be specified for GOOGLE_RECAPTCHA.
         &quot;type&quot;: &quot;A String&quot;, # Type of the redirect action.
       },
@@ -2070,7 +2239,7 @@ Args:
   ],
   &quot;selfLink&quot;: &quot;A String&quot;, # [Output Only] Server-defined URL for the resource.
   &quot;selfLinkWithId&quot;: &quot;A String&quot;, # [Output Only] Server-defined URL for this resource with the resource id.
-  &quot;type&quot;: &quot;A String&quot;, # The type indicates the intended use of the security policy. - CLOUD_ARMOR: Cloud Armor backend security policies can be configured to filter incoming HTTP requests targeting backend services. They filter requests before they hit the origin servers. - CLOUD_ARMOR_EDGE: Cloud Armor edge security policies can be configured to filter incoming HTTP requests targeting backend services (including Cloud CDN-enabled) as well as backend buckets (Cloud Storage). They filter requests before the request is served from Google&#x27;s cache. - CLOUD_ARMOR_INTERNAL_SERVICE: Cloud Armor internal service policies can be configured to filter HTTP requests targeting services managed by Traffic Director in a service mesh. They filter requests before the request is served from the application. This field can be set only at resource creation time.
+  &quot;type&quot;: &quot;A String&quot;, # The type indicates the intended use of the security policy. - CLOUD_ARMOR: Cloud Armor backend security policies can be configured to filter incoming HTTP requests targeting backend services. They filter requests before they hit the origin servers. - CLOUD_ARMOR_EDGE: Cloud Armor edge security policies can be configured to filter incoming HTTP requests targeting backend services (including Cloud CDN-enabled) as well as backend buckets (Cloud Storage). They filter requests before the request is served from Google&#x27;s cache. - CLOUD_ARMOR_INTERNAL_SERVICE: Cloud Armor internal service policies can be configured to filter HTTP requests targeting services managed by Traffic Director in a service mesh. They filter requests before the request is served from the application. - CLOUD_ARMOR_NETWORK: Cloud Armor network policies can be configured to filter packets targeting network load balancing resources such as backend services, target pools, target instances, and instances with external IPs. They filter requests before the request is served from the application. This field can be set only at resource creation time.
   &quot;userDefinedFields&quot;: [ # Definitions of user-defined fields for CLOUD_ARMOR_NETWORK policies. A user-defined field consists of up to 4 bytes extracted from a fixed offset in the packet, relative to the IPv4, IPv6, TCP, or UDP header, with an optional mask to select certain bits. Rules may then specify matching values for these fields. Example: userDefinedFields: - name: &quot;ipv4_fragment_offset&quot; base: IPV4 offset: 6 size: 2 mask: &quot;0x1fff&quot;
     {
       &quot;base&quot;: &quot;A String&quot;, # The base relative to which &#x27;offset&#x27; is measured. Possible values are: - IPV4: Points to the beginning of the IPv4 header. - IPV6: Points to the beginning of the IPv6 header. - TCP: Points to the beginning of the TCP header, skipping over any IPv4 options or IPv6 extension headers. Not present for non-first fragments. - UDP: Points to the beginning of the UDP header, skipping over any IPv4 options or IPv6 extension headers. Not present for non-first fragments. required
@@ -2142,6 +2311,17 @@ Returns:
   &quot;httpErrorStatusCode&quot;: 42, # [Output Only] If the operation fails, this field contains the HTTP error status code that was returned. For example, a `404` means the resource was not found.
   &quot;id&quot;: &quot;A String&quot;, # [Output Only] The unique identifier for the operation. This identifier is defined by the server.
   &quot;insertTime&quot;: &quot;A String&quot;, # [Output Only] The time that this operation was requested. This value is in RFC3339 text format.
+  &quot;instancesBulkInsertOperationMetadata&quot;: {
+    &quot;perLocationStatus&quot;: { # Status information per location (location name is key). Example key: zones/us-central1-a
+      &quot;a_key&quot;: {
+        &quot;createdVmCount&quot;: 42, # [Output Only] Count of VMs successfully created so far.
+        &quot;deletedVmCount&quot;: 42, # [Output Only] Count of VMs that got deleted during rollback.
+        &quot;failedToCreateVmCount&quot;: 42, # [Output Only] Count of VMs that started creating but encountered an error.
+        &quot;status&quot;: &quot;A String&quot;, # [Output Only] Creation status of BulkInsert operation - information if the flow is rolling forward or rolling back.
+        &quot;targetVmCount&quot;: 42, # [Output Only] Count of VMs originally planned to be created.
+      },
+    },
+  },
   &quot;kind&quot;: &quot;compute#operation&quot;, # [Output Only] Type of the resource. Always `compute#operation` for Operation resources.
   &quot;name&quot;: &quot;A String&quot;, # [Output Only] Name of the operation.
   &quot;operationGroupId&quot;: &quot;A String&quot;, # [Output Only] An ID that represents a group of operations, such as when a group of operations results from a `bulkInsert` API request.
@@ -2150,6 +2330,23 @@ Returns:
   &quot;region&quot;: &quot;A String&quot;, # [Output Only] The URL of the region where the operation resides. Only applicable when performing regional operations.
   &quot;selfLink&quot;: &quot;A String&quot;, # [Output Only] Server-defined URL for the resource.
   &quot;selfLinkWithId&quot;: &quot;A String&quot;, # [Output Only] Server-defined URL for this resource with the resource id.
+  &quot;setCommonInstanceMetadataOperationMetadata&quot;: { # Encapsulates partial completion metadata for SetCommonInstanceMetadata. Will be propagated on Operation.metadata.
+    &quot;clientOperationId&quot;: &quot;A String&quot;,
+    &quot;perLocationOperations&quot;: {
+      &quot;a_key&quot;: {
+        &quot;error&quot;: { # The `Status` type defines a logical error model that is suitable for different programming environments, including REST APIs and RPC APIs. It is used by [gRPC](https://github.com/grpc). Each `Status` message contains three pieces of data: error code, error message, and error details. You can find out more about this error model and how to work with it in the [API Design Guide](https://cloud.google.com/apis/design/errors).
+          &quot;code&quot;: 42, # The status code, which should be an enum value of google.rpc.Code.
+          &quot;details&quot;: [ # A list of messages that carry the error details. There is a common set of message types for APIs to use.
+            {
+              &quot;a_key&quot;: &quot;&quot;, # Properties of the object. Contains field @type with type URL.
+            },
+          ],
+          &quot;message&quot;: &quot;A String&quot;, # A developer-facing error message, which should be in English. Any user-facing error message should be localized and sent in the google.rpc.Status.details field, or localized by the client.
+        },
+        &quot;state&quot;: &quot;A String&quot;,
+      },
+    },
+  },
   &quot;startTime&quot;: &quot;A String&quot;, # [Output Only] The time that this operation was started by the server. This value is in RFC3339 text format.
   &quot;status&quot;: &quot;A String&quot;, # [Output Only] The status of the operation, which can be one of the following: `PENDING`, `RUNNING`, or `DONE`.
   &quot;statusMessage&quot;: &quot;A String&quot;, # [Output Only] An optional textual description of the current status of the operation.
@@ -2173,7 +2370,7 @@ Returns:
 </div>
 
 <div class="method">
-    <code class="details" id="patchRule">patchRule(project, securityPolicy, body=None, priority=None, validateOnly=None, x__xgafv=None)</code>
+    <code class="details" id="patchRule">patchRule(project, securityPolicy, body=None, priority=None, updateMask=None, validateOnly=None, x__xgafv=None)</code>
   <pre>Patches a rule at the specified priority.
 
 Args:
@@ -2183,11 +2380,11 @@ Args:
     The object takes the form of:
 
 { # Represents a rule that describes one or more match conditions along with the action to be taken when traffic matches this condition (allow or deny).
-  &quot;action&quot;: &quot;A String&quot;, # The Action to perform when the rule is matched. The following are the valid actions: - allow: allow access to target. - deny(STATUS): deny access to target, returns the HTTP response code specified. Valid values for `STATUS` are 403, 404, and 502. - rate_based_ban: limit client traffic to the configured threshold and ban the client if the traffic exceeds the threshold. Configure parameters for this action in RateLimitOptions. Requires rate_limit_options to be set. - redirect: redirect to a different target. This can either be an internal reCAPTCHA redirect, or an external URL-based redirect via a 302 response. Parameters for this action can be configured via redirectOptions. - throttle: limit client traffic to the configured threshold. Configure parameters for this action in rateLimitOptions. Requires rate_limit_options to be set for this.
+  &quot;action&quot;: &quot;A String&quot;, # The Action to perform when the rule is matched. The following are the valid actions: - allow: allow access to target. - deny(STATUS): deny access to target, returns the HTTP response code specified. Valid values for `STATUS` are 403, 404, and 502. - rate_based_ban: limit client traffic to the configured threshold and ban the client if the traffic exceeds the threshold. Configure parameters for this action in RateLimitOptions. Requires rate_limit_options to be set. - redirect: redirect to a different target. This can either be an internal reCAPTCHA redirect, or an external URL-based redirect via a 302 response. Parameters for this action can be configured via redirectOptions. This action is only supported in Global Security Policies of type CLOUD_ARMOR. - throttle: limit client traffic to the configured threshold. Configure parameters for this action in rateLimitOptions. Requires rate_limit_options to be set for this.
   &quot;description&quot;: &quot;A String&quot;, # An optional description of this resource. Provide this property when you create the resource.
   &quot;direction&quot;: &quot;A String&quot;, # The direction in which this rule applies. This field may only be specified when versioned_expr is set to FIREWALL.
   &quot;enableLogging&quot;: True or False, # Denotes whether to enable logging for a particular rule. If logging is enabled, logs will be exported to the configured export destination in Stackdriver. Logs may be exported to BigQuery or Pub/Sub. Note: you cannot enable logging on &quot;goto_next&quot; rules. This field may only be specified when the versioned_expr is set to FIREWALL.
-  &quot;headerAction&quot;: { # Optional, additional actions that are performed on headers.
+  &quot;headerAction&quot;: { # Optional, additional actions that are performed on headers. This field is only supported in Global Security Policies of type CLOUD_ARMOR.
     &quot;requestHeadersToAdds&quot;: [ # The list of request headers to add or overwrite if they&#x27;re already present.
       {
         &quot;headerName&quot;: &quot;A String&quot;, # The name of the header to set.
@@ -2221,11 +2418,21 @@ Args:
         &quot;A String&quot;,
       ],
     },
-    &quot;expr&quot;: { # Represents a textual expression in the Common Expression Language (CEL) syntax. CEL is a C-like expression language. The syntax and semantics of CEL are documented at https://github.com/google/cel-spec. Example (Comparison): title: &quot;Summary size limit&quot; description: &quot;Determines if a summary is less than 100 chars&quot; expression: &quot;document.summary.size() &lt; 100&quot; Example (Equality): title: &quot;Requestor is owner&quot; description: &quot;Determines if requestor is the document owner&quot; expression: &quot;document.owner == request.auth.claims.email&quot; Example (Logic): title: &quot;Public documents&quot; description: &quot;Determine whether the document should be publicly visible&quot; expression: &quot;document.type != &#x27;private&#x27; &amp;&amp; document.type != &#x27;internal&#x27;&quot; Example (Data Manipulation): title: &quot;Notification string&quot; description: &quot;Create a notification string with a timestamp.&quot; expression: &quot;&#x27;New message received at &#x27; + string(document.create_time)&quot; The exact variables and functions that may be referenced within an expression are determined by the service that evaluates it. See the service documentation for additional information. # User defined CEVAL expression. A CEVAL expression is used to specify match criteria such as origin.ip, source.region_code and contents in the request header.
+    &quot;expr&quot;: { # Represents a textual expression in the Common Expression Language (CEL) syntax. CEL is a C-like expression language. The syntax and semantics of CEL are documented at https://github.com/google/cel-spec. Example (Comparison): title: &quot;Summary size limit&quot; description: &quot;Determines if a summary is less than 100 chars&quot; expression: &quot;document.summary.size() &lt; 100&quot; Example (Equality): title: &quot;Requestor is owner&quot; description: &quot;Determines if requestor is the document owner&quot; expression: &quot;document.owner == request.auth.claims.email&quot; Example (Logic): title: &quot;Public documents&quot; description: &quot;Determine whether the document should be publicly visible&quot; expression: &quot;document.type != &#x27;private&#x27; &amp;&amp; document.type != &#x27;internal&#x27;&quot; Example (Data Manipulation): title: &quot;Notification string&quot; description: &quot;Create a notification string with a timestamp.&quot; expression: &quot;&#x27;New message received at &#x27; + string(document.create_time)&quot; The exact variables and functions that may be referenced within an expression are determined by the service that evaluates it. See the service documentation for additional information. # User defined CEVAL expression. A CEVAL expression is used to specify match criteria such as origin.ip, source.region_code and contents in the request header. Expressions containing `evaluateThreatIntelligence` require Cloud Armor Managed Protection Plus tier and are not supported in Edge Policies nor in Regional Policies. Expressions containing `evaluatePreconfiguredExpr(&#x27;sourceiplist-*&#x27;)` require Cloud Armor Managed Protection Plus tier and are only supported in Global Security Policies.
       &quot;description&quot;: &quot;A String&quot;, # Optional. Description of the expression. This is a longer text which describes the expression, e.g. when hovered over it in a UI.
       &quot;expression&quot;: &quot;A String&quot;, # Textual representation of an expression in Common Expression Language syntax.
       &quot;location&quot;: &quot;A String&quot;, # Optional. String indicating the location of the expression for error reporting, e.g. a file name and a position in the file.
       &quot;title&quot;: &quot;A String&quot;, # Optional. Title for the expression, i.e. a short string describing its purpose. This can be used e.g. in UIs which allow to enter the expression.
+    },
+    &quot;exprOptions&quot;: { # The configuration options available when specifying a user defined CEVAL expression (i.e., &#x27;expr&#x27;).
+      &quot;recaptchaOptions&quot;: { # reCAPTCHA configuration options to be applied for the rule. If the rule does not evaluate reCAPTCHA tokens, this field will have no effect.
+        &quot;actionTokenSiteKeys&quot;: [ # A list of site keys to be used during the validation of reCAPTCHA action-tokens. The provided site keys need to be created from reCAPTCHA API under the same project where the security policy is created.
+          &quot;A String&quot;,
+        ],
+        &quot;sessionTokenSiteKeys&quot;: [ # A list of site keys to be used during the validation of reCAPTCHA session-tokens. The provided site keys need to be created from reCAPTCHA API under the same project where the security policy is created.
+          &quot;A String&quot;,
+        ],
+      },
     },
     &quot;versionedExpr&quot;: &quot;A String&quot;, # Preconfigured versioned expression. If this field is specified, config must also be specified. Available preconfigured expressions along with their requirements are: SRC_IPS_V1 - must specify the corresponding src_ip_range field in config.
   },
@@ -2311,12 +2518,12 @@ Args:
       },
     ],
     &quot;enforceOnKeyName&quot;: &quot;A String&quot;, # Rate limit key name applicable only for the following key types: HTTP_HEADER -- Name of the HTTP header whose value is taken as the key value. HTTP_COOKIE -- Name of the HTTP cookie whose value is taken as the key value.
-    &quot;exceedAction&quot;: &quot;A String&quot;, # Action to take for requests that are above the configured rate limit threshold, to either deny with a specified HTTP response code, or redirect to a different endpoint. Valid options are `deny(STATUS)`, where valid values for `STATUS` are 403, 404, 429, and 502, and `redirect`, where the redirect parameters come from `exceedRedirectOptions` below.
+    &quot;exceedAction&quot;: &quot;A String&quot;, # Action to take for requests that are above the configured rate limit threshold, to either deny with a specified HTTP response code, or redirect to a different endpoint. Valid options are `deny(STATUS)`, where valid values for `STATUS` are 403, 404, 429, and 502, and `redirect`, where the redirect parameters come from `exceedRedirectOptions` below. The `redirect` action is only supported in Global Security Policies of type CLOUD_ARMOR.
     &quot;exceedActionRpcStatus&quot;: { # Simplified google.rpc.Status type (omitting details). # Specified gRPC response status for proxyless gRPC requests that are above the configured rate limit threshold
       &quot;code&quot;: 42, # The status code, which should be an enum value of google.rpc.Code.
       &quot;message&quot;: &quot;A String&quot;, # A developer-facing error message, which should be in English.
     },
-    &quot;exceedRedirectOptions&quot;: { # Parameters defining the redirect action that is used as the exceed action. Cannot be specified if the exceed action is not redirect.
+    &quot;exceedRedirectOptions&quot;: { # Parameters defining the redirect action that is used as the exceed action. Cannot be specified if the exceed action is not redirect. This field is only supported in Global Security Policies of type CLOUD_ARMOR.
       &quot;target&quot;: &quot;A String&quot;, # Target for the redirect action. This is required if the type is EXTERNAL_302 and cannot be specified for GOOGLE_RECAPTCHA.
       &quot;type&quot;: &quot;A String&quot;, # Type of the redirect action.
     },
@@ -2325,7 +2532,7 @@ Args:
       &quot;intervalSec&quot;: 42, # Interval over which the threshold is computed.
     },
   },
-  &quot;redirectOptions&quot;: { # Parameters defining the redirect action. Cannot be specified for any other actions.
+  &quot;redirectOptions&quot;: { # Parameters defining the redirect action. Cannot be specified for any other actions. This field is only supported in Global Security Policies of type CLOUD_ARMOR.
     &quot;target&quot;: &quot;A String&quot;, # Target for the redirect action. This is required if the type is EXTERNAL_302 and cannot be specified for GOOGLE_RECAPTCHA.
     &quot;type&quot;: &quot;A String&quot;, # Type of the redirect action.
   },
@@ -2342,6 +2549,7 @@ Args:
 }
 
   priority: integer, The priority of the rule to patch.
+  updateMask: string, Indicates fields to be cleared as part of this request.
   validateOnly: boolean, If true, the request will not be committed.
   x__xgafv: string, V1 error format.
     Allowed values
@@ -2400,6 +2608,17 @@ Returns:
   &quot;httpErrorStatusCode&quot;: 42, # [Output Only] If the operation fails, this field contains the HTTP error status code that was returned. For example, a `404` means the resource was not found.
   &quot;id&quot;: &quot;A String&quot;, # [Output Only] The unique identifier for the operation. This identifier is defined by the server.
   &quot;insertTime&quot;: &quot;A String&quot;, # [Output Only] The time that this operation was requested. This value is in RFC3339 text format.
+  &quot;instancesBulkInsertOperationMetadata&quot;: {
+    &quot;perLocationStatus&quot;: { # Status information per location (location name is key). Example key: zones/us-central1-a
+      &quot;a_key&quot;: {
+        &quot;createdVmCount&quot;: 42, # [Output Only] Count of VMs successfully created so far.
+        &quot;deletedVmCount&quot;: 42, # [Output Only] Count of VMs that got deleted during rollback.
+        &quot;failedToCreateVmCount&quot;: 42, # [Output Only] Count of VMs that started creating but encountered an error.
+        &quot;status&quot;: &quot;A String&quot;, # [Output Only] Creation status of BulkInsert operation - information if the flow is rolling forward or rolling back.
+        &quot;targetVmCount&quot;: 42, # [Output Only] Count of VMs originally planned to be created.
+      },
+    },
+  },
   &quot;kind&quot;: &quot;compute#operation&quot;, # [Output Only] Type of the resource. Always `compute#operation` for Operation resources.
   &quot;name&quot;: &quot;A String&quot;, # [Output Only] Name of the operation.
   &quot;operationGroupId&quot;: &quot;A String&quot;, # [Output Only] An ID that represents a group of operations, such as when a group of operations results from a `bulkInsert` API request.
@@ -2408,6 +2627,23 @@ Returns:
   &quot;region&quot;: &quot;A String&quot;, # [Output Only] The URL of the region where the operation resides. Only applicable when performing regional operations.
   &quot;selfLink&quot;: &quot;A String&quot;, # [Output Only] Server-defined URL for the resource.
   &quot;selfLinkWithId&quot;: &quot;A String&quot;, # [Output Only] Server-defined URL for this resource with the resource id.
+  &quot;setCommonInstanceMetadataOperationMetadata&quot;: { # Encapsulates partial completion metadata for SetCommonInstanceMetadata. Will be propagated on Operation.metadata.
+    &quot;clientOperationId&quot;: &quot;A String&quot;,
+    &quot;perLocationOperations&quot;: {
+      &quot;a_key&quot;: {
+        &quot;error&quot;: { # The `Status` type defines a logical error model that is suitable for different programming environments, including REST APIs and RPC APIs. It is used by [gRPC](https://github.com/grpc). Each `Status` message contains three pieces of data: error code, error message, and error details. You can find out more about this error model and how to work with it in the [API Design Guide](https://cloud.google.com/apis/design/errors).
+          &quot;code&quot;: 42, # The status code, which should be an enum value of google.rpc.Code.
+          &quot;details&quot;: [ # A list of messages that carry the error details. There is a common set of message types for APIs to use.
+            {
+              &quot;a_key&quot;: &quot;&quot;, # Properties of the object. Contains field @type with type URL.
+            },
+          ],
+          &quot;message&quot;: &quot;A String&quot;, # A developer-facing error message, which should be in English. Any user-facing error message should be localized and sent in the google.rpc.Status.details field, or localized by the client.
+        },
+        &quot;state&quot;: &quot;A String&quot;,
+      },
+    },
+  },
   &quot;startTime&quot;: &quot;A String&quot;, # [Output Only] The time that this operation was started by the server. This value is in RFC3339 text format.
   &quot;status&quot;: &quot;A String&quot;, # [Output Only] The status of the operation, which can be one of the following: `PENDING`, `RUNNING`, or `DONE`.
   &quot;statusMessage&quot;: &quot;A String&quot;, # [Output Only] An optional textual description of the current status of the operation.
@@ -2495,6 +2731,17 @@ Returns:
   &quot;httpErrorStatusCode&quot;: 42, # [Output Only] If the operation fails, this field contains the HTTP error status code that was returned. For example, a `404` means the resource was not found.
   &quot;id&quot;: &quot;A String&quot;, # [Output Only] The unique identifier for the operation. This identifier is defined by the server.
   &quot;insertTime&quot;: &quot;A String&quot;, # [Output Only] The time that this operation was requested. This value is in RFC3339 text format.
+  &quot;instancesBulkInsertOperationMetadata&quot;: {
+    &quot;perLocationStatus&quot;: { # Status information per location (location name is key). Example key: zones/us-central1-a
+      &quot;a_key&quot;: {
+        &quot;createdVmCount&quot;: 42, # [Output Only] Count of VMs successfully created so far.
+        &quot;deletedVmCount&quot;: 42, # [Output Only] Count of VMs that got deleted during rollback.
+        &quot;failedToCreateVmCount&quot;: 42, # [Output Only] Count of VMs that started creating but encountered an error.
+        &quot;status&quot;: &quot;A String&quot;, # [Output Only] Creation status of BulkInsert operation - information if the flow is rolling forward or rolling back.
+        &quot;targetVmCount&quot;: 42, # [Output Only] Count of VMs originally planned to be created.
+      },
+    },
+  },
   &quot;kind&quot;: &quot;compute#operation&quot;, # [Output Only] Type of the resource. Always `compute#operation` for Operation resources.
   &quot;name&quot;: &quot;A String&quot;, # [Output Only] Name of the operation.
   &quot;operationGroupId&quot;: &quot;A String&quot;, # [Output Only] An ID that represents a group of operations, such as when a group of operations results from a `bulkInsert` API request.
@@ -2503,6 +2750,23 @@ Returns:
   &quot;region&quot;: &quot;A String&quot;, # [Output Only] The URL of the region where the operation resides. Only applicable when performing regional operations.
   &quot;selfLink&quot;: &quot;A String&quot;, # [Output Only] Server-defined URL for the resource.
   &quot;selfLinkWithId&quot;: &quot;A String&quot;, # [Output Only] Server-defined URL for this resource with the resource id.
+  &quot;setCommonInstanceMetadataOperationMetadata&quot;: { # Encapsulates partial completion metadata for SetCommonInstanceMetadata. Will be propagated on Operation.metadata.
+    &quot;clientOperationId&quot;: &quot;A String&quot;,
+    &quot;perLocationOperations&quot;: {
+      &quot;a_key&quot;: {
+        &quot;error&quot;: { # The `Status` type defines a logical error model that is suitable for different programming environments, including REST APIs and RPC APIs. It is used by [gRPC](https://github.com/grpc). Each `Status` message contains three pieces of data: error code, error message, and error details. You can find out more about this error model and how to work with it in the [API Design Guide](https://cloud.google.com/apis/design/errors).
+          &quot;code&quot;: 42, # The status code, which should be an enum value of google.rpc.Code.
+          &quot;details&quot;: [ # A list of messages that carry the error details. There is a common set of message types for APIs to use.
+            {
+              &quot;a_key&quot;: &quot;&quot;, # Properties of the object. Contains field @type with type URL.
+            },
+          ],
+          &quot;message&quot;: &quot;A String&quot;, # A developer-facing error message, which should be in English. Any user-facing error message should be localized and sent in the google.rpc.Status.details field, or localized by the client.
+        },
+        &quot;state&quot;: &quot;A String&quot;,
+      },
+    },
+  },
   &quot;startTime&quot;: &quot;A String&quot;, # [Output Only] The time that this operation was started by the server. This value is in RFC3339 text format.
   &quot;status&quot;: &quot;A String&quot;, # [Output Only] The status of the operation, which can be one of the following: `PENDING`, `RUNNING`, or `DONE`.
   &quot;statusMessage&quot;: &quot;A String&quot;, # [Output Only] An optional textual description of the current status of the operation.
@@ -2599,6 +2863,17 @@ Returns:
   &quot;httpErrorStatusCode&quot;: 42, # [Output Only] If the operation fails, this field contains the HTTP error status code that was returned. For example, a `404` means the resource was not found.
   &quot;id&quot;: &quot;A String&quot;, # [Output Only] The unique identifier for the operation. This identifier is defined by the server.
   &quot;insertTime&quot;: &quot;A String&quot;, # [Output Only] The time that this operation was requested. This value is in RFC3339 text format.
+  &quot;instancesBulkInsertOperationMetadata&quot;: {
+    &quot;perLocationStatus&quot;: { # Status information per location (location name is key). Example key: zones/us-central1-a
+      &quot;a_key&quot;: {
+        &quot;createdVmCount&quot;: 42, # [Output Only] Count of VMs successfully created so far.
+        &quot;deletedVmCount&quot;: 42, # [Output Only] Count of VMs that got deleted during rollback.
+        &quot;failedToCreateVmCount&quot;: 42, # [Output Only] Count of VMs that started creating but encountered an error.
+        &quot;status&quot;: &quot;A String&quot;, # [Output Only] Creation status of BulkInsert operation - information if the flow is rolling forward or rolling back.
+        &quot;targetVmCount&quot;: 42, # [Output Only] Count of VMs originally planned to be created.
+      },
+    },
+  },
   &quot;kind&quot;: &quot;compute#operation&quot;, # [Output Only] Type of the resource. Always `compute#operation` for Operation resources.
   &quot;name&quot;: &quot;A String&quot;, # [Output Only] Name of the operation.
   &quot;operationGroupId&quot;: &quot;A String&quot;, # [Output Only] An ID that represents a group of operations, such as when a group of operations results from a `bulkInsert` API request.
@@ -2607,6 +2882,23 @@ Returns:
   &quot;region&quot;: &quot;A String&quot;, # [Output Only] The URL of the region where the operation resides. Only applicable when performing regional operations.
   &quot;selfLink&quot;: &quot;A String&quot;, # [Output Only] Server-defined URL for the resource.
   &quot;selfLinkWithId&quot;: &quot;A String&quot;, # [Output Only] Server-defined URL for this resource with the resource id.
+  &quot;setCommonInstanceMetadataOperationMetadata&quot;: { # Encapsulates partial completion metadata for SetCommonInstanceMetadata. Will be propagated on Operation.metadata.
+    &quot;clientOperationId&quot;: &quot;A String&quot;,
+    &quot;perLocationOperations&quot;: {
+      &quot;a_key&quot;: {
+        &quot;error&quot;: { # The `Status` type defines a logical error model that is suitable for different programming environments, including REST APIs and RPC APIs. It is used by [gRPC](https://github.com/grpc). Each `Status` message contains three pieces of data: error code, error message, and error details. You can find out more about this error model and how to work with it in the [API Design Guide](https://cloud.google.com/apis/design/errors).
+          &quot;code&quot;: 42, # The status code, which should be an enum value of google.rpc.Code.
+          &quot;details&quot;: [ # A list of messages that carry the error details. There is a common set of message types for APIs to use.
+            {
+              &quot;a_key&quot;: &quot;&quot;, # Properties of the object. Contains field @type with type URL.
+            },
+          ],
+          &quot;message&quot;: &quot;A String&quot;, # A developer-facing error message, which should be in English. Any user-facing error message should be localized and sent in the google.rpc.Status.details field, or localized by the client.
+        },
+        &quot;state&quot;: &quot;A String&quot;,
+      },
+    },
+  },
   &quot;startTime&quot;: &quot;A String&quot;, # [Output Only] The time that this operation was started by the server. This value is in RFC3339 text format.
   &quot;status&quot;: &quot;A String&quot;, # [Output Only] The status of the operation, which can be one of the following: `PENDING`, `RUNNING`, or `DONE`.
   &quot;statusMessage&quot;: &quot;A String&quot;, # [Output Only] An optional textual description of the current status of the operation.

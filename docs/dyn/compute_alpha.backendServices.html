@@ -94,7 +94,7 @@ h1, h2, h3 {
 <p class="firstline">Deletes a key for validating requests with signed URLs for this backend service.</p>
 <p class="toc_element">
   <code><a href="#get">get(project, backendService, x__xgafv=None)</a></code></p>
-<p class="firstline">Returns the specified BackendService resource. Gets a list of available backend services.</p>
+<p class="firstline">Returns the specified BackendService resource.</p>
 <p class="toc_element">
   <code><a href="#getHealth">getHealth(project, backendService, body=None, x__xgafv=None)</a></code></p>
 <p class="firstline">Gets the most recent health check results for this BackendService. Example request body: { "group": "/zones/us-east1-b/instanceGroups/lb-backend-example" }</p>
@@ -202,6 +202,17 @@ Returns:
   &quot;httpErrorStatusCode&quot;: 42, # [Output Only] If the operation fails, this field contains the HTTP error status code that was returned. For example, a `404` means the resource was not found.
   &quot;id&quot;: &quot;A String&quot;, # [Output Only] The unique identifier for the operation. This identifier is defined by the server.
   &quot;insertTime&quot;: &quot;A String&quot;, # [Output Only] The time that this operation was requested. This value is in RFC3339 text format.
+  &quot;instancesBulkInsertOperationMetadata&quot;: {
+    &quot;perLocationStatus&quot;: { # Status information per location (location name is key). Example key: zones/us-central1-a
+      &quot;a_key&quot;: {
+        &quot;createdVmCount&quot;: 42, # [Output Only] Count of VMs successfully created so far.
+        &quot;deletedVmCount&quot;: 42, # [Output Only] Count of VMs that got deleted during rollback.
+        &quot;failedToCreateVmCount&quot;: 42, # [Output Only] Count of VMs that started creating but encountered an error.
+        &quot;status&quot;: &quot;A String&quot;, # [Output Only] Creation status of BulkInsert operation - information if the flow is rolling forward or rolling back.
+        &quot;targetVmCount&quot;: 42, # [Output Only] Count of VMs originally planned to be created.
+      },
+    },
+  },
   &quot;kind&quot;: &quot;compute#operation&quot;, # [Output Only] Type of the resource. Always `compute#operation` for Operation resources.
   &quot;name&quot;: &quot;A String&quot;, # [Output Only] Name of the operation.
   &quot;operationGroupId&quot;: &quot;A String&quot;, # [Output Only] An ID that represents a group of operations, such as when a group of operations results from a `bulkInsert` API request.
@@ -210,6 +221,23 @@ Returns:
   &quot;region&quot;: &quot;A String&quot;, # [Output Only] The URL of the region where the operation resides. Only applicable when performing regional operations.
   &quot;selfLink&quot;: &quot;A String&quot;, # [Output Only] Server-defined URL for the resource.
   &quot;selfLinkWithId&quot;: &quot;A String&quot;, # [Output Only] Server-defined URL for this resource with the resource id.
+  &quot;setCommonInstanceMetadataOperationMetadata&quot;: { # Encapsulates partial completion metadata for SetCommonInstanceMetadata. Will be propagated on Operation.metadata.
+    &quot;clientOperationId&quot;: &quot;A String&quot;,
+    &quot;perLocationOperations&quot;: {
+      &quot;a_key&quot;: {
+        &quot;error&quot;: { # The `Status` type defines a logical error model that is suitable for different programming environments, including REST APIs and RPC APIs. It is used by [gRPC](https://github.com/grpc). Each `Status` message contains three pieces of data: error code, error message, and error details. You can find out more about this error model and how to work with it in the [API Design Guide](https://cloud.google.com/apis/design/errors).
+          &quot;code&quot;: 42, # The status code, which should be an enum value of google.rpc.Code.
+          &quot;details&quot;: [ # A list of messages that carry the error details. There is a common set of message types for APIs to use.
+            {
+              &quot;a_key&quot;: &quot;&quot;, # Properties of the object. Contains field @type with type URL.
+            },
+          ],
+          &quot;message&quot;: &quot;A String&quot;, # A developer-facing error message, which should be in English. Any user-facing error message should be localized and sent in the google.rpc.Status.details field, or localized by the client.
+        },
+        &quot;state&quot;: &quot;A String&quot;,
+      },
+    },
+  },
   &quot;startTime&quot;: &quot;A String&quot;, # [Output Only] The time that this operation was started by the server. This value is in RFC3339 text format.
   &quot;status&quot;: &quot;A String&quot;, # [Output Only] The status of the operation, which can be one of the following: `PENDING`, `RUNNING`, or `DONE`.
   &quot;statusMessage&quot;: &quot;A String&quot;, # [Output Only] An optional textual description of the current status of the operation.
@@ -408,6 +436,9 @@ Returns:
             &quot;nanos&quot;: 42, # Span of time that&#x27;s a fraction of a second at nanosecond resolution. Durations less than one second are represented with a 0 `seconds` field and a positive `nanos` field. Must be from 0 to 999,999,999 inclusive.
             &quot;seconds&quot;: &quot;A String&quot;, # Span of time at a resolution of a second. Must be from 0 to 315,576,000,000 inclusive. Note: these bounds are computed from: 60 sec/min * 60 min/hr * 24 hr/day * 365.25 days/year * 10000 years
           },
+          &quot;metadatas&quot;: { # Deployment metadata associated with the resource to be set by a GKE hub controller and read by the backend RCTH
+            &quot;a_key&quot;: &quot;A String&quot;,
+          },
           &quot;name&quot;: &quot;A String&quot;, # Name of the resource. Provided by the client when the resource is created. The name must be 1-63 characters long, and comply with RFC1035. Specifically, the name must be 1-63 characters long and match the regular expression `[a-z]([-a-z0-9]*[a-z0-9])?` which means the first character must be a lowercase letter, and all following characters must be a dash, lowercase letter, or digit, except the last character, which cannot be a dash.
           &quot;network&quot;: &quot;A String&quot;, # The URL of the network to which this backend service belongs. This field can only be specified when the load balancing scheme is set to INTERNAL.
           &quot;outlierDetection&quot;: { # Settings controlling the eviction of unhealthy hosts from the load balancing pool for the backend service. # Settings controlling the eviction of unhealthy hosts from the load balancing pool for the backend service. If not set, this feature is considered disabled. This field is applicable to either: - A regional backend service with the service_protocol set to HTTP, HTTPS, HTTP2, or GRPC, and load_balancing_scheme set to INTERNAL_MANAGED. - A global backend service with the load_balancing_scheme set to INTERNAL_SELF_MANAGED.
@@ -598,7 +629,7 @@ Returns:
               &quot;accessKeyVersion&quot;: &quot;A String&quot;, # The optional version identifier for the access key. You can use this to keep track of different iterations of your access key.
               &quot;originRegion&quot;: &quot;A String&quot;, # The name of the cloud region of your origin. This is a free-form field with the name of the region your cloud uses to host your origin. For example, &quot;us-east-1&quot; for AWS or &quot;us-ashburn-1&quot; for OCI.
             },
-            &quot;clientTlsPolicy&quot;: &quot;A String&quot;, # Optional. A URL referring to a networksecurity.ClientTlsPolicy resource that describes how clients should authenticate with this service&#x27;s backends. clientTlsPolicy only applies to a global BackendService with the loadBalancingScheme set to INTERNAL_SELF_MANAGED. If left blank, communications are not encrypted. Note: This field currently has no impact.
+            &quot;clientTlsPolicy&quot;: &quot;A String&quot;, # Optional. A URL referring to a networksecurity.ClientTlsPolicy resource that describes how clients should authenticate with this service&#x27;s backends. clientTlsPolicy only applies to a global BackendService with the loadBalancingScheme set to INTERNAL_SELF_MANAGED. If left blank, communications are not encrypted.
             &quot;clientTlsSettings&quot;: { # [Deprecated] The client side authentication settings for connection originating from the backend service. the backend service. # [Deprecated] TLS Settings for the backend service.
               &quot;clientTlsContext&quot;: { # [Deprecated] The TLS settings for the client or server. The TLS settings for the client or server. # Configures the mechanism to obtain client-side security certificates and identity information. This field is only applicable when mode is set to MUTUAL.
                 &quot;certificateContext&quot;: { # [Deprecated] Defines the mechanism to obtain the client or server certificate. Defines the mechanism to obtain the client or server certificate. # Defines the mechanism to obtain the client or server certificate.
@@ -657,7 +688,7 @@ Returns:
                 &quot;A String&quot;,
               ],
             },
-            &quot;subjectAltNames&quot;: [ # Optional. A list of Subject Alternative Names (SANs) that the client verifies during a mutual TLS handshake with an server/endpoint for this BackendService. When the server presents its X.509 certificate to the client, the client inspects the certificate&#x27;s subjectAltName field. If the field contains one of the specified values, the communication continues. Otherwise, it fails. This additional check enables the client to verify that the server is authorized to run the requested service. Note that the contents of the server certificate&#x27;s subjectAltName field are configured by the Public Key Infrastructure which provisions server identities. Only applies to a global BackendService with loadBalancingScheme set to INTERNAL_SELF_MANAGED. Only applies when BackendService has an attached clientTlsPolicy with clientCertificate (mTLS mode). Note: This field currently has no impact.
+            &quot;subjectAltNames&quot;: [ # Optional. A list of Subject Alternative Names (SANs) that the client verifies during a mutual TLS handshake with an server/endpoint for this BackendService. When the server presents its X.509 certificate to the client, the client inspects the certificate&#x27;s subjectAltName field. If the field contains one of the specified values, the communication continues. Otherwise, it fails. This additional check enables the client to verify that the server is authorized to run the requested service. Note that the contents of the server certificate&#x27;s subjectAltName field are configured by the Public Key Infrastructure which provisions server identities. Only applies to a global BackendService with loadBalancingScheme set to INTERNAL_SELF_MANAGED. Only applies when BackendService has an attached clientTlsPolicy with clientCertificate (mTLS mode).
               &quot;A String&quot;,
             ],
           },
@@ -791,6 +822,17 @@ Returns:
   &quot;httpErrorStatusCode&quot;: 42, # [Output Only] If the operation fails, this field contains the HTTP error status code that was returned. For example, a `404` means the resource was not found.
   &quot;id&quot;: &quot;A String&quot;, # [Output Only] The unique identifier for the operation. This identifier is defined by the server.
   &quot;insertTime&quot;: &quot;A String&quot;, # [Output Only] The time that this operation was requested. This value is in RFC3339 text format.
+  &quot;instancesBulkInsertOperationMetadata&quot;: {
+    &quot;perLocationStatus&quot;: { # Status information per location (location name is key). Example key: zones/us-central1-a
+      &quot;a_key&quot;: {
+        &quot;createdVmCount&quot;: 42, # [Output Only] Count of VMs successfully created so far.
+        &quot;deletedVmCount&quot;: 42, # [Output Only] Count of VMs that got deleted during rollback.
+        &quot;failedToCreateVmCount&quot;: 42, # [Output Only] Count of VMs that started creating but encountered an error.
+        &quot;status&quot;: &quot;A String&quot;, # [Output Only] Creation status of BulkInsert operation - information if the flow is rolling forward or rolling back.
+        &quot;targetVmCount&quot;: 42, # [Output Only] Count of VMs originally planned to be created.
+      },
+    },
+  },
   &quot;kind&quot;: &quot;compute#operation&quot;, # [Output Only] Type of the resource. Always `compute#operation` for Operation resources.
   &quot;name&quot;: &quot;A String&quot;, # [Output Only] Name of the operation.
   &quot;operationGroupId&quot;: &quot;A String&quot;, # [Output Only] An ID that represents a group of operations, such as when a group of operations results from a `bulkInsert` API request.
@@ -799,6 +841,23 @@ Returns:
   &quot;region&quot;: &quot;A String&quot;, # [Output Only] The URL of the region where the operation resides. Only applicable when performing regional operations.
   &quot;selfLink&quot;: &quot;A String&quot;, # [Output Only] Server-defined URL for the resource.
   &quot;selfLinkWithId&quot;: &quot;A String&quot;, # [Output Only] Server-defined URL for this resource with the resource id.
+  &quot;setCommonInstanceMetadataOperationMetadata&quot;: { # Encapsulates partial completion metadata for SetCommonInstanceMetadata. Will be propagated on Operation.metadata.
+    &quot;clientOperationId&quot;: &quot;A String&quot;,
+    &quot;perLocationOperations&quot;: {
+      &quot;a_key&quot;: {
+        &quot;error&quot;: { # The `Status` type defines a logical error model that is suitable for different programming environments, including REST APIs and RPC APIs. It is used by [gRPC](https://github.com/grpc). Each `Status` message contains three pieces of data: error code, error message, and error details. You can find out more about this error model and how to work with it in the [API Design Guide](https://cloud.google.com/apis/design/errors).
+          &quot;code&quot;: 42, # The status code, which should be an enum value of google.rpc.Code.
+          &quot;details&quot;: [ # A list of messages that carry the error details. There is a common set of message types for APIs to use.
+            {
+              &quot;a_key&quot;: &quot;&quot;, # Properties of the object. Contains field @type with type URL.
+            },
+          ],
+          &quot;message&quot;: &quot;A String&quot;, # A developer-facing error message, which should be in English. Any user-facing error message should be localized and sent in the google.rpc.Status.details field, or localized by the client.
+        },
+        &quot;state&quot;: &quot;A String&quot;,
+      },
+    },
+  },
   &quot;startTime&quot;: &quot;A String&quot;, # [Output Only] The time that this operation was started by the server. This value is in RFC3339 text format.
   &quot;status&quot;: &quot;A String&quot;, # [Output Only] The status of the operation, which can be one of the following: `PENDING`, `RUNNING`, or `DONE`.
   &quot;statusMessage&quot;: &quot;A String&quot;, # [Output Only] An optional textual description of the current status of the operation.
@@ -887,6 +946,17 @@ Returns:
   &quot;httpErrorStatusCode&quot;: 42, # [Output Only] If the operation fails, this field contains the HTTP error status code that was returned. For example, a `404` means the resource was not found.
   &quot;id&quot;: &quot;A String&quot;, # [Output Only] The unique identifier for the operation. This identifier is defined by the server.
   &quot;insertTime&quot;: &quot;A String&quot;, # [Output Only] The time that this operation was requested. This value is in RFC3339 text format.
+  &quot;instancesBulkInsertOperationMetadata&quot;: {
+    &quot;perLocationStatus&quot;: { # Status information per location (location name is key). Example key: zones/us-central1-a
+      &quot;a_key&quot;: {
+        &quot;createdVmCount&quot;: 42, # [Output Only] Count of VMs successfully created so far.
+        &quot;deletedVmCount&quot;: 42, # [Output Only] Count of VMs that got deleted during rollback.
+        &quot;failedToCreateVmCount&quot;: 42, # [Output Only] Count of VMs that started creating but encountered an error.
+        &quot;status&quot;: &quot;A String&quot;, # [Output Only] Creation status of BulkInsert operation - information if the flow is rolling forward or rolling back.
+        &quot;targetVmCount&quot;: 42, # [Output Only] Count of VMs originally planned to be created.
+      },
+    },
+  },
   &quot;kind&quot;: &quot;compute#operation&quot;, # [Output Only] Type of the resource. Always `compute#operation` for Operation resources.
   &quot;name&quot;: &quot;A String&quot;, # [Output Only] Name of the operation.
   &quot;operationGroupId&quot;: &quot;A String&quot;, # [Output Only] An ID that represents a group of operations, such as when a group of operations results from a `bulkInsert` API request.
@@ -895,6 +965,23 @@ Returns:
   &quot;region&quot;: &quot;A String&quot;, # [Output Only] The URL of the region where the operation resides. Only applicable when performing regional operations.
   &quot;selfLink&quot;: &quot;A String&quot;, # [Output Only] Server-defined URL for the resource.
   &quot;selfLinkWithId&quot;: &quot;A String&quot;, # [Output Only] Server-defined URL for this resource with the resource id.
+  &quot;setCommonInstanceMetadataOperationMetadata&quot;: { # Encapsulates partial completion metadata for SetCommonInstanceMetadata. Will be propagated on Operation.metadata.
+    &quot;clientOperationId&quot;: &quot;A String&quot;,
+    &quot;perLocationOperations&quot;: {
+      &quot;a_key&quot;: {
+        &quot;error&quot;: { # The `Status` type defines a logical error model that is suitable for different programming environments, including REST APIs and RPC APIs. It is used by [gRPC](https://github.com/grpc). Each `Status` message contains three pieces of data: error code, error message, and error details. You can find out more about this error model and how to work with it in the [API Design Guide](https://cloud.google.com/apis/design/errors).
+          &quot;code&quot;: 42, # The status code, which should be an enum value of google.rpc.Code.
+          &quot;details&quot;: [ # A list of messages that carry the error details. There is a common set of message types for APIs to use.
+            {
+              &quot;a_key&quot;: &quot;&quot;, # Properties of the object. Contains field @type with type URL.
+            },
+          ],
+          &quot;message&quot;: &quot;A String&quot;, # A developer-facing error message, which should be in English. Any user-facing error message should be localized and sent in the google.rpc.Status.details field, or localized by the client.
+        },
+        &quot;state&quot;: &quot;A String&quot;,
+      },
+    },
+  },
   &quot;startTime&quot;: &quot;A String&quot;, # [Output Only] The time that this operation was started by the server. This value is in RFC3339 text format.
   &quot;status&quot;: &quot;A String&quot;, # [Output Only] The status of the operation, which can be one of the following: `PENDING`, `RUNNING`, or `DONE`.
   &quot;statusMessage&quot;: &quot;A String&quot;, # [Output Only] An optional textual description of the current status of the operation.
@@ -919,7 +1006,7 @@ Returns:
 
 <div class="method">
     <code class="details" id="get">get(project, backendService, x__xgafv=None)</code>
-  <pre>Returns the specified BackendService resource. Gets a list of available backend services.
+  <pre>Returns the specified BackendService resource.
 
 Args:
   project: string, Project ID for this request. (required)
@@ -1082,6 +1169,9 @@ Returns:
   &quot;maxStreamDuration&quot;: { # A Duration represents a fixed-length span of time represented as a count of seconds and fractions of seconds at nanosecond resolution. It is independent of any calendar and concepts like &quot;day&quot; or &quot;month&quot;. Range is approximately 10,000 years. # Specifies the default maximum duration (timeout) for streams to this service. Duration is computed from the beginning of the stream until the response has been completely processed, including all retries. A stream that does not complete in this duration is closed. If not specified, there will be no timeout limit, i.e. the maximum duration is infinite. This value can be overridden in the PathMatcher configuration of the UrlMap that references this backend service. This field is only allowed when the loadBalancingScheme of the backend service is INTERNAL_SELF_MANAGED.
     &quot;nanos&quot;: 42, # Span of time that&#x27;s a fraction of a second at nanosecond resolution. Durations less than one second are represented with a 0 `seconds` field and a positive `nanos` field. Must be from 0 to 999,999,999 inclusive.
     &quot;seconds&quot;: &quot;A String&quot;, # Span of time at a resolution of a second. Must be from 0 to 315,576,000,000 inclusive. Note: these bounds are computed from: 60 sec/min * 60 min/hr * 24 hr/day * 365.25 days/year * 10000 years
+  },
+  &quot;metadatas&quot;: { # Deployment metadata associated with the resource to be set by a GKE hub controller and read by the backend RCTH
+    &quot;a_key&quot;: &quot;A String&quot;,
   },
   &quot;name&quot;: &quot;A String&quot;, # Name of the resource. Provided by the client when the resource is created. The name must be 1-63 characters long, and comply with RFC1035. Specifically, the name must be 1-63 characters long and match the regular expression `[a-z]([-a-z0-9]*[a-z0-9])?` which means the first character must be a lowercase letter, and all following characters must be a dash, lowercase letter, or digit, except the last character, which cannot be a dash.
   &quot;network&quot;: &quot;A String&quot;, # The URL of the network to which this backend service belongs. This field can only be specified when the load balancing scheme is set to INTERNAL.
@@ -1273,7 +1363,7 @@ Returns:
       &quot;accessKeyVersion&quot;: &quot;A String&quot;, # The optional version identifier for the access key. You can use this to keep track of different iterations of your access key.
       &quot;originRegion&quot;: &quot;A String&quot;, # The name of the cloud region of your origin. This is a free-form field with the name of the region your cloud uses to host your origin. For example, &quot;us-east-1&quot; for AWS or &quot;us-ashburn-1&quot; for OCI.
     },
-    &quot;clientTlsPolicy&quot;: &quot;A String&quot;, # Optional. A URL referring to a networksecurity.ClientTlsPolicy resource that describes how clients should authenticate with this service&#x27;s backends. clientTlsPolicy only applies to a global BackendService with the loadBalancingScheme set to INTERNAL_SELF_MANAGED. If left blank, communications are not encrypted. Note: This field currently has no impact.
+    &quot;clientTlsPolicy&quot;: &quot;A String&quot;, # Optional. A URL referring to a networksecurity.ClientTlsPolicy resource that describes how clients should authenticate with this service&#x27;s backends. clientTlsPolicy only applies to a global BackendService with the loadBalancingScheme set to INTERNAL_SELF_MANAGED. If left blank, communications are not encrypted.
     &quot;clientTlsSettings&quot;: { # [Deprecated] The client side authentication settings for connection originating from the backend service. the backend service. # [Deprecated] TLS Settings for the backend service.
       &quot;clientTlsContext&quot;: { # [Deprecated] The TLS settings for the client or server. The TLS settings for the client or server. # Configures the mechanism to obtain client-side security certificates and identity information. This field is only applicable when mode is set to MUTUAL.
         &quot;certificateContext&quot;: { # [Deprecated] Defines the mechanism to obtain the client or server certificate. Defines the mechanism to obtain the client or server certificate. # Defines the mechanism to obtain the client or server certificate.
@@ -1332,7 +1422,7 @@ Returns:
         &quot;A String&quot;,
       ],
     },
-    &quot;subjectAltNames&quot;: [ # Optional. A list of Subject Alternative Names (SANs) that the client verifies during a mutual TLS handshake with an server/endpoint for this BackendService. When the server presents its X.509 certificate to the client, the client inspects the certificate&#x27;s subjectAltName field. If the field contains one of the specified values, the communication continues. Otherwise, it fails. This additional check enables the client to verify that the server is authorized to run the requested service. Note that the contents of the server certificate&#x27;s subjectAltName field are configured by the Public Key Infrastructure which provisions server identities. Only applies to a global BackendService with loadBalancingScheme set to INTERNAL_SELF_MANAGED. Only applies when BackendService has an attached clientTlsPolicy with clientCertificate (mTLS mode). Note: This field currently has no impact.
+    &quot;subjectAltNames&quot;: [ # Optional. A list of Subject Alternative Names (SANs) that the client verifies during a mutual TLS handshake with an server/endpoint for this BackendService. When the server presents its X.509 certificate to the client, the client inspects the certificate&#x27;s subjectAltName field. If the field contains one of the specified values, the communication continues. Otherwise, it fails. This additional check enables the client to verify that the server is authorized to run the requested service. Note that the contents of the server certificate&#x27;s subjectAltName field are configured by the Public Key Infrastructure which provisions server identities. Only applies to a global BackendService with loadBalancingScheme set to INTERNAL_SELF_MANAGED. Only applies when BackendService has an attached clientTlsPolicy with clientCertificate (mTLS mode).
       &quot;A String&quot;,
     ],
   },
@@ -1385,7 +1475,7 @@ Returns:
       },
       &quot;forwardingRule&quot;: &quot;A String&quot;, # URL of the forwarding rule associated with the health status of the instance.
       &quot;forwardingRuleIp&quot;: &quot;A String&quot;, # A forwarding rule IP address assigned to this instance.
-      &quot;healthState&quot;: &quot;A String&quot;, # Health state of the instance.
+      &quot;healthState&quot;: &quot;A String&quot;, # Health state of the IPv4 address of the instance.
       &quot;instance&quot;: &quot;A String&quot;, # URL of the instance resource.
       &quot;ipAddress&quot;: &quot;A String&quot;, # For target pool based Network Load Balancing, it indicates the forwarding rule&#x27;s IP address assigned to this instance. For other types of load balancing, the field indicates VM internal ip.
       &quot;port&quot;: 42, # The named port of the instance group, not necessarily the port that is health-checked.
@@ -1440,7 +1530,7 @@ Returns:
         &quot;location&quot;: &quot;A String&quot;, # Optional. String indicating the location of the expression for error reporting, e.g. a file name and a position in the file.
         &quot;title&quot;: &quot;A String&quot;, # Optional. Title for the expression, i.e. a short string describing its purpose. This can be used e.g. in UIs which allow to enter the expression.
       },
-      &quot;members&quot;: [ # Specifies the principals requesting access for a Google Cloud resource. `members` can have the following values: * `allUsers`: A special identifier that represents anyone who is on the internet; with or without a Google account. * `allAuthenticatedUsers`: A special identifier that represents anyone who is authenticated with a Google account or a service account. Does not include identities that come from external identity providers (IdPs) through identity federation. * `user:{emailid}`: An email address that represents a specific Google account. For example, `alice@example.com` . * `serviceAccount:{emailid}`: An email address that represents a Google service account. For example, `my-other-app@appspot.gserviceaccount.com`. * `serviceAccount:{projectid}.svc.id.goog[{namespace}/{kubernetes-sa}]`: An identifier for a [Kubernetes service account](https://cloud.google.com/kubernetes-engine/docs/how-to/kubernetes-service-accounts). For example, `my-project.svc.id.goog[my-namespace/my-kubernetes-sa]`. * `group:{emailid}`: An email address that represents a Google group. For example, `admins@example.com`. * `deleted:user:{emailid}?uid={uniqueid}`: An email address (plus unique identifier) representing a user that has been recently deleted. For example, `alice@example.com?uid=123456789012345678901`. If the user is recovered, this value reverts to `user:{emailid}` and the recovered user retains the role in the binding. * `deleted:serviceAccount:{emailid}?uid={uniqueid}`: An email address (plus unique identifier) representing a service account that has been recently deleted. For example, `my-other-app@appspot.gserviceaccount.com?uid=123456789012345678901`. If the service account is undeleted, this value reverts to `serviceAccount:{emailid}` and the undeleted service account retains the role in the binding. * `deleted:group:{emailid}?uid={uniqueid}`: An email address (plus unique identifier) representing a Google group that has been recently deleted. For example, `admins@example.com?uid=123456789012345678901`. If the group is recovered, this value reverts to `group:{emailid}` and the recovered group retains the role in the binding. * `domain:{domain}`: The G Suite domain (primary) that represents all the users of that domain. For example, `google.com` or `example.com`.
+      &quot;members&quot;: [ # Specifies the principals requesting access for a Google Cloud resource. `members` can have the following values: * `allUsers`: A special identifier that represents anyone who is on the internet; with or without a Google account. * `allAuthenticatedUsers`: A special identifier that represents anyone who is authenticated with a Google account or a service account. Does not include identities that come from external identity providers (IdPs) through identity federation. * `user:{emailid}`: An email address that represents a specific Google account. For example, `alice@example.com` . * `serviceAccount:{emailid}`: An email address that represents a Google service account. For example, `my-other-app@appspot.gserviceaccount.com`. * `serviceAccount:{projectid}.svc.id.goog[{namespace}/{kubernetes-sa}]`: An identifier for a [Kubernetes service account](https://cloud.google.com/kubernetes-engine/docs/how-to/kubernetes-service-accounts). For example, `my-project.svc.id.goog[my-namespace/my-kubernetes-sa]`. * `group:{emailid}`: An email address that represents a Google group. For example, `admins@example.com`. * `domain:{domain}`: The G Suite domain (primary) that represents all the users of that domain. For example, `google.com` or `example.com`. * `deleted:user:{emailid}?uid={uniqueid}`: An email address (plus unique identifier) representing a user that has been recently deleted. For example, `alice@example.com?uid=123456789012345678901`. If the user is recovered, this value reverts to `user:{emailid}` and the recovered user retains the role in the binding. * `deleted:serviceAccount:{emailid}?uid={uniqueid}`: An email address (plus unique identifier) representing a service account that has been recently deleted. For example, `my-other-app@appspot.gserviceaccount.com?uid=123456789012345678901`. If the service account is undeleted, this value reverts to `serviceAccount:{emailid}` and the undeleted service account retains the role in the binding. * `deleted:group:{emailid}?uid={uniqueid}`: An email address (plus unique identifier) representing a Google group that has been recently deleted. For example, `admins@example.com?uid=123456789012345678901`. If the group is recovered, this value reverts to `group:{emailid}` and the recovered group retains the role in the binding.
         &quot;A String&quot;,
       ],
       &quot;role&quot;: &quot;A String&quot;, # Role that is assigned to the list of `members`, or principals. For example, `roles/viewer`, `roles/editor`, or `roles/owner`.
@@ -1660,6 +1750,9 @@ Args:
     &quot;nanos&quot;: 42, # Span of time that&#x27;s a fraction of a second at nanosecond resolution. Durations less than one second are represented with a 0 `seconds` field and a positive `nanos` field. Must be from 0 to 999,999,999 inclusive.
     &quot;seconds&quot;: &quot;A String&quot;, # Span of time at a resolution of a second. Must be from 0 to 315,576,000,000 inclusive. Note: these bounds are computed from: 60 sec/min * 60 min/hr * 24 hr/day * 365.25 days/year * 10000 years
   },
+  &quot;metadatas&quot;: { # Deployment metadata associated with the resource to be set by a GKE hub controller and read by the backend RCTH
+    &quot;a_key&quot;: &quot;A String&quot;,
+  },
   &quot;name&quot;: &quot;A String&quot;, # Name of the resource. Provided by the client when the resource is created. The name must be 1-63 characters long, and comply with RFC1035. Specifically, the name must be 1-63 characters long and match the regular expression `[a-z]([-a-z0-9]*[a-z0-9])?` which means the first character must be a lowercase letter, and all following characters must be a dash, lowercase letter, or digit, except the last character, which cannot be a dash.
   &quot;network&quot;: &quot;A String&quot;, # The URL of the network to which this backend service belongs. This field can only be specified when the load balancing scheme is set to INTERNAL.
   &quot;outlierDetection&quot;: { # Settings controlling the eviction of unhealthy hosts from the load balancing pool for the backend service. # Settings controlling the eviction of unhealthy hosts from the load balancing pool for the backend service. If not set, this feature is considered disabled. This field is applicable to either: - A regional backend service with the service_protocol set to HTTP, HTTPS, HTTP2, or GRPC, and load_balancing_scheme set to INTERNAL_MANAGED. - A global backend service with the load_balancing_scheme set to INTERNAL_SELF_MANAGED.
@@ -1850,7 +1943,7 @@ Args:
       &quot;accessKeyVersion&quot;: &quot;A String&quot;, # The optional version identifier for the access key. You can use this to keep track of different iterations of your access key.
       &quot;originRegion&quot;: &quot;A String&quot;, # The name of the cloud region of your origin. This is a free-form field with the name of the region your cloud uses to host your origin. For example, &quot;us-east-1&quot; for AWS or &quot;us-ashburn-1&quot; for OCI.
     },
-    &quot;clientTlsPolicy&quot;: &quot;A String&quot;, # Optional. A URL referring to a networksecurity.ClientTlsPolicy resource that describes how clients should authenticate with this service&#x27;s backends. clientTlsPolicy only applies to a global BackendService with the loadBalancingScheme set to INTERNAL_SELF_MANAGED. If left blank, communications are not encrypted. Note: This field currently has no impact.
+    &quot;clientTlsPolicy&quot;: &quot;A String&quot;, # Optional. A URL referring to a networksecurity.ClientTlsPolicy resource that describes how clients should authenticate with this service&#x27;s backends. clientTlsPolicy only applies to a global BackendService with the loadBalancingScheme set to INTERNAL_SELF_MANAGED. If left blank, communications are not encrypted.
     &quot;clientTlsSettings&quot;: { # [Deprecated] The client side authentication settings for connection originating from the backend service. the backend service. # [Deprecated] TLS Settings for the backend service.
       &quot;clientTlsContext&quot;: { # [Deprecated] The TLS settings for the client or server. The TLS settings for the client or server. # Configures the mechanism to obtain client-side security certificates and identity information. This field is only applicable when mode is set to MUTUAL.
         &quot;certificateContext&quot;: { # [Deprecated] Defines the mechanism to obtain the client or server certificate. Defines the mechanism to obtain the client or server certificate. # Defines the mechanism to obtain the client or server certificate.
@@ -1909,7 +2002,7 @@ Args:
         &quot;A String&quot;,
       ],
     },
-    &quot;subjectAltNames&quot;: [ # Optional. A list of Subject Alternative Names (SANs) that the client verifies during a mutual TLS handshake with an server/endpoint for this BackendService. When the server presents its X.509 certificate to the client, the client inspects the certificate&#x27;s subjectAltName field. If the field contains one of the specified values, the communication continues. Otherwise, it fails. This additional check enables the client to verify that the server is authorized to run the requested service. Note that the contents of the server certificate&#x27;s subjectAltName field are configured by the Public Key Infrastructure which provisions server identities. Only applies to a global BackendService with loadBalancingScheme set to INTERNAL_SELF_MANAGED. Only applies when BackendService has an attached clientTlsPolicy with clientCertificate (mTLS mode). Note: This field currently has no impact.
+    &quot;subjectAltNames&quot;: [ # Optional. A list of Subject Alternative Names (SANs) that the client verifies during a mutual TLS handshake with an server/endpoint for this BackendService. When the server presents its X.509 certificate to the client, the client inspects the certificate&#x27;s subjectAltName field. If the field contains one of the specified values, the communication continues. Otherwise, it fails. This additional check enables the client to verify that the server is authorized to run the requested service. Note that the contents of the server certificate&#x27;s subjectAltName field are configured by the Public Key Infrastructure which provisions server identities. Only applies to a global BackendService with loadBalancingScheme set to INTERNAL_SELF_MANAGED. Only applies when BackendService has an attached clientTlsPolicy with clientCertificate (mTLS mode).
       &quot;A String&quot;,
     ],
   },
@@ -1986,6 +2079,17 @@ Returns:
   &quot;httpErrorStatusCode&quot;: 42, # [Output Only] If the operation fails, this field contains the HTTP error status code that was returned. For example, a `404` means the resource was not found.
   &quot;id&quot;: &quot;A String&quot;, # [Output Only] The unique identifier for the operation. This identifier is defined by the server.
   &quot;insertTime&quot;: &quot;A String&quot;, # [Output Only] The time that this operation was requested. This value is in RFC3339 text format.
+  &quot;instancesBulkInsertOperationMetadata&quot;: {
+    &quot;perLocationStatus&quot;: { # Status information per location (location name is key). Example key: zones/us-central1-a
+      &quot;a_key&quot;: {
+        &quot;createdVmCount&quot;: 42, # [Output Only] Count of VMs successfully created so far.
+        &quot;deletedVmCount&quot;: 42, # [Output Only] Count of VMs that got deleted during rollback.
+        &quot;failedToCreateVmCount&quot;: 42, # [Output Only] Count of VMs that started creating but encountered an error.
+        &quot;status&quot;: &quot;A String&quot;, # [Output Only] Creation status of BulkInsert operation - information if the flow is rolling forward or rolling back.
+        &quot;targetVmCount&quot;: 42, # [Output Only] Count of VMs originally planned to be created.
+      },
+    },
+  },
   &quot;kind&quot;: &quot;compute#operation&quot;, # [Output Only] Type of the resource. Always `compute#operation` for Operation resources.
   &quot;name&quot;: &quot;A String&quot;, # [Output Only] Name of the operation.
   &quot;operationGroupId&quot;: &quot;A String&quot;, # [Output Only] An ID that represents a group of operations, such as when a group of operations results from a `bulkInsert` API request.
@@ -1994,6 +2098,23 @@ Returns:
   &quot;region&quot;: &quot;A String&quot;, # [Output Only] The URL of the region where the operation resides. Only applicable when performing regional operations.
   &quot;selfLink&quot;: &quot;A String&quot;, # [Output Only] Server-defined URL for the resource.
   &quot;selfLinkWithId&quot;: &quot;A String&quot;, # [Output Only] Server-defined URL for this resource with the resource id.
+  &quot;setCommonInstanceMetadataOperationMetadata&quot;: { # Encapsulates partial completion metadata for SetCommonInstanceMetadata. Will be propagated on Operation.metadata.
+    &quot;clientOperationId&quot;: &quot;A String&quot;,
+    &quot;perLocationOperations&quot;: {
+      &quot;a_key&quot;: {
+        &quot;error&quot;: { # The `Status` type defines a logical error model that is suitable for different programming environments, including REST APIs and RPC APIs. It is used by [gRPC](https://github.com/grpc). Each `Status` message contains three pieces of data: error code, error message, and error details. You can find out more about this error model and how to work with it in the [API Design Guide](https://cloud.google.com/apis/design/errors).
+          &quot;code&quot;: 42, # The status code, which should be an enum value of google.rpc.Code.
+          &quot;details&quot;: [ # A list of messages that carry the error details. There is a common set of message types for APIs to use.
+            {
+              &quot;a_key&quot;: &quot;&quot;, # Properties of the object. Contains field @type with type URL.
+            },
+          ],
+          &quot;message&quot;: &quot;A String&quot;, # A developer-facing error message, which should be in English. Any user-facing error message should be localized and sent in the google.rpc.Status.details field, or localized by the client.
+        },
+        &quot;state&quot;: &quot;A String&quot;,
+      },
+    },
+  },
   &quot;startTime&quot;: &quot;A String&quot;, # [Output Only] The time that this operation was started by the server. This value is in RFC3339 text format.
   &quot;status&quot;: &quot;A String&quot;, # [Output Only] The status of the operation, which can be one of the following: `PENDING`, `RUNNING`, or `DONE`.
   &quot;statusMessage&quot;: &quot;A String&quot;, # [Output Only] An optional textual description of the current status of the operation.
@@ -2189,6 +2310,9 @@ Returns:
         &quot;nanos&quot;: 42, # Span of time that&#x27;s a fraction of a second at nanosecond resolution. Durations less than one second are represented with a 0 `seconds` field and a positive `nanos` field. Must be from 0 to 999,999,999 inclusive.
         &quot;seconds&quot;: &quot;A String&quot;, # Span of time at a resolution of a second. Must be from 0 to 315,576,000,000 inclusive. Note: these bounds are computed from: 60 sec/min * 60 min/hr * 24 hr/day * 365.25 days/year * 10000 years
       },
+      &quot;metadatas&quot;: { # Deployment metadata associated with the resource to be set by a GKE hub controller and read by the backend RCTH
+        &quot;a_key&quot;: &quot;A String&quot;,
+      },
       &quot;name&quot;: &quot;A String&quot;, # Name of the resource. Provided by the client when the resource is created. The name must be 1-63 characters long, and comply with RFC1035. Specifically, the name must be 1-63 characters long and match the regular expression `[a-z]([-a-z0-9]*[a-z0-9])?` which means the first character must be a lowercase letter, and all following characters must be a dash, lowercase letter, or digit, except the last character, which cannot be a dash.
       &quot;network&quot;: &quot;A String&quot;, # The URL of the network to which this backend service belongs. This field can only be specified when the load balancing scheme is set to INTERNAL.
       &quot;outlierDetection&quot;: { # Settings controlling the eviction of unhealthy hosts from the load balancing pool for the backend service. # Settings controlling the eviction of unhealthy hosts from the load balancing pool for the backend service. If not set, this feature is considered disabled. This field is applicable to either: - A regional backend service with the service_protocol set to HTTP, HTTPS, HTTP2, or GRPC, and load_balancing_scheme set to INTERNAL_MANAGED. - A global backend service with the load_balancing_scheme set to INTERNAL_SELF_MANAGED.
@@ -2379,7 +2503,7 @@ Returns:
           &quot;accessKeyVersion&quot;: &quot;A String&quot;, # The optional version identifier for the access key. You can use this to keep track of different iterations of your access key.
           &quot;originRegion&quot;: &quot;A String&quot;, # The name of the cloud region of your origin. This is a free-form field with the name of the region your cloud uses to host your origin. For example, &quot;us-east-1&quot; for AWS or &quot;us-ashburn-1&quot; for OCI.
         },
-        &quot;clientTlsPolicy&quot;: &quot;A String&quot;, # Optional. A URL referring to a networksecurity.ClientTlsPolicy resource that describes how clients should authenticate with this service&#x27;s backends. clientTlsPolicy only applies to a global BackendService with the loadBalancingScheme set to INTERNAL_SELF_MANAGED. If left blank, communications are not encrypted. Note: This field currently has no impact.
+        &quot;clientTlsPolicy&quot;: &quot;A String&quot;, # Optional. A URL referring to a networksecurity.ClientTlsPolicy resource that describes how clients should authenticate with this service&#x27;s backends. clientTlsPolicy only applies to a global BackendService with the loadBalancingScheme set to INTERNAL_SELF_MANAGED. If left blank, communications are not encrypted.
         &quot;clientTlsSettings&quot;: { # [Deprecated] The client side authentication settings for connection originating from the backend service. the backend service. # [Deprecated] TLS Settings for the backend service.
           &quot;clientTlsContext&quot;: { # [Deprecated] The TLS settings for the client or server. The TLS settings for the client or server. # Configures the mechanism to obtain client-side security certificates and identity information. This field is only applicable when mode is set to MUTUAL.
             &quot;certificateContext&quot;: { # [Deprecated] Defines the mechanism to obtain the client or server certificate. Defines the mechanism to obtain the client or server certificate. # Defines the mechanism to obtain the client or server certificate.
@@ -2438,7 +2562,7 @@ Returns:
             &quot;A String&quot;,
           ],
         },
-        &quot;subjectAltNames&quot;: [ # Optional. A list of Subject Alternative Names (SANs) that the client verifies during a mutual TLS handshake with an server/endpoint for this BackendService. When the server presents its X.509 certificate to the client, the client inspects the certificate&#x27;s subjectAltName field. If the field contains one of the specified values, the communication continues. Otherwise, it fails. This additional check enables the client to verify that the server is authorized to run the requested service. Note that the contents of the server certificate&#x27;s subjectAltName field are configured by the Public Key Infrastructure which provisions server identities. Only applies to a global BackendService with loadBalancingScheme set to INTERNAL_SELF_MANAGED. Only applies when BackendService has an attached clientTlsPolicy with clientCertificate (mTLS mode). Note: This field currently has no impact.
+        &quot;subjectAltNames&quot;: [ # Optional. A list of Subject Alternative Names (SANs) that the client verifies during a mutual TLS handshake with an server/endpoint for this BackendService. When the server presents its X.509 certificate to the client, the client inspects the certificate&#x27;s subjectAltName field. If the field contains one of the specified values, the communication continues. Otherwise, it fails. This additional check enables the client to verify that the server is authorized to run the requested service. Note that the contents of the server certificate&#x27;s subjectAltName field are configured by the Public Key Infrastructure which provisions server identities. Only applies to a global BackendService with loadBalancingScheme set to INTERNAL_SELF_MANAGED. Only applies when BackendService has an attached clientTlsPolicy with clientCertificate (mTLS mode).
           &quot;A String&quot;,
         ],
       },
@@ -2648,6 +2772,9 @@ Args:
     &quot;nanos&quot;: 42, # Span of time that&#x27;s a fraction of a second at nanosecond resolution. Durations less than one second are represented with a 0 `seconds` field and a positive `nanos` field. Must be from 0 to 999,999,999 inclusive.
     &quot;seconds&quot;: &quot;A String&quot;, # Span of time at a resolution of a second. Must be from 0 to 315,576,000,000 inclusive. Note: these bounds are computed from: 60 sec/min * 60 min/hr * 24 hr/day * 365.25 days/year * 10000 years
   },
+  &quot;metadatas&quot;: { # Deployment metadata associated with the resource to be set by a GKE hub controller and read by the backend RCTH
+    &quot;a_key&quot;: &quot;A String&quot;,
+  },
   &quot;name&quot;: &quot;A String&quot;, # Name of the resource. Provided by the client when the resource is created. The name must be 1-63 characters long, and comply with RFC1035. Specifically, the name must be 1-63 characters long and match the regular expression `[a-z]([-a-z0-9]*[a-z0-9])?` which means the first character must be a lowercase letter, and all following characters must be a dash, lowercase letter, or digit, except the last character, which cannot be a dash.
   &quot;network&quot;: &quot;A String&quot;, # The URL of the network to which this backend service belongs. This field can only be specified when the load balancing scheme is set to INTERNAL.
   &quot;outlierDetection&quot;: { # Settings controlling the eviction of unhealthy hosts from the load balancing pool for the backend service. # Settings controlling the eviction of unhealthy hosts from the load balancing pool for the backend service. If not set, this feature is considered disabled. This field is applicable to either: - A regional backend service with the service_protocol set to HTTP, HTTPS, HTTP2, or GRPC, and load_balancing_scheme set to INTERNAL_MANAGED. - A global backend service with the load_balancing_scheme set to INTERNAL_SELF_MANAGED.
@@ -2838,7 +2965,7 @@ Args:
       &quot;accessKeyVersion&quot;: &quot;A String&quot;, # The optional version identifier for the access key. You can use this to keep track of different iterations of your access key.
       &quot;originRegion&quot;: &quot;A String&quot;, # The name of the cloud region of your origin. This is a free-form field with the name of the region your cloud uses to host your origin. For example, &quot;us-east-1&quot; for AWS or &quot;us-ashburn-1&quot; for OCI.
     },
-    &quot;clientTlsPolicy&quot;: &quot;A String&quot;, # Optional. A URL referring to a networksecurity.ClientTlsPolicy resource that describes how clients should authenticate with this service&#x27;s backends. clientTlsPolicy only applies to a global BackendService with the loadBalancingScheme set to INTERNAL_SELF_MANAGED. If left blank, communications are not encrypted. Note: This field currently has no impact.
+    &quot;clientTlsPolicy&quot;: &quot;A String&quot;, # Optional. A URL referring to a networksecurity.ClientTlsPolicy resource that describes how clients should authenticate with this service&#x27;s backends. clientTlsPolicy only applies to a global BackendService with the loadBalancingScheme set to INTERNAL_SELF_MANAGED. If left blank, communications are not encrypted.
     &quot;clientTlsSettings&quot;: { # [Deprecated] The client side authentication settings for connection originating from the backend service. the backend service. # [Deprecated] TLS Settings for the backend service.
       &quot;clientTlsContext&quot;: { # [Deprecated] The TLS settings for the client or server. The TLS settings for the client or server. # Configures the mechanism to obtain client-side security certificates and identity information. This field is only applicable when mode is set to MUTUAL.
         &quot;certificateContext&quot;: { # [Deprecated] Defines the mechanism to obtain the client or server certificate. Defines the mechanism to obtain the client or server certificate. # Defines the mechanism to obtain the client or server certificate.
@@ -2897,7 +3024,7 @@ Args:
         &quot;A String&quot;,
       ],
     },
-    &quot;subjectAltNames&quot;: [ # Optional. A list of Subject Alternative Names (SANs) that the client verifies during a mutual TLS handshake with an server/endpoint for this BackendService. When the server presents its X.509 certificate to the client, the client inspects the certificate&#x27;s subjectAltName field. If the field contains one of the specified values, the communication continues. Otherwise, it fails. This additional check enables the client to verify that the server is authorized to run the requested service. Note that the contents of the server certificate&#x27;s subjectAltName field are configured by the Public Key Infrastructure which provisions server identities. Only applies to a global BackendService with loadBalancingScheme set to INTERNAL_SELF_MANAGED. Only applies when BackendService has an attached clientTlsPolicy with clientCertificate (mTLS mode). Note: This field currently has no impact.
+    &quot;subjectAltNames&quot;: [ # Optional. A list of Subject Alternative Names (SANs) that the client verifies during a mutual TLS handshake with an server/endpoint for this BackendService. When the server presents its X.509 certificate to the client, the client inspects the certificate&#x27;s subjectAltName field. If the field contains one of the specified values, the communication continues. Otherwise, it fails. This additional check enables the client to verify that the server is authorized to run the requested service. Note that the contents of the server certificate&#x27;s subjectAltName field are configured by the Public Key Infrastructure which provisions server identities. Only applies to a global BackendService with loadBalancingScheme set to INTERNAL_SELF_MANAGED. Only applies when BackendService has an attached clientTlsPolicy with clientCertificate (mTLS mode).
       &quot;A String&quot;,
     ],
   },
@@ -2974,6 +3101,17 @@ Returns:
   &quot;httpErrorStatusCode&quot;: 42, # [Output Only] If the operation fails, this field contains the HTTP error status code that was returned. For example, a `404` means the resource was not found.
   &quot;id&quot;: &quot;A String&quot;, # [Output Only] The unique identifier for the operation. This identifier is defined by the server.
   &quot;insertTime&quot;: &quot;A String&quot;, # [Output Only] The time that this operation was requested. This value is in RFC3339 text format.
+  &quot;instancesBulkInsertOperationMetadata&quot;: {
+    &quot;perLocationStatus&quot;: { # Status information per location (location name is key). Example key: zones/us-central1-a
+      &quot;a_key&quot;: {
+        &quot;createdVmCount&quot;: 42, # [Output Only] Count of VMs successfully created so far.
+        &quot;deletedVmCount&quot;: 42, # [Output Only] Count of VMs that got deleted during rollback.
+        &quot;failedToCreateVmCount&quot;: 42, # [Output Only] Count of VMs that started creating but encountered an error.
+        &quot;status&quot;: &quot;A String&quot;, # [Output Only] Creation status of BulkInsert operation - information if the flow is rolling forward or rolling back.
+        &quot;targetVmCount&quot;: 42, # [Output Only] Count of VMs originally planned to be created.
+      },
+    },
+  },
   &quot;kind&quot;: &quot;compute#operation&quot;, # [Output Only] Type of the resource. Always `compute#operation` for Operation resources.
   &quot;name&quot;: &quot;A String&quot;, # [Output Only] Name of the operation.
   &quot;operationGroupId&quot;: &quot;A String&quot;, # [Output Only] An ID that represents a group of operations, such as when a group of operations results from a `bulkInsert` API request.
@@ -2982,6 +3120,23 @@ Returns:
   &quot;region&quot;: &quot;A String&quot;, # [Output Only] The URL of the region where the operation resides. Only applicable when performing regional operations.
   &quot;selfLink&quot;: &quot;A String&quot;, # [Output Only] Server-defined URL for the resource.
   &quot;selfLinkWithId&quot;: &quot;A String&quot;, # [Output Only] Server-defined URL for this resource with the resource id.
+  &quot;setCommonInstanceMetadataOperationMetadata&quot;: { # Encapsulates partial completion metadata for SetCommonInstanceMetadata. Will be propagated on Operation.metadata.
+    &quot;clientOperationId&quot;: &quot;A String&quot;,
+    &quot;perLocationOperations&quot;: {
+      &quot;a_key&quot;: {
+        &quot;error&quot;: { # The `Status` type defines a logical error model that is suitable for different programming environments, including REST APIs and RPC APIs. It is used by [gRPC](https://github.com/grpc). Each `Status` message contains three pieces of data: error code, error message, and error details. You can find out more about this error model and how to work with it in the [API Design Guide](https://cloud.google.com/apis/design/errors).
+          &quot;code&quot;: 42, # The status code, which should be an enum value of google.rpc.Code.
+          &quot;details&quot;: [ # A list of messages that carry the error details. There is a common set of message types for APIs to use.
+            {
+              &quot;a_key&quot;: &quot;&quot;, # Properties of the object. Contains field @type with type URL.
+            },
+          ],
+          &quot;message&quot;: &quot;A String&quot;, # A developer-facing error message, which should be in English. Any user-facing error message should be localized and sent in the google.rpc.Status.details field, or localized by the client.
+        },
+        &quot;state&quot;: &quot;A String&quot;,
+      },
+    },
+  },
   &quot;startTime&quot;: &quot;A String&quot;, # [Output Only] The time that this operation was started by the server. This value is in RFC3339 text format.
   &quot;status&quot;: &quot;A String&quot;, # [Output Only] The status of the operation, which can be one of the following: `PENDING`, `RUNNING`, or `DONE`.
   &quot;statusMessage&quot;: &quot;A String&quot;, # [Output Only] An optional textual description of the current status of the operation.
@@ -3076,6 +3231,17 @@ Returns:
   &quot;httpErrorStatusCode&quot;: 42, # [Output Only] If the operation fails, this field contains the HTTP error status code that was returned. For example, a `404` means the resource was not found.
   &quot;id&quot;: &quot;A String&quot;, # [Output Only] The unique identifier for the operation. This identifier is defined by the server.
   &quot;insertTime&quot;: &quot;A String&quot;, # [Output Only] The time that this operation was requested. This value is in RFC3339 text format.
+  &quot;instancesBulkInsertOperationMetadata&quot;: {
+    &quot;perLocationStatus&quot;: { # Status information per location (location name is key). Example key: zones/us-central1-a
+      &quot;a_key&quot;: {
+        &quot;createdVmCount&quot;: 42, # [Output Only] Count of VMs successfully created so far.
+        &quot;deletedVmCount&quot;: 42, # [Output Only] Count of VMs that got deleted during rollback.
+        &quot;failedToCreateVmCount&quot;: 42, # [Output Only] Count of VMs that started creating but encountered an error.
+        &quot;status&quot;: &quot;A String&quot;, # [Output Only] Creation status of BulkInsert operation - information if the flow is rolling forward or rolling back.
+        &quot;targetVmCount&quot;: 42, # [Output Only] Count of VMs originally planned to be created.
+      },
+    },
+  },
   &quot;kind&quot;: &quot;compute#operation&quot;, # [Output Only] Type of the resource. Always `compute#operation` for Operation resources.
   &quot;name&quot;: &quot;A String&quot;, # [Output Only] Name of the operation.
   &quot;operationGroupId&quot;: &quot;A String&quot;, # [Output Only] An ID that represents a group of operations, such as when a group of operations results from a `bulkInsert` API request.
@@ -3084,6 +3250,23 @@ Returns:
   &quot;region&quot;: &quot;A String&quot;, # [Output Only] The URL of the region where the operation resides. Only applicable when performing regional operations.
   &quot;selfLink&quot;: &quot;A String&quot;, # [Output Only] Server-defined URL for the resource.
   &quot;selfLinkWithId&quot;: &quot;A String&quot;, # [Output Only] Server-defined URL for this resource with the resource id.
+  &quot;setCommonInstanceMetadataOperationMetadata&quot;: { # Encapsulates partial completion metadata for SetCommonInstanceMetadata. Will be propagated on Operation.metadata.
+    &quot;clientOperationId&quot;: &quot;A String&quot;,
+    &quot;perLocationOperations&quot;: {
+      &quot;a_key&quot;: {
+        &quot;error&quot;: { # The `Status` type defines a logical error model that is suitable for different programming environments, including REST APIs and RPC APIs. It is used by [gRPC](https://github.com/grpc). Each `Status` message contains three pieces of data: error code, error message, and error details. You can find out more about this error model and how to work with it in the [API Design Guide](https://cloud.google.com/apis/design/errors).
+          &quot;code&quot;: 42, # The status code, which should be an enum value of google.rpc.Code.
+          &quot;details&quot;: [ # A list of messages that carry the error details. There is a common set of message types for APIs to use.
+            {
+              &quot;a_key&quot;: &quot;&quot;, # Properties of the object. Contains field @type with type URL.
+            },
+          ],
+          &quot;message&quot;: &quot;A String&quot;, # A developer-facing error message, which should be in English. Any user-facing error message should be localized and sent in the google.rpc.Status.details field, or localized by the client.
+        },
+        &quot;state&quot;: &quot;A String&quot;,
+      },
+    },
+  },
   &quot;startTime&quot;: &quot;A String&quot;, # [Output Only] The time that this operation was started by the server. This value is in RFC3339 text format.
   &quot;status&quot;: &quot;A String&quot;, # [Output Only] The status of the operation, which can be one of the following: `PENDING`, `RUNNING`, or `DONE`.
   &quot;statusMessage&quot;: &quot;A String&quot;, # [Output Only] An optional textual description of the current status of the operation.
@@ -3126,7 +3309,7 @@ Args:
         &quot;location&quot;: &quot;A String&quot;, # Optional. String indicating the location of the expression for error reporting, e.g. a file name and a position in the file.
         &quot;title&quot;: &quot;A String&quot;, # Optional. Title for the expression, i.e. a short string describing its purpose. This can be used e.g. in UIs which allow to enter the expression.
       },
-      &quot;members&quot;: [ # Specifies the principals requesting access for a Google Cloud resource. `members` can have the following values: * `allUsers`: A special identifier that represents anyone who is on the internet; with or without a Google account. * `allAuthenticatedUsers`: A special identifier that represents anyone who is authenticated with a Google account or a service account. Does not include identities that come from external identity providers (IdPs) through identity federation. * `user:{emailid}`: An email address that represents a specific Google account. For example, `alice@example.com` . * `serviceAccount:{emailid}`: An email address that represents a Google service account. For example, `my-other-app@appspot.gserviceaccount.com`. * `serviceAccount:{projectid}.svc.id.goog[{namespace}/{kubernetes-sa}]`: An identifier for a [Kubernetes service account](https://cloud.google.com/kubernetes-engine/docs/how-to/kubernetes-service-accounts). For example, `my-project.svc.id.goog[my-namespace/my-kubernetes-sa]`. * `group:{emailid}`: An email address that represents a Google group. For example, `admins@example.com`. * `deleted:user:{emailid}?uid={uniqueid}`: An email address (plus unique identifier) representing a user that has been recently deleted. For example, `alice@example.com?uid=123456789012345678901`. If the user is recovered, this value reverts to `user:{emailid}` and the recovered user retains the role in the binding. * `deleted:serviceAccount:{emailid}?uid={uniqueid}`: An email address (plus unique identifier) representing a service account that has been recently deleted. For example, `my-other-app@appspot.gserviceaccount.com?uid=123456789012345678901`. If the service account is undeleted, this value reverts to `serviceAccount:{emailid}` and the undeleted service account retains the role in the binding. * `deleted:group:{emailid}?uid={uniqueid}`: An email address (plus unique identifier) representing a Google group that has been recently deleted. For example, `admins@example.com?uid=123456789012345678901`. If the group is recovered, this value reverts to `group:{emailid}` and the recovered group retains the role in the binding. * `domain:{domain}`: The G Suite domain (primary) that represents all the users of that domain. For example, `google.com` or `example.com`.
+      &quot;members&quot;: [ # Specifies the principals requesting access for a Google Cloud resource. `members` can have the following values: * `allUsers`: A special identifier that represents anyone who is on the internet; with or without a Google account. * `allAuthenticatedUsers`: A special identifier that represents anyone who is authenticated with a Google account or a service account. Does not include identities that come from external identity providers (IdPs) through identity federation. * `user:{emailid}`: An email address that represents a specific Google account. For example, `alice@example.com` . * `serviceAccount:{emailid}`: An email address that represents a Google service account. For example, `my-other-app@appspot.gserviceaccount.com`. * `serviceAccount:{projectid}.svc.id.goog[{namespace}/{kubernetes-sa}]`: An identifier for a [Kubernetes service account](https://cloud.google.com/kubernetes-engine/docs/how-to/kubernetes-service-accounts). For example, `my-project.svc.id.goog[my-namespace/my-kubernetes-sa]`. * `group:{emailid}`: An email address that represents a Google group. For example, `admins@example.com`. * `domain:{domain}`: The G Suite domain (primary) that represents all the users of that domain. For example, `google.com` or `example.com`. * `deleted:user:{emailid}?uid={uniqueid}`: An email address (plus unique identifier) representing a user that has been recently deleted. For example, `alice@example.com?uid=123456789012345678901`. If the user is recovered, this value reverts to `user:{emailid}` and the recovered user retains the role in the binding. * `deleted:serviceAccount:{emailid}?uid={uniqueid}`: An email address (plus unique identifier) representing a service account that has been recently deleted. For example, `my-other-app@appspot.gserviceaccount.com?uid=123456789012345678901`. If the service account is undeleted, this value reverts to `serviceAccount:{emailid}` and the undeleted service account retains the role in the binding. * `deleted:group:{emailid}?uid={uniqueid}`: An email address (plus unique identifier) representing a Google group that has been recently deleted. For example, `admins@example.com?uid=123456789012345678901`. If the group is recovered, this value reverts to `group:{emailid}` and the recovered group retains the role in the binding.
         &quot;A String&quot;,
       ],
       &quot;role&quot;: &quot;A String&quot;, # Role that is assigned to the list of `members`, or principals. For example, `roles/viewer`, `roles/editor`, or `roles/owner`.
@@ -3160,7 +3343,7 @@ Args:
           &quot;location&quot;: &quot;A String&quot;, # Optional. String indicating the location of the expression for error reporting, e.g. a file name and a position in the file.
           &quot;title&quot;: &quot;A String&quot;, # Optional. Title for the expression, i.e. a short string describing its purpose. This can be used e.g. in UIs which allow to enter the expression.
         },
-        &quot;members&quot;: [ # Specifies the principals requesting access for a Google Cloud resource. `members` can have the following values: * `allUsers`: A special identifier that represents anyone who is on the internet; with or without a Google account. * `allAuthenticatedUsers`: A special identifier that represents anyone who is authenticated with a Google account or a service account. Does not include identities that come from external identity providers (IdPs) through identity federation. * `user:{emailid}`: An email address that represents a specific Google account. For example, `alice@example.com` . * `serviceAccount:{emailid}`: An email address that represents a Google service account. For example, `my-other-app@appspot.gserviceaccount.com`. * `serviceAccount:{projectid}.svc.id.goog[{namespace}/{kubernetes-sa}]`: An identifier for a [Kubernetes service account](https://cloud.google.com/kubernetes-engine/docs/how-to/kubernetes-service-accounts). For example, `my-project.svc.id.goog[my-namespace/my-kubernetes-sa]`. * `group:{emailid}`: An email address that represents a Google group. For example, `admins@example.com`. * `deleted:user:{emailid}?uid={uniqueid}`: An email address (plus unique identifier) representing a user that has been recently deleted. For example, `alice@example.com?uid=123456789012345678901`. If the user is recovered, this value reverts to `user:{emailid}` and the recovered user retains the role in the binding. * `deleted:serviceAccount:{emailid}?uid={uniqueid}`: An email address (plus unique identifier) representing a service account that has been recently deleted. For example, `my-other-app@appspot.gserviceaccount.com?uid=123456789012345678901`. If the service account is undeleted, this value reverts to `serviceAccount:{emailid}` and the undeleted service account retains the role in the binding. * `deleted:group:{emailid}?uid={uniqueid}`: An email address (plus unique identifier) representing a Google group that has been recently deleted. For example, `admins@example.com?uid=123456789012345678901`. If the group is recovered, this value reverts to `group:{emailid}` and the recovered group retains the role in the binding. * `domain:{domain}`: The G Suite domain (primary) that represents all the users of that domain. For example, `google.com` or `example.com`.
+        &quot;members&quot;: [ # Specifies the principals requesting access for a Google Cloud resource. `members` can have the following values: * `allUsers`: A special identifier that represents anyone who is on the internet; with or without a Google account. * `allAuthenticatedUsers`: A special identifier that represents anyone who is authenticated with a Google account or a service account. Does not include identities that come from external identity providers (IdPs) through identity federation. * `user:{emailid}`: An email address that represents a specific Google account. For example, `alice@example.com` . * `serviceAccount:{emailid}`: An email address that represents a Google service account. For example, `my-other-app@appspot.gserviceaccount.com`. * `serviceAccount:{projectid}.svc.id.goog[{namespace}/{kubernetes-sa}]`: An identifier for a [Kubernetes service account](https://cloud.google.com/kubernetes-engine/docs/how-to/kubernetes-service-accounts). For example, `my-project.svc.id.goog[my-namespace/my-kubernetes-sa]`. * `group:{emailid}`: An email address that represents a Google group. For example, `admins@example.com`. * `domain:{domain}`: The G Suite domain (primary) that represents all the users of that domain. For example, `google.com` or `example.com`. * `deleted:user:{emailid}?uid={uniqueid}`: An email address (plus unique identifier) representing a user that has been recently deleted. For example, `alice@example.com?uid=123456789012345678901`. If the user is recovered, this value reverts to `user:{emailid}` and the recovered user retains the role in the binding. * `deleted:serviceAccount:{emailid}?uid={uniqueid}`: An email address (plus unique identifier) representing a service account that has been recently deleted. For example, `my-other-app@appspot.gserviceaccount.com?uid=123456789012345678901`. If the service account is undeleted, this value reverts to `serviceAccount:{emailid}` and the undeleted service account retains the role in the binding. * `deleted:group:{emailid}?uid={uniqueid}`: An email address (plus unique identifier) representing a Google group that has been recently deleted. For example, `admins@example.com?uid=123456789012345678901`. If the group is recovered, this value reverts to `group:{emailid}` and the recovered group retains the role in the binding.
           &quot;A String&quot;,
         ],
         &quot;role&quot;: &quot;A String&quot;, # Role that is assigned to the list of `members`, or principals. For example, `roles/viewer`, `roles/editor`, or `roles/owner`.
@@ -3255,7 +3438,7 @@ Returns:
         &quot;location&quot;: &quot;A String&quot;, # Optional. String indicating the location of the expression for error reporting, e.g. a file name and a position in the file.
         &quot;title&quot;: &quot;A String&quot;, # Optional. Title for the expression, i.e. a short string describing its purpose. This can be used e.g. in UIs which allow to enter the expression.
       },
-      &quot;members&quot;: [ # Specifies the principals requesting access for a Google Cloud resource. `members` can have the following values: * `allUsers`: A special identifier that represents anyone who is on the internet; with or without a Google account. * `allAuthenticatedUsers`: A special identifier that represents anyone who is authenticated with a Google account or a service account. Does not include identities that come from external identity providers (IdPs) through identity federation. * `user:{emailid}`: An email address that represents a specific Google account. For example, `alice@example.com` . * `serviceAccount:{emailid}`: An email address that represents a Google service account. For example, `my-other-app@appspot.gserviceaccount.com`. * `serviceAccount:{projectid}.svc.id.goog[{namespace}/{kubernetes-sa}]`: An identifier for a [Kubernetes service account](https://cloud.google.com/kubernetes-engine/docs/how-to/kubernetes-service-accounts). For example, `my-project.svc.id.goog[my-namespace/my-kubernetes-sa]`. * `group:{emailid}`: An email address that represents a Google group. For example, `admins@example.com`. * `deleted:user:{emailid}?uid={uniqueid}`: An email address (plus unique identifier) representing a user that has been recently deleted. For example, `alice@example.com?uid=123456789012345678901`. If the user is recovered, this value reverts to `user:{emailid}` and the recovered user retains the role in the binding. * `deleted:serviceAccount:{emailid}?uid={uniqueid}`: An email address (plus unique identifier) representing a service account that has been recently deleted. For example, `my-other-app@appspot.gserviceaccount.com?uid=123456789012345678901`. If the service account is undeleted, this value reverts to `serviceAccount:{emailid}` and the undeleted service account retains the role in the binding. * `deleted:group:{emailid}?uid={uniqueid}`: An email address (plus unique identifier) representing a Google group that has been recently deleted. For example, `admins@example.com?uid=123456789012345678901`. If the group is recovered, this value reverts to `group:{emailid}` and the recovered group retains the role in the binding. * `domain:{domain}`: The G Suite domain (primary) that represents all the users of that domain. For example, `google.com` or `example.com`.
+      &quot;members&quot;: [ # Specifies the principals requesting access for a Google Cloud resource. `members` can have the following values: * `allUsers`: A special identifier that represents anyone who is on the internet; with or without a Google account. * `allAuthenticatedUsers`: A special identifier that represents anyone who is authenticated with a Google account or a service account. Does not include identities that come from external identity providers (IdPs) through identity federation. * `user:{emailid}`: An email address that represents a specific Google account. For example, `alice@example.com` . * `serviceAccount:{emailid}`: An email address that represents a Google service account. For example, `my-other-app@appspot.gserviceaccount.com`. * `serviceAccount:{projectid}.svc.id.goog[{namespace}/{kubernetes-sa}]`: An identifier for a [Kubernetes service account](https://cloud.google.com/kubernetes-engine/docs/how-to/kubernetes-service-accounts). For example, `my-project.svc.id.goog[my-namespace/my-kubernetes-sa]`. * `group:{emailid}`: An email address that represents a Google group. For example, `admins@example.com`. * `domain:{domain}`: The G Suite domain (primary) that represents all the users of that domain. For example, `google.com` or `example.com`. * `deleted:user:{emailid}?uid={uniqueid}`: An email address (plus unique identifier) representing a user that has been recently deleted. For example, `alice@example.com?uid=123456789012345678901`. If the user is recovered, this value reverts to `user:{emailid}` and the recovered user retains the role in the binding. * `deleted:serviceAccount:{emailid}?uid={uniqueid}`: An email address (plus unique identifier) representing a service account that has been recently deleted. For example, `my-other-app@appspot.gserviceaccount.com?uid=123456789012345678901`. If the service account is undeleted, this value reverts to `serviceAccount:{emailid}` and the undeleted service account retains the role in the binding. * `deleted:group:{emailid}?uid={uniqueid}`: An email address (plus unique identifier) representing a Google group that has been recently deleted. For example, `admins@example.com?uid=123456789012345678901`. If the group is recovered, this value reverts to `group:{emailid}` and the recovered group retains the role in the binding.
         &quot;A String&quot;,
       ],
       &quot;role&quot;: &quot;A String&quot;, # Role that is assigned to the list of `members`, or principals. For example, `roles/viewer`, `roles/editor`, or `roles/owner`.
@@ -3387,6 +3570,17 @@ Returns:
   &quot;httpErrorStatusCode&quot;: 42, # [Output Only] If the operation fails, this field contains the HTTP error status code that was returned. For example, a `404` means the resource was not found.
   &quot;id&quot;: &quot;A String&quot;, # [Output Only] The unique identifier for the operation. This identifier is defined by the server.
   &quot;insertTime&quot;: &quot;A String&quot;, # [Output Only] The time that this operation was requested. This value is in RFC3339 text format.
+  &quot;instancesBulkInsertOperationMetadata&quot;: {
+    &quot;perLocationStatus&quot;: { # Status information per location (location name is key). Example key: zones/us-central1-a
+      &quot;a_key&quot;: {
+        &quot;createdVmCount&quot;: 42, # [Output Only] Count of VMs successfully created so far.
+        &quot;deletedVmCount&quot;: 42, # [Output Only] Count of VMs that got deleted during rollback.
+        &quot;failedToCreateVmCount&quot;: 42, # [Output Only] Count of VMs that started creating but encountered an error.
+        &quot;status&quot;: &quot;A String&quot;, # [Output Only] Creation status of BulkInsert operation - information if the flow is rolling forward or rolling back.
+        &quot;targetVmCount&quot;: 42, # [Output Only] Count of VMs originally planned to be created.
+      },
+    },
+  },
   &quot;kind&quot;: &quot;compute#operation&quot;, # [Output Only] Type of the resource. Always `compute#operation` for Operation resources.
   &quot;name&quot;: &quot;A String&quot;, # [Output Only] Name of the operation.
   &quot;operationGroupId&quot;: &quot;A String&quot;, # [Output Only] An ID that represents a group of operations, such as when a group of operations results from a `bulkInsert` API request.
@@ -3395,6 +3589,23 @@ Returns:
   &quot;region&quot;: &quot;A String&quot;, # [Output Only] The URL of the region where the operation resides. Only applicable when performing regional operations.
   &quot;selfLink&quot;: &quot;A String&quot;, # [Output Only] Server-defined URL for the resource.
   &quot;selfLinkWithId&quot;: &quot;A String&quot;, # [Output Only] Server-defined URL for this resource with the resource id.
+  &quot;setCommonInstanceMetadataOperationMetadata&quot;: { # Encapsulates partial completion metadata for SetCommonInstanceMetadata. Will be propagated on Operation.metadata.
+    &quot;clientOperationId&quot;: &quot;A String&quot;,
+    &quot;perLocationOperations&quot;: {
+      &quot;a_key&quot;: {
+        &quot;error&quot;: { # The `Status` type defines a logical error model that is suitable for different programming environments, including REST APIs and RPC APIs. It is used by [gRPC](https://github.com/grpc). Each `Status` message contains three pieces of data: error code, error message, and error details. You can find out more about this error model and how to work with it in the [API Design Guide](https://cloud.google.com/apis/design/errors).
+          &quot;code&quot;: 42, # The status code, which should be an enum value of google.rpc.Code.
+          &quot;details&quot;: [ # A list of messages that carry the error details. There is a common set of message types for APIs to use.
+            {
+              &quot;a_key&quot;: &quot;&quot;, # Properties of the object. Contains field @type with type URL.
+            },
+          ],
+          &quot;message&quot;: &quot;A String&quot;, # A developer-facing error message, which should be in English. Any user-facing error message should be localized and sent in the google.rpc.Status.details field, or localized by the client.
+        },
+        &quot;state&quot;: &quot;A String&quot;,
+      },
+    },
+  },
   &quot;startTime&quot;: &quot;A String&quot;, # [Output Only] The time that this operation was started by the server. This value is in RFC3339 text format.
   &quot;status&quot;: &quot;A String&quot;, # [Output Only] The status of the operation, which can be one of the following: `PENDING`, `RUNNING`, or `DONE`.
   &quot;statusMessage&quot;: &quot;A String&quot;, # [Output Only] An optional textual description of the current status of the operation.
@@ -3609,6 +3820,9 @@ Args:
     &quot;nanos&quot;: 42, # Span of time that&#x27;s a fraction of a second at nanosecond resolution. Durations less than one second are represented with a 0 `seconds` field and a positive `nanos` field. Must be from 0 to 999,999,999 inclusive.
     &quot;seconds&quot;: &quot;A String&quot;, # Span of time at a resolution of a second. Must be from 0 to 315,576,000,000 inclusive. Note: these bounds are computed from: 60 sec/min * 60 min/hr * 24 hr/day * 365.25 days/year * 10000 years
   },
+  &quot;metadatas&quot;: { # Deployment metadata associated with the resource to be set by a GKE hub controller and read by the backend RCTH
+    &quot;a_key&quot;: &quot;A String&quot;,
+  },
   &quot;name&quot;: &quot;A String&quot;, # Name of the resource. Provided by the client when the resource is created. The name must be 1-63 characters long, and comply with RFC1035. Specifically, the name must be 1-63 characters long and match the regular expression `[a-z]([-a-z0-9]*[a-z0-9])?` which means the first character must be a lowercase letter, and all following characters must be a dash, lowercase letter, or digit, except the last character, which cannot be a dash.
   &quot;network&quot;: &quot;A String&quot;, # The URL of the network to which this backend service belongs. This field can only be specified when the load balancing scheme is set to INTERNAL.
   &quot;outlierDetection&quot;: { # Settings controlling the eviction of unhealthy hosts from the load balancing pool for the backend service. # Settings controlling the eviction of unhealthy hosts from the load balancing pool for the backend service. If not set, this feature is considered disabled. This field is applicable to either: - A regional backend service with the service_protocol set to HTTP, HTTPS, HTTP2, or GRPC, and load_balancing_scheme set to INTERNAL_MANAGED. - A global backend service with the load_balancing_scheme set to INTERNAL_SELF_MANAGED.
@@ -3799,7 +4013,7 @@ Args:
       &quot;accessKeyVersion&quot;: &quot;A String&quot;, # The optional version identifier for the access key. You can use this to keep track of different iterations of your access key.
       &quot;originRegion&quot;: &quot;A String&quot;, # The name of the cloud region of your origin. This is a free-form field with the name of the region your cloud uses to host your origin. For example, &quot;us-east-1&quot; for AWS or &quot;us-ashburn-1&quot; for OCI.
     },
-    &quot;clientTlsPolicy&quot;: &quot;A String&quot;, # Optional. A URL referring to a networksecurity.ClientTlsPolicy resource that describes how clients should authenticate with this service&#x27;s backends. clientTlsPolicy only applies to a global BackendService with the loadBalancingScheme set to INTERNAL_SELF_MANAGED. If left blank, communications are not encrypted. Note: This field currently has no impact.
+    &quot;clientTlsPolicy&quot;: &quot;A String&quot;, # Optional. A URL referring to a networksecurity.ClientTlsPolicy resource that describes how clients should authenticate with this service&#x27;s backends. clientTlsPolicy only applies to a global BackendService with the loadBalancingScheme set to INTERNAL_SELF_MANAGED. If left blank, communications are not encrypted.
     &quot;clientTlsSettings&quot;: { # [Deprecated] The client side authentication settings for connection originating from the backend service. the backend service. # [Deprecated] TLS Settings for the backend service.
       &quot;clientTlsContext&quot;: { # [Deprecated] The TLS settings for the client or server. The TLS settings for the client or server. # Configures the mechanism to obtain client-side security certificates and identity information. This field is only applicable when mode is set to MUTUAL.
         &quot;certificateContext&quot;: { # [Deprecated] Defines the mechanism to obtain the client or server certificate. Defines the mechanism to obtain the client or server certificate. # Defines the mechanism to obtain the client or server certificate.
@@ -3858,7 +4072,7 @@ Args:
         &quot;A String&quot;,
       ],
     },
-    &quot;subjectAltNames&quot;: [ # Optional. A list of Subject Alternative Names (SANs) that the client verifies during a mutual TLS handshake with an server/endpoint for this BackendService. When the server presents its X.509 certificate to the client, the client inspects the certificate&#x27;s subjectAltName field. If the field contains one of the specified values, the communication continues. Otherwise, it fails. This additional check enables the client to verify that the server is authorized to run the requested service. Note that the contents of the server certificate&#x27;s subjectAltName field are configured by the Public Key Infrastructure which provisions server identities. Only applies to a global BackendService with loadBalancingScheme set to INTERNAL_SELF_MANAGED. Only applies when BackendService has an attached clientTlsPolicy with clientCertificate (mTLS mode). Note: This field currently has no impact.
+    &quot;subjectAltNames&quot;: [ # Optional. A list of Subject Alternative Names (SANs) that the client verifies during a mutual TLS handshake with an server/endpoint for this BackendService. When the server presents its X.509 certificate to the client, the client inspects the certificate&#x27;s subjectAltName field. If the field contains one of the specified values, the communication continues. Otherwise, it fails. This additional check enables the client to verify that the server is authorized to run the requested service. Note that the contents of the server certificate&#x27;s subjectAltName field are configured by the Public Key Infrastructure which provisions server identities. Only applies to a global BackendService with loadBalancingScheme set to INTERNAL_SELF_MANAGED. Only applies when BackendService has an attached clientTlsPolicy with clientCertificate (mTLS mode).
       &quot;A String&quot;,
     ],
   },
@@ -3935,6 +4149,17 @@ Returns:
   &quot;httpErrorStatusCode&quot;: 42, # [Output Only] If the operation fails, this field contains the HTTP error status code that was returned. For example, a `404` means the resource was not found.
   &quot;id&quot;: &quot;A String&quot;, # [Output Only] The unique identifier for the operation. This identifier is defined by the server.
   &quot;insertTime&quot;: &quot;A String&quot;, # [Output Only] The time that this operation was requested. This value is in RFC3339 text format.
+  &quot;instancesBulkInsertOperationMetadata&quot;: {
+    &quot;perLocationStatus&quot;: { # Status information per location (location name is key). Example key: zones/us-central1-a
+      &quot;a_key&quot;: {
+        &quot;createdVmCount&quot;: 42, # [Output Only] Count of VMs successfully created so far.
+        &quot;deletedVmCount&quot;: 42, # [Output Only] Count of VMs that got deleted during rollback.
+        &quot;failedToCreateVmCount&quot;: 42, # [Output Only] Count of VMs that started creating but encountered an error.
+        &quot;status&quot;: &quot;A String&quot;, # [Output Only] Creation status of BulkInsert operation - information if the flow is rolling forward or rolling back.
+        &quot;targetVmCount&quot;: 42, # [Output Only] Count of VMs originally planned to be created.
+      },
+    },
+  },
   &quot;kind&quot;: &quot;compute#operation&quot;, # [Output Only] Type of the resource. Always `compute#operation` for Operation resources.
   &quot;name&quot;: &quot;A String&quot;, # [Output Only] Name of the operation.
   &quot;operationGroupId&quot;: &quot;A String&quot;, # [Output Only] An ID that represents a group of operations, such as when a group of operations results from a `bulkInsert` API request.
@@ -3943,6 +4168,23 @@ Returns:
   &quot;region&quot;: &quot;A String&quot;, # [Output Only] The URL of the region where the operation resides. Only applicable when performing regional operations.
   &quot;selfLink&quot;: &quot;A String&quot;, # [Output Only] Server-defined URL for the resource.
   &quot;selfLinkWithId&quot;: &quot;A String&quot;, # [Output Only] Server-defined URL for this resource with the resource id.
+  &quot;setCommonInstanceMetadataOperationMetadata&quot;: { # Encapsulates partial completion metadata for SetCommonInstanceMetadata. Will be propagated on Operation.metadata.
+    &quot;clientOperationId&quot;: &quot;A String&quot;,
+    &quot;perLocationOperations&quot;: {
+      &quot;a_key&quot;: {
+        &quot;error&quot;: { # The `Status` type defines a logical error model that is suitable for different programming environments, including REST APIs and RPC APIs. It is used by [gRPC](https://github.com/grpc). Each `Status` message contains three pieces of data: error code, error message, and error details. You can find out more about this error model and how to work with it in the [API Design Guide](https://cloud.google.com/apis/design/errors).
+          &quot;code&quot;: 42, # The status code, which should be an enum value of google.rpc.Code.
+          &quot;details&quot;: [ # A list of messages that carry the error details. There is a common set of message types for APIs to use.
+            {
+              &quot;a_key&quot;: &quot;&quot;, # Properties of the object. Contains field @type with type URL.
+            },
+          ],
+          &quot;message&quot;: &quot;A String&quot;, # A developer-facing error message, which should be in English. Any user-facing error message should be localized and sent in the google.rpc.Status.details field, or localized by the client.
+        },
+        &quot;state&quot;: &quot;A String&quot;,
+      },
+    },
+  },
   &quot;startTime&quot;: &quot;A String&quot;, # [Output Only] The time that this operation was started by the server. This value is in RFC3339 text format.
   &quot;status&quot;: &quot;A String&quot;, # [Output Only] The status of the operation, which can be one of the following: `PENDING`, `RUNNING`, or `DONE`.
   &quot;statusMessage&quot;: &quot;A String&quot;, # [Output Only] An optional textual description of the current status of the operation.

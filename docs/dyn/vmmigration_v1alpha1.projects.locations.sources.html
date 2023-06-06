@@ -136,6 +136,7 @@ Args:
     &quot;accessKeyCreds&quot;: { # Message describing AWS Credentials using access key id and secret. # AWS Credentials using access key id and secret.
       &quot;accessKeyId&quot;: &quot;A String&quot;, # AWS access key ID.
       &quot;secretAccessKey&quot;: &quot;A String&quot;, # Input only. AWS secret access key.
+      &quot;sessionToken&quot;: &quot;A String&quot;, # Input only. AWS session token. Used only when AWS security token service (STS) is responsible for creating the temporary credentials.
     },
     &quot;awsRegion&quot;: &quot;A String&quot;, # Immutable. The AWS region that the source VMs will be migrated from.
     &quot;error&quot;: { # The `Status` type defines a logical error model that is suitable for different programming environments, including REST APIs and RPC APIs. It is used by [gRPC](https://github.com/grpc). Each `Status` message contains three pieces of data: error code, error message, and error details. You can find out more about this error model and how to work with it in the [API Design Guide](https://cloud.google.com/apis/design/errors). # Output only. Provides details on the state of the Source in case of an error.
@@ -180,13 +181,14 @@ Args:
   &quot;updateTime&quot;: &quot;A String&quot;, # Output only. The update time timestamp.
   &quot;vmware&quot;: { # VmwareSourceDetails message describes a specific source details for the vmware source type. # Vmware type source details.
     &quot;password&quot;: &quot;A String&quot;, # Input only. The credentials password. This is write only and can not be read in a GET operation.
+    &quot;resolvedVcenterHost&quot;: &quot;A String&quot;, # The hostname of the vcenter.
     &quot;thumbprint&quot;: &quot;A String&quot;, # The thumbprint representing the certificate for the vcenter.
     &quot;username&quot;: &quot;A String&quot;, # The credentials username.
     &quot;vcenterIp&quot;: &quot;A String&quot;, # The ip address of the vcenter this Source represents.
   },
 }
 
-  requestId: string, A request ID to identify requests. Specify a unique request ID so that if you must retry your request, the server will know to ignore the request if it has already been completed. The server will guarantee that for at least 60 minutes since the first request. For example, consider a situation where you make an initial request and t he request times out. If you make the request again with the same request ID, the server can check if original operation with the same request ID was received, and if so, will ignore the second request. This prevents clients from accidentally creating duplicate commitments. The request ID must be a valid UUID with the exception that zero UUID is not supported (00000000-0000-0000-0000-000000000000).
+  requestId: string, A request ID to identify requests. Specify a unique request ID so that if you must retry your request, the server will know to ignore the request if it has already been completed. The server will guarantee that for at least 60 minutes since the first request. For example, consider a situation where you make an initial request and the request times out. If you make the request again with the same request ID, the server can check if original operation with the same request ID was received, and if so, will ignore the second request. This prevents clients from accidentally creating duplicate commitments. The request ID must be a valid UUID with the exception that zero UUID is not supported (00000000-0000-0000-0000-000000000000).
   sourceId: string, Required. The source identifier.
   x__xgafv: string, V1 error format.
     Allowed values
@@ -223,7 +225,7 @@ Returns:
 
 Args:
   name: string, Required. The Source name. (required)
-  requestId: string, Optional. A request ID to identify requests. Specify a unique request ID so that if you must retry your request, the server will know to ignore the request if it has already been completed. The server will guarantee that for at least 60 minutes after the first request. For example, consider a situation where you make an initial request and t he request times out. If you make the request again with the same request ID, the server can check if original operation with the same request ID was received, and if so, will ignore the second request. This prevents clients from accidentally creating duplicate commitments. The request ID must be a valid UUID with the exception that zero UUID is not supported (00000000-0000-0000-0000-000000000000).
+  requestId: string, Optional. A request ID to identify requests. Specify a unique request ID so that if you must retry your request, the server will know to ignore the request if it has already been completed. The server will guarantee that for at least 60 minutes after the first request. For example, consider a situation where you make an initial request and the request times out. If you make the request again with the same request ID, the server can check if original operation with the same request ID was received, and if so, will ignore the second request. This prevents clients from accidentally creating duplicate commitments. The request ID must be a valid UUID with the exception that zero UUID is not supported (00000000-0000-0000-0000-000000000000).
   x__xgafv: string, V1 error format.
     Allowed values
       1 - v1 error format
@@ -359,6 +361,7 @@ Returns:
     &quot;accessKeyCreds&quot;: { # Message describing AWS Credentials using access key id and secret. # AWS Credentials using access key id and secret.
       &quot;accessKeyId&quot;: &quot;A String&quot;, # AWS access key ID.
       &quot;secretAccessKey&quot;: &quot;A String&quot;, # Input only. AWS secret access key.
+      &quot;sessionToken&quot;: &quot;A String&quot;, # Input only. AWS session token. Used only when AWS security token service (STS) is responsible for creating the temporary credentials.
     },
     &quot;awsRegion&quot;: &quot;A String&quot;, # Immutable. The AWS region that the source VMs will be migrated from.
     &quot;error&quot;: { # The `Status` type defines a logical error model that is suitable for different programming environments, including REST APIs and RPC APIs. It is used by [gRPC](https://github.com/grpc). Each `Status` message contains three pieces of data: error code, error message, and error details. You can find out more about this error model and how to work with it in the [API Design Guide](https://cloud.google.com/apis/design/errors). # Output only. Provides details on the state of the Source in case of an error.
@@ -403,6 +406,7 @@ Returns:
   &quot;updateTime&quot;: &quot;A String&quot;, # Output only. The update time timestamp.
   &quot;vmware&quot;: { # VmwareSourceDetails message describes a specific source details for the vmware source type. # Vmware type source details.
     &quot;password&quot;: &quot;A String&quot;, # Input only. The credentials password. This is write only and can not be read in a GET operation.
+    &quot;resolvedVcenterHost&quot;: &quot;A String&quot;, # The hostname of the vcenter.
     &quot;thumbprint&quot;: &quot;A String&quot;, # The thumbprint representing the certificate for the vcenter.
     &quot;username&quot;: &quot;A String&quot;, # The credentials username.
     &quot;vcenterIp&quot;: &quot;A String&quot;, # The ip address of the vcenter this Source represents.
@@ -436,6 +440,7 @@ Returns:
         &quot;accessKeyCreds&quot;: { # Message describing AWS Credentials using access key id and secret. # AWS Credentials using access key id and secret.
           &quot;accessKeyId&quot;: &quot;A String&quot;, # AWS access key ID.
           &quot;secretAccessKey&quot;: &quot;A String&quot;, # Input only. AWS secret access key.
+          &quot;sessionToken&quot;: &quot;A String&quot;, # Input only. AWS session token. Used only when AWS security token service (STS) is responsible for creating the temporary credentials.
         },
         &quot;awsRegion&quot;: &quot;A String&quot;, # Immutable. The AWS region that the source VMs will be migrated from.
         &quot;error&quot;: { # The `Status` type defines a logical error model that is suitable for different programming environments, including REST APIs and RPC APIs. It is used by [gRPC](https://github.com/grpc). Each `Status` message contains three pieces of data: error code, error message, and error details. You can find out more about this error model and how to work with it in the [API Design Guide](https://cloud.google.com/apis/design/errors). # Output only. Provides details on the state of the Source in case of an error.
@@ -480,6 +485,7 @@ Returns:
       &quot;updateTime&quot;: &quot;A String&quot;, # Output only. The update time timestamp.
       &quot;vmware&quot;: { # VmwareSourceDetails message describes a specific source details for the vmware source type. # Vmware type source details.
         &quot;password&quot;: &quot;A String&quot;, # Input only. The credentials password. This is write only and can not be read in a GET operation.
+        &quot;resolvedVcenterHost&quot;: &quot;A String&quot;, # The hostname of the vcenter.
         &quot;thumbprint&quot;: &quot;A String&quot;, # The thumbprint representing the certificate for the vcenter.
         &quot;username&quot;: &quot;A String&quot;, # The credentials username.
         &quot;vcenterIp&quot;: &quot;A String&quot;, # The ip address of the vcenter this Source represents.
@@ -520,6 +526,7 @@ Args:
     &quot;accessKeyCreds&quot;: { # Message describing AWS Credentials using access key id and secret. # AWS Credentials using access key id and secret.
       &quot;accessKeyId&quot;: &quot;A String&quot;, # AWS access key ID.
       &quot;secretAccessKey&quot;: &quot;A String&quot;, # Input only. AWS secret access key.
+      &quot;sessionToken&quot;: &quot;A String&quot;, # Input only. AWS session token. Used only when AWS security token service (STS) is responsible for creating the temporary credentials.
     },
     &quot;awsRegion&quot;: &quot;A String&quot;, # Immutable. The AWS region that the source VMs will be migrated from.
     &quot;error&quot;: { # The `Status` type defines a logical error model that is suitable for different programming environments, including REST APIs and RPC APIs. It is used by [gRPC](https://github.com/grpc). Each `Status` message contains three pieces of data: error code, error message, and error details. You can find out more about this error model and how to work with it in the [API Design Guide](https://cloud.google.com/apis/design/errors). # Output only. Provides details on the state of the Source in case of an error.
@@ -564,13 +571,14 @@ Args:
   &quot;updateTime&quot;: &quot;A String&quot;, # Output only. The update time timestamp.
   &quot;vmware&quot;: { # VmwareSourceDetails message describes a specific source details for the vmware source type. # Vmware type source details.
     &quot;password&quot;: &quot;A String&quot;, # Input only. The credentials password. This is write only and can not be read in a GET operation.
+    &quot;resolvedVcenterHost&quot;: &quot;A String&quot;, # The hostname of the vcenter.
     &quot;thumbprint&quot;: &quot;A String&quot;, # The thumbprint representing the certificate for the vcenter.
     &quot;username&quot;: &quot;A String&quot;, # The credentials username.
     &quot;vcenterIp&quot;: &quot;A String&quot;, # The ip address of the vcenter this Source represents.
   },
 }
 
-  requestId: string, A request ID to identify requests. Specify a unique request ID so that if you must retry your request, the server will know to ignore the request if it has already been completed. The server will guarantee that for at least 60 minutes since the first request. For example, consider a situation where you make an initial request and t he request times out. If you make the request again with the same request ID, the server can check if original operation with the same request ID was received, and if so, will ignore the second request. This prevents clients from accidentally creating duplicate commitments. The request ID must be a valid UUID with the exception that zero UUID is not supported (00000000-0000-0000-0000-000000000000).
+  requestId: string, A request ID to identify requests. Specify a unique request ID so that if you must retry your request, the server will know to ignore the request if it has already been completed. The server will guarantee that for at least 60 minutes since the first request. For example, consider a situation where you make an initial request and the request times out. If you make the request again with the same request ID, the server can check if original operation with the same request ID was received, and if so, will ignore the second request. This prevents clients from accidentally creating duplicate commitments. The request ID must be a valid UUID with the exception that zero UUID is not supported (00000000-0000-0000-0000-000000000000).
   updateMask: string, Field mask is used to specify the fields to be overwritten in the Source resource by the update. The fields specified in the update_mask are relative to the resource, not the full request. A field will be overwritten if it is in the mask. If the user does not provide a mask then all fields will be overwritten.
   x__xgafv: string, V1 error format.
     Allowed values

@@ -221,7 +221,7 @@ Args:
           },
         ],
       },
-      &quot;insert&quot;: { # A Datastore data object. An entity is limited to 1 megabyte when stored. That _roughly_ corresponds to a limit of 1 megabyte for the serialized form of this message. # The entity to insert. The entity must not already exist. The entity key&#x27;s final path element may be incomplete.
+      &quot;insert&quot;: { # A Datastore data object. Must not exceed 1 MiB - 4 bytes. # The entity to insert. The entity must not already exist. The entity key&#x27;s final path element may be incomplete.
         &quot;key&quot;: { # A unique identifier for an entity. If a key&#x27;s partition ID or any of its path kinds or names are reserved/read-only, the key is reserved/read-only. A reserved/read-only key is forbidden in certain documented contexts. # The entity&#x27;s key. An entity must have a key, unless otherwise documented (for example, an entity in `Value.entity_value` may have no key). An entity&#x27;s kind is its key path&#x27;s last element&#x27;s kind, or null if it has no key.
           &quot;partitionId&quot;: { # A partition ID identifies a grouping of entities. The grouping is always by project and namespace, however the namespace ID may be empty. A partition ID contains several dimensions: project ID and namespace ID. Partition dimensions: - May be `&quot;&quot;`. - Must be valid UTF-8 bytes. - Must have values that match regex `[A-Za-z\d\.\-_]{1,100}` If the value of any dimension matches regex `__.*__`, the partition is reserved/read-only. A reserved/read-only partition ID is forbidden in certain documented contexts. Foreign partition IDs (in which the project ID does not match the context project ID ) are discouraged. Reads and writes of foreign partition IDs may fail if the project is not in an active state. # Entities are partitioned into subsets, currently identified by a project ID and namespace ID. Queries are scoped to a single partition.
             &quot;namespaceId&quot;: &quot;A String&quot;, # If not empty, the ID of the namespace to which the entities belong.
@@ -235,7 +235,7 @@ Args:
             },
           ],
         },
-        &quot;properties&quot;: { # The entity&#x27;s properties. The map&#x27;s keys are property names. A property name matching regex `__.*__` is reserved. A reserved property name is forbidden in certain documented contexts. The name must not contain more than 500 characters. The name cannot be `&quot;&quot;`.
+        &quot;properties&quot;: { # The entity&#x27;s properties. The map&#x27;s keys are property names. A property name matching regex `__.*__` is reserved. A reserved property name is forbidden in certain documented contexts. The map keys, represented as UTF-8, must not exceed 1,500 bytes and cannot be empty.
           &quot;a_key&quot;: { # A message that can hold any of the supported value types and associated metadata.
             &quot;arrayValue&quot;: { # An array value. # An array value. Cannot contain another array value. A `Value` instance that sets field `array_value` must not set fields `meaning` or `exclude_from_indexes`.
               &quot;values&quot;: [ # Values in the array. The order of values in an array is preserved as long as all values have identical settings for &#x27;exclude_from_indexes&#x27;.
@@ -272,7 +272,7 @@ Args:
           },
         },
       },
-      &quot;update&quot;: { # A Datastore data object. An entity is limited to 1 megabyte when stored. That _roughly_ corresponds to a limit of 1 megabyte for the serialized form of this message. # The entity to update. The entity must already exist. Must have a complete key path.
+      &quot;update&quot;: { # A Datastore data object. Must not exceed 1 MiB - 4 bytes. # The entity to update. The entity must already exist. Must have a complete key path.
         &quot;key&quot;: { # A unique identifier for an entity. If a key&#x27;s partition ID or any of its path kinds or names are reserved/read-only, the key is reserved/read-only. A reserved/read-only key is forbidden in certain documented contexts. # The entity&#x27;s key. An entity must have a key, unless otherwise documented (for example, an entity in `Value.entity_value` may have no key). An entity&#x27;s kind is its key path&#x27;s last element&#x27;s kind, or null if it has no key.
           &quot;partitionId&quot;: { # A partition ID identifies a grouping of entities. The grouping is always by project and namespace, however the namespace ID may be empty. A partition ID contains several dimensions: project ID and namespace ID. Partition dimensions: - May be `&quot;&quot;`. - Must be valid UTF-8 bytes. - Must have values that match regex `[A-Za-z\d\.\-_]{1,100}` If the value of any dimension matches regex `__.*__`, the partition is reserved/read-only. A reserved/read-only partition ID is forbidden in certain documented contexts. Foreign partition IDs (in which the project ID does not match the context project ID ) are discouraged. Reads and writes of foreign partition IDs may fail if the project is not in an active state. # Entities are partitioned into subsets, currently identified by a project ID and namespace ID. Queries are scoped to a single partition.
             &quot;namespaceId&quot;: &quot;A String&quot;, # If not empty, the ID of the namespace to which the entities belong.
@@ -286,7 +286,7 @@ Args:
             },
           ],
         },
-        &quot;properties&quot;: { # The entity&#x27;s properties. The map&#x27;s keys are property names. A property name matching regex `__.*__` is reserved. A reserved property name is forbidden in certain documented contexts. The name must not contain more than 500 characters. The name cannot be `&quot;&quot;`.
+        &quot;properties&quot;: { # The entity&#x27;s properties. The map&#x27;s keys are property names. A property name matching regex `__.*__` is reserved. A reserved property name is forbidden in certain documented contexts. The map keys, represented as UTF-8, must not exceed 1,500 bytes and cannot be empty.
           &quot;a_key&quot;: { # A message that can hold any of the supported value types and associated metadata.
             &quot;arrayValue&quot;: { # An array value. # An array value. Cannot contain another array value. A `Value` instance that sets field `array_value` must not set fields `meaning` or `exclude_from_indexes`.
               &quot;values&quot;: [ # Values in the array. The order of values in an array is preserved as long as all values have identical settings for &#x27;exclude_from_indexes&#x27;.
@@ -324,7 +324,7 @@ Args:
         },
       },
       &quot;updateTime&quot;: &quot;A String&quot;, # The update time of the entity that this mutation is being applied to. If this does not match the current update time on the server, the mutation conflicts.
-      &quot;upsert&quot;: { # A Datastore data object. An entity is limited to 1 megabyte when stored. That _roughly_ corresponds to a limit of 1 megabyte for the serialized form of this message. # The entity to upsert. The entity may or may not already exist. The entity key&#x27;s final path element may be incomplete.
+      &quot;upsert&quot;: { # A Datastore data object. Must not exceed 1 MiB - 4 bytes. # The entity to upsert. The entity may or may not already exist. The entity key&#x27;s final path element may be incomplete.
         &quot;key&quot;: { # A unique identifier for an entity. If a key&#x27;s partition ID or any of its path kinds or names are reserved/read-only, the key is reserved/read-only. A reserved/read-only key is forbidden in certain documented contexts. # The entity&#x27;s key. An entity must have a key, unless otherwise documented (for example, an entity in `Value.entity_value` may have no key). An entity&#x27;s kind is its key path&#x27;s last element&#x27;s kind, or null if it has no key.
           &quot;partitionId&quot;: { # A partition ID identifies a grouping of entities. The grouping is always by project and namespace, however the namespace ID may be empty. A partition ID contains several dimensions: project ID and namespace ID. Partition dimensions: - May be `&quot;&quot;`. - Must be valid UTF-8 bytes. - Must have values that match regex `[A-Za-z\d\.\-_]{1,100}` If the value of any dimension matches regex `__.*__`, the partition is reserved/read-only. A reserved/read-only partition ID is forbidden in certain documented contexts. Foreign partition IDs (in which the project ID does not match the context project ID ) are discouraged. Reads and writes of foreign partition IDs may fail if the project is not in an active state. # Entities are partitioned into subsets, currently identified by a project ID and namespace ID. Queries are scoped to a single partition.
             &quot;namespaceId&quot;: &quot;A String&quot;, # If not empty, the ID of the namespace to which the entities belong.
@@ -338,7 +338,7 @@ Args:
             },
           ],
         },
-        &quot;properties&quot;: { # The entity&#x27;s properties. The map&#x27;s keys are property names. A property name matching regex `__.*__` is reserved. A reserved property name is forbidden in certain documented contexts. The name must not contain more than 500 characters. The name cannot be `&quot;&quot;`.
+        &quot;properties&quot;: { # The entity&#x27;s properties. The map&#x27;s keys are property names. A property name matching regex `__.*__` is reserved. A reserved property name is forbidden in certain documented contexts. The map keys, represented as UTF-8, must not exceed 1,500 bytes and cannot be empty.
           &quot;a_key&quot;: { # A message that can hold any of the supported value types and associated metadata.
             &quot;arrayValue&quot;: { # An array value. # An array value. Cannot contain another array value. A `Value` instance that sets field `array_value` must not set fields `meaning` or `exclude_from_indexes`.
               &quot;values&quot;: [ # Values in the array. The order of values in an array is preserved as long as all values have identical settings for &#x27;exclude_from_indexes&#x27;.
@@ -475,7 +475,7 @@ Returns:
     { # The result of fetching an entity from Datastore.
       &quot;createTime&quot;: &quot;A String&quot;, # The time at which the entity was created. This field is set for `FULL` entity results. If this entity is missing, this field will not be set.
       &quot;cursor&quot;: &quot;A String&quot;, # A cursor that points to the position after the result entity. Set only when the `EntityResult` is part of a `QueryResultBatch` message.
-      &quot;entity&quot;: { # A Datastore data object. An entity is limited to 1 megabyte when stored. That _roughly_ corresponds to a limit of 1 megabyte for the serialized form of this message. # The resulting entity.
+      &quot;entity&quot;: { # A Datastore data object. Must not exceed 1 MiB - 4 bytes. # The resulting entity.
         &quot;key&quot;: { # A unique identifier for an entity. If a key&#x27;s partition ID or any of its path kinds or names are reserved/read-only, the key is reserved/read-only. A reserved/read-only key is forbidden in certain documented contexts. # The entity&#x27;s key. An entity must have a key, unless otherwise documented (for example, an entity in `Value.entity_value` may have no key). An entity&#x27;s kind is its key path&#x27;s last element&#x27;s kind, or null if it has no key.
           &quot;partitionId&quot;: { # A partition ID identifies a grouping of entities. The grouping is always by project and namespace, however the namespace ID may be empty. A partition ID contains several dimensions: project ID and namespace ID. Partition dimensions: - May be `&quot;&quot;`. - Must be valid UTF-8 bytes. - Must have values that match regex `[A-Za-z\d\.\-_]{1,100}` If the value of any dimension matches regex `__.*__`, the partition is reserved/read-only. A reserved/read-only partition ID is forbidden in certain documented contexts. Foreign partition IDs (in which the project ID does not match the context project ID ) are discouraged. Reads and writes of foreign partition IDs may fail if the project is not in an active state. # Entities are partitioned into subsets, currently identified by a project ID and namespace ID. Queries are scoped to a single partition.
             &quot;namespaceId&quot;: &quot;A String&quot;, # If not empty, the ID of the namespace to which the entities belong.
@@ -489,7 +489,7 @@ Returns:
             },
           ],
         },
-        &quot;properties&quot;: { # The entity&#x27;s properties. The map&#x27;s keys are property names. A property name matching regex `__.*__` is reserved. A reserved property name is forbidden in certain documented contexts. The name must not contain more than 500 characters. The name cannot be `&quot;&quot;`.
+        &quot;properties&quot;: { # The entity&#x27;s properties. The map&#x27;s keys are property names. A property name matching regex `__.*__` is reserved. A reserved property name is forbidden in certain documented contexts. The map keys, represented as UTF-8, must not exceed 1,500 bytes and cannot be empty.
           &quot;a_key&quot;: { # A message that can hold any of the supported value types and associated metadata.
             &quot;arrayValue&quot;: { # An array value. # An array value. Cannot contain another array value. A `Value` instance that sets field `array_value` must not set fields `meaning` or `exclude_from_indexes`.
               &quot;values&quot;: [ # Values in the array. The order of values in an array is preserved as long as all values have identical settings for &#x27;exclude_from_indexes&#x27;.
@@ -534,7 +534,7 @@ Returns:
     { # The result of fetching an entity from Datastore.
       &quot;createTime&quot;: &quot;A String&quot;, # The time at which the entity was created. This field is set for `FULL` entity results. If this entity is missing, this field will not be set.
       &quot;cursor&quot;: &quot;A String&quot;, # A cursor that points to the position after the result entity. Set only when the `EntityResult` is part of a `QueryResultBatch` message.
-      &quot;entity&quot;: { # A Datastore data object. An entity is limited to 1 megabyte when stored. That _roughly_ corresponds to a limit of 1 megabyte for the serialized form of this message. # The resulting entity.
+      &quot;entity&quot;: { # A Datastore data object. Must not exceed 1 MiB - 4 bytes. # The resulting entity.
         &quot;key&quot;: { # A unique identifier for an entity. If a key&#x27;s partition ID or any of its path kinds or names are reserved/read-only, the key is reserved/read-only. A reserved/read-only key is forbidden in certain documented contexts. # The entity&#x27;s key. An entity must have a key, unless otherwise documented (for example, an entity in `Value.entity_value` may have no key). An entity&#x27;s kind is its key path&#x27;s last element&#x27;s kind, or null if it has no key.
           &quot;partitionId&quot;: { # A partition ID identifies a grouping of entities. The grouping is always by project and namespace, however the namespace ID may be empty. A partition ID contains several dimensions: project ID and namespace ID. Partition dimensions: - May be `&quot;&quot;`. - Must be valid UTF-8 bytes. - Must have values that match regex `[A-Za-z\d\.\-_]{1,100}` If the value of any dimension matches regex `__.*__`, the partition is reserved/read-only. A reserved/read-only partition ID is forbidden in certain documented contexts. Foreign partition IDs (in which the project ID does not match the context project ID ) are discouraged. Reads and writes of foreign partition IDs may fail if the project is not in an active state. # Entities are partitioned into subsets, currently identified by a project ID and namespace ID. Queries are scoped to a single partition.
             &quot;namespaceId&quot;: &quot;A String&quot;, # If not empty, the ID of the namespace to which the entities belong.
@@ -548,7 +548,7 @@ Returns:
             },
           ],
         },
-        &quot;properties&quot;: { # The entity&#x27;s properties. The map&#x27;s keys are property names. A property name matching regex `__.*__` is reserved. A reserved property name is forbidden in certain documented contexts. The name must not contain more than 500 characters. The name cannot be `&quot;&quot;`.
+        &quot;properties&quot;: { # The entity&#x27;s properties. The map&#x27;s keys are property names. A property name matching regex `__.*__` is reserved. A reserved property name is forbidden in certain documented contexts. The map keys, represented as UTF-8, must not exceed 1,500 bytes and cannot be empty.
           &quot;a_key&quot;: { # A message that can hold any of the supported value types and associated metadata.
             &quot;arrayValue&quot;: { # An array value. # An array value. Cannot contain another array value. A `Value` instance that sets field `array_value` must not set fields `meaning` or `exclude_from_indexes`.
               &quot;values&quot;: [ # Values in the array. The order of values in an array is preserved as long as all values have identical settings for &#x27;exclude_from_indexes&#x27;.
@@ -670,15 +670,15 @@ Args:
 { # The request for Datastore.RunAggregationQuery.
   &quot;aggregationQuery&quot;: { # Datastore query for running an aggregation over a Query. # The query to run.
     &quot;aggregations&quot;: [ # Optional. Series of aggregations to apply over the results of the `nested_query`. Requires: * A minimum of one and maximum of five aggregations per query.
-      { # Defines a aggregation that produces a single result.
-        &quot;alias&quot;: &quot;A String&quot;, # Optional. Optional name of the property to store the result of the aggregation. If not provided, Datastore will pick a default name following the format `property_`. For example: ``` AGGREGATE COUNT_UP_TO(1) AS count_up_to_1, COUNT_UP_TO(2), COUNT_UP_TO(3) AS count_up_to_3, COUNT_UP_TO(4) OVER ( ... ); ``` becomes: ``` AGGREGATE COUNT_UP_TO(1) AS count_up_to_1, COUNT_UP_TO(2) AS property_1, COUNT_UP_TO(3) AS count_up_to_3, COUNT_UP_TO(4) AS property_2 OVER ( ... ); ``` Requires: * Must be unique across all aggregation aliases. * Conform to entity property name limitations.
+      { # Defines an aggregation that produces a single result.
+        &quot;alias&quot;: &quot;A String&quot;, # Optional. Optional name of the property to store the result of the aggregation. If not provided, Datastore will pick a default name following the format `property_`. For example: ``` AGGREGATE COUNT_UP_TO(1) AS count_up_to_1, COUNT_UP_TO(2), COUNT_UP_TO(3) AS count_up_to_3, COUNT(*) OVER ( ... ); ``` becomes: ``` AGGREGATE COUNT_UP_TO(1) AS count_up_to_1, COUNT_UP_TO(2) AS property_1, COUNT_UP_TO(3) AS count_up_to_3, COUNT(*) AS property_2 OVER ( ... ); ``` Requires: * Must be unique across all aggregation aliases. * Conform to entity property name limitations.
         &quot;count&quot;: { # Count of entities that match the query. The `COUNT(*)` aggregation function operates on the entire entity so it does not require a field reference. # Count aggregator.
-          &quot;upTo&quot;: &quot;A String&quot;, # Optional. Optional constraint on the maximum number of entities to count. This provides a way to set an upper bound on the number of entities to scan, limiting latency and cost. Unspecified is interpreted as no bound. If a zero value is provided, a count result of zero should always be expected. High-Level Example: ``` AGGREGATE COUNT_UP_TO(1000) OVER ( SELECT * FROM k ); ``` Requires: * Must be non-negative when present.
+          &quot;upTo&quot;: &quot;A String&quot;, # Optional. Optional constraint on the maximum number of entities to count. This provides a way to set an upper bound on the number of entities to scan, limiting latency, and cost. Unspecified is interpreted as no bound. If a zero value is provided, a count result of zero should always be expected. High-Level Example: ``` AGGREGATE COUNT_UP_TO(1000) OVER ( SELECT * FROM k ); ``` Requires: * Must be non-negative when present.
         },
       },
     ],
     &quot;nestedQuery&quot;: { # A query for entities. # Nested query for aggregation
-      &quot;distinctOn&quot;: [ # The properties to make distinct. The query results will contain the first result for each distinct combination of values for the given properties (if empty, all results are returned).
+      &quot;distinctOn&quot;: [ # The properties to make distinct. The query results will contain the first result for each distinct combination of values for the given properties (if empty, all results are returned). Requires: * If `order` is specified, the set of distinct on properties must appear before the non-distinct on properties in `order`.
         { # A reference to a property relative to the kind expressions.
           &quot;name&quot;: &quot;A String&quot;, # The name of the property. If name includes &quot;.&quot;s, it may be interpreted as a property name path.
         },
@@ -905,15 +905,15 @@ Returns:
   },
   &quot;query&quot;: { # Datastore query for running an aggregation over a Query. # The parsed form of the `GqlQuery` from the request, if it was set.
     &quot;aggregations&quot;: [ # Optional. Series of aggregations to apply over the results of the `nested_query`. Requires: * A minimum of one and maximum of five aggregations per query.
-      { # Defines a aggregation that produces a single result.
-        &quot;alias&quot;: &quot;A String&quot;, # Optional. Optional name of the property to store the result of the aggregation. If not provided, Datastore will pick a default name following the format `property_`. For example: ``` AGGREGATE COUNT_UP_TO(1) AS count_up_to_1, COUNT_UP_TO(2), COUNT_UP_TO(3) AS count_up_to_3, COUNT_UP_TO(4) OVER ( ... ); ``` becomes: ``` AGGREGATE COUNT_UP_TO(1) AS count_up_to_1, COUNT_UP_TO(2) AS property_1, COUNT_UP_TO(3) AS count_up_to_3, COUNT_UP_TO(4) AS property_2 OVER ( ... ); ``` Requires: * Must be unique across all aggregation aliases. * Conform to entity property name limitations.
+      { # Defines an aggregation that produces a single result.
+        &quot;alias&quot;: &quot;A String&quot;, # Optional. Optional name of the property to store the result of the aggregation. If not provided, Datastore will pick a default name following the format `property_`. For example: ``` AGGREGATE COUNT_UP_TO(1) AS count_up_to_1, COUNT_UP_TO(2), COUNT_UP_TO(3) AS count_up_to_3, COUNT(*) OVER ( ... ); ``` becomes: ``` AGGREGATE COUNT_UP_TO(1) AS count_up_to_1, COUNT_UP_TO(2) AS property_1, COUNT_UP_TO(3) AS count_up_to_3, COUNT(*) AS property_2 OVER ( ... ); ``` Requires: * Must be unique across all aggregation aliases. * Conform to entity property name limitations.
         &quot;count&quot;: { # Count of entities that match the query. The `COUNT(*)` aggregation function operates on the entire entity so it does not require a field reference. # Count aggregator.
-          &quot;upTo&quot;: &quot;A String&quot;, # Optional. Optional constraint on the maximum number of entities to count. This provides a way to set an upper bound on the number of entities to scan, limiting latency and cost. Unspecified is interpreted as no bound. If a zero value is provided, a count result of zero should always be expected. High-Level Example: ``` AGGREGATE COUNT_UP_TO(1000) OVER ( SELECT * FROM k ); ``` Requires: * Must be non-negative when present.
+          &quot;upTo&quot;: &quot;A String&quot;, # Optional. Optional constraint on the maximum number of entities to count. This provides a way to set an upper bound on the number of entities to scan, limiting latency, and cost. Unspecified is interpreted as no bound. If a zero value is provided, a count result of zero should always be expected. High-Level Example: ``` AGGREGATE COUNT_UP_TO(1000) OVER ( SELECT * FROM k ); ``` Requires: * Must be non-negative when present.
         },
       },
     ],
     &quot;nestedQuery&quot;: { # A query for entities. # Nested query for aggregation
-      &quot;distinctOn&quot;: [ # The properties to make distinct. The query results will contain the first result for each distinct combination of values for the given properties (if empty, all results are returned).
+      &quot;distinctOn&quot;: [ # The properties to make distinct. The query results will contain the first result for each distinct combination of values for the given properties (if empty, all results are returned). Requires: * If `order` is specified, the set of distinct on properties must appear before the non-distinct on properties in `order`.
         { # A reference to a property relative to the kind expressions.
           &quot;name&quot;: &quot;A String&quot;, # The name of the property. If name includes &quot;.&quot;s, it may be interpreted as a property name path.
         },
@@ -1092,7 +1092,7 @@ Args:
     &quot;projectId&quot;: &quot;A String&quot;, # The ID of the project to which the entities belong.
   },
   &quot;query&quot;: { # A query for entities. # The query to run.
-    &quot;distinctOn&quot;: [ # The properties to make distinct. The query results will contain the first result for each distinct combination of values for the given properties (if empty, all results are returned).
+    &quot;distinctOn&quot;: [ # The properties to make distinct. The query results will contain the first result for each distinct combination of values for the given properties (if empty, all results are returned). Requires: * If `order` is specified, the set of distinct on properties must appear before the non-distinct on properties in `order`.
       { # A reference to a property relative to the kind expressions.
         &quot;name&quot;: &quot;A String&quot;, # The name of the property. If name includes &quot;.&quot;s, it may be interpreted as a property name path.
       },
@@ -1193,7 +1193,7 @@ Returns:
       { # The result of fetching an entity from Datastore.
         &quot;createTime&quot;: &quot;A String&quot;, # The time at which the entity was created. This field is set for `FULL` entity results. If this entity is missing, this field will not be set.
         &quot;cursor&quot;: &quot;A String&quot;, # A cursor that points to the position after the result entity. Set only when the `EntityResult` is part of a `QueryResultBatch` message.
-        &quot;entity&quot;: { # A Datastore data object. An entity is limited to 1 megabyte when stored. That _roughly_ corresponds to a limit of 1 megabyte for the serialized form of this message. # The resulting entity.
+        &quot;entity&quot;: { # A Datastore data object. Must not exceed 1 MiB - 4 bytes. # The resulting entity.
           &quot;key&quot;: { # A unique identifier for an entity. If a key&#x27;s partition ID or any of its path kinds or names are reserved/read-only, the key is reserved/read-only. A reserved/read-only key is forbidden in certain documented contexts. # The entity&#x27;s key. An entity must have a key, unless otherwise documented (for example, an entity in `Value.entity_value` may have no key). An entity&#x27;s kind is its key path&#x27;s last element&#x27;s kind, or null if it has no key.
             &quot;partitionId&quot;: { # A partition ID identifies a grouping of entities. The grouping is always by project and namespace, however the namespace ID may be empty. A partition ID contains several dimensions: project ID and namespace ID. Partition dimensions: - May be `&quot;&quot;`. - Must be valid UTF-8 bytes. - Must have values that match regex `[A-Za-z\d\.\-_]{1,100}` If the value of any dimension matches regex `__.*__`, the partition is reserved/read-only. A reserved/read-only partition ID is forbidden in certain documented contexts. Foreign partition IDs (in which the project ID does not match the context project ID ) are discouraged. Reads and writes of foreign partition IDs may fail if the project is not in an active state. # Entities are partitioned into subsets, currently identified by a project ID and namespace ID. Queries are scoped to a single partition.
               &quot;namespaceId&quot;: &quot;A String&quot;, # If not empty, the ID of the namespace to which the entities belong.
@@ -1207,7 +1207,7 @@ Returns:
               },
             ],
           },
-          &quot;properties&quot;: { # The entity&#x27;s properties. The map&#x27;s keys are property names. A property name matching regex `__.*__` is reserved. A reserved property name is forbidden in certain documented contexts. The name must not contain more than 500 characters. The name cannot be `&quot;&quot;`.
+          &quot;properties&quot;: { # The entity&#x27;s properties. The map&#x27;s keys are property names. A property name matching regex `__.*__` is reserved. A reserved property name is forbidden in certain documented contexts. The map keys, represented as UTF-8, must not exceed 1,500 bytes and cannot be empty.
             &quot;a_key&quot;: { # A message that can hold any of the supported value types and associated metadata.
               &quot;arrayValue&quot;: { # An array value. # An array value. Cannot contain another array value. A `Value` instance that sets field `array_value` must not set fields `meaning` or `exclude_from_indexes`.
                 &quot;values&quot;: [ # Values in the array. The order of values in an array is preserved as long as all values have identical settings for &#x27;exclude_from_indexes&#x27;.
@@ -1255,7 +1255,7 @@ Returns:
     &quot;snapshotVersion&quot;: &quot;A String&quot;, # The version number of the snapshot this batch was returned from. This applies to the range of results from the query&#x27;s `start_cursor` (or the beginning of the query if no cursor was given) to this batch&#x27;s `end_cursor` (not the query&#x27;s `end_cursor`). In a single transaction, subsequent query result batches for the same query can have a greater snapshot version number. Each batch&#x27;s snapshot version is valid for all preceding batches. The value will be zero for eventually consistent queries.
   },
   &quot;query&quot;: { # A query for entities. # The parsed form of the `GqlQuery` from the request, if it was set.
-    &quot;distinctOn&quot;: [ # The properties to make distinct. The query results will contain the first result for each distinct combination of values for the given properties (if empty, all results are returned).
+    &quot;distinctOn&quot;: [ # The properties to make distinct. The query results will contain the first result for each distinct combination of values for the given properties (if empty, all results are returned). Requires: * If `order` is specified, the set of distinct on properties must appear before the non-distinct on properties in `order`.
       { # A reference to a property relative to the kind expressions.
         &quot;name&quot;: &quot;A String&quot;, # The name of the property. If name includes &quot;.&quot;s, it may be interpreted as a property name path.
       },

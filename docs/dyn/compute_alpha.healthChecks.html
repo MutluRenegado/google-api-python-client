@@ -88,7 +88,7 @@ h1, h2, h3 {
 <p class="firstline">Deletes the specified HealthCheck resource.</p>
 <p class="toc_element">
   <code><a href="#get">get(project, healthCheck, x__xgafv=None)</a></code></p>
-<p class="firstline">Returns the specified HealthCheck resource. Gets a list of available health checks by making a list() request.</p>
+<p class="firstline">Returns the specified HealthCheck resource.</p>
 <p class="toc_element">
   <code><a href="#insert">insert(project, body=None, requestId=None, x__xgafv=None)</a></code></p>
 <p class="firstline">Creates a HealthCheck resource in the specified project using the data included in the request.</p>
@@ -133,7 +133,7 @@ Returns:
   &quot;items&quot;: { # A list of HealthChecksScopedList resources.
     &quot;a_key&quot;: { # Name of the scope containing this set of HealthChecks.
       &quot;healthChecks&quot;: [ # A list of HealthChecks contained in this scope.
-        { # Represents a Health Check resource. Google Compute Engine has two Health Check resources: * [Global](/compute/docs/reference/rest/alpha/healthChecks) * [Regional](/compute/docs/reference/rest/alpha/regionHealthChecks) Internal HTTP(S) load balancers must use regional health checks (`compute.v1.regionHealthChecks`). Traffic Director must use global health checks (`compute.v1.HealthChecks`). Internal TCP/UDP load balancers can use either regional or global health checks (`compute.v1.regionHealthChecks` or `compute.v1.HealthChecks`). External HTTP(S), TCP proxy, and SSL proxy load balancers as well as managed instance group auto-healing must use global health checks (`compute.v1.HealthChecks`). Backend service-based network load balancers must use regional health checks (`compute.v1.regionHealthChecks`). Target pool-based network load balancers must use legacy HTTP health checks (`compute.v1.httpHealthChecks`). For more information, see Health checks overview.
+        { # Represents a Health Check resource. Google Compute Engine has two Health Check resources: * [Global](/compute/docs/reference/rest/alpha/healthChecks) * [Regional](/compute/docs/reference/rest/alpha/regionHealthChecks) Internal HTTP(S) load balancers must use regional health checks (`compute.v1.regionHealthChecks`). Traffic Director must use global health checks (`compute.v1.healthChecks`). Internal TCP/UDP load balancers can use either regional or global health checks (`compute.v1.regionHealthChecks` or `compute.v1.healthChecks`). External HTTP(S), TCP proxy, and SSL proxy load balancers as well as managed instance group auto-healing must use global health checks (`compute.v1.healthChecks`). Backend service-based network load balancers must use regional health checks (`compute.v1.regionHealthChecks`). Target pool-based network load balancers must use legacy HTTP health checks (`compute.v1.httpHealthChecks`). For more information, see Health checks overview.
           &quot;checkIntervalSec&quot;: 42, # How often (in seconds) to send a health check. The default value is 5 seconds.
           &quot;creationTimestamp&quot;: &quot;A String&quot;, # [Output Only] Creation timestamp in 3339 text format.
           &quot;description&quot;: &quot;A String&quot;, # An optional description of this resource. Provide this property when you create the resource.
@@ -328,6 +328,17 @@ Returns:
   &quot;httpErrorStatusCode&quot;: 42, # [Output Only] If the operation fails, this field contains the HTTP error status code that was returned. For example, a `404` means the resource was not found.
   &quot;id&quot;: &quot;A String&quot;, # [Output Only] The unique identifier for the operation. This identifier is defined by the server.
   &quot;insertTime&quot;: &quot;A String&quot;, # [Output Only] The time that this operation was requested. This value is in RFC3339 text format.
+  &quot;instancesBulkInsertOperationMetadata&quot;: {
+    &quot;perLocationStatus&quot;: { # Status information per location (location name is key). Example key: zones/us-central1-a
+      &quot;a_key&quot;: {
+        &quot;createdVmCount&quot;: 42, # [Output Only] Count of VMs successfully created so far.
+        &quot;deletedVmCount&quot;: 42, # [Output Only] Count of VMs that got deleted during rollback.
+        &quot;failedToCreateVmCount&quot;: 42, # [Output Only] Count of VMs that started creating but encountered an error.
+        &quot;status&quot;: &quot;A String&quot;, # [Output Only] Creation status of BulkInsert operation - information if the flow is rolling forward or rolling back.
+        &quot;targetVmCount&quot;: 42, # [Output Only] Count of VMs originally planned to be created.
+      },
+    },
+  },
   &quot;kind&quot;: &quot;compute#operation&quot;, # [Output Only] Type of the resource. Always `compute#operation` for Operation resources.
   &quot;name&quot;: &quot;A String&quot;, # [Output Only] Name of the operation.
   &quot;operationGroupId&quot;: &quot;A String&quot;, # [Output Only] An ID that represents a group of operations, such as when a group of operations results from a `bulkInsert` API request.
@@ -336,6 +347,23 @@ Returns:
   &quot;region&quot;: &quot;A String&quot;, # [Output Only] The URL of the region where the operation resides. Only applicable when performing regional operations.
   &quot;selfLink&quot;: &quot;A String&quot;, # [Output Only] Server-defined URL for the resource.
   &quot;selfLinkWithId&quot;: &quot;A String&quot;, # [Output Only] Server-defined URL for this resource with the resource id.
+  &quot;setCommonInstanceMetadataOperationMetadata&quot;: { # Encapsulates partial completion metadata for SetCommonInstanceMetadata. Will be propagated on Operation.metadata.
+    &quot;clientOperationId&quot;: &quot;A String&quot;,
+    &quot;perLocationOperations&quot;: {
+      &quot;a_key&quot;: {
+        &quot;error&quot;: { # The `Status` type defines a logical error model that is suitable for different programming environments, including REST APIs and RPC APIs. It is used by [gRPC](https://github.com/grpc). Each `Status` message contains three pieces of data: error code, error message, and error details. You can find out more about this error model and how to work with it in the [API Design Guide](https://cloud.google.com/apis/design/errors).
+          &quot;code&quot;: 42, # The status code, which should be an enum value of google.rpc.Code.
+          &quot;details&quot;: [ # A list of messages that carry the error details. There is a common set of message types for APIs to use.
+            {
+              &quot;a_key&quot;: &quot;&quot;, # Properties of the object. Contains field @type with type URL.
+            },
+          ],
+          &quot;message&quot;: &quot;A String&quot;, # A developer-facing error message, which should be in English. Any user-facing error message should be localized and sent in the google.rpc.Status.details field, or localized by the client.
+        },
+        &quot;state&quot;: &quot;A String&quot;,
+      },
+    },
+  },
   &quot;startTime&quot;: &quot;A String&quot;, # [Output Only] The time that this operation was started by the server. This value is in RFC3339 text format.
   &quot;status&quot;: &quot;A String&quot;, # [Output Only] The status of the operation, which can be one of the following: `PENDING`, `RUNNING`, or `DONE`.
   &quot;statusMessage&quot;: &quot;A String&quot;, # [Output Only] An optional textual description of the current status of the operation.
@@ -360,7 +388,7 @@ Returns:
 
 <div class="method">
     <code class="details" id="get">get(project, healthCheck, x__xgafv=None)</code>
-  <pre>Returns the specified HealthCheck resource. Gets a list of available health checks by making a list() request.
+  <pre>Returns the specified HealthCheck resource.
 
 Args:
   project: string, Project ID for this request. (required)
@@ -373,7 +401,7 @@ Args:
 Returns:
   An object of the form:
 
-    { # Represents a Health Check resource. Google Compute Engine has two Health Check resources: * [Global](/compute/docs/reference/rest/alpha/healthChecks) * [Regional](/compute/docs/reference/rest/alpha/regionHealthChecks) Internal HTTP(S) load balancers must use regional health checks (`compute.v1.regionHealthChecks`). Traffic Director must use global health checks (`compute.v1.HealthChecks`). Internal TCP/UDP load balancers can use either regional or global health checks (`compute.v1.regionHealthChecks` or `compute.v1.HealthChecks`). External HTTP(S), TCP proxy, and SSL proxy load balancers as well as managed instance group auto-healing must use global health checks (`compute.v1.HealthChecks`). Backend service-based network load balancers must use regional health checks (`compute.v1.regionHealthChecks`). Target pool-based network load balancers must use legacy HTTP health checks (`compute.v1.httpHealthChecks`). For more information, see Health checks overview.
+    { # Represents a Health Check resource. Google Compute Engine has two Health Check resources: * [Global](/compute/docs/reference/rest/alpha/healthChecks) * [Regional](/compute/docs/reference/rest/alpha/regionHealthChecks) Internal HTTP(S) load balancers must use regional health checks (`compute.v1.regionHealthChecks`). Traffic Director must use global health checks (`compute.v1.healthChecks`). Internal TCP/UDP load balancers can use either regional or global health checks (`compute.v1.regionHealthChecks` or `compute.v1.healthChecks`). External HTTP(S), TCP proxy, and SSL proxy load balancers as well as managed instance group auto-healing must use global health checks (`compute.v1.healthChecks`). Backend service-based network load balancers must use regional health checks (`compute.v1.regionHealthChecks`). Target pool-based network load balancers must use legacy HTTP health checks (`compute.v1.httpHealthChecks`). For more information, see Health checks overview.
   &quot;checkIntervalSec&quot;: 42, # How often (in seconds) to send a health check. The default value is 5 seconds.
   &quot;creationTimestamp&quot;: &quot;A String&quot;, # [Output Only] Creation timestamp in 3339 text format.
   &quot;description&quot;: &quot;A String&quot;, # An optional description of this resource. Provide this property when you create the resource.
@@ -463,7 +491,7 @@ Args:
   body: object, The request body.
     The object takes the form of:
 
-{ # Represents a Health Check resource. Google Compute Engine has two Health Check resources: * [Global](/compute/docs/reference/rest/alpha/healthChecks) * [Regional](/compute/docs/reference/rest/alpha/regionHealthChecks) Internal HTTP(S) load balancers must use regional health checks (`compute.v1.regionHealthChecks`). Traffic Director must use global health checks (`compute.v1.HealthChecks`). Internal TCP/UDP load balancers can use either regional or global health checks (`compute.v1.regionHealthChecks` or `compute.v1.HealthChecks`). External HTTP(S), TCP proxy, and SSL proxy load balancers as well as managed instance group auto-healing must use global health checks (`compute.v1.HealthChecks`). Backend service-based network load balancers must use regional health checks (`compute.v1.regionHealthChecks`). Target pool-based network load balancers must use legacy HTTP health checks (`compute.v1.httpHealthChecks`). For more information, see Health checks overview.
+{ # Represents a Health Check resource. Google Compute Engine has two Health Check resources: * [Global](/compute/docs/reference/rest/alpha/healthChecks) * [Regional](/compute/docs/reference/rest/alpha/regionHealthChecks) Internal HTTP(S) load balancers must use regional health checks (`compute.v1.regionHealthChecks`). Traffic Director must use global health checks (`compute.v1.healthChecks`). Internal TCP/UDP load balancers can use either regional or global health checks (`compute.v1.regionHealthChecks` or `compute.v1.healthChecks`). External HTTP(S), TCP proxy, and SSL proxy load balancers as well as managed instance group auto-healing must use global health checks (`compute.v1.healthChecks`). Backend service-based network load balancers must use regional health checks (`compute.v1.regionHealthChecks`). Target pool-based network load balancers must use legacy HTTP health checks (`compute.v1.httpHealthChecks`). For more information, see Health checks overview.
   &quot;checkIntervalSec&quot;: 42, # How often (in seconds) to send a health check. The default value is 5 seconds.
   &quot;creationTimestamp&quot;: &quot;A String&quot;, # [Output Only] Creation timestamp in 3339 text format.
   &quot;description&quot;: &quot;A String&quot;, # An optional description of this resource. Provide this property when you create the resource.
@@ -601,6 +629,17 @@ Returns:
   &quot;httpErrorStatusCode&quot;: 42, # [Output Only] If the operation fails, this field contains the HTTP error status code that was returned. For example, a `404` means the resource was not found.
   &quot;id&quot;: &quot;A String&quot;, # [Output Only] The unique identifier for the operation. This identifier is defined by the server.
   &quot;insertTime&quot;: &quot;A String&quot;, # [Output Only] The time that this operation was requested. This value is in RFC3339 text format.
+  &quot;instancesBulkInsertOperationMetadata&quot;: {
+    &quot;perLocationStatus&quot;: { # Status information per location (location name is key). Example key: zones/us-central1-a
+      &quot;a_key&quot;: {
+        &quot;createdVmCount&quot;: 42, # [Output Only] Count of VMs successfully created so far.
+        &quot;deletedVmCount&quot;: 42, # [Output Only] Count of VMs that got deleted during rollback.
+        &quot;failedToCreateVmCount&quot;: 42, # [Output Only] Count of VMs that started creating but encountered an error.
+        &quot;status&quot;: &quot;A String&quot;, # [Output Only] Creation status of BulkInsert operation - information if the flow is rolling forward or rolling back.
+        &quot;targetVmCount&quot;: 42, # [Output Only] Count of VMs originally planned to be created.
+      },
+    },
+  },
   &quot;kind&quot;: &quot;compute#operation&quot;, # [Output Only] Type of the resource. Always `compute#operation` for Operation resources.
   &quot;name&quot;: &quot;A String&quot;, # [Output Only] Name of the operation.
   &quot;operationGroupId&quot;: &quot;A String&quot;, # [Output Only] An ID that represents a group of operations, such as when a group of operations results from a `bulkInsert` API request.
@@ -609,6 +648,23 @@ Returns:
   &quot;region&quot;: &quot;A String&quot;, # [Output Only] The URL of the region where the operation resides. Only applicable when performing regional operations.
   &quot;selfLink&quot;: &quot;A String&quot;, # [Output Only] Server-defined URL for the resource.
   &quot;selfLinkWithId&quot;: &quot;A String&quot;, # [Output Only] Server-defined URL for this resource with the resource id.
+  &quot;setCommonInstanceMetadataOperationMetadata&quot;: { # Encapsulates partial completion metadata for SetCommonInstanceMetadata. Will be propagated on Operation.metadata.
+    &quot;clientOperationId&quot;: &quot;A String&quot;,
+    &quot;perLocationOperations&quot;: {
+      &quot;a_key&quot;: {
+        &quot;error&quot;: { # The `Status` type defines a logical error model that is suitable for different programming environments, including REST APIs and RPC APIs. It is used by [gRPC](https://github.com/grpc). Each `Status` message contains three pieces of data: error code, error message, and error details. You can find out more about this error model and how to work with it in the [API Design Guide](https://cloud.google.com/apis/design/errors).
+          &quot;code&quot;: 42, # The status code, which should be an enum value of google.rpc.Code.
+          &quot;details&quot;: [ # A list of messages that carry the error details. There is a common set of message types for APIs to use.
+            {
+              &quot;a_key&quot;: &quot;&quot;, # Properties of the object. Contains field @type with type URL.
+            },
+          ],
+          &quot;message&quot;: &quot;A String&quot;, # A developer-facing error message, which should be in English. Any user-facing error message should be localized and sent in the google.rpc.Status.details field, or localized by the client.
+        },
+        &quot;state&quot;: &quot;A String&quot;,
+      },
+    },
+  },
   &quot;startTime&quot;: &quot;A String&quot;, # [Output Only] The time that this operation was started by the server. This value is in RFC3339 text format.
   &quot;status&quot;: &quot;A String&quot;, # [Output Only] The status of the operation, which can be one of the following: `PENDING`, `RUNNING`, or `DONE`.
   &quot;statusMessage&quot;: &quot;A String&quot;, # [Output Only] An optional textual description of the current status of the operation.
@@ -653,7 +709,7 @@ Returns:
     { # Contains a list of HealthCheck resources.
   &quot;id&quot;: &quot;A String&quot;, # [Output Only] Unique identifier for the resource; defined by the server.
   &quot;items&quot;: [ # A list of HealthCheck resources.
-    { # Represents a Health Check resource. Google Compute Engine has two Health Check resources: * [Global](/compute/docs/reference/rest/alpha/healthChecks) * [Regional](/compute/docs/reference/rest/alpha/regionHealthChecks) Internal HTTP(S) load balancers must use regional health checks (`compute.v1.regionHealthChecks`). Traffic Director must use global health checks (`compute.v1.HealthChecks`). Internal TCP/UDP load balancers can use either regional or global health checks (`compute.v1.regionHealthChecks` or `compute.v1.HealthChecks`). External HTTP(S), TCP proxy, and SSL proxy load balancers as well as managed instance group auto-healing must use global health checks (`compute.v1.HealthChecks`). Backend service-based network load balancers must use regional health checks (`compute.v1.regionHealthChecks`). Target pool-based network load balancers must use legacy HTTP health checks (`compute.v1.httpHealthChecks`). For more information, see Health checks overview.
+    { # Represents a Health Check resource. Google Compute Engine has two Health Check resources: * [Global](/compute/docs/reference/rest/alpha/healthChecks) * [Regional](/compute/docs/reference/rest/alpha/regionHealthChecks) Internal HTTP(S) load balancers must use regional health checks (`compute.v1.regionHealthChecks`). Traffic Director must use global health checks (`compute.v1.healthChecks`). Internal TCP/UDP load balancers can use either regional or global health checks (`compute.v1.regionHealthChecks` or `compute.v1.healthChecks`). External HTTP(S), TCP proxy, and SSL proxy load balancers as well as managed instance group auto-healing must use global health checks (`compute.v1.healthChecks`). Backend service-based network load balancers must use regional health checks (`compute.v1.regionHealthChecks`). Target pool-based network load balancers must use legacy HTTP health checks (`compute.v1.httpHealthChecks`). For more information, see Health checks overview.
       &quot;checkIntervalSec&quot;: 42, # How often (in seconds) to send a health check. The default value is 5 seconds.
       &quot;creationTimestamp&quot;: &quot;A String&quot;, # [Output Only] Creation timestamp in 3339 text format.
       &quot;description&quot;: &quot;A String&quot;, # An optional description of this resource. Provide this property when you create the resource.
@@ -773,7 +829,7 @@ Args:
   body: object, The request body.
     The object takes the form of:
 
-{ # Represents a Health Check resource. Google Compute Engine has two Health Check resources: * [Global](/compute/docs/reference/rest/alpha/healthChecks) * [Regional](/compute/docs/reference/rest/alpha/regionHealthChecks) Internal HTTP(S) load balancers must use regional health checks (`compute.v1.regionHealthChecks`). Traffic Director must use global health checks (`compute.v1.HealthChecks`). Internal TCP/UDP load balancers can use either regional or global health checks (`compute.v1.regionHealthChecks` or `compute.v1.HealthChecks`). External HTTP(S), TCP proxy, and SSL proxy load balancers as well as managed instance group auto-healing must use global health checks (`compute.v1.HealthChecks`). Backend service-based network load balancers must use regional health checks (`compute.v1.regionHealthChecks`). Target pool-based network load balancers must use legacy HTTP health checks (`compute.v1.httpHealthChecks`). For more information, see Health checks overview.
+{ # Represents a Health Check resource. Google Compute Engine has two Health Check resources: * [Global](/compute/docs/reference/rest/alpha/healthChecks) * [Regional](/compute/docs/reference/rest/alpha/regionHealthChecks) Internal HTTP(S) load balancers must use regional health checks (`compute.v1.regionHealthChecks`). Traffic Director must use global health checks (`compute.v1.healthChecks`). Internal TCP/UDP load balancers can use either regional or global health checks (`compute.v1.regionHealthChecks` or `compute.v1.healthChecks`). External HTTP(S), TCP proxy, and SSL proxy load balancers as well as managed instance group auto-healing must use global health checks (`compute.v1.healthChecks`). Backend service-based network load balancers must use regional health checks (`compute.v1.regionHealthChecks`). Target pool-based network load balancers must use legacy HTTP health checks (`compute.v1.httpHealthChecks`). For more information, see Health checks overview.
   &quot;checkIntervalSec&quot;: 42, # How often (in seconds) to send a health check. The default value is 5 seconds.
   &quot;creationTimestamp&quot;: &quot;A String&quot;, # [Output Only] Creation timestamp in 3339 text format.
   &quot;description&quot;: &quot;A String&quot;, # An optional description of this resource. Provide this property when you create the resource.
@@ -911,6 +967,17 @@ Returns:
   &quot;httpErrorStatusCode&quot;: 42, # [Output Only] If the operation fails, this field contains the HTTP error status code that was returned. For example, a `404` means the resource was not found.
   &quot;id&quot;: &quot;A String&quot;, # [Output Only] The unique identifier for the operation. This identifier is defined by the server.
   &quot;insertTime&quot;: &quot;A String&quot;, # [Output Only] The time that this operation was requested. This value is in RFC3339 text format.
+  &quot;instancesBulkInsertOperationMetadata&quot;: {
+    &quot;perLocationStatus&quot;: { # Status information per location (location name is key). Example key: zones/us-central1-a
+      &quot;a_key&quot;: {
+        &quot;createdVmCount&quot;: 42, # [Output Only] Count of VMs successfully created so far.
+        &quot;deletedVmCount&quot;: 42, # [Output Only] Count of VMs that got deleted during rollback.
+        &quot;failedToCreateVmCount&quot;: 42, # [Output Only] Count of VMs that started creating but encountered an error.
+        &quot;status&quot;: &quot;A String&quot;, # [Output Only] Creation status of BulkInsert operation - information if the flow is rolling forward or rolling back.
+        &quot;targetVmCount&quot;: 42, # [Output Only] Count of VMs originally planned to be created.
+      },
+    },
+  },
   &quot;kind&quot;: &quot;compute#operation&quot;, # [Output Only] Type of the resource. Always `compute#operation` for Operation resources.
   &quot;name&quot;: &quot;A String&quot;, # [Output Only] Name of the operation.
   &quot;operationGroupId&quot;: &quot;A String&quot;, # [Output Only] An ID that represents a group of operations, such as when a group of operations results from a `bulkInsert` API request.
@@ -919,6 +986,23 @@ Returns:
   &quot;region&quot;: &quot;A String&quot;, # [Output Only] The URL of the region where the operation resides. Only applicable when performing regional operations.
   &quot;selfLink&quot;: &quot;A String&quot;, # [Output Only] Server-defined URL for the resource.
   &quot;selfLinkWithId&quot;: &quot;A String&quot;, # [Output Only] Server-defined URL for this resource with the resource id.
+  &quot;setCommonInstanceMetadataOperationMetadata&quot;: { # Encapsulates partial completion metadata for SetCommonInstanceMetadata. Will be propagated on Operation.metadata.
+    &quot;clientOperationId&quot;: &quot;A String&quot;,
+    &quot;perLocationOperations&quot;: {
+      &quot;a_key&quot;: {
+        &quot;error&quot;: { # The `Status` type defines a logical error model that is suitable for different programming environments, including REST APIs and RPC APIs. It is used by [gRPC](https://github.com/grpc). Each `Status` message contains three pieces of data: error code, error message, and error details. You can find out more about this error model and how to work with it in the [API Design Guide](https://cloud.google.com/apis/design/errors).
+          &quot;code&quot;: 42, # The status code, which should be an enum value of google.rpc.Code.
+          &quot;details&quot;: [ # A list of messages that carry the error details. There is a common set of message types for APIs to use.
+            {
+              &quot;a_key&quot;: &quot;&quot;, # Properties of the object. Contains field @type with type URL.
+            },
+          ],
+          &quot;message&quot;: &quot;A String&quot;, # A developer-facing error message, which should be in English. Any user-facing error message should be localized and sent in the google.rpc.Status.details field, or localized by the client.
+        },
+        &quot;state&quot;: &quot;A String&quot;,
+      },
+    },
+  },
   &quot;startTime&quot;: &quot;A String&quot;, # [Output Only] The time that this operation was started by the server. This value is in RFC3339 text format.
   &quot;status&quot;: &quot;A String&quot;, # [Output Only] The status of the operation, which can be one of the following: `PENDING`, `RUNNING`, or `DONE`.
   &quot;statusMessage&quot;: &quot;A String&quot;, # [Output Only] An optional textual description of the current status of the operation.
@@ -982,7 +1066,7 @@ Args:
   body: object, The request body.
     The object takes the form of:
 
-{ # Represents a Health Check resource. Google Compute Engine has two Health Check resources: * [Global](/compute/docs/reference/rest/alpha/healthChecks) * [Regional](/compute/docs/reference/rest/alpha/regionHealthChecks) Internal HTTP(S) load balancers must use regional health checks (`compute.v1.regionHealthChecks`). Traffic Director must use global health checks (`compute.v1.HealthChecks`). Internal TCP/UDP load balancers can use either regional or global health checks (`compute.v1.regionHealthChecks` or `compute.v1.HealthChecks`). External HTTP(S), TCP proxy, and SSL proxy load balancers as well as managed instance group auto-healing must use global health checks (`compute.v1.HealthChecks`). Backend service-based network load balancers must use regional health checks (`compute.v1.regionHealthChecks`). Target pool-based network load balancers must use legacy HTTP health checks (`compute.v1.httpHealthChecks`). For more information, see Health checks overview.
+{ # Represents a Health Check resource. Google Compute Engine has two Health Check resources: * [Global](/compute/docs/reference/rest/alpha/healthChecks) * [Regional](/compute/docs/reference/rest/alpha/regionHealthChecks) Internal HTTP(S) load balancers must use regional health checks (`compute.v1.regionHealthChecks`). Traffic Director must use global health checks (`compute.v1.healthChecks`). Internal TCP/UDP load balancers can use either regional or global health checks (`compute.v1.regionHealthChecks` or `compute.v1.healthChecks`). External HTTP(S), TCP proxy, and SSL proxy load balancers as well as managed instance group auto-healing must use global health checks (`compute.v1.healthChecks`). Backend service-based network load balancers must use regional health checks (`compute.v1.regionHealthChecks`). Target pool-based network load balancers must use legacy HTTP health checks (`compute.v1.httpHealthChecks`). For more information, see Health checks overview.
   &quot;checkIntervalSec&quot;: 42, # How often (in seconds) to send a health check. The default value is 5 seconds.
   &quot;creationTimestamp&quot;: &quot;A String&quot;, # [Output Only] Creation timestamp in 3339 text format.
   &quot;description&quot;: &quot;A String&quot;, # An optional description of this resource. Provide this property when you create the resource.
@@ -1120,6 +1204,17 @@ Returns:
   &quot;httpErrorStatusCode&quot;: 42, # [Output Only] If the operation fails, this field contains the HTTP error status code that was returned. For example, a `404` means the resource was not found.
   &quot;id&quot;: &quot;A String&quot;, # [Output Only] The unique identifier for the operation. This identifier is defined by the server.
   &quot;insertTime&quot;: &quot;A String&quot;, # [Output Only] The time that this operation was requested. This value is in RFC3339 text format.
+  &quot;instancesBulkInsertOperationMetadata&quot;: {
+    &quot;perLocationStatus&quot;: { # Status information per location (location name is key). Example key: zones/us-central1-a
+      &quot;a_key&quot;: {
+        &quot;createdVmCount&quot;: 42, # [Output Only] Count of VMs successfully created so far.
+        &quot;deletedVmCount&quot;: 42, # [Output Only] Count of VMs that got deleted during rollback.
+        &quot;failedToCreateVmCount&quot;: 42, # [Output Only] Count of VMs that started creating but encountered an error.
+        &quot;status&quot;: &quot;A String&quot;, # [Output Only] Creation status of BulkInsert operation - information if the flow is rolling forward or rolling back.
+        &quot;targetVmCount&quot;: 42, # [Output Only] Count of VMs originally planned to be created.
+      },
+    },
+  },
   &quot;kind&quot;: &quot;compute#operation&quot;, # [Output Only] Type of the resource. Always `compute#operation` for Operation resources.
   &quot;name&quot;: &quot;A String&quot;, # [Output Only] Name of the operation.
   &quot;operationGroupId&quot;: &quot;A String&quot;, # [Output Only] An ID that represents a group of operations, such as when a group of operations results from a `bulkInsert` API request.
@@ -1128,6 +1223,23 @@ Returns:
   &quot;region&quot;: &quot;A String&quot;, # [Output Only] The URL of the region where the operation resides. Only applicable when performing regional operations.
   &quot;selfLink&quot;: &quot;A String&quot;, # [Output Only] Server-defined URL for the resource.
   &quot;selfLinkWithId&quot;: &quot;A String&quot;, # [Output Only] Server-defined URL for this resource with the resource id.
+  &quot;setCommonInstanceMetadataOperationMetadata&quot;: { # Encapsulates partial completion metadata for SetCommonInstanceMetadata. Will be propagated on Operation.metadata.
+    &quot;clientOperationId&quot;: &quot;A String&quot;,
+    &quot;perLocationOperations&quot;: {
+      &quot;a_key&quot;: {
+        &quot;error&quot;: { # The `Status` type defines a logical error model that is suitable for different programming environments, including REST APIs and RPC APIs. It is used by [gRPC](https://github.com/grpc). Each `Status` message contains three pieces of data: error code, error message, and error details. You can find out more about this error model and how to work with it in the [API Design Guide](https://cloud.google.com/apis/design/errors).
+          &quot;code&quot;: 42, # The status code, which should be an enum value of google.rpc.Code.
+          &quot;details&quot;: [ # A list of messages that carry the error details. There is a common set of message types for APIs to use.
+            {
+              &quot;a_key&quot;: &quot;&quot;, # Properties of the object. Contains field @type with type URL.
+            },
+          ],
+          &quot;message&quot;: &quot;A String&quot;, # A developer-facing error message, which should be in English. Any user-facing error message should be localized and sent in the google.rpc.Status.details field, or localized by the client.
+        },
+        &quot;state&quot;: &quot;A String&quot;,
+      },
+    },
+  },
   &quot;startTime&quot;: &quot;A String&quot;, # [Output Only] The time that this operation was started by the server. This value is in RFC3339 text format.
   &quot;status&quot;: &quot;A String&quot;, # [Output Only] The status of the operation, which can be one of the following: `PENDING`, `RUNNING`, or `DONE`.
   &quot;statusMessage&quot;: &quot;A String&quot;, # [Output Only] An optional textual description of the current status of the operation.

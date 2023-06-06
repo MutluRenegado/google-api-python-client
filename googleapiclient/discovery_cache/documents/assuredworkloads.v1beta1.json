@@ -137,7 +137,7 @@
                   ]
                 },
                 "list": {
-                  "description": "Lists operations that match the specified filter in the request. If the server doesn't support this method, it returns `UNIMPLEMENTED`. NOTE: the `name` binding allows API services to override the binding to use different resource name schemes, such as `users/*/operations`. To override the binding, API services can add a binding such as `\"/v1/{name=users/*}/operations\"` to their service configuration. For backwards compatibility, the default name includes the operations collection id, however overriding users must ensure the name binding is the parent resource, without the operations collection id.",
+                  "description": "Lists operations that match the specified filter in the request. If the server doesn't support this method, it returns `UNIMPLEMENTED`.",
                   "flatPath": "v1beta1/organizations/{organizationsId}/locations/{locationsId}/operations",
                   "httpMethod": "GET",
                   "id": "assuredworkloads.organizations.locations.operations.list",
@@ -595,7 +595,7 @@
       }
     }
   },
-  "revision": "20230127",
+  "revision": "20230526",
   "rootUrl": "https://assuredworkloads.googleapis.com/",
   "schemas": {
     "GoogleCloudAssuredworkloadsV1beta1AcknowledgeViolationRequest": {
@@ -627,6 +627,73 @@
           "description": "A list of blockers that should be addressed before moving the source project or project-based workload to the destination folder-based workload.",
           "items": {
             "type": "string"
+          },
+          "type": "array"
+        }
+      },
+      "type": "object"
+    },
+    "GoogleCloudAssuredworkloadsV1beta1CreateWorkloadOperationMetadata": {
+      "description": "Operation metadata to give request details of CreateWorkload.",
+      "id": "GoogleCloudAssuredworkloadsV1beta1CreateWorkloadOperationMetadata",
+      "properties": {
+        "complianceRegime": {
+          "description": "Optional. Compliance controls that should be applied to the resources managed by the workload.",
+          "enum": [
+            "COMPLIANCE_REGIME_UNSPECIFIED",
+            "IL4",
+            "CJIS",
+            "FEDRAMP_HIGH",
+            "FEDRAMP_MODERATE",
+            "US_REGIONAL_ACCESS",
+            "HIPAA",
+            "HITRUST",
+            "EU_REGIONS_AND_SUPPORT",
+            "CA_REGIONS_AND_SUPPORT",
+            "ITAR",
+            "AU_REGIONS_AND_US_SUPPORT",
+            "ASSURED_WORKLOADS_FOR_PARTNERS",
+            "ISR_REGIONS",
+            "ISR_REGIONS_AND_SUPPORT",
+            "CA_PROTECTED_B"
+          ],
+          "enumDescriptions": [
+            "Unknown compliance regime.",
+            "Information protection as per DoD IL4 requirements.",
+            "Criminal Justice Information Services (CJIS) Security policies.",
+            "FedRAMP High data protection controls",
+            "FedRAMP Moderate data protection controls",
+            "Assured Workloads For US Regions data protection controls",
+            "Health Insurance Portability and Accountability Act controls",
+            "Health Information Trust Alliance controls",
+            "Assured Workloads For EU Regions and Support controls",
+            "Assured Workloads For Canada Regions and Support controls",
+            "International Traffic in Arms Regulations",
+            "Assured Workloads for Australia Regions and Support controls Available for public preview consumption. Don't create production workloads.",
+            "Assured Workloads for Partners;",
+            "Assured Workloads for Israel",
+            "Assured Workloads for Israel Regions",
+            "Assured Workloads for Canada Protected B regime"
+          ],
+          "type": "string"
+        },
+        "createTime": {
+          "description": "Optional. Time when the operation was created.",
+          "format": "google-datetime",
+          "type": "string"
+        },
+        "displayName": {
+          "description": "Optional. The display name of the workload.",
+          "type": "string"
+        },
+        "parent": {
+          "description": "Optional. The parent of the workload.",
+          "type": "string"
+        },
+        "resourceSettings": {
+          "description": "Optional. Resource properties in the input that are used for creating/customizing workload resources.",
+          "items": {
+            "$ref": "GoogleCloudAssuredworkloadsV1beta1WorkloadResourceSettings"
           },
           "type": "array"
         }
@@ -699,7 +766,7 @@
       "type": "object"
     },
     "GoogleCloudAssuredworkloadsV1beta1Violation": {
-      "description": "Workload monitoring Violation. Next Id: 22",
+      "description": "Workload monitoring Violation. Next Id: 27",
       "id": "GoogleCloudAssuredworkloadsV1beta1Violation",
       "properties": {
         "acknowledged": {
@@ -707,7 +774,7 @@
           "type": "boolean"
         },
         "acknowledgementTime": {
-          "description": "Optional. Timestamp when this violation was acknowledged last. This will be absent when acknowledged field is marked as false.",
+          "description": "Optional. Timestamp when this violation was acknowledged first. Check exception_contexts to find the last time the violation was acknowledged when there are more than one violations. This field will be absent when acknowledged field is marked as false.",
           "format": "google-datetime",
           "type": "string"
         },
@@ -926,6 +993,7 @@
             "AU_REGIONS_AND_US_SUPPORT",
             "ASSURED_WORKLOADS_FOR_PARTNERS",
             "ISR_REGIONS",
+            "ISR_REGIONS_AND_SUPPORT",
             "CA_PROTECTED_B"
           ],
           "enumDescriptions": [
@@ -943,6 +1011,7 @@
             "Assured Workloads for Australia Regions and Support controls Available for public preview consumption. Don't create production workloads.",
             "Assured Workloads for Partners;",
             "Assured Workloads for Israel",
+            "Assured Workloads for Israel Regions",
             "Assured Workloads for Canada Protected B regime"
           ],
           "type": "string"
@@ -960,6 +1029,11 @@
           "readOnly": true,
           "type": "array"
         },
+        "controls": {
+          "$ref": "GoogleCloudAssuredworkloadsV1beta1WorkloadComplianceControls",
+          "description": "Output only. Controls associated with the customer workload",
+          "readOnly": true
+        },
         "createTime": {
           "description": "Output only. Immutable. The Workload creation timestamp.",
           "format": "google-datetime",
@@ -969,6 +1043,10 @@
         "displayName": {
           "description": "Required. The user-assigned display name of the Workload. When present it must be between 4 to 30 characters. Allowed characters are: lowercase and uppercase letters, numbers, hyphen, and spaces. Example: My Workload",
           "type": "string"
+        },
+        "ekmProvisioningResponse": {
+          "$ref": "GoogleCloudAssuredworkloadsV1beta1WorkloadEkmProvisioningResponse",
+          "description": "Optional. Represents the Ekm Provisioning State of the given workload."
         },
         "enableSovereignControls": {
           "description": "Optional. Indicates the sovereignty status of the given workload. Currently meant to be used by Europe/Canada customers.",
@@ -1025,14 +1103,22 @@
           "enum": [
             "PARTNER_UNSPECIFIED",
             "LOCAL_CONTROLS_BY_S3NS",
-            "SOVEREIGN_CONTROLS_BY_T_SYSTEMS"
+            "SOVEREIGN_CONTROLS_BY_T_SYSTEMS",
+            "SOVEREIGN_CONTROLS_BY_SIA_MINSAIT",
+            "SOVEREIGN_CONTROLS_BY_PSN"
           ],
           "enumDescriptions": [
             "",
-            "Enum representing S3NS partner.",
-            "Enum representing T_SYSTEM partner."
+            "Enum representing S3NS (Thales) partner.",
+            "Enum representing T_SYSTEM (TSI) partner.",
+            "Enum representing SIA_MINSAIT (Indra) partner.",
+            "Enum representing PSN (TIM) partner."
           ],
           "type": "string"
+        },
+        "partnerPermissions": {
+          "$ref": "GoogleCloudAssuredworkloadsV1beta1WorkloadPartnerPermissions",
+          "description": "Optional. Permissions granted to the AW Partner SA account for the customer workload"
         },
         "provisionedResourcesParent": {
           "description": "Input only. The parent resource for the resources managed by this Assured Workload. May be either empty or a folder resource which is a child of the Workload parent. If not specified all resources are created under the parent organization. Format: folders/{folder_id}",
@@ -1057,6 +1143,10 @@
           "$ref": "GoogleCloudAssuredworkloadsV1beta1WorkloadSaaEnrollmentResponse",
           "description": "Output only. Represents the SAA enrollment response of the given workload. SAA enrollment response is queried during GetWorkload call. In failure cases, user friendly error message is shown in SAA details page.",
           "readOnly": true
+        },
+        "violationNotificationsEnabled": {
+          "description": "Optional. Indicates whether the e-mail notification for a violation is enabled for a workload. This value will be by default True, and if not present will be considered as true. This should only be updated via updateWorkload call. Any Changes to this field during the createWorkload call will not be honored. This will always be true while creating the workload.",
+          "type": "boolean"
         }
       },
       "type": "object"
@@ -1068,6 +1158,39 @@
         "kmsSettings": {
           "$ref": "GoogleCloudAssuredworkloadsV1beta1WorkloadKMSSettings",
           "description": "Input only. Immutable. Settings used to create a CMEK crypto key."
+        }
+      },
+      "type": "object"
+    },
+    "GoogleCloudAssuredworkloadsV1beta1WorkloadComplianceControls": {
+      "description": "Controls enabled to the user associated with this workload",
+      "id": "GoogleCloudAssuredworkloadsV1beta1WorkloadComplianceControls",
+      "properties": {
+        "appliedOrgPolicies": {
+          "description": "Output only. Org policies currently applied by this Assured Workload",
+          "items": {
+            "$ref": "GoogleCloudAssuredworkloadsV1beta1WorkloadComplianceControlsOrgPolicyControl"
+          },
+          "readOnly": true,
+          "type": "array"
+        }
+      },
+      "type": "object"
+    },
+    "GoogleCloudAssuredworkloadsV1beta1WorkloadComplianceControlsOrgPolicyControl": {
+      "description": "An org policy control applied by Assured Workloads",
+      "id": "GoogleCloudAssuredworkloadsV1beta1WorkloadComplianceControlsOrgPolicyControl",
+      "properties": {
+        "constraint": {
+          "description": "Output only. Constraint name of the org policy control Example: constraints/gcp.resourcelocations",
+          "readOnly": true,
+          "type": "string"
+        },
+        "version": {
+          "description": "Output only. Org policy version",
+          "format": "int32",
+          "readOnly": true,
+          "type": "integer"
         }
       },
       "type": "object"
@@ -1085,6 +1208,65 @@
           "description": "Count of active Violations which haven't been acknowledged.",
           "format": "int32",
           "type": "integer"
+        }
+      },
+      "type": "object"
+    },
+    "GoogleCloudAssuredworkloadsV1beta1WorkloadEkmProvisioningResponse": {
+      "description": "External key management systems(EKM) Provisioning response",
+      "id": "GoogleCloudAssuredworkloadsV1beta1WorkloadEkmProvisioningResponse",
+      "properties": {
+        "ekmProvisioningErrorDomain": {
+          "description": "Indicates Ekm provisioning error if any.",
+          "enum": [
+            "EKM_PROVISIONING_ERROR_DOMAIN_UNSPECIFIED",
+            "UNSPECIFIED_ERROR",
+            "GOOGLE_SERVER_ERROR",
+            "EXTERNAL_USER_ERROR",
+            "EXTERNAL_PARTNER_ERROR",
+            "TIMEOUT_ERROR"
+          ],
+          "enumDescriptions": [
+            "No error domain",
+            "Error but domain is unspecified.",
+            "Internal logic breaks within provisioning code.",
+            "Error occurred with the customer not granting permission/creating resource.",
+            "Error occurred within the partner\u2019s provisioning cluster.",
+            "Resource wasn't provisioned in the required 7 day time period"
+          ],
+          "type": "string"
+        },
+        "ekmProvisioningErrorMapping": {
+          "description": "Detailed error message if Ekm provisioning fails",
+          "enum": [
+            "EKM_PROVISIONING_ERROR_MAPPING_UNSPECIFIED",
+            "INVALID_SERVICE_ACCOUNT",
+            "MISSING_METRICS_SCOPE_ADMIN_PERMISSION",
+            "MISSING_EKM_CONNECTION_ADMIN_PERMISSION"
+          ],
+          "enumDescriptions": [
+            "Error is unspecified.",
+            "Service account is used is invalid.",
+            "Iam permission monitoring.MetricsScopeAdmin wasn't applied.",
+            "Iam permission cloudkms.ekmConnectionsAdmin wasn't applied."
+          ],
+          "type": "string"
+        },
+        "ekmProvisioningState": {
+          "description": "Indicates Ekm enrollment Provisioning of a given workload.",
+          "enum": [
+            "EKM_PROVISIONING_STATE_UNSPECIFIED",
+            "EKM_PROVISIONING_STATE_PENDING",
+            "EKM_PROVISIONING_STATE_FAILED",
+            "EKM_PROVISIONING_STATE_COMPLETED"
+          ],
+          "enumDescriptions": [
+            "Default State for Ekm Provisioning",
+            "Pending State for Ekm Provisioning",
+            "Failed State for Ekm Provisioning",
+            "Completed State for Ekm Provisioning"
+          ],
+          "type": "string"
         }
       },
       "type": "object"
@@ -1135,6 +1317,21 @@
           "description": "Required. Input only. Immutable. [next_rotation_time] will be advanced by this period when the Key Management Service automatically rotates a key. Must be at least 24 hours and at most 876,000 hours.",
           "format": "google-duration",
           "type": "string"
+        }
+      },
+      "type": "object"
+    },
+    "GoogleCloudAssuredworkloadsV1beta1WorkloadPartnerPermissions": {
+      "description": "Permissions granted to the AW Partner SA account for the customer workload",
+      "id": "GoogleCloudAssuredworkloadsV1beta1WorkloadPartnerPermissions",
+      "properties": {
+        "dataLogsViewer": {
+          "description": "Allow the partner to view inspectability logs and monitoring violations.",
+          "type": "boolean"
+        },
+        "remediateFolderViolations": {
+          "description": "Allow partner to monitor folder and remediate violations",
+          "type": "boolean"
         }
       },
       "type": "object"

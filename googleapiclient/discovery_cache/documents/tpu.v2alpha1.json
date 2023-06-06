@@ -637,7 +637,7 @@
                   ]
                 },
                 "list": {
-                  "description": "Lists operations that match the specified filter in the request. If the server doesn't support this method, it returns `UNIMPLEMENTED`. NOTE: the `name` binding allows API services to override the binding to use different resource name schemes, such as `users/*/operations`. To override the binding, API services can add a binding such as `\"/v1/{name=users/*}/operations\"` to their service configuration. For backwards compatibility, the default name includes the operations collection id, however overriding users must ensure the name binding is the parent resource, without the operations collection id.",
+                  "description": "Lists operations that match the specified filter in the request. If the server doesn't support this method, it returns `UNIMPLEMENTED`.",
                   "flatPath": "v2alpha1/projects/{projectsId}/locations/{locationsId}/operations",
                   "httpMethod": "GET",
                   "id": "tpu.projects.locations.operations.list",
@@ -698,7 +698,7 @@
                       "type": "string"
                     },
                     "queuedResourceId": {
-                      "description": "The unqualified resource name. Should follow the ^[A-Za-z0-9_.~+%-]+$ regex format.",
+                      "description": "The unqualified resource name. Should follow the `^[A-Za-z0-9_.~+%-]+$` regex format.",
                       "location": "query",
                       "type": "string"
                     },
@@ -728,6 +728,11 @@
                     "name"
                   ],
                   "parameters": {
+                    "force": {
+                      "description": "If set to true, all running nodes belonging to this queued resource will be deleted first and then the queued resource will be deleted. Otherwise (i.e. force=false), the queued resource will only be deleted if its nodes have already been deleted or the queued resource is in the ACCEPTED, FAILED, or SUSPENDED state.",
+                      "location": "query",
+                      "type": "boolean"
+                    },
                     "name": {
                       "description": "Required. The resource name.",
                       "location": "path",
@@ -892,13 +897,47 @@
       }
     }
   },
-  "revision": "20230105",
+  "revision": "20230525",
   "rootUrl": "https://tpu.googleapis.com/",
   "schemas": {
+    "AcceleratorConfig": {
+      "description": "A TPU accelerator configuration.",
+      "id": "AcceleratorConfig",
+      "properties": {
+        "topology": {
+          "description": "Required. Topology of TPU in chips.",
+          "type": "string"
+        },
+        "type": {
+          "description": "Required. Type of TPU.",
+          "enum": [
+            "TYPE_UNSPECIFIED",
+            "V2",
+            "V3",
+            "V4"
+          ],
+          "enumDescriptions": [
+            "Unspecified version.",
+            "TPU v2.",
+            "TPU v3.",
+            "TPU v4."
+          ],
+          "type": "string"
+        }
+      },
+      "type": "object"
+    },
     "AcceleratorType": {
       "description": "A accelerator type that a Node can be configured with.",
       "id": "AcceleratorType",
       "properties": {
+        "acceleratorConfigs": {
+          "description": "The accelerator config.",
+          "items": {
+            "$ref": "AcceleratorConfig"
+          },
+          "type": "array"
+        },
         "name": {
           "description": "The resource name.",
           "type": "string"
@@ -1261,7 +1300,7 @@
       "type": "object"
     },
     "Location": {
-      "description": "A resource that represents Google Cloud Platform location.",
+      "description": "A resource that represents a Google Cloud location.",
       "id": "Location",
       "properties": {
         "displayName": {
@@ -1341,6 +1380,10 @@
       "description": "A TPU instance.",
       "id": "Node",
       "properties": {
+        "acceleratorConfig": {
+          "$ref": "AcceleratorConfig",
+          "description": "The AccleratorConfig for the TPU Node."
+        },
         "acceleratorType": {
           "description": "The type of hardware accelerators associated with this node.",
           "type": "string"
@@ -1425,6 +1468,11 @@
           },
           "description": "Custom metadata to apply to the TPU Node. Can set startup-script and shutdown-script",
           "type": "object"
+        },
+        "multisliceNode": {
+          "description": "Output only. Whether the Node belongs to a Multislice group.",
+          "readOnly": true,
+          "type": "boolean"
         },
         "name": {
           "description": "Output only. Immutable. The name of the TPU.",
@@ -1639,9 +1687,13 @@
           "$ref": "QueueingPolicy",
           "description": "The queueing policy of the QueuedRequest."
         },
+        "reservationName": {
+          "description": "Name of the reservation in which the resource should be provisioned. Format: projects/{project}/locations/{zone}/reservations/{reservation}",
+          "type": "string"
+        },
         "state": {
           "$ref": "QueuedResourceState",
-          "description": "Output only. State of the QueuedResource request",
+          "description": "Output only. State of the QueuedResource request.",
           "readOnly": true
         },
         "tpu": {

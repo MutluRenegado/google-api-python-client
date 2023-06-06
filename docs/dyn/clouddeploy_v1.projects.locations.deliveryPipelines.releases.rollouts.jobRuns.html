@@ -86,6 +86,9 @@ h1, h2, h3 {
 <p class="toc_element">
   <code><a href="#list_next">list_next()</a></code></p>
 <p class="firstline">Retrieves the next page of results.</p>
+<p class="toc_element">
+  <code><a href="#terminate">terminate(name, body=None, x__xgafv=None)</a></code></p>
+<p class="firstline">Terminates a Job Run in a given project and location.</p>
 <h3>Method Details</h3>
 <div class="method">
     <code class="details" id="close">close()</code>
@@ -107,8 +110,22 @@ Returns:
   An object of the form:
 
     { # A `JobRun` resource in the Google Cloud Deploy API. A `JobRun` contains information of a single `Rollout` job evaluation.
+  &quot;advanceChildRolloutJobRun&quot;: { # AdvanceChildRolloutJobRun contains information specific to a advanceChildRollout `JobRun`. # Output only. Information specific to an advanceChildRollout `JobRun`
+    &quot;rollout&quot;: &quot;A String&quot;, # Output only. Name of the `ChildRollout`. Format is projects/{project}/ locations/{location}/deliveryPipelines/{deliveryPipeline}/ releases/{release}/rollouts/a-z{0,62}.
+    &quot;rolloutPhaseId&quot;: &quot;A String&quot;, # Output only. the ID of the ChildRollout&#x27;s Phase.
+  },
+  &quot;createChildRolloutJobRun&quot;: { # CreateChildRolloutJobRun contains information specific to a createChildRollout `JobRun`. # Output only. Information specific to a createChildRollout `JobRun`.
+    &quot;rollout&quot;: &quot;A String&quot;, # Output only. Name of the `ChildRollout`. Format is projects/{project}/ locations/{location}/deliveryPipelines/{deliveryPipeline}/ releases/{release}/rollouts/a-z{0,62}.
+    &quot;rolloutPhaseId&quot;: &quot;A String&quot;, # Output only. The ID of the childRollout Phase initiated by this JobRun.
+  },
   &quot;createTime&quot;: &quot;A String&quot;, # Output only. Time at which the `JobRun` was created.
   &quot;deployJobRun&quot;: { # DeployJobRun contains information specific to a deploy `JobRun`. # Output only. Information specific to a deploy `JobRun`.
+    &quot;artifact&quot;: { # The artifacts produced by a deploy operation. # Output only. The artifact of a deploy job run, if available.
+      &quot;artifactUri&quot;: &quot;A String&quot;, # Output only. URI of a directory containing the artifacts. All paths are relative to this location.
+      &quot;manifestPaths&quot;: [ # Output only. File paths of the manifests applied during the deploy operation relative to the URI.
+        &quot;A String&quot;,
+      ],
+    },
     &quot;build&quot;: &quot;A String&quot;, # Output only. The resource name of the Cloud Build `Build` object that is used to deploy. Format is projects/{project}/locations/{location}/builds/{build}.
     &quot;failureCause&quot;: &quot;A String&quot;, # Output only. The reason the deploy failed. This will always be unspecified while the deploy is in progress or if it succeeded.
     &quot;failureMessage&quot;: &quot;A String&quot;, # Output only. Additional information about the deploy failure, if available.
@@ -161,8 +178,22 @@ Returns:
     { # ListJobRunsResponse is the response object returned by `ListJobRuns`.
   &quot;jobRuns&quot;: [ # The `JobRun` objects.
     { # A `JobRun` resource in the Google Cloud Deploy API. A `JobRun` contains information of a single `Rollout` job evaluation.
+      &quot;advanceChildRolloutJobRun&quot;: { # AdvanceChildRolloutJobRun contains information specific to a advanceChildRollout `JobRun`. # Output only. Information specific to an advanceChildRollout `JobRun`
+        &quot;rollout&quot;: &quot;A String&quot;, # Output only. Name of the `ChildRollout`. Format is projects/{project}/ locations/{location}/deliveryPipelines/{deliveryPipeline}/ releases/{release}/rollouts/a-z{0,62}.
+        &quot;rolloutPhaseId&quot;: &quot;A String&quot;, # Output only. the ID of the ChildRollout&#x27;s Phase.
+      },
+      &quot;createChildRolloutJobRun&quot;: { # CreateChildRolloutJobRun contains information specific to a createChildRollout `JobRun`. # Output only. Information specific to a createChildRollout `JobRun`.
+        &quot;rollout&quot;: &quot;A String&quot;, # Output only. Name of the `ChildRollout`. Format is projects/{project}/ locations/{location}/deliveryPipelines/{deliveryPipeline}/ releases/{release}/rollouts/a-z{0,62}.
+        &quot;rolloutPhaseId&quot;: &quot;A String&quot;, # Output only. The ID of the childRollout Phase initiated by this JobRun.
+      },
       &quot;createTime&quot;: &quot;A String&quot;, # Output only. Time at which the `JobRun` was created.
       &quot;deployJobRun&quot;: { # DeployJobRun contains information specific to a deploy `JobRun`. # Output only. Information specific to a deploy `JobRun`.
+        &quot;artifact&quot;: { # The artifacts produced by a deploy operation. # Output only. The artifact of a deploy job run, if available.
+          &quot;artifactUri&quot;: &quot;A String&quot;, # Output only. URI of a directory containing the artifacts. All paths are relative to this location.
+          &quot;manifestPaths&quot;: [ # Output only. File paths of the manifests applied during the deploy operation relative to the URI.
+            &quot;A String&quot;,
+          ],
+        },
         &quot;build&quot;: &quot;A String&quot;, # Output only. The resource name of the Cloud Build `Build` object that is used to deploy. Format is projects/{project}/locations/{location}/builds/{build}.
         &quot;failureCause&quot;: &quot;A String&quot;, # Output only. The reason the deploy failed. This will always be unspecified while the deploy is in progress or if it succeeded.
         &quot;failureMessage&quot;: &quot;A String&quot;, # Output only. Additional information about the deploy failure, if available.
@@ -212,6 +243,30 @@ Returns:
           A request object that you can call &#x27;execute()&#x27; on to request the next
           page. Returns None if there are no more items in the collection.
         </pre>
+</div>
+
+<div class="method">
+    <code class="details" id="terminate">terminate(name, body=None, x__xgafv=None)</code>
+  <pre>Terminates a Job Run in a given project and location.
+
+Args:
+  name: string, Required. Name of the `JobRun`. Format must be projects/{project}/locations/{location}/deliveryPipelines/{deliveryPipeline}/ releases/{release}/rollouts/{rollout}/jobRuns/{jobRun}. (required)
+  body: object, The request body.
+    The object takes the form of:
+
+{ # The request object used by `TerminateJobRun`.
+}
+
+  x__xgafv: string, V1 error format.
+    Allowed values
+      1 - v1 error format
+      2 - v2 error format
+
+Returns:
+  An object of the form:
+
+    { # The response object from `TerminateJobRun`.
+}</pre>
 </div>
 
 </body></html>

@@ -85,7 +85,7 @@ h1, h2, h3 {
 <p class="firstline">Close httplib2 connections.</p>
 <p class="toc_element">
   <code><a href="#get">get(project, zone, machineType, x__xgafv=None)</a></code></p>
-<p class="firstline">Returns the specified machine type. Gets a list of available machine types by making a list() request.</p>
+<p class="firstline">Returns the specified machine type.</p>
 <p class="toc_element">
   <code><a href="#list">list(project, zone, filter=None, maxResults=None, orderBy=None, pageToken=None, returnPartialSuccess=None, x__xgafv=None)</a></code></p>
 <p class="firstline">Retrieves a list of machine types available to the specified project.</p>
@@ -122,7 +122,7 @@ Returns:
           &quot;accelerators&quot;: [ # [Output Only] A list of accelerator configurations assigned to this machine type.
             {
               &quot;guestAcceleratorCount&quot;: 42, # Number of accelerator cards exposed to the guest.
-              &quot;guestAcceleratorType&quot;: &quot;A String&quot;, # The accelerator type resource name, not a full URL, e.g. &#x27;nvidia-tesla-k80&#x27;.
+              &quot;guestAcceleratorType&quot;: &quot;A String&quot;, # The accelerator type resource name, not a full URL, e.g. nvidia-tesla-t4.
             },
           ],
           &quot;bundledLocalSsds&quot;: { # [Output Only] The configuration of bundled local SSD for the machine type.
@@ -208,7 +208,7 @@ Returns:
 
 <div class="method">
     <code class="details" id="get">get(project, zone, machineType, x__xgafv=None)</code>
-  <pre>Returns the specified machine type. Gets a list of available machine types by making a list() request.
+  <pre>Returns the specified machine type.
 
 Args:
   project: string, Project ID for this request. (required)
@@ -226,7 +226,7 @@ Returns:
   &quot;accelerators&quot;: [ # [Output Only] A list of accelerator configurations assigned to this machine type.
     {
       &quot;guestAcceleratorCount&quot;: 42, # Number of accelerator cards exposed to the guest.
-      &quot;guestAcceleratorType&quot;: &quot;A String&quot;, # The accelerator type resource name, not a full URL, e.g. &#x27;nvidia-tesla-k80&#x27;.
+      &quot;guestAcceleratorType&quot;: &quot;A String&quot;, # The accelerator type resource name, not a full URL, e.g. nvidia-tesla-t4.
     },
   ],
   &quot;bundledLocalSsds&quot;: { # [Output Only] The configuration of bundled local SSD for the machine type.
@@ -288,7 +288,7 @@ Returns:
       &quot;accelerators&quot;: [ # [Output Only] A list of accelerator configurations assigned to this machine type.
         {
           &quot;guestAcceleratorCount&quot;: 42, # Number of accelerator cards exposed to the guest.
-          &quot;guestAcceleratorType&quot;: &quot;A String&quot;, # The accelerator type resource name, not a full URL, e.g. &#x27;nvidia-tesla-k80&#x27;.
+          &quot;guestAcceleratorType&quot;: &quot;A String&quot;, # The accelerator type resource name, not a full URL, e.g. nvidia-tesla-t4.
         },
       ],
       &quot;bundledLocalSsds&quot;: { # [Output Only] The configuration of bundled local SSD for the machine type.

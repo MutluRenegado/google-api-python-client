@@ -88,7 +88,7 @@ h1, h2, h3 {
 <p class="firstline">Used by partners to entitle a previously provisioned subscription to the current end user. The end user identity is inferred from the authorized credential of the request. This API must be authorized by the end user using OAuth.</p>
 <p class="toc_element">
   <code><a href="#extend">extend(name, body=None, x__xgafv=None)</a></code></p>
-<p class="firstline">[Deprecated] New partners should be on auto-extend by default. Used by partners to extend a subscription service for their customers on an ongoing basis for the subscription to remain active and renewable. It should be called directly by the partner using service accounts.</p>
+<p class="firstline">[Opt-in only] Most partners should be on auto-extend by default. Used by partners to extend a subscription service for their customers on an ongoing basis for the subscription to remain active and renewable. It should be called directly by the partner using service accounts.</p>
 <p class="toc_element">
   <code><a href="#get">get(name, x__xgafv=None)</a></code></p>
 <p class="firstline">Used by partners to get a subscription by id. It should be called directly by the partner using service accounts.</p>
@@ -132,8 +132,13 @@ Returns:
     &quot;freeTrialEndTime&quot;: &quot;A String&quot;, # Output only. End of the free trial period, in ISO 8061 format. For example, &quot;2019-08-31T17:28:54.564Z&quot;. It will be set the same as createTime if no free trial promotion is specified.
     &quot;lineItems&quot;: [ # Required. The line items of the subscription.
       { # Individual line item definition of a subscription.
+        &quot;amount&quot;: { # Describes the amount unit including the currency code. # Output only. The price of the product/service in this line item. The amount could be the wholesale price, or it can include a cost of sale based on the contract.
+          &quot;amountMicros&quot;: &quot;A String&quot;, # Required. Amount in micros (1_000_000 micros = 1 currency unit)
+          &quot;currencyCode&quot;: &quot;A String&quot;, # Required. Currency codes in accordance with [ISO-4217 Currency Codes] (https://en.wikipedia.org/wiki/ISO_4217). For example, USD.
+        },
         &quot;description&quot;: &quot;A String&quot;, # Output only. Description of this line item.
-        &quot;lineItemFreeTrialEndTime&quot;: &quot;A String&quot;, # Output only. It is set only if the line item has its own free trial applied. End time of the line item free trial period, in ISO 8061 format. For example, &quot;2019-08-31T17:28:54.564Z&quot;. It will be set the same as createTime if no free trial promotion is specified.
+        &quot;lineItemFreeTrialEndTime&quot;: &quot;A String&quot;, # Output only. The free trial end time will be populated after the line item is successfully processed. End time of the line item free trial period, in ISO 8061 format. For example, &quot;2019-08-31T17:28:54.564Z&quot;. It will be set the same as createTime if no free trial promotion is specified.
+        &quot;lineItemIndex&quot;: 42, # Output only. A unique index of the subscription line item.
         &quot;lineItemPromotionSpecs&quot;: [ # Optional. The promotions applied on the line item. It can be: - a free trial promotion, which overrides the subscription-level free trial promotion. - an introductory pricing promotion. When used as input in Create or Provision API, specify its resource name only.
           { # Describes the spec for one promotion.
             &quot;freeTrialDuration&quot;: { # Describes the length of a period of a time. # Output only. The duration of the free trial if the promotion is of type FREE_TRIAL.
@@ -165,7 +170,7 @@ Returns:
         },
         &quot;product&quot;: &quot;A String&quot;, # Required. Product resource name that identifies one the line item The format is &#x27;partners/{partner_id}/products/{product_id}&#x27;.
         &quot;productPayload&quot;: { # Specifies product specific payload. # Optional. Product specific payload for this line item.
-          &quot;googleOnePayload&quot;: { # Payload specific to Google One products. # Payload specific to Google One products.
+          &quot;googleOnePayload&quot;: { # Payload specific to Google One products. # Product-specific payloads. Payload specific to Google One products.
             &quot;campaigns&quot;: [ # Campaign attributed to sales of this subscription.
               &quot;A String&quot;,
             ],
@@ -174,6 +179,7 @@ Returns:
             &quot;storeId&quot;: &quot;A String&quot;, # The identifier for the partner store where the subscription was sold.
           },
           &quot;youtubePayload&quot;: { # Payload specific to Youtube products. # Payload specific to Youtube products.
+            &quot;accessEndTime&quot;: &quot;A String&quot;, # Output only. The access expiration time for this line item.
             &quot;partnerEligibilityIds&quot;: [ # The list of eligibility_ids which are applicable for the line item.
               &quot;A String&quot;,
             ],
@@ -186,7 +192,7 @@ Returns:
     &quot;name&quot;: &quot;A String&quot;, # Optional. Resource name of the subscription. It will have the format of &quot;partners/{partner_id}/subscriptions/{subscription_id}&quot;. This is available for authorizeAddon, but otherwise is response only.
     &quot;partnerUserToken&quot;: &quot;A String&quot;, # Required. Identifier of the end-user in partner’s system. The value is restricted to 63 ASCII characters at the maximum.
     &quot;processingState&quot;: &quot;A String&quot;, # Output only. Describes the processing state of the subscription. See more details at [the lifecycle of a subscription](/payments/reseller/subscription/reference/index/Receive.Notifications#payments-subscription-lifecycle).
-    &quot;products&quot;: [ # Required. Deprecated: consider using `line_items` as the input. Required. Resource name that identifies the purchased products. The format will be &#x27;partners/{partner_id}/products/{product_id}&#x27;.
+    &quot;products&quot;: [ # Optional. Deprecated: consider using `line_items` as the input. Required. Resource name that identifies the purchased products. The format will be &#x27;partners/{partner_id}/products/{product_id}&#x27;.
       &quot;A String&quot;,
     ],
     &quot;promotionSpecs&quot;: [ # Optional. Subscription-level promotions. Only free trial is supported on this level. It determines the first renewal time of the subscription to be the end of the free trial period. Specify the promotion resource name only when used as input.
@@ -255,8 +261,13 @@ Args:
   &quot;freeTrialEndTime&quot;: &quot;A String&quot;, # Output only. End of the free trial period, in ISO 8061 format. For example, &quot;2019-08-31T17:28:54.564Z&quot;. It will be set the same as createTime if no free trial promotion is specified.
   &quot;lineItems&quot;: [ # Required. The line items of the subscription.
     { # Individual line item definition of a subscription.
+      &quot;amount&quot;: { # Describes the amount unit including the currency code. # Output only. The price of the product/service in this line item. The amount could be the wholesale price, or it can include a cost of sale based on the contract.
+        &quot;amountMicros&quot;: &quot;A String&quot;, # Required. Amount in micros (1_000_000 micros = 1 currency unit)
+        &quot;currencyCode&quot;: &quot;A String&quot;, # Required. Currency codes in accordance with [ISO-4217 Currency Codes] (https://en.wikipedia.org/wiki/ISO_4217). For example, USD.
+      },
       &quot;description&quot;: &quot;A String&quot;, # Output only. Description of this line item.
-      &quot;lineItemFreeTrialEndTime&quot;: &quot;A String&quot;, # Output only. It is set only if the line item has its own free trial applied. End time of the line item free trial period, in ISO 8061 format. For example, &quot;2019-08-31T17:28:54.564Z&quot;. It will be set the same as createTime if no free trial promotion is specified.
+      &quot;lineItemFreeTrialEndTime&quot;: &quot;A String&quot;, # Output only. The free trial end time will be populated after the line item is successfully processed. End time of the line item free trial period, in ISO 8061 format. For example, &quot;2019-08-31T17:28:54.564Z&quot;. It will be set the same as createTime if no free trial promotion is specified.
+      &quot;lineItemIndex&quot;: 42, # Output only. A unique index of the subscription line item.
       &quot;lineItemPromotionSpecs&quot;: [ # Optional. The promotions applied on the line item. It can be: - a free trial promotion, which overrides the subscription-level free trial promotion. - an introductory pricing promotion. When used as input in Create or Provision API, specify its resource name only.
         { # Describes the spec for one promotion.
           &quot;freeTrialDuration&quot;: { # Describes the length of a period of a time. # Output only. The duration of the free trial if the promotion is of type FREE_TRIAL.
@@ -288,7 +299,7 @@ Args:
       },
       &quot;product&quot;: &quot;A String&quot;, # Required. Product resource name that identifies one the line item The format is &#x27;partners/{partner_id}/products/{product_id}&#x27;.
       &quot;productPayload&quot;: { # Specifies product specific payload. # Optional. Product specific payload for this line item.
-        &quot;googleOnePayload&quot;: { # Payload specific to Google One products. # Payload specific to Google One products.
+        &quot;googleOnePayload&quot;: { # Payload specific to Google One products. # Product-specific payloads. Payload specific to Google One products.
           &quot;campaigns&quot;: [ # Campaign attributed to sales of this subscription.
             &quot;A String&quot;,
           ],
@@ -297,6 +308,7 @@ Args:
           &quot;storeId&quot;: &quot;A String&quot;, # The identifier for the partner store where the subscription was sold.
         },
         &quot;youtubePayload&quot;: { # Payload specific to Youtube products. # Payload specific to Youtube products.
+          &quot;accessEndTime&quot;: &quot;A String&quot;, # Output only. The access expiration time for this line item.
           &quot;partnerEligibilityIds&quot;: [ # The list of eligibility_ids which are applicable for the line item.
             &quot;A String&quot;,
           ],
@@ -309,7 +321,7 @@ Args:
   &quot;name&quot;: &quot;A String&quot;, # Optional. Resource name of the subscription. It will have the format of &quot;partners/{partner_id}/subscriptions/{subscription_id}&quot;. This is available for authorizeAddon, but otherwise is response only.
   &quot;partnerUserToken&quot;: &quot;A String&quot;, # Required. Identifier of the end-user in partner’s system. The value is restricted to 63 ASCII characters at the maximum.
   &quot;processingState&quot;: &quot;A String&quot;, # Output only. Describes the processing state of the subscription. See more details at [the lifecycle of a subscription](/payments/reseller/subscription/reference/index/Receive.Notifications#payments-subscription-lifecycle).
-  &quot;products&quot;: [ # Required. Deprecated: consider using `line_items` as the input. Required. Resource name that identifies the purchased products. The format will be &#x27;partners/{partner_id}/products/{product_id}&#x27;.
+  &quot;products&quot;: [ # Optional. Deprecated: consider using `line_items` as the input. Required. Resource name that identifies the purchased products. The format will be &#x27;partners/{partner_id}/products/{product_id}&#x27;.
     &quot;A String&quot;,
   ],
   &quot;promotionSpecs&quot;: [ # Optional. Subscription-level promotions. Only free trial is supported on this level. It determines the first renewal time of the subscription to be the end of the free trial period. Specify the promotion resource name only when used as input.
@@ -371,8 +383,13 @@ Returns:
   &quot;freeTrialEndTime&quot;: &quot;A String&quot;, # Output only. End of the free trial period, in ISO 8061 format. For example, &quot;2019-08-31T17:28:54.564Z&quot;. It will be set the same as createTime if no free trial promotion is specified.
   &quot;lineItems&quot;: [ # Required. The line items of the subscription.
     { # Individual line item definition of a subscription.
+      &quot;amount&quot;: { # Describes the amount unit including the currency code. # Output only. The price of the product/service in this line item. The amount could be the wholesale price, or it can include a cost of sale based on the contract.
+        &quot;amountMicros&quot;: &quot;A String&quot;, # Required. Amount in micros (1_000_000 micros = 1 currency unit)
+        &quot;currencyCode&quot;: &quot;A String&quot;, # Required. Currency codes in accordance with [ISO-4217 Currency Codes] (https://en.wikipedia.org/wiki/ISO_4217). For example, USD.
+      },
       &quot;description&quot;: &quot;A String&quot;, # Output only. Description of this line item.
-      &quot;lineItemFreeTrialEndTime&quot;: &quot;A String&quot;, # Output only. It is set only if the line item has its own free trial applied. End time of the line item free trial period, in ISO 8061 format. For example, &quot;2019-08-31T17:28:54.564Z&quot;. It will be set the same as createTime if no free trial promotion is specified.
+      &quot;lineItemFreeTrialEndTime&quot;: &quot;A String&quot;, # Output only. The free trial end time will be populated after the line item is successfully processed. End time of the line item free trial period, in ISO 8061 format. For example, &quot;2019-08-31T17:28:54.564Z&quot;. It will be set the same as createTime if no free trial promotion is specified.
+      &quot;lineItemIndex&quot;: 42, # Output only. A unique index of the subscription line item.
       &quot;lineItemPromotionSpecs&quot;: [ # Optional. The promotions applied on the line item. It can be: - a free trial promotion, which overrides the subscription-level free trial promotion. - an introductory pricing promotion. When used as input in Create or Provision API, specify its resource name only.
         { # Describes the spec for one promotion.
           &quot;freeTrialDuration&quot;: { # Describes the length of a period of a time. # Output only. The duration of the free trial if the promotion is of type FREE_TRIAL.
@@ -404,7 +421,7 @@ Returns:
       },
       &quot;product&quot;: &quot;A String&quot;, # Required. Product resource name that identifies one the line item The format is &#x27;partners/{partner_id}/products/{product_id}&#x27;.
       &quot;productPayload&quot;: { # Specifies product specific payload. # Optional. Product specific payload for this line item.
-        &quot;googleOnePayload&quot;: { # Payload specific to Google One products. # Payload specific to Google One products.
+        &quot;googleOnePayload&quot;: { # Payload specific to Google One products. # Product-specific payloads. Payload specific to Google One products.
           &quot;campaigns&quot;: [ # Campaign attributed to sales of this subscription.
             &quot;A String&quot;,
           ],
@@ -413,6 +430,7 @@ Returns:
           &quot;storeId&quot;: &quot;A String&quot;, # The identifier for the partner store where the subscription was sold.
         },
         &quot;youtubePayload&quot;: { # Payload specific to Youtube products. # Payload specific to Youtube products.
+          &quot;accessEndTime&quot;: &quot;A String&quot;, # Output only. The access expiration time for this line item.
           &quot;partnerEligibilityIds&quot;: [ # The list of eligibility_ids which are applicable for the line item.
             &quot;A String&quot;,
           ],
@@ -425,7 +443,7 @@ Returns:
   &quot;name&quot;: &quot;A String&quot;, # Optional. Resource name of the subscription. It will have the format of &quot;partners/{partner_id}/subscriptions/{subscription_id}&quot;. This is available for authorizeAddon, but otherwise is response only.
   &quot;partnerUserToken&quot;: &quot;A String&quot;, # Required. Identifier of the end-user in partner’s system. The value is restricted to 63 ASCII characters at the maximum.
   &quot;processingState&quot;: &quot;A String&quot;, # Output only. Describes the processing state of the subscription. See more details at [the lifecycle of a subscription](/payments/reseller/subscription/reference/index/Receive.Notifications#payments-subscription-lifecycle).
-  &quot;products&quot;: [ # Required. Deprecated: consider using `line_items` as the input. Required. Resource name that identifies the purchased products. The format will be &#x27;partners/{partner_id}/products/{product_id}&#x27;.
+  &quot;products&quot;: [ # Optional. Deprecated: consider using `line_items` as the input. Required. Resource name that identifies the purchased products. The format will be &#x27;partners/{partner_id}/products/{product_id}&#x27;.
     &quot;A String&quot;,
   ],
   &quot;promotionSpecs&quot;: [ # Optional. Subscription-level promotions. Only free trial is supported on this level. It determines the first renewal time of the subscription to be the end of the free trial period. Specify the promotion resource name only when used as input.
@@ -500,8 +518,13 @@ Returns:
     &quot;freeTrialEndTime&quot;: &quot;A String&quot;, # Output only. End of the free trial period, in ISO 8061 format. For example, &quot;2019-08-31T17:28:54.564Z&quot;. It will be set the same as createTime if no free trial promotion is specified.
     &quot;lineItems&quot;: [ # Required. The line items of the subscription.
       { # Individual line item definition of a subscription.
+        &quot;amount&quot;: { # Describes the amount unit including the currency code. # Output only. The price of the product/service in this line item. The amount could be the wholesale price, or it can include a cost of sale based on the contract.
+          &quot;amountMicros&quot;: &quot;A String&quot;, # Required. Amount in micros (1_000_000 micros = 1 currency unit)
+          &quot;currencyCode&quot;: &quot;A String&quot;, # Required. Currency codes in accordance with [ISO-4217 Currency Codes] (https://en.wikipedia.org/wiki/ISO_4217). For example, USD.
+        },
         &quot;description&quot;: &quot;A String&quot;, # Output only. Description of this line item.
-        &quot;lineItemFreeTrialEndTime&quot;: &quot;A String&quot;, # Output only. It is set only if the line item has its own free trial applied. End time of the line item free trial period, in ISO 8061 format. For example, &quot;2019-08-31T17:28:54.564Z&quot;. It will be set the same as createTime if no free trial promotion is specified.
+        &quot;lineItemFreeTrialEndTime&quot;: &quot;A String&quot;, # Output only. The free trial end time will be populated after the line item is successfully processed. End time of the line item free trial period, in ISO 8061 format. For example, &quot;2019-08-31T17:28:54.564Z&quot;. It will be set the same as createTime if no free trial promotion is specified.
+        &quot;lineItemIndex&quot;: 42, # Output only. A unique index of the subscription line item.
         &quot;lineItemPromotionSpecs&quot;: [ # Optional. The promotions applied on the line item. It can be: - a free trial promotion, which overrides the subscription-level free trial promotion. - an introductory pricing promotion. When used as input in Create or Provision API, specify its resource name only.
           { # Describes the spec for one promotion.
             &quot;freeTrialDuration&quot;: { # Describes the length of a period of a time. # Output only. The duration of the free trial if the promotion is of type FREE_TRIAL.
@@ -533,7 +556,7 @@ Returns:
         },
         &quot;product&quot;: &quot;A String&quot;, # Required. Product resource name that identifies one the line item The format is &#x27;partners/{partner_id}/products/{product_id}&#x27;.
         &quot;productPayload&quot;: { # Specifies product specific payload. # Optional. Product specific payload for this line item.
-          &quot;googleOnePayload&quot;: { # Payload specific to Google One products. # Payload specific to Google One products.
+          &quot;googleOnePayload&quot;: { # Payload specific to Google One products. # Product-specific payloads. Payload specific to Google One products.
             &quot;campaigns&quot;: [ # Campaign attributed to sales of this subscription.
               &quot;A String&quot;,
             ],
@@ -542,6 +565,7 @@ Returns:
             &quot;storeId&quot;: &quot;A String&quot;, # The identifier for the partner store where the subscription was sold.
           },
           &quot;youtubePayload&quot;: { # Payload specific to Youtube products. # Payload specific to Youtube products.
+            &quot;accessEndTime&quot;: &quot;A String&quot;, # Output only. The access expiration time for this line item.
             &quot;partnerEligibilityIds&quot;: [ # The list of eligibility_ids which are applicable for the line item.
               &quot;A String&quot;,
             ],
@@ -554,7 +578,7 @@ Returns:
     &quot;name&quot;: &quot;A String&quot;, # Optional. Resource name of the subscription. It will have the format of &quot;partners/{partner_id}/subscriptions/{subscription_id}&quot;. This is available for authorizeAddon, but otherwise is response only.
     &quot;partnerUserToken&quot;: &quot;A String&quot;, # Required. Identifier of the end-user in partner’s system. The value is restricted to 63 ASCII characters at the maximum.
     &quot;processingState&quot;: &quot;A String&quot;, # Output only. Describes the processing state of the subscription. See more details at [the lifecycle of a subscription](/payments/reseller/subscription/reference/index/Receive.Notifications#payments-subscription-lifecycle).
-    &quot;products&quot;: [ # Required. Deprecated: consider using `line_items` as the input. Required. Resource name that identifies the purchased products. The format will be &#x27;partners/{partner_id}/products/{product_id}&#x27;.
+    &quot;products&quot;: [ # Optional. Deprecated: consider using `line_items` as the input. Required. Resource name that identifies the purchased products. The format will be &#x27;partners/{partner_id}/products/{product_id}&#x27;.
       &quot;A String&quot;,
     ],
     &quot;promotionSpecs&quot;: [ # Optional. Subscription-level promotions. Only free trial is supported on this level. It determines the first renewal time of the subscription to be the end of the free trial period. Specify the promotion resource name only when used as input.
@@ -601,7 +625,7 @@ Returns:
 
 <div class="method">
     <code class="details" id="extend">extend(name, body=None, x__xgafv=None)</code>
-  <pre>[Deprecated] New partners should be on auto-extend by default. Used by partners to extend a subscription service for their customers on an ongoing basis for the subscription to remain active and renewable. It should be called directly by the partner using service accounts.
+  <pre>[Opt-in only] Most partners should be on auto-extend by default. Used by partners to extend a subscription service for their customers on an ongoing basis for the subscription to remain active and renewable. It should be called directly by the partner using service accounts.
 
 Args:
   name: string, Required. The name of the subscription resource to be extended. It will have the format of &quot;partners/{partner_id}/subscriptions/{subscription_id}&quot;. (required)
@@ -658,8 +682,13 @@ Returns:
   &quot;freeTrialEndTime&quot;: &quot;A String&quot;, # Output only. End of the free trial period, in ISO 8061 format. For example, &quot;2019-08-31T17:28:54.564Z&quot;. It will be set the same as createTime if no free trial promotion is specified.
   &quot;lineItems&quot;: [ # Required. The line items of the subscription.
     { # Individual line item definition of a subscription.
+      &quot;amount&quot;: { # Describes the amount unit including the currency code. # Output only. The price of the product/service in this line item. The amount could be the wholesale price, or it can include a cost of sale based on the contract.
+        &quot;amountMicros&quot;: &quot;A String&quot;, # Required. Amount in micros (1_000_000 micros = 1 currency unit)
+        &quot;currencyCode&quot;: &quot;A String&quot;, # Required. Currency codes in accordance with [ISO-4217 Currency Codes] (https://en.wikipedia.org/wiki/ISO_4217). For example, USD.
+      },
       &quot;description&quot;: &quot;A String&quot;, # Output only. Description of this line item.
-      &quot;lineItemFreeTrialEndTime&quot;: &quot;A String&quot;, # Output only. It is set only if the line item has its own free trial applied. End time of the line item free trial period, in ISO 8061 format. For example, &quot;2019-08-31T17:28:54.564Z&quot;. It will be set the same as createTime if no free trial promotion is specified.
+      &quot;lineItemFreeTrialEndTime&quot;: &quot;A String&quot;, # Output only. The free trial end time will be populated after the line item is successfully processed. End time of the line item free trial period, in ISO 8061 format. For example, &quot;2019-08-31T17:28:54.564Z&quot;. It will be set the same as createTime if no free trial promotion is specified.
+      &quot;lineItemIndex&quot;: 42, # Output only. A unique index of the subscription line item.
       &quot;lineItemPromotionSpecs&quot;: [ # Optional. The promotions applied on the line item. It can be: - a free trial promotion, which overrides the subscription-level free trial promotion. - an introductory pricing promotion. When used as input in Create or Provision API, specify its resource name only.
         { # Describes the spec for one promotion.
           &quot;freeTrialDuration&quot;: { # Describes the length of a period of a time. # Output only. The duration of the free trial if the promotion is of type FREE_TRIAL.
@@ -691,7 +720,7 @@ Returns:
       },
       &quot;product&quot;: &quot;A String&quot;, # Required. Product resource name that identifies one the line item The format is &#x27;partners/{partner_id}/products/{product_id}&#x27;.
       &quot;productPayload&quot;: { # Specifies product specific payload. # Optional. Product specific payload for this line item.
-        &quot;googleOnePayload&quot;: { # Payload specific to Google One products. # Payload specific to Google One products.
+        &quot;googleOnePayload&quot;: { # Payload specific to Google One products. # Product-specific payloads. Payload specific to Google One products.
           &quot;campaigns&quot;: [ # Campaign attributed to sales of this subscription.
             &quot;A String&quot;,
           ],
@@ -700,6 +729,7 @@ Returns:
           &quot;storeId&quot;: &quot;A String&quot;, # The identifier for the partner store where the subscription was sold.
         },
         &quot;youtubePayload&quot;: { # Payload specific to Youtube products. # Payload specific to Youtube products.
+          &quot;accessEndTime&quot;: &quot;A String&quot;, # Output only. The access expiration time for this line item.
           &quot;partnerEligibilityIds&quot;: [ # The list of eligibility_ids which are applicable for the line item.
             &quot;A String&quot;,
           ],
@@ -712,7 +742,7 @@ Returns:
   &quot;name&quot;: &quot;A String&quot;, # Optional. Resource name of the subscription. It will have the format of &quot;partners/{partner_id}/subscriptions/{subscription_id}&quot;. This is available for authorizeAddon, but otherwise is response only.
   &quot;partnerUserToken&quot;: &quot;A String&quot;, # Required. Identifier of the end-user in partner’s system. The value is restricted to 63 ASCII characters at the maximum.
   &quot;processingState&quot;: &quot;A String&quot;, # Output only. Describes the processing state of the subscription. See more details at [the lifecycle of a subscription](/payments/reseller/subscription/reference/index/Receive.Notifications#payments-subscription-lifecycle).
-  &quot;products&quot;: [ # Required. Deprecated: consider using `line_items` as the input. Required. Resource name that identifies the purchased products. The format will be &#x27;partners/{partner_id}/products/{product_id}&#x27;.
+  &quot;products&quot;: [ # Optional. Deprecated: consider using `line_items` as the input. Required. Resource name that identifies the purchased products. The format will be &#x27;partners/{partner_id}/products/{product_id}&#x27;.
     &quot;A String&quot;,
   ],
   &quot;promotionSpecs&quot;: [ # Optional. Subscription-level promotions. Only free trial is supported on this level. It determines the first renewal time of the subscription to be the end of the free trial period. Specify the promotion resource name only when used as input.
@@ -775,8 +805,13 @@ Args:
   &quot;freeTrialEndTime&quot;: &quot;A String&quot;, # Output only. End of the free trial period, in ISO 8061 format. For example, &quot;2019-08-31T17:28:54.564Z&quot;. It will be set the same as createTime if no free trial promotion is specified.
   &quot;lineItems&quot;: [ # Required. The line items of the subscription.
     { # Individual line item definition of a subscription.
+      &quot;amount&quot;: { # Describes the amount unit including the currency code. # Output only. The price of the product/service in this line item. The amount could be the wholesale price, or it can include a cost of sale based on the contract.
+        &quot;amountMicros&quot;: &quot;A String&quot;, # Required. Amount in micros (1_000_000 micros = 1 currency unit)
+        &quot;currencyCode&quot;: &quot;A String&quot;, # Required. Currency codes in accordance with [ISO-4217 Currency Codes] (https://en.wikipedia.org/wiki/ISO_4217). For example, USD.
+      },
       &quot;description&quot;: &quot;A String&quot;, # Output only. Description of this line item.
-      &quot;lineItemFreeTrialEndTime&quot;: &quot;A String&quot;, # Output only. It is set only if the line item has its own free trial applied. End time of the line item free trial period, in ISO 8061 format. For example, &quot;2019-08-31T17:28:54.564Z&quot;. It will be set the same as createTime if no free trial promotion is specified.
+      &quot;lineItemFreeTrialEndTime&quot;: &quot;A String&quot;, # Output only. The free trial end time will be populated after the line item is successfully processed. End time of the line item free trial period, in ISO 8061 format. For example, &quot;2019-08-31T17:28:54.564Z&quot;. It will be set the same as createTime if no free trial promotion is specified.
+      &quot;lineItemIndex&quot;: 42, # Output only. A unique index of the subscription line item.
       &quot;lineItemPromotionSpecs&quot;: [ # Optional. The promotions applied on the line item. It can be: - a free trial promotion, which overrides the subscription-level free trial promotion. - an introductory pricing promotion. When used as input in Create or Provision API, specify its resource name only.
         { # Describes the spec for one promotion.
           &quot;freeTrialDuration&quot;: { # Describes the length of a period of a time. # Output only. The duration of the free trial if the promotion is of type FREE_TRIAL.
@@ -808,7 +843,7 @@ Args:
       },
       &quot;product&quot;: &quot;A String&quot;, # Required. Product resource name that identifies one the line item The format is &#x27;partners/{partner_id}/products/{product_id}&#x27;.
       &quot;productPayload&quot;: { # Specifies product specific payload. # Optional. Product specific payload for this line item.
-        &quot;googleOnePayload&quot;: { # Payload specific to Google One products. # Payload specific to Google One products.
+        &quot;googleOnePayload&quot;: { # Payload specific to Google One products. # Product-specific payloads. Payload specific to Google One products.
           &quot;campaigns&quot;: [ # Campaign attributed to sales of this subscription.
             &quot;A String&quot;,
           ],
@@ -817,6 +852,7 @@ Args:
           &quot;storeId&quot;: &quot;A String&quot;, # The identifier for the partner store where the subscription was sold.
         },
         &quot;youtubePayload&quot;: { # Payload specific to Youtube products. # Payload specific to Youtube products.
+          &quot;accessEndTime&quot;: &quot;A String&quot;, # Output only. The access expiration time for this line item.
           &quot;partnerEligibilityIds&quot;: [ # The list of eligibility_ids which are applicable for the line item.
             &quot;A String&quot;,
           ],
@@ -829,7 +865,7 @@ Args:
   &quot;name&quot;: &quot;A String&quot;, # Optional. Resource name of the subscription. It will have the format of &quot;partners/{partner_id}/subscriptions/{subscription_id}&quot;. This is available for authorizeAddon, but otherwise is response only.
   &quot;partnerUserToken&quot;: &quot;A String&quot;, # Required. Identifier of the end-user in partner’s system. The value is restricted to 63 ASCII characters at the maximum.
   &quot;processingState&quot;: &quot;A String&quot;, # Output only. Describes the processing state of the subscription. See more details at [the lifecycle of a subscription](/payments/reseller/subscription/reference/index/Receive.Notifications#payments-subscription-lifecycle).
-  &quot;products&quot;: [ # Required. Deprecated: consider using `line_items` as the input. Required. Resource name that identifies the purchased products. The format will be &#x27;partners/{partner_id}/products/{product_id}&#x27;.
+  &quot;products&quot;: [ # Optional. Deprecated: consider using `line_items` as the input. Required. Resource name that identifies the purchased products. The format will be &#x27;partners/{partner_id}/products/{product_id}&#x27;.
     &quot;A String&quot;,
   ],
   &quot;promotionSpecs&quot;: [ # Optional. Subscription-level promotions. Only free trial is supported on this level. It determines the first renewal time of the subscription to be the end of the free trial period. Specify the promotion resource name only when used as input.
@@ -891,8 +927,13 @@ Returns:
   &quot;freeTrialEndTime&quot;: &quot;A String&quot;, # Output only. End of the free trial period, in ISO 8061 format. For example, &quot;2019-08-31T17:28:54.564Z&quot;. It will be set the same as createTime if no free trial promotion is specified.
   &quot;lineItems&quot;: [ # Required. The line items of the subscription.
     { # Individual line item definition of a subscription.
+      &quot;amount&quot;: { # Describes the amount unit including the currency code. # Output only. The price of the product/service in this line item. The amount could be the wholesale price, or it can include a cost of sale based on the contract.
+        &quot;amountMicros&quot;: &quot;A String&quot;, # Required. Amount in micros (1_000_000 micros = 1 currency unit)
+        &quot;currencyCode&quot;: &quot;A String&quot;, # Required. Currency codes in accordance with [ISO-4217 Currency Codes] (https://en.wikipedia.org/wiki/ISO_4217). For example, USD.
+      },
       &quot;description&quot;: &quot;A String&quot;, # Output only. Description of this line item.
-      &quot;lineItemFreeTrialEndTime&quot;: &quot;A String&quot;, # Output only. It is set only if the line item has its own free trial applied. End time of the line item free trial period, in ISO 8061 format. For example, &quot;2019-08-31T17:28:54.564Z&quot;. It will be set the same as createTime if no free trial promotion is specified.
+      &quot;lineItemFreeTrialEndTime&quot;: &quot;A String&quot;, # Output only. The free trial end time will be populated after the line item is successfully processed. End time of the line item free trial period, in ISO 8061 format. For example, &quot;2019-08-31T17:28:54.564Z&quot;. It will be set the same as createTime if no free trial promotion is specified.
+      &quot;lineItemIndex&quot;: 42, # Output only. A unique index of the subscription line item.
       &quot;lineItemPromotionSpecs&quot;: [ # Optional. The promotions applied on the line item. It can be: - a free trial promotion, which overrides the subscription-level free trial promotion. - an introductory pricing promotion. When used as input in Create or Provision API, specify its resource name only.
         { # Describes the spec for one promotion.
           &quot;freeTrialDuration&quot;: { # Describes the length of a period of a time. # Output only. The duration of the free trial if the promotion is of type FREE_TRIAL.
@@ -924,7 +965,7 @@ Returns:
       },
       &quot;product&quot;: &quot;A String&quot;, # Required. Product resource name that identifies one the line item The format is &#x27;partners/{partner_id}/products/{product_id}&#x27;.
       &quot;productPayload&quot;: { # Specifies product specific payload. # Optional. Product specific payload for this line item.
-        &quot;googleOnePayload&quot;: { # Payload specific to Google One products. # Payload specific to Google One products.
+        &quot;googleOnePayload&quot;: { # Payload specific to Google One products. # Product-specific payloads. Payload specific to Google One products.
           &quot;campaigns&quot;: [ # Campaign attributed to sales of this subscription.
             &quot;A String&quot;,
           ],
@@ -933,6 +974,7 @@ Returns:
           &quot;storeId&quot;: &quot;A String&quot;, # The identifier for the partner store where the subscription was sold.
         },
         &quot;youtubePayload&quot;: { # Payload specific to Youtube products. # Payload specific to Youtube products.
+          &quot;accessEndTime&quot;: &quot;A String&quot;, # Output only. The access expiration time for this line item.
           &quot;partnerEligibilityIds&quot;: [ # The list of eligibility_ids which are applicable for the line item.
             &quot;A String&quot;,
           ],
@@ -945,7 +987,7 @@ Returns:
   &quot;name&quot;: &quot;A String&quot;, # Optional. Resource name of the subscription. It will have the format of &quot;partners/{partner_id}/subscriptions/{subscription_id}&quot;. This is available for authorizeAddon, but otherwise is response only.
   &quot;partnerUserToken&quot;: &quot;A String&quot;, # Required. Identifier of the end-user in partner’s system. The value is restricted to 63 ASCII characters at the maximum.
   &quot;processingState&quot;: &quot;A String&quot;, # Output only. Describes the processing state of the subscription. See more details at [the lifecycle of a subscription](/payments/reseller/subscription/reference/index/Receive.Notifications#payments-subscription-lifecycle).
-  &quot;products&quot;: [ # Required. Deprecated: consider using `line_items` as the input. Required. Resource name that identifies the purchased products. The format will be &#x27;partners/{partner_id}/products/{product_id}&#x27;.
+  &quot;products&quot;: [ # Optional. Deprecated: consider using `line_items` as the input. Required. Resource name that identifies the purchased products. The format will be &#x27;partners/{partner_id}/products/{product_id}&#x27;.
     &quot;A String&quot;,
   ],
   &quot;promotionSpecs&quot;: [ # Optional. Subscription-level promotions. Only free trial is supported on this level. It determines the first renewal time of the subscription to be the end of the free trial period. Specify the promotion resource name only when used as input.
@@ -1020,8 +1062,13 @@ Returns:
     &quot;freeTrialEndTime&quot;: &quot;A String&quot;, # Output only. End of the free trial period, in ISO 8061 format. For example, &quot;2019-08-31T17:28:54.564Z&quot;. It will be set the same as createTime if no free trial promotion is specified.
     &quot;lineItems&quot;: [ # Required. The line items of the subscription.
       { # Individual line item definition of a subscription.
+        &quot;amount&quot;: { # Describes the amount unit including the currency code. # Output only. The price of the product/service in this line item. The amount could be the wholesale price, or it can include a cost of sale based on the contract.
+          &quot;amountMicros&quot;: &quot;A String&quot;, # Required. Amount in micros (1_000_000 micros = 1 currency unit)
+          &quot;currencyCode&quot;: &quot;A String&quot;, # Required. Currency codes in accordance with [ISO-4217 Currency Codes] (https://en.wikipedia.org/wiki/ISO_4217). For example, USD.
+        },
         &quot;description&quot;: &quot;A String&quot;, # Output only. Description of this line item.
-        &quot;lineItemFreeTrialEndTime&quot;: &quot;A String&quot;, # Output only. It is set only if the line item has its own free trial applied. End time of the line item free trial period, in ISO 8061 format. For example, &quot;2019-08-31T17:28:54.564Z&quot;. It will be set the same as createTime if no free trial promotion is specified.
+        &quot;lineItemFreeTrialEndTime&quot;: &quot;A String&quot;, # Output only. The free trial end time will be populated after the line item is successfully processed. End time of the line item free trial period, in ISO 8061 format. For example, &quot;2019-08-31T17:28:54.564Z&quot;. It will be set the same as createTime if no free trial promotion is specified.
+        &quot;lineItemIndex&quot;: 42, # Output only. A unique index of the subscription line item.
         &quot;lineItemPromotionSpecs&quot;: [ # Optional. The promotions applied on the line item. It can be: - a free trial promotion, which overrides the subscription-level free trial promotion. - an introductory pricing promotion. When used as input in Create or Provision API, specify its resource name only.
           { # Describes the spec for one promotion.
             &quot;freeTrialDuration&quot;: { # Describes the length of a period of a time. # Output only. The duration of the free trial if the promotion is of type FREE_TRIAL.
@@ -1053,7 +1100,7 @@ Returns:
         },
         &quot;product&quot;: &quot;A String&quot;, # Required. Product resource name that identifies one the line item The format is &#x27;partners/{partner_id}/products/{product_id}&#x27;.
         &quot;productPayload&quot;: { # Specifies product specific payload. # Optional. Product specific payload for this line item.
-          &quot;googleOnePayload&quot;: { # Payload specific to Google One products. # Payload specific to Google One products.
+          &quot;googleOnePayload&quot;: { # Payload specific to Google One products. # Product-specific payloads. Payload specific to Google One products.
             &quot;campaigns&quot;: [ # Campaign attributed to sales of this subscription.
               &quot;A String&quot;,
             ],
@@ -1062,6 +1109,7 @@ Returns:
             &quot;storeId&quot;: &quot;A String&quot;, # The identifier for the partner store where the subscription was sold.
           },
           &quot;youtubePayload&quot;: { # Payload specific to Youtube products. # Payload specific to Youtube products.
+            &quot;accessEndTime&quot;: &quot;A String&quot;, # Output only. The access expiration time for this line item.
             &quot;partnerEligibilityIds&quot;: [ # The list of eligibility_ids which are applicable for the line item.
               &quot;A String&quot;,
             ],
@@ -1074,7 +1122,7 @@ Returns:
     &quot;name&quot;: &quot;A String&quot;, # Optional. Resource name of the subscription. It will have the format of &quot;partners/{partner_id}/subscriptions/{subscription_id}&quot;. This is available for authorizeAddon, but otherwise is response only.
     &quot;partnerUserToken&quot;: &quot;A String&quot;, # Required. Identifier of the end-user in partner’s system. The value is restricted to 63 ASCII characters at the maximum.
     &quot;processingState&quot;: &quot;A String&quot;, # Output only. Describes the processing state of the subscription. See more details at [the lifecycle of a subscription](/payments/reseller/subscription/reference/index/Receive.Notifications#payments-subscription-lifecycle).
-    &quot;products&quot;: [ # Required. Deprecated: consider using `line_items` as the input. Required. Resource name that identifies the purchased products. The format will be &#x27;partners/{partner_id}/products/{product_id}&#x27;.
+    &quot;products&quot;: [ # Optional. Deprecated: consider using `line_items` as the input. Required. Resource name that identifies the purchased products. The format will be &#x27;partners/{partner_id}/products/{product_id}&#x27;.
       &quot;A String&quot;,
     ],
     &quot;promotionSpecs&quot;: [ # Optional. Subscription-level promotions. Only free trial is supported on this level. It determines the first renewal time of the subscription to be the end of the free trial period. Specify the promotion resource name only when used as input.

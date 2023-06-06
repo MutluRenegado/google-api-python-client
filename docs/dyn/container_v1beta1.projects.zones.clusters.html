@@ -163,6 +163,9 @@ Args:
     &quot;gcpFilestoreCsiDriverConfig&quot;: { # Configuration for the GCP Filestore CSI driver. # Configuration for the GCP Filestore CSI driver.
       &quot;enabled&quot;: True or False, # Whether the GCP Filestore CSI driver is enabled for this cluster.
     },
+    &quot;gcsFuseCsiDriverConfig&quot;: { # Configuration for the Cloud Storage Fuse CSI driver. # Configuration for the Cloud Storage Fuse CSI driver.
+      &quot;enabled&quot;: True or False, # Whether the Cloud Storage Fuse CSI driver is enabled for this cluster.
+    },
     &quot;gkeBackupAgentConfig&quot;: { # Configuration for the Backup for GKE Agent. # Configuration for the Backup for GKE agent addon.
       &quot;enabled&quot;: True or False, # Whether the Backup for GKE agent is enabled for this cluster.
     },
@@ -244,11 +247,11 @@ Returns:
     ],
     &quot;status&quot;: &quot;A String&quot;, # Status of an operation stage. Unset for single-stage operations.
   },
-  &quot;selfLink&quot;: &quot;A String&quot;, # Server-defined URL for the resource.
+  &quot;selfLink&quot;: &quot;A String&quot;, # Server-defined URI for the operation. Example: `https://container.googleapis.com/v1alpha1/projects/123/locations/us-central1/operations/operation-123`.
   &quot;startTime&quot;: &quot;A String&quot;, # [Output only] The time the operation started, in [RFC3339](https://www.ietf.org/rfc/rfc3339.txt) text format.
   &quot;status&quot;: &quot;A String&quot;, # The current status of the operation.
   &quot;statusMessage&quot;: &quot;A String&quot;, # Output only. If an error has occurred, a textual description of the error. Deprecated. Use field error instead.
-  &quot;targetLink&quot;: &quot;A String&quot;, # Server-defined URL for the target of the operation.
+  &quot;targetLink&quot;: &quot;A String&quot;, # Server-defined URI for the target of the operation. The format of this is a URI to the resource being modified (such as a cluster, node pool, or node). For node pool repairs, there may be multiple nodes being repaired, but only one will be the target. Examples: - ## `https://container.googleapis.com/v1/projects/123/locations/us-central1/clusters/my-cluster` ## `https://container.googleapis.com/v1/projects/123/zones/us-central1-c/clusters/my-cluster/nodePools/my-np` `https://container.googleapis.com/v1/projects/123/zones/us-central1-c/clusters/my-cluster/nodePools/my-np/node/my-node`
   &quot;zone&quot;: &quot;A String&quot;, # The name of the Google Compute Engine [zone](https://cloud.google.com/compute/docs/zones#available) in which the operation is taking place. This field is deprecated, use location instead.
 }</pre>
 </div>
@@ -328,11 +331,11 @@ Returns:
     ],
     &quot;status&quot;: &quot;A String&quot;, # Status of an operation stage. Unset for single-stage operations.
   },
-  &quot;selfLink&quot;: &quot;A String&quot;, # Server-defined URL for the resource.
+  &quot;selfLink&quot;: &quot;A String&quot;, # Server-defined URI for the operation. Example: `https://container.googleapis.com/v1alpha1/projects/123/locations/us-central1/operations/operation-123`.
   &quot;startTime&quot;: &quot;A String&quot;, # [Output only] The time the operation started, in [RFC3339](https://www.ietf.org/rfc/rfc3339.txt) text format.
   &quot;status&quot;: &quot;A String&quot;, # The current status of the operation.
   &quot;statusMessage&quot;: &quot;A String&quot;, # Output only. If an error has occurred, a textual description of the error. Deprecated. Use field error instead.
-  &quot;targetLink&quot;: &quot;A String&quot;, # Server-defined URL for the target of the operation.
+  &quot;targetLink&quot;: &quot;A String&quot;, # Server-defined URI for the target of the operation. The format of this is a URI to the resource being modified (such as a cluster, node pool, or node). For node pool repairs, there may be multiple nodes being repaired, but only one will be the target. Examples: - ## `https://container.googleapis.com/v1/projects/123/locations/us-central1/clusters/my-cluster` ## `https://container.googleapis.com/v1/projects/123/zones/us-central1-c/clusters/my-cluster/nodePools/my-np` `https://container.googleapis.com/v1/projects/123/zones/us-central1-c/clusters/my-cluster/nodePools/my-np/node/my-node`
   &quot;zone&quot;: &quot;A String&quot;, # The name of the Google Compute Engine [zone](https://cloud.google.com/compute/docs/zones#available) in which the operation is taking place. This field is deprecated, use location instead.
 }</pre>
 </div>
@@ -365,6 +368,9 @@ Args:
       },
       &quot;gcpFilestoreCsiDriverConfig&quot;: { # Configuration for the GCP Filestore CSI driver. # Configuration for the GCP Filestore CSI driver.
         &quot;enabled&quot;: True or False, # Whether the GCP Filestore CSI driver is enabled for this cluster.
+      },
+      &quot;gcsFuseCsiDriverConfig&quot;: { # Configuration for the Cloud Storage Fuse CSI driver. # Configuration for the Cloud Storage Fuse CSI driver.
+        &quot;enabled&quot;: True or False, # Whether the Cloud Storage Fuse CSI driver is enabled for this cluster.
       },
       &quot;gkeBackupAgentConfig&quot;: { # Configuration for the Backup for GKE Agent. # Configuration for the Backup for GKE agent addon.
         &quot;enabled&quot;: True or False, # Whether the Backup for GKE agent is enabled for this cluster.
@@ -473,17 +479,27 @@ Args:
     &quot;currentNodeVersion&quot;: &quot;A String&quot;, # [Output only] Deprecated, use [NodePool.version](https://cloud.google.com/kubernetes-engine/docs/reference/rest/v1beta1/projects.locations.clusters.nodePools) instead. The current version of the node software components. If they are currently at multiple versions because they&#x27;re in the process of being upgraded, this reflects the minimum version of all nodes.
     &quot;databaseEncryption&quot;: { # Configuration of etcd encryption. # Configuration of etcd encryption.
       &quot;keyName&quot;: &quot;A String&quot;, # Name of CloudKMS key to use for the encryption of secrets in etcd. Ex. projects/my-project/locations/global/keyRings/my-ring/cryptoKeys/my-key
-      &quot;state&quot;: &quot;A String&quot;, # Denotes the state of etcd encryption.
+      &quot;state&quot;: &quot;A String&quot;, # The desired state of etcd encryption.
     },
     &quot;defaultMaxPodsConstraint&quot;: { # Constraints applied to pods. # The default constraint on the maximum number of pods that can be run simultaneously on a node in the node pool of this cluster. Only honored if cluster created with IP Alias support.
       &quot;maxPodsPerNode&quot;: &quot;A String&quot;, # Constraint enforced on the max num of pods per node.
     },
     &quot;description&quot;: &quot;A String&quot;, # An optional description of this cluster.
+    &quot;enableK8sBetaApis&quot;: { # Kubernetes open source beta apis enabled on the cluster. # Kubernetes open source beta apis enabled on the cluster. Only beta apis.
+      &quot;enabledApis&quot;: [ # api name, e.g. storage.k8s.io/v1beta1/csistoragecapacities.
+        &quot;A String&quot;,
+      ],
+    },
     &quot;enableKubernetesAlpha&quot;: True or False, # Kubernetes alpha features are enabled on this cluster. This includes alpha API groups (e.g. v1beta1) and features that may not be production ready in the kubernetes version of the master and nodes. The cluster has no SLA for uptime and master/node upgrades are disabled. Alpha enabled clusters are automatically deleted thirty days after creation.
     &quot;enableTpu&quot;: True or False, # Enable the ability to use Cloud TPUs in this cluster. This field is deprecated, use tpu_config.enabled instead.
     &quot;endpoint&quot;: &quot;A String&quot;, # [Output only] The IP address of this cluster&#x27;s master endpoint. The endpoint can be accessed from the internet at `https://username:password@endpoint/`. See the `masterAuth` property of this resource for username and password information.
     &quot;etag&quot;: &quot;A String&quot;, # This checksum is computed by the server based on the value of cluster fields, and may be sent on update requests to ensure the client has an up-to-date value before proceeding.
     &quot;expireTime&quot;: &quot;A String&quot;, # [Output only] The time the cluster will be automatically deleted in [RFC3339](https://www.ietf.org/rfc/rfc3339.txt) text format.
+    &quot;fleet&quot;: { # Fleet is the fleet configuration for the cluster. # Fleet information for the cluster.
+      &quot;membership&quot;: &quot;A String&quot;, # [Output only] The full resource name of the registered fleet membership of the cluster, in the format `//gkehub.googleapis.com/projects/*/locations/*/memberships/*`.
+      &quot;preRegistered&quot;: True or False, # [Output only] Whether the cluster has been registered through the fleet API.
+      &quot;project&quot;: &quot;A String&quot;, # The Fleet host project(project ID or project number) where this cluster will be registered to. This field cannot be changed after the cluster has been registered.
+    },
     &quot;id&quot;: &quot;A String&quot;, # Output only. Unique id for the cluster.
     &quot;identityServiceConfig&quot;: { # IdentityServiceConfig is configuration for Identity Service which allows customers to use external identity providers with the K8S API # Configuration for Identity Service component.
       &quot;enabled&quot;: True or False, # Whether to enable the Identity Service component
@@ -494,6 +510,11 @@ Args:
       &quot;A String&quot;,
     ],
     &quot;ipAllocationPolicy&quot;: { # Configuration for controlling how IPs are allocated in the cluster. # Configuration for cluster IP allocation.
+      &quot;additionalPodRangesConfig&quot;: { # AdditionalPodRangesConfig is the configuration for additional pod secondary ranges supporting the ClusterUpdate message. # Output only. [Output only] The additional pod ranges that are added to the cluster. These pod ranges can be used by new node pools to allocate pod IPs automatically. Once the range is removed it will not show up in IPAllocationPolicy.
+        &quot;podRangeNames&quot;: [ # Name for pod secondary ipv4 range which has the actual range defined ahead.
+          &quot;A String&quot;,
+        ],
+      },
       &quot;allowRouteOverlap&quot;: True or False, # If true, allow allocation of cluster CIDR ranges that overlap with certain kinds of network routes. By default we do not allow cluster CIDR ranges to intersect with any user declared routes. With allow_route_overlap == true, we allow overlapping with CIDR ranges that are larger than the cluster CIDR range. If this field is set to true, then cluster and services CIDRs must be fully-specified (e.g. `10.96.0.0/14`, but not `/14`), which means: 1) When `use_ip_aliases` is true, `cluster_ipv4_cidr_block` and `services_ipv4_cidr_block` must be fully-specified. 2) When `use_ip_aliases` is false, `cluster.cluster_ipv4_cidr` muse be fully-specified.
       &quot;clusterIpv4Cidr&quot;: &quot;A String&quot;, # This field is deprecated, use cluster_ipv4_cidr_block.
       &quot;clusterIpv4CidrBlock&quot;: &quot;A String&quot;, # The IP address range for the cluster pod IPs. If this field is set, then `cluster.cluster_ipv4_cidr` must be left blank. This field is only applicable when `use_ip_aliases` is true. Set to blank to have a range chosen with the default size. Set to /netmask (e.g. `/14`) to have a range chosen with a specific netmask. Set to a [CIDR](http://en.wikipedia.org/wiki/Classless_Inter-Domain_Routing) notation (e.g. `10.96.0.0/14`) from the RFC-1918 private networks (e.g. `10.0.0.0/8`, `172.16.0.0/12`, `192.168.0.0/16`) to pick a specific range to use.
@@ -502,6 +523,9 @@ Args:
       &quot;ipv6AccessType&quot;: &quot;A String&quot;, # The ipv6 access type (internal or external) when create_subnetwork is true
       &quot;nodeIpv4Cidr&quot;: &quot;A String&quot;, # This field is deprecated, use node_ipv4_cidr_block.
       &quot;nodeIpv4CidrBlock&quot;: &quot;A String&quot;, # The IP address range of the instance IPs in this cluster. This is applicable only if `create_subnetwork` is true. Set to blank to have a range chosen with the default size. Set to /netmask (e.g. `/14`) to have a range chosen with a specific netmask. Set to a [CIDR](http://en.wikipedia.org/wiki/Classless_Inter-Domain_Routing) notation (e.g. `10.96.0.0/14`) from the RFC-1918 private networks (e.g. `10.0.0.0/8`, `172.16.0.0/12`, `192.168.0.0/16`) to pick a specific range to use.
+      &quot;podCidrOverprovisionConfig&quot;: { # [PRIVATE FIELD] Config for pod CIDR size overprovisioning. # [PRIVATE FIELD] Pod CIDR size overprovisioning config for the cluster. Pod CIDR size per node depends on max_pods_per_node. By default, the value of max_pods_per_node is doubled and then rounded off to next power of 2 to get the size of pod CIDR block per node. Example: max_pods_per_node of 30 would result in 64 IPs (/26). This config can disable the doubling of IPs (we still round off to next power of 2) Example: max_pods_per_node of 30 will result in 32 IPs (/27) when overprovisioning is disabled.
+        &quot;disable&quot;: True or False, # Whether Pod CIDR overprovisioning is disabled. Note: Pod CIDR overprovisioning is enabled by default.
+      },
       &quot;servicesIpv4Cidr&quot;: &quot;A String&quot;, # This field is deprecated, use services_ipv4_cidr_block.
       &quot;servicesIpv4CidrBlock&quot;: &quot;A String&quot;, # The IP address range of the services IPs in this cluster. If blank, a range will be automatically chosen with the default size. This field is only applicable when `use_ip_aliases` is true. Set to blank to have a range chosen with the default size. Set to /netmask (e.g. `/14`) to have a range chosen with a specific netmask. Set to a [CIDR](http://en.wikipedia.org/wiki/Classless_Inter-Domain_Routing) notation (e.g. `10.96.0.0/14`) from the RFC-1918 private networks (e.g. `10.0.0.0/8`, `172.16.0.0/12`, `192.168.0.0/16`) to pick a specific range to use.
       &quot;servicesIpv6CidrBlock&quot;: &quot;A String&quot;, # Output only. [Output only] The services IPv6 CIDR block for the cluster.
@@ -606,6 +630,7 @@ Args:
         &quot;clusterDnsDomain&quot;: &quot;A String&quot;, # cluster_dns_domain is the suffix used for all cluster service records.
         &quot;clusterDnsScope&quot;: &quot;A String&quot;, # cluster_dns_scope indicates the scope of access to cluster DNS records.
       },
+      &quot;enableFqdnNetworkPolicy&quot;: True or False, # Whether FQDN Network Policy is enabled on this cluster.
       &quot;enableIntraNodeVisibility&quot;: True or False, # Whether Intra-node visibility is enabled for this cluster. This makes same node pod to pod traffic visible for VPC network.
       &quot;enableL4ilbSubsetting&quot;: True or False, # Whether L4ILB Subsetting is enabled for this cluster.
       &quot;gatewayApiConfig&quot;: { # GatewayAPIConfig contains the desired config of Gateway API on this cluster. # GatewayAPIConfig contains the desired config of Gateway API on this cluster.
@@ -713,12 +738,23 @@ Args:
         &quot;enableIntegrityMonitoring&quot;: True or False, # Defines whether the instance has integrity monitoring enabled. Enables monitoring and attestation of the boot integrity of the instance. The attestation is performed against the integrity policy baseline. This baseline is initially derived from the implicitly trusted boot image when the instance is created.
         &quot;enableSecureBoot&quot;: True or False, # Defines whether the instance has Secure Boot enabled. Secure Boot helps ensure that the system only runs authentic software by verifying the digital signature of all boot components, and halting the boot process if signature verification fails.
       },
+      &quot;soleTenantConfig&quot;: { # SoleTenantConfig contains the NodeAffinities to specify what shared sole tenant node groups should back the node pool. # Parameters for node pools to be backed by shared sole tenant node groups.
+        &quot;nodeAffinities&quot;: [ # NodeAffinities used to match to a shared sole tenant node group.
+          { # Specifies the NodeAffinity key, values, and affinity operator according to [shared sole tenant node group affinities](https://cloud.google.com/compute/docs/nodes/sole-tenant-nodes#node_affinity_and_anti-affinity).
+            &quot;key&quot;: &quot;A String&quot;, # Key for NodeAffinity.
+            &quot;operator&quot;: &quot;A String&quot;, # Operator for NodeAffinity.
+            &quot;values&quot;: [ # Values for NodeAffinity.
+              &quot;A String&quot;,
+            ],
+          },
+        ],
+      },
       &quot;spot&quot;: True or False, # Spot flag for enabling Spot VM, which is a rebrand of the existing preemptible flag.
       &quot;tags&quot;: [ # The list of instance tags applied to all nodes. Tags are used to identify valid sources or targets for network firewalls and are specified by the client during cluster or node pool creation. Each tag within the list must comply with RFC1035.
         &quot;A String&quot;,
       ],
       &quot;taints&quot;: [ # List of kubernetes taints to be applied to each node. For more information, including usage and the valid values, see: https://kubernetes.io/docs/concepts/configuration/taint-and-toleration/
-        { # Kubernetes taint is comprised of three fields: key, value, and effect. Effect can only be one of three types: NoSchedule, PreferNoSchedule or NoExecute. See [here](https://kubernetes.io/docs/concepts/configuration/taint-and-toleration) for more information, including usage and the valid values.
+        { # Kubernetes taint is composed of three fields: key, value, and effect. Effect can only be one of three types: NoSchedule, PreferNoSchedule or NoExecute. See [here](https://kubernetes.io/docs/concepts/configuration/taint-and-toleration) for more information, including usage and the valid values.
           &quot;effect&quot;: &quot;A String&quot;, # Effect for taint.
           &quot;key&quot;: &quot;A String&quot;, # Key for taint.
           &quot;value&quot;: &quot;A String&quot;, # Value for taint.
@@ -762,6 +798,10 @@ Args:
           &quot;minNodeCount&quot;: 42, # Minimum number of nodes for one location in the NodePool. Must be &gt;= 1 and &lt;= max_node_count.
           &quot;totalMaxNodeCount&quot;: 42, # Maximum number of nodes in the node pool. Must be greater than total_min_node_count. There has to be enough quota to scale up the cluster. The total_*_node_count fields are mutually exclusive with the *_node_count fields.
           &quot;totalMinNodeCount&quot;: 42, # Minimum number of nodes in the node pool. Must be greater than 1 less than total_max_node_count. The total_*_node_count fields are mutually exclusive with the *_node_count fields.
+        },
+        &quot;bestEffortProvisioning&quot;: { # Best effort provisioning. # Enable best effort provisioning for nodes
+          &quot;enabled&quot;: True or False, # When this is enabled, cluster/node pool creations will ignore non-fatal errors like stockout to best provision as many nodes as possible right now and eventually bring up all target number of nodes
+          &quot;minProvisionNodes&quot;: 42, # Minimum number of nodes to be provisioned to be considered as succeeded, and the rest of nodes will be provisioned gradually and eventually when stockout issue has been resolved.
         },
         &quot;conditions&quot;: [ # Which conditions caused the current node pool state.
           { # StatusCondition describes why a cluster or a node pool has a certain status (e.g., ERROR or DEGRADED).
@@ -861,12 +901,23 @@ Args:
             &quot;enableIntegrityMonitoring&quot;: True or False, # Defines whether the instance has integrity monitoring enabled. Enables monitoring and attestation of the boot integrity of the instance. The attestation is performed against the integrity policy baseline. This baseline is initially derived from the implicitly trusted boot image when the instance is created.
             &quot;enableSecureBoot&quot;: True or False, # Defines whether the instance has Secure Boot enabled. Secure Boot helps ensure that the system only runs authentic software by verifying the digital signature of all boot components, and halting the boot process if signature verification fails.
           },
+          &quot;soleTenantConfig&quot;: { # SoleTenantConfig contains the NodeAffinities to specify what shared sole tenant node groups should back the node pool. # Parameters for node pools to be backed by shared sole tenant node groups.
+            &quot;nodeAffinities&quot;: [ # NodeAffinities used to match to a shared sole tenant node group.
+              { # Specifies the NodeAffinity key, values, and affinity operator according to [shared sole tenant node group affinities](https://cloud.google.com/compute/docs/nodes/sole-tenant-nodes#node_affinity_and_anti-affinity).
+                &quot;key&quot;: &quot;A String&quot;, # Key for NodeAffinity.
+                &quot;operator&quot;: &quot;A String&quot;, # Operator for NodeAffinity.
+                &quot;values&quot;: [ # Values for NodeAffinity.
+                  &quot;A String&quot;,
+                ],
+              },
+            ],
+          },
           &quot;spot&quot;: True or False, # Spot flag for enabling Spot VM, which is a rebrand of the existing preemptible flag.
           &quot;tags&quot;: [ # The list of instance tags applied to all nodes. Tags are used to identify valid sources or targets for network firewalls and are specified by the client during cluster or node pool creation. Each tag within the list must comply with RFC1035.
             &quot;A String&quot;,
           ],
           &quot;taints&quot;: [ # List of kubernetes taints to be applied to each node. For more information, including usage and the valid values, see: https://kubernetes.io/docs/concepts/configuration/taint-and-toleration/
-            { # Kubernetes taint is comprised of three fields: key, value, and effect. Effect can only be one of three types: NoSchedule, PreferNoSchedule or NoExecute. See [here](https://kubernetes.io/docs/concepts/configuration/taint-and-toleration) for more information, including usage and the valid values.
+            { # Kubernetes taint is composed of three fields: key, value, and effect. Effect can only be one of three types: NoSchedule, PreferNoSchedule or NoExecute. See [here](https://kubernetes.io/docs/concepts/configuration/taint-and-toleration) for more information, including usage and the valid values.
               &quot;effect&quot;: &quot;A String&quot;, # Effect for taint.
               &quot;key&quot;: &quot;A String&quot;, # Key for taint.
               &quot;value&quot;: &quot;A String&quot;, # Value for taint.
@@ -906,6 +957,9 @@ Args:
           &quot;networkPerformanceConfig&quot;: { # Configuration of all network bandwidth tiers # Network bandwidth tier configuration.
             &quot;externalIpEgressBandwidthTier&quot;: &quot;A String&quot;, # Specifies the network bandwidth tier for the NodePool for traffic to external/public IP addresses.
             &quot;totalEgressBandwidthTier&quot;: &quot;A String&quot;, # Specifies the total network bandwidth tier for the NodePool.
+          },
+          &quot;podCidrOverprovisionConfig&quot;: { # [PRIVATE FIELD] Config for pod CIDR size overprovisioning. # [PRIVATE FIELD] Pod CIDR size overprovisioning config for the nodepool. Pod CIDR size per node depends on max_pods_per_node. By default, the value of max_pods_per_node is rounded off to next power of 2 and we then double that to get the size of pod CIDR block per node. Example: max_pods_per_node of 30 would result in 64 IPs (/26). This config can disable the doubling of IPs (we still round off to next power of 2) Example: max_pods_per_node of 30 will result in 32 IPs (/27) when overprovisioning is disabled.
+            &quot;disable&quot;: True or False, # Whether Pod CIDR overprovisioning is disabled. Note: Pod CIDR overprovisioning is enabled by default.
           },
           &quot;podIpv4CidrBlock&quot;: &quot;A String&quot;, # The IP address range for pod IPs in this node pool. Only applicable if `create_pod_range` is true. Set to blank to have a range chosen with the default size. Set to /netmask (e.g. `/14`) to have a range chosen with a specific netmask. Set to a [CIDR](https://en.wikipedia.org/wiki/Classless_Inter-Domain_Routing) notation (e.g. `10.96.0.0/14`) to pick a specific range to use. Only applicable if `ip_allocation_policy.use_ip_aliases` is true. This field cannot be changed after the node pool has been created.
           &quot;podRange&quot;: &quot;A String&quot;, # The ID of the secondary range for pod IPs. If `create_pod_range` is true, this ID is used for the new range. If `create_pod_range` is false, uses an existing secondary range with this ID. Only applicable if `ip_allocation_policy.use_ip_aliases` is true. This field cannot be changed after the node pool has been created.
@@ -979,7 +1033,7 @@ Args:
       },
       &quot;workloadVulnerabilityMode&quot;: &quot;A String&quot;, # Sets which mode to use for Protect workload vulnerability scanning feature.
     },
-    &quot;releaseChannel&quot;: { # ReleaseChannel indicates which release channel a cluster is subscribed to. Release channels are arranged in order of risk. When a cluster is subscribed to a release channel, Google maintains both the master version and the node version. Node auto-upgrade defaults to true and cannot be disabled. # Release channel configuration.
+    &quot;releaseChannel&quot;: { # ReleaseChannel indicates which release channel a cluster is subscribed to. Release channels are arranged in order of risk. When a cluster is subscribed to a release channel, Google maintains both the master version and the node version. Node auto-upgrade defaults to true and cannot be disabled. # Release channel configuration. If left unspecified on cluster creation and a version is specified, the cluster is enrolled in the most mature release channel where the version is available (first checking STABLE, then REGULAR, and finally RAPID). Otherwise, if no release channel configuration and no version is specified, the cluster is enrolled in the REGULAR channel with its default version.
       &quot;channel&quot;: &quot;A String&quot;, # channel specifies which release channel the cluster is subscribed to.
     },
     &quot;resourceLabels&quot;: { # The resource labels for the cluster to use to annotate any related Google Compute Engine resources.
@@ -1081,11 +1135,11 @@ Returns:
     ],
     &quot;status&quot;: &quot;A String&quot;, # Status of an operation stage. Unset for single-stage operations.
   },
-  &quot;selfLink&quot;: &quot;A String&quot;, # Server-defined URL for the resource.
+  &quot;selfLink&quot;: &quot;A String&quot;, # Server-defined URI for the operation. Example: `https://container.googleapis.com/v1alpha1/projects/123/locations/us-central1/operations/operation-123`.
   &quot;startTime&quot;: &quot;A String&quot;, # [Output only] The time the operation started, in [RFC3339](https://www.ietf.org/rfc/rfc3339.txt) text format.
   &quot;status&quot;: &quot;A String&quot;, # The current status of the operation.
   &quot;statusMessage&quot;: &quot;A String&quot;, # Output only. If an error has occurred, a textual description of the error. Deprecated. Use field error instead.
-  &quot;targetLink&quot;: &quot;A String&quot;, # Server-defined URL for the target of the operation.
+  &quot;targetLink&quot;: &quot;A String&quot;, # Server-defined URI for the target of the operation. The format of this is a URI to the resource being modified (such as a cluster, node pool, or node). For node pool repairs, there may be multiple nodes being repaired, but only one will be the target. Examples: - ## `https://container.googleapis.com/v1/projects/123/locations/us-central1/clusters/my-cluster` ## `https://container.googleapis.com/v1/projects/123/zones/us-central1-c/clusters/my-cluster/nodePools/my-np` `https://container.googleapis.com/v1/projects/123/zones/us-central1-c/clusters/my-cluster/nodePools/my-np/node/my-node`
   &quot;zone&quot;: &quot;A String&quot;, # The name of the Google Compute Engine [zone](https://cloud.google.com/compute/docs/zones#available) in which the operation is taking place. This field is deprecated, use location instead.
 }</pre>
 </div>
@@ -1151,11 +1205,11 @@ Returns:
     ],
     &quot;status&quot;: &quot;A String&quot;, # Status of an operation stage. Unset for single-stage operations.
   },
-  &quot;selfLink&quot;: &quot;A String&quot;, # Server-defined URL for the resource.
+  &quot;selfLink&quot;: &quot;A String&quot;, # Server-defined URI for the operation. Example: `https://container.googleapis.com/v1alpha1/projects/123/locations/us-central1/operations/operation-123`.
   &quot;startTime&quot;: &quot;A String&quot;, # [Output only] The time the operation started, in [RFC3339](https://www.ietf.org/rfc/rfc3339.txt) text format.
   &quot;status&quot;: &quot;A String&quot;, # The current status of the operation.
   &quot;statusMessage&quot;: &quot;A String&quot;, # Output only. If an error has occurred, a textual description of the error. Deprecated. Use field error instead.
-  &quot;targetLink&quot;: &quot;A String&quot;, # Server-defined URL for the target of the operation.
+  &quot;targetLink&quot;: &quot;A String&quot;, # Server-defined URI for the target of the operation. The format of this is a URI to the resource being modified (such as a cluster, node pool, or node). For node pool repairs, there may be multiple nodes being repaired, but only one will be the target. Examples: - ## `https://container.googleapis.com/v1/projects/123/locations/us-central1/clusters/my-cluster` ## `https://container.googleapis.com/v1/projects/123/zones/us-central1-c/clusters/my-cluster/nodePools/my-np` `https://container.googleapis.com/v1/projects/123/zones/us-central1-c/clusters/my-cluster/nodePools/my-np/node/my-node`
   &quot;zone&quot;: &quot;A String&quot;, # The name of the Google Compute Engine [zone](https://cloud.google.com/compute/docs/zones#available) in which the operation is taking place. This field is deprecated, use location instead.
 }</pre>
 </div>
@@ -1194,6 +1248,9 @@ Returns:
     },
     &quot;gcpFilestoreCsiDriverConfig&quot;: { # Configuration for the GCP Filestore CSI driver. # Configuration for the GCP Filestore CSI driver.
       &quot;enabled&quot;: True or False, # Whether the GCP Filestore CSI driver is enabled for this cluster.
+    },
+    &quot;gcsFuseCsiDriverConfig&quot;: { # Configuration for the Cloud Storage Fuse CSI driver. # Configuration for the Cloud Storage Fuse CSI driver.
+      &quot;enabled&quot;: True or False, # Whether the Cloud Storage Fuse CSI driver is enabled for this cluster.
     },
     &quot;gkeBackupAgentConfig&quot;: { # Configuration for the Backup for GKE Agent. # Configuration for the Backup for GKE agent addon.
       &quot;enabled&quot;: True or False, # Whether the Backup for GKE agent is enabled for this cluster.
@@ -1302,17 +1359,27 @@ Returns:
   &quot;currentNodeVersion&quot;: &quot;A String&quot;, # [Output only] Deprecated, use [NodePool.version](https://cloud.google.com/kubernetes-engine/docs/reference/rest/v1beta1/projects.locations.clusters.nodePools) instead. The current version of the node software components. If they are currently at multiple versions because they&#x27;re in the process of being upgraded, this reflects the minimum version of all nodes.
   &quot;databaseEncryption&quot;: { # Configuration of etcd encryption. # Configuration of etcd encryption.
     &quot;keyName&quot;: &quot;A String&quot;, # Name of CloudKMS key to use for the encryption of secrets in etcd. Ex. projects/my-project/locations/global/keyRings/my-ring/cryptoKeys/my-key
-    &quot;state&quot;: &quot;A String&quot;, # Denotes the state of etcd encryption.
+    &quot;state&quot;: &quot;A String&quot;, # The desired state of etcd encryption.
   },
   &quot;defaultMaxPodsConstraint&quot;: { # Constraints applied to pods. # The default constraint on the maximum number of pods that can be run simultaneously on a node in the node pool of this cluster. Only honored if cluster created with IP Alias support.
     &quot;maxPodsPerNode&quot;: &quot;A String&quot;, # Constraint enforced on the max num of pods per node.
   },
   &quot;description&quot;: &quot;A String&quot;, # An optional description of this cluster.
+  &quot;enableK8sBetaApis&quot;: { # Kubernetes open source beta apis enabled on the cluster. # Kubernetes open source beta apis enabled on the cluster. Only beta apis.
+    &quot;enabledApis&quot;: [ # api name, e.g. storage.k8s.io/v1beta1/csistoragecapacities.
+      &quot;A String&quot;,
+    ],
+  },
   &quot;enableKubernetesAlpha&quot;: True or False, # Kubernetes alpha features are enabled on this cluster. This includes alpha API groups (e.g. v1beta1) and features that may not be production ready in the kubernetes version of the master and nodes. The cluster has no SLA for uptime and master/node upgrades are disabled. Alpha enabled clusters are automatically deleted thirty days after creation.
   &quot;enableTpu&quot;: True or False, # Enable the ability to use Cloud TPUs in this cluster. This field is deprecated, use tpu_config.enabled instead.
   &quot;endpoint&quot;: &quot;A String&quot;, # [Output only] The IP address of this cluster&#x27;s master endpoint. The endpoint can be accessed from the internet at `https://username:password@endpoint/`. See the `masterAuth` property of this resource for username and password information.
   &quot;etag&quot;: &quot;A String&quot;, # This checksum is computed by the server based on the value of cluster fields, and may be sent on update requests to ensure the client has an up-to-date value before proceeding.
   &quot;expireTime&quot;: &quot;A String&quot;, # [Output only] The time the cluster will be automatically deleted in [RFC3339](https://www.ietf.org/rfc/rfc3339.txt) text format.
+  &quot;fleet&quot;: { # Fleet is the fleet configuration for the cluster. # Fleet information for the cluster.
+    &quot;membership&quot;: &quot;A String&quot;, # [Output only] The full resource name of the registered fleet membership of the cluster, in the format `//gkehub.googleapis.com/projects/*/locations/*/memberships/*`.
+    &quot;preRegistered&quot;: True or False, # [Output only] Whether the cluster has been registered through the fleet API.
+    &quot;project&quot;: &quot;A String&quot;, # The Fleet host project(project ID or project number) where this cluster will be registered to. This field cannot be changed after the cluster has been registered.
+  },
   &quot;id&quot;: &quot;A String&quot;, # Output only. Unique id for the cluster.
   &quot;identityServiceConfig&quot;: { # IdentityServiceConfig is configuration for Identity Service which allows customers to use external identity providers with the K8S API # Configuration for Identity Service component.
     &quot;enabled&quot;: True or False, # Whether to enable the Identity Service component
@@ -1323,6 +1390,11 @@ Returns:
     &quot;A String&quot;,
   ],
   &quot;ipAllocationPolicy&quot;: { # Configuration for controlling how IPs are allocated in the cluster. # Configuration for cluster IP allocation.
+    &quot;additionalPodRangesConfig&quot;: { # AdditionalPodRangesConfig is the configuration for additional pod secondary ranges supporting the ClusterUpdate message. # Output only. [Output only] The additional pod ranges that are added to the cluster. These pod ranges can be used by new node pools to allocate pod IPs automatically. Once the range is removed it will not show up in IPAllocationPolicy.
+      &quot;podRangeNames&quot;: [ # Name for pod secondary ipv4 range which has the actual range defined ahead.
+        &quot;A String&quot;,
+      ],
+    },
     &quot;allowRouteOverlap&quot;: True or False, # If true, allow allocation of cluster CIDR ranges that overlap with certain kinds of network routes. By default we do not allow cluster CIDR ranges to intersect with any user declared routes. With allow_route_overlap == true, we allow overlapping with CIDR ranges that are larger than the cluster CIDR range. If this field is set to true, then cluster and services CIDRs must be fully-specified (e.g. `10.96.0.0/14`, but not `/14`), which means: 1) When `use_ip_aliases` is true, `cluster_ipv4_cidr_block` and `services_ipv4_cidr_block` must be fully-specified. 2) When `use_ip_aliases` is false, `cluster.cluster_ipv4_cidr` muse be fully-specified.
     &quot;clusterIpv4Cidr&quot;: &quot;A String&quot;, # This field is deprecated, use cluster_ipv4_cidr_block.
     &quot;clusterIpv4CidrBlock&quot;: &quot;A String&quot;, # The IP address range for the cluster pod IPs. If this field is set, then `cluster.cluster_ipv4_cidr` must be left blank. This field is only applicable when `use_ip_aliases` is true. Set to blank to have a range chosen with the default size. Set to /netmask (e.g. `/14`) to have a range chosen with a specific netmask. Set to a [CIDR](http://en.wikipedia.org/wiki/Classless_Inter-Domain_Routing) notation (e.g. `10.96.0.0/14`) from the RFC-1918 private networks (e.g. `10.0.0.0/8`, `172.16.0.0/12`, `192.168.0.0/16`) to pick a specific range to use.
@@ -1331,6 +1403,9 @@ Returns:
     &quot;ipv6AccessType&quot;: &quot;A String&quot;, # The ipv6 access type (internal or external) when create_subnetwork is true
     &quot;nodeIpv4Cidr&quot;: &quot;A String&quot;, # This field is deprecated, use node_ipv4_cidr_block.
     &quot;nodeIpv4CidrBlock&quot;: &quot;A String&quot;, # The IP address range of the instance IPs in this cluster. This is applicable only if `create_subnetwork` is true. Set to blank to have a range chosen with the default size. Set to /netmask (e.g. `/14`) to have a range chosen with a specific netmask. Set to a [CIDR](http://en.wikipedia.org/wiki/Classless_Inter-Domain_Routing) notation (e.g. `10.96.0.0/14`) from the RFC-1918 private networks (e.g. `10.0.0.0/8`, `172.16.0.0/12`, `192.168.0.0/16`) to pick a specific range to use.
+    &quot;podCidrOverprovisionConfig&quot;: { # [PRIVATE FIELD] Config for pod CIDR size overprovisioning. # [PRIVATE FIELD] Pod CIDR size overprovisioning config for the cluster. Pod CIDR size per node depends on max_pods_per_node. By default, the value of max_pods_per_node is doubled and then rounded off to next power of 2 to get the size of pod CIDR block per node. Example: max_pods_per_node of 30 would result in 64 IPs (/26). This config can disable the doubling of IPs (we still round off to next power of 2) Example: max_pods_per_node of 30 will result in 32 IPs (/27) when overprovisioning is disabled.
+      &quot;disable&quot;: True or False, # Whether Pod CIDR overprovisioning is disabled. Note: Pod CIDR overprovisioning is enabled by default.
+    },
     &quot;servicesIpv4Cidr&quot;: &quot;A String&quot;, # This field is deprecated, use services_ipv4_cidr_block.
     &quot;servicesIpv4CidrBlock&quot;: &quot;A String&quot;, # The IP address range of the services IPs in this cluster. If blank, a range will be automatically chosen with the default size. This field is only applicable when `use_ip_aliases` is true. Set to blank to have a range chosen with the default size. Set to /netmask (e.g. `/14`) to have a range chosen with a specific netmask. Set to a [CIDR](http://en.wikipedia.org/wiki/Classless_Inter-Domain_Routing) notation (e.g. `10.96.0.0/14`) from the RFC-1918 private networks (e.g. `10.0.0.0/8`, `172.16.0.0/12`, `192.168.0.0/16`) to pick a specific range to use.
     &quot;servicesIpv6CidrBlock&quot;: &quot;A String&quot;, # Output only. [Output only] The services IPv6 CIDR block for the cluster.
@@ -1435,6 +1510,7 @@ Returns:
       &quot;clusterDnsDomain&quot;: &quot;A String&quot;, # cluster_dns_domain is the suffix used for all cluster service records.
       &quot;clusterDnsScope&quot;: &quot;A String&quot;, # cluster_dns_scope indicates the scope of access to cluster DNS records.
     },
+    &quot;enableFqdnNetworkPolicy&quot;: True or False, # Whether FQDN Network Policy is enabled on this cluster.
     &quot;enableIntraNodeVisibility&quot;: True or False, # Whether Intra-node visibility is enabled for this cluster. This makes same node pod to pod traffic visible for VPC network.
     &quot;enableL4ilbSubsetting&quot;: True or False, # Whether L4ILB Subsetting is enabled for this cluster.
     &quot;gatewayApiConfig&quot;: { # GatewayAPIConfig contains the desired config of Gateway API on this cluster. # GatewayAPIConfig contains the desired config of Gateway API on this cluster.
@@ -1542,12 +1618,23 @@ Returns:
       &quot;enableIntegrityMonitoring&quot;: True or False, # Defines whether the instance has integrity monitoring enabled. Enables monitoring and attestation of the boot integrity of the instance. The attestation is performed against the integrity policy baseline. This baseline is initially derived from the implicitly trusted boot image when the instance is created.
       &quot;enableSecureBoot&quot;: True or False, # Defines whether the instance has Secure Boot enabled. Secure Boot helps ensure that the system only runs authentic software by verifying the digital signature of all boot components, and halting the boot process if signature verification fails.
     },
+    &quot;soleTenantConfig&quot;: { # SoleTenantConfig contains the NodeAffinities to specify what shared sole tenant node groups should back the node pool. # Parameters for node pools to be backed by shared sole tenant node groups.
+      &quot;nodeAffinities&quot;: [ # NodeAffinities used to match to a shared sole tenant node group.
+        { # Specifies the NodeAffinity key, values, and affinity operator according to [shared sole tenant node group affinities](https://cloud.google.com/compute/docs/nodes/sole-tenant-nodes#node_affinity_and_anti-affinity).
+          &quot;key&quot;: &quot;A String&quot;, # Key for NodeAffinity.
+          &quot;operator&quot;: &quot;A String&quot;, # Operator for NodeAffinity.
+          &quot;values&quot;: [ # Values for NodeAffinity.
+            &quot;A String&quot;,
+          ],
+        },
+      ],
+    },
     &quot;spot&quot;: True or False, # Spot flag for enabling Spot VM, which is a rebrand of the existing preemptible flag.
     &quot;tags&quot;: [ # The list of instance tags applied to all nodes. Tags are used to identify valid sources or targets for network firewalls and are specified by the client during cluster or node pool creation. Each tag within the list must comply with RFC1035.
       &quot;A String&quot;,
     ],
     &quot;taints&quot;: [ # List of kubernetes taints to be applied to each node. For more information, including usage and the valid values, see: https://kubernetes.io/docs/concepts/configuration/taint-and-toleration/
-      { # Kubernetes taint is comprised of three fields: key, value, and effect. Effect can only be one of three types: NoSchedule, PreferNoSchedule or NoExecute. See [here](https://kubernetes.io/docs/concepts/configuration/taint-and-toleration) for more information, including usage and the valid values.
+      { # Kubernetes taint is composed of three fields: key, value, and effect. Effect can only be one of three types: NoSchedule, PreferNoSchedule or NoExecute. See [here](https://kubernetes.io/docs/concepts/configuration/taint-and-toleration) for more information, including usage and the valid values.
         &quot;effect&quot;: &quot;A String&quot;, # Effect for taint.
         &quot;key&quot;: &quot;A String&quot;, # Key for taint.
         &quot;value&quot;: &quot;A String&quot;, # Value for taint.
@@ -1591,6 +1678,10 @@ Returns:
         &quot;minNodeCount&quot;: 42, # Minimum number of nodes for one location in the NodePool. Must be &gt;= 1 and &lt;= max_node_count.
         &quot;totalMaxNodeCount&quot;: 42, # Maximum number of nodes in the node pool. Must be greater than total_min_node_count. There has to be enough quota to scale up the cluster. The total_*_node_count fields are mutually exclusive with the *_node_count fields.
         &quot;totalMinNodeCount&quot;: 42, # Minimum number of nodes in the node pool. Must be greater than 1 less than total_max_node_count. The total_*_node_count fields are mutually exclusive with the *_node_count fields.
+      },
+      &quot;bestEffortProvisioning&quot;: { # Best effort provisioning. # Enable best effort provisioning for nodes
+        &quot;enabled&quot;: True or False, # When this is enabled, cluster/node pool creations will ignore non-fatal errors like stockout to best provision as many nodes as possible right now and eventually bring up all target number of nodes
+        &quot;minProvisionNodes&quot;: 42, # Minimum number of nodes to be provisioned to be considered as succeeded, and the rest of nodes will be provisioned gradually and eventually when stockout issue has been resolved.
       },
       &quot;conditions&quot;: [ # Which conditions caused the current node pool state.
         { # StatusCondition describes why a cluster or a node pool has a certain status (e.g., ERROR or DEGRADED).
@@ -1690,12 +1781,23 @@ Returns:
           &quot;enableIntegrityMonitoring&quot;: True or False, # Defines whether the instance has integrity monitoring enabled. Enables monitoring and attestation of the boot integrity of the instance. The attestation is performed against the integrity policy baseline. This baseline is initially derived from the implicitly trusted boot image when the instance is created.
           &quot;enableSecureBoot&quot;: True or False, # Defines whether the instance has Secure Boot enabled. Secure Boot helps ensure that the system only runs authentic software by verifying the digital signature of all boot components, and halting the boot process if signature verification fails.
         },
+        &quot;soleTenantConfig&quot;: { # SoleTenantConfig contains the NodeAffinities to specify what shared sole tenant node groups should back the node pool. # Parameters for node pools to be backed by shared sole tenant node groups.
+          &quot;nodeAffinities&quot;: [ # NodeAffinities used to match to a shared sole tenant node group.
+            { # Specifies the NodeAffinity key, values, and affinity operator according to [shared sole tenant node group affinities](https://cloud.google.com/compute/docs/nodes/sole-tenant-nodes#node_affinity_and_anti-affinity).
+              &quot;key&quot;: &quot;A String&quot;, # Key for NodeAffinity.
+              &quot;operator&quot;: &quot;A String&quot;, # Operator for NodeAffinity.
+              &quot;values&quot;: [ # Values for NodeAffinity.
+                &quot;A String&quot;,
+              ],
+            },
+          ],
+        },
         &quot;spot&quot;: True or False, # Spot flag for enabling Spot VM, which is a rebrand of the existing preemptible flag.
         &quot;tags&quot;: [ # The list of instance tags applied to all nodes. Tags are used to identify valid sources or targets for network firewalls and are specified by the client during cluster or node pool creation. Each tag within the list must comply with RFC1035.
           &quot;A String&quot;,
         ],
         &quot;taints&quot;: [ # List of kubernetes taints to be applied to each node. For more information, including usage and the valid values, see: https://kubernetes.io/docs/concepts/configuration/taint-and-toleration/
-          { # Kubernetes taint is comprised of three fields: key, value, and effect. Effect can only be one of three types: NoSchedule, PreferNoSchedule or NoExecute. See [here](https://kubernetes.io/docs/concepts/configuration/taint-and-toleration) for more information, including usage and the valid values.
+          { # Kubernetes taint is composed of three fields: key, value, and effect. Effect can only be one of three types: NoSchedule, PreferNoSchedule or NoExecute. See [here](https://kubernetes.io/docs/concepts/configuration/taint-and-toleration) for more information, including usage and the valid values.
             &quot;effect&quot;: &quot;A String&quot;, # Effect for taint.
             &quot;key&quot;: &quot;A String&quot;, # Key for taint.
             &quot;value&quot;: &quot;A String&quot;, # Value for taint.
@@ -1735,6 +1837,9 @@ Returns:
         &quot;networkPerformanceConfig&quot;: { # Configuration of all network bandwidth tiers # Network bandwidth tier configuration.
           &quot;externalIpEgressBandwidthTier&quot;: &quot;A String&quot;, # Specifies the network bandwidth tier for the NodePool for traffic to external/public IP addresses.
           &quot;totalEgressBandwidthTier&quot;: &quot;A String&quot;, # Specifies the total network bandwidth tier for the NodePool.
+        },
+        &quot;podCidrOverprovisionConfig&quot;: { # [PRIVATE FIELD] Config for pod CIDR size overprovisioning. # [PRIVATE FIELD] Pod CIDR size overprovisioning config for the nodepool. Pod CIDR size per node depends on max_pods_per_node. By default, the value of max_pods_per_node is rounded off to next power of 2 and we then double that to get the size of pod CIDR block per node. Example: max_pods_per_node of 30 would result in 64 IPs (/26). This config can disable the doubling of IPs (we still round off to next power of 2) Example: max_pods_per_node of 30 will result in 32 IPs (/27) when overprovisioning is disabled.
+          &quot;disable&quot;: True or False, # Whether Pod CIDR overprovisioning is disabled. Note: Pod CIDR overprovisioning is enabled by default.
         },
         &quot;podIpv4CidrBlock&quot;: &quot;A String&quot;, # The IP address range for pod IPs in this node pool. Only applicable if `create_pod_range` is true. Set to blank to have a range chosen with the default size. Set to /netmask (e.g. `/14`) to have a range chosen with a specific netmask. Set to a [CIDR](https://en.wikipedia.org/wiki/Classless_Inter-Domain_Routing) notation (e.g. `10.96.0.0/14`) to pick a specific range to use. Only applicable if `ip_allocation_policy.use_ip_aliases` is true. This field cannot be changed after the node pool has been created.
         &quot;podRange&quot;: &quot;A String&quot;, # The ID of the secondary range for pod IPs. If `create_pod_range` is true, this ID is used for the new range. If `create_pod_range` is false, uses an existing secondary range with this ID. Only applicable if `ip_allocation_policy.use_ip_aliases` is true. This field cannot be changed after the node pool has been created.
@@ -1808,7 +1913,7 @@ Returns:
     },
     &quot;workloadVulnerabilityMode&quot;: &quot;A String&quot;, # Sets which mode to use for Protect workload vulnerability scanning feature.
   },
-  &quot;releaseChannel&quot;: { # ReleaseChannel indicates which release channel a cluster is subscribed to. Release channels are arranged in order of risk. When a cluster is subscribed to a release channel, Google maintains both the master version and the node version. Node auto-upgrade defaults to true and cannot be disabled. # Release channel configuration.
+  &quot;releaseChannel&quot;: { # ReleaseChannel indicates which release channel a cluster is subscribed to. Release channels are arranged in order of risk. When a cluster is subscribed to a release channel, Google maintains both the master version and the node version. Node auto-upgrade defaults to true and cannot be disabled. # Release channel configuration. If left unspecified on cluster creation and a version is specified, the cluster is enrolled in the most mature release channel where the version is available (first checking STABLE, then REGULAR, and finally RAPID). Otherwise, if no release channel configuration and no version is specified, the cluster is enrolled in the REGULAR channel with its default version.
     &quot;channel&quot;: &quot;A String&quot;, # channel specifies which release channel the cluster is subscribed to.
   },
   &quot;resourceLabels&quot;: { # The resource labels for the cluster to use to annotate any related Google Compute Engine resources.
@@ -1926,11 +2031,11 @@ Returns:
     ],
     &quot;status&quot;: &quot;A String&quot;, # Status of an operation stage. Unset for single-stage operations.
   },
-  &quot;selfLink&quot;: &quot;A String&quot;, # Server-defined URL for the resource.
+  &quot;selfLink&quot;: &quot;A String&quot;, # Server-defined URI for the operation. Example: `https://container.googleapis.com/v1alpha1/projects/123/locations/us-central1/operations/operation-123`.
   &quot;startTime&quot;: &quot;A String&quot;, # [Output only] The time the operation started, in [RFC3339](https://www.ietf.org/rfc/rfc3339.txt) text format.
   &quot;status&quot;: &quot;A String&quot;, # The current status of the operation.
   &quot;statusMessage&quot;: &quot;A String&quot;, # Output only. If an error has occurred, a textual description of the error. Deprecated. Use field error instead.
-  &quot;targetLink&quot;: &quot;A String&quot;, # Server-defined URL for the target of the operation.
+  &quot;targetLink&quot;: &quot;A String&quot;, # Server-defined URI for the target of the operation. The format of this is a URI to the resource being modified (such as a cluster, node pool, or node). For node pool repairs, there may be multiple nodes being repaired, but only one will be the target. Examples: - ## `https://container.googleapis.com/v1/projects/123/locations/us-central1/clusters/my-cluster` ## `https://container.googleapis.com/v1/projects/123/zones/us-central1-c/clusters/my-cluster/nodePools/my-np` `https://container.googleapis.com/v1/projects/123/zones/us-central1-c/clusters/my-cluster/nodePools/my-np/node/my-node`
   &quot;zone&quot;: &quot;A String&quot;, # The name of the Google Compute Engine [zone](https://cloud.google.com/compute/docs/zones#available) in which the operation is taking place. This field is deprecated, use location instead.
 }</pre>
 </div>
@@ -1970,6 +2075,9 @@ Returns:
         },
         &quot;gcpFilestoreCsiDriverConfig&quot;: { # Configuration for the GCP Filestore CSI driver. # Configuration for the GCP Filestore CSI driver.
           &quot;enabled&quot;: True or False, # Whether the GCP Filestore CSI driver is enabled for this cluster.
+        },
+        &quot;gcsFuseCsiDriverConfig&quot;: { # Configuration for the Cloud Storage Fuse CSI driver. # Configuration for the Cloud Storage Fuse CSI driver.
+          &quot;enabled&quot;: True or False, # Whether the Cloud Storage Fuse CSI driver is enabled for this cluster.
         },
         &quot;gkeBackupAgentConfig&quot;: { # Configuration for the Backup for GKE Agent. # Configuration for the Backup for GKE agent addon.
           &quot;enabled&quot;: True or False, # Whether the Backup for GKE agent is enabled for this cluster.
@@ -2078,17 +2186,27 @@ Returns:
       &quot;currentNodeVersion&quot;: &quot;A String&quot;, # [Output only] Deprecated, use [NodePool.version](https://cloud.google.com/kubernetes-engine/docs/reference/rest/v1beta1/projects.locations.clusters.nodePools) instead. The current version of the node software components. If they are currently at multiple versions because they&#x27;re in the process of being upgraded, this reflects the minimum version of all nodes.
       &quot;databaseEncryption&quot;: { # Configuration of etcd encryption. # Configuration of etcd encryption.
         &quot;keyName&quot;: &quot;A String&quot;, # Name of CloudKMS key to use for the encryption of secrets in etcd. Ex. projects/my-project/locations/global/keyRings/my-ring/cryptoKeys/my-key
-        &quot;state&quot;: &quot;A String&quot;, # Denotes the state of etcd encryption.
+        &quot;state&quot;: &quot;A String&quot;, # The desired state of etcd encryption.
       },
       &quot;defaultMaxPodsConstraint&quot;: { # Constraints applied to pods. # The default constraint on the maximum number of pods that can be run simultaneously on a node in the node pool of this cluster. Only honored if cluster created with IP Alias support.
         &quot;maxPodsPerNode&quot;: &quot;A String&quot;, # Constraint enforced on the max num of pods per node.
       },
       &quot;description&quot;: &quot;A String&quot;, # An optional description of this cluster.
+      &quot;enableK8sBetaApis&quot;: { # Kubernetes open source beta apis enabled on the cluster. # Kubernetes open source beta apis enabled on the cluster. Only beta apis.
+        &quot;enabledApis&quot;: [ # api name, e.g. storage.k8s.io/v1beta1/csistoragecapacities.
+          &quot;A String&quot;,
+        ],
+      },
       &quot;enableKubernetesAlpha&quot;: True or False, # Kubernetes alpha features are enabled on this cluster. This includes alpha API groups (e.g. v1beta1) and features that may not be production ready in the kubernetes version of the master and nodes. The cluster has no SLA for uptime and master/node upgrades are disabled. Alpha enabled clusters are automatically deleted thirty days after creation.
       &quot;enableTpu&quot;: True or False, # Enable the ability to use Cloud TPUs in this cluster. This field is deprecated, use tpu_config.enabled instead.
       &quot;endpoint&quot;: &quot;A String&quot;, # [Output only] The IP address of this cluster&#x27;s master endpoint. The endpoint can be accessed from the internet at `https://username:password@endpoint/`. See the `masterAuth` property of this resource for username and password information.
       &quot;etag&quot;: &quot;A String&quot;, # This checksum is computed by the server based on the value of cluster fields, and may be sent on update requests to ensure the client has an up-to-date value before proceeding.
       &quot;expireTime&quot;: &quot;A String&quot;, # [Output only] The time the cluster will be automatically deleted in [RFC3339](https://www.ietf.org/rfc/rfc3339.txt) text format.
+      &quot;fleet&quot;: { # Fleet is the fleet configuration for the cluster. # Fleet information for the cluster.
+        &quot;membership&quot;: &quot;A String&quot;, # [Output only] The full resource name of the registered fleet membership of the cluster, in the format `//gkehub.googleapis.com/projects/*/locations/*/memberships/*`.
+        &quot;preRegistered&quot;: True or False, # [Output only] Whether the cluster has been registered through the fleet API.
+        &quot;project&quot;: &quot;A String&quot;, # The Fleet host project(project ID or project number) where this cluster will be registered to. This field cannot be changed after the cluster has been registered.
+      },
       &quot;id&quot;: &quot;A String&quot;, # Output only. Unique id for the cluster.
       &quot;identityServiceConfig&quot;: { # IdentityServiceConfig is configuration for Identity Service which allows customers to use external identity providers with the K8S API # Configuration for Identity Service component.
         &quot;enabled&quot;: True or False, # Whether to enable the Identity Service component
@@ -2099,6 +2217,11 @@ Returns:
         &quot;A String&quot;,
       ],
       &quot;ipAllocationPolicy&quot;: { # Configuration for controlling how IPs are allocated in the cluster. # Configuration for cluster IP allocation.
+        &quot;additionalPodRangesConfig&quot;: { # AdditionalPodRangesConfig is the configuration for additional pod secondary ranges supporting the ClusterUpdate message. # Output only. [Output only] The additional pod ranges that are added to the cluster. These pod ranges can be used by new node pools to allocate pod IPs automatically. Once the range is removed it will not show up in IPAllocationPolicy.
+          &quot;podRangeNames&quot;: [ # Name for pod secondary ipv4 range which has the actual range defined ahead.
+            &quot;A String&quot;,
+          ],
+        },
         &quot;allowRouteOverlap&quot;: True or False, # If true, allow allocation of cluster CIDR ranges that overlap with certain kinds of network routes. By default we do not allow cluster CIDR ranges to intersect with any user declared routes. With allow_route_overlap == true, we allow overlapping with CIDR ranges that are larger than the cluster CIDR range. If this field is set to true, then cluster and services CIDRs must be fully-specified (e.g. `10.96.0.0/14`, but not `/14`), which means: 1) When `use_ip_aliases` is true, `cluster_ipv4_cidr_block` and `services_ipv4_cidr_block` must be fully-specified. 2) When `use_ip_aliases` is false, `cluster.cluster_ipv4_cidr` muse be fully-specified.
         &quot;clusterIpv4Cidr&quot;: &quot;A String&quot;, # This field is deprecated, use cluster_ipv4_cidr_block.
         &quot;clusterIpv4CidrBlock&quot;: &quot;A String&quot;, # The IP address range for the cluster pod IPs. If this field is set, then `cluster.cluster_ipv4_cidr` must be left blank. This field is only applicable when `use_ip_aliases` is true. Set to blank to have a range chosen with the default size. Set to /netmask (e.g. `/14`) to have a range chosen with a specific netmask. Set to a [CIDR](http://en.wikipedia.org/wiki/Classless_Inter-Domain_Routing) notation (e.g. `10.96.0.0/14`) from the RFC-1918 private networks (e.g. `10.0.0.0/8`, `172.16.0.0/12`, `192.168.0.0/16`) to pick a specific range to use.
@@ -2107,6 +2230,9 @@ Returns:
         &quot;ipv6AccessType&quot;: &quot;A String&quot;, # The ipv6 access type (internal or external) when create_subnetwork is true
         &quot;nodeIpv4Cidr&quot;: &quot;A String&quot;, # This field is deprecated, use node_ipv4_cidr_block.
         &quot;nodeIpv4CidrBlock&quot;: &quot;A String&quot;, # The IP address range of the instance IPs in this cluster. This is applicable only if `create_subnetwork` is true. Set to blank to have a range chosen with the default size. Set to /netmask (e.g. `/14`) to have a range chosen with a specific netmask. Set to a [CIDR](http://en.wikipedia.org/wiki/Classless_Inter-Domain_Routing) notation (e.g. `10.96.0.0/14`) from the RFC-1918 private networks (e.g. `10.0.0.0/8`, `172.16.0.0/12`, `192.168.0.0/16`) to pick a specific range to use.
+        &quot;podCidrOverprovisionConfig&quot;: { # [PRIVATE FIELD] Config for pod CIDR size overprovisioning. # [PRIVATE FIELD] Pod CIDR size overprovisioning config for the cluster. Pod CIDR size per node depends on max_pods_per_node. By default, the value of max_pods_per_node is doubled and then rounded off to next power of 2 to get the size of pod CIDR block per node. Example: max_pods_per_node of 30 would result in 64 IPs (/26). This config can disable the doubling of IPs (we still round off to next power of 2) Example: max_pods_per_node of 30 will result in 32 IPs (/27) when overprovisioning is disabled.
+          &quot;disable&quot;: True or False, # Whether Pod CIDR overprovisioning is disabled. Note: Pod CIDR overprovisioning is enabled by default.
+        },
         &quot;servicesIpv4Cidr&quot;: &quot;A String&quot;, # This field is deprecated, use services_ipv4_cidr_block.
         &quot;servicesIpv4CidrBlock&quot;: &quot;A String&quot;, # The IP address range of the services IPs in this cluster. If blank, a range will be automatically chosen with the default size. This field is only applicable when `use_ip_aliases` is true. Set to blank to have a range chosen with the default size. Set to /netmask (e.g. `/14`) to have a range chosen with a specific netmask. Set to a [CIDR](http://en.wikipedia.org/wiki/Classless_Inter-Domain_Routing) notation (e.g. `10.96.0.0/14`) from the RFC-1918 private networks (e.g. `10.0.0.0/8`, `172.16.0.0/12`, `192.168.0.0/16`) to pick a specific range to use.
         &quot;servicesIpv6CidrBlock&quot;: &quot;A String&quot;, # Output only. [Output only] The services IPv6 CIDR block for the cluster.
@@ -2211,6 +2337,7 @@ Returns:
           &quot;clusterDnsDomain&quot;: &quot;A String&quot;, # cluster_dns_domain is the suffix used for all cluster service records.
           &quot;clusterDnsScope&quot;: &quot;A String&quot;, # cluster_dns_scope indicates the scope of access to cluster DNS records.
         },
+        &quot;enableFqdnNetworkPolicy&quot;: True or False, # Whether FQDN Network Policy is enabled on this cluster.
         &quot;enableIntraNodeVisibility&quot;: True or False, # Whether Intra-node visibility is enabled for this cluster. This makes same node pod to pod traffic visible for VPC network.
         &quot;enableL4ilbSubsetting&quot;: True or False, # Whether L4ILB Subsetting is enabled for this cluster.
         &quot;gatewayApiConfig&quot;: { # GatewayAPIConfig contains the desired config of Gateway API on this cluster. # GatewayAPIConfig contains the desired config of Gateway API on this cluster.
@@ -2318,12 +2445,23 @@ Returns:
           &quot;enableIntegrityMonitoring&quot;: True or False, # Defines whether the instance has integrity monitoring enabled. Enables monitoring and attestation of the boot integrity of the instance. The attestation is performed against the integrity policy baseline. This baseline is initially derived from the implicitly trusted boot image when the instance is created.
           &quot;enableSecureBoot&quot;: True or False, # Defines whether the instance has Secure Boot enabled. Secure Boot helps ensure that the system only runs authentic software by verifying the digital signature of all boot components, and halting the boot process if signature verification fails.
         },
+        &quot;soleTenantConfig&quot;: { # SoleTenantConfig contains the NodeAffinities to specify what shared sole tenant node groups should back the node pool. # Parameters for node pools to be backed by shared sole tenant node groups.
+          &quot;nodeAffinities&quot;: [ # NodeAffinities used to match to a shared sole tenant node group.
+            { # Specifies the NodeAffinity key, values, and affinity operator according to [shared sole tenant node group affinities](https://cloud.google.com/compute/docs/nodes/sole-tenant-nodes#node_affinity_and_anti-affinity).
+              &quot;key&quot;: &quot;A String&quot;, # Key for NodeAffinity.
+              &quot;operator&quot;: &quot;A String&quot;, # Operator for NodeAffinity.
+              &quot;values&quot;: [ # Values for NodeAffinity.
+                &quot;A String&quot;,
+              ],
+            },
+          ],
+        },
         &quot;spot&quot;: True or False, # Spot flag for enabling Spot VM, which is a rebrand of the existing preemptible flag.
         &quot;tags&quot;: [ # The list of instance tags applied to all nodes. Tags are used to identify valid sources or targets for network firewalls and are specified by the client during cluster or node pool creation. Each tag within the list must comply with RFC1035.
           &quot;A String&quot;,
         ],
         &quot;taints&quot;: [ # List of kubernetes taints to be applied to each node. For more information, including usage and the valid values, see: https://kubernetes.io/docs/concepts/configuration/taint-and-toleration/
-          { # Kubernetes taint is comprised of three fields: key, value, and effect. Effect can only be one of three types: NoSchedule, PreferNoSchedule or NoExecute. See [here](https://kubernetes.io/docs/concepts/configuration/taint-and-toleration) for more information, including usage and the valid values.
+          { # Kubernetes taint is composed of three fields: key, value, and effect. Effect can only be one of three types: NoSchedule, PreferNoSchedule or NoExecute. See [here](https://kubernetes.io/docs/concepts/configuration/taint-and-toleration) for more information, including usage and the valid values.
             &quot;effect&quot;: &quot;A String&quot;, # Effect for taint.
             &quot;key&quot;: &quot;A String&quot;, # Key for taint.
             &quot;value&quot;: &quot;A String&quot;, # Value for taint.
@@ -2367,6 +2505,10 @@ Returns:
             &quot;minNodeCount&quot;: 42, # Minimum number of nodes for one location in the NodePool. Must be &gt;= 1 and &lt;= max_node_count.
             &quot;totalMaxNodeCount&quot;: 42, # Maximum number of nodes in the node pool. Must be greater than total_min_node_count. There has to be enough quota to scale up the cluster. The total_*_node_count fields are mutually exclusive with the *_node_count fields.
             &quot;totalMinNodeCount&quot;: 42, # Minimum number of nodes in the node pool. Must be greater than 1 less than total_max_node_count. The total_*_node_count fields are mutually exclusive with the *_node_count fields.
+          },
+          &quot;bestEffortProvisioning&quot;: { # Best effort provisioning. # Enable best effort provisioning for nodes
+            &quot;enabled&quot;: True or False, # When this is enabled, cluster/node pool creations will ignore non-fatal errors like stockout to best provision as many nodes as possible right now and eventually bring up all target number of nodes
+            &quot;minProvisionNodes&quot;: 42, # Minimum number of nodes to be provisioned to be considered as succeeded, and the rest of nodes will be provisioned gradually and eventually when stockout issue has been resolved.
           },
           &quot;conditions&quot;: [ # Which conditions caused the current node pool state.
             { # StatusCondition describes why a cluster or a node pool has a certain status (e.g., ERROR or DEGRADED).
@@ -2466,12 +2608,23 @@ Returns:
               &quot;enableIntegrityMonitoring&quot;: True or False, # Defines whether the instance has integrity monitoring enabled. Enables monitoring and attestation of the boot integrity of the instance. The attestation is performed against the integrity policy baseline. This baseline is initially derived from the implicitly trusted boot image when the instance is created.
               &quot;enableSecureBoot&quot;: True or False, # Defines whether the instance has Secure Boot enabled. Secure Boot helps ensure that the system only runs authentic software by verifying the digital signature of all boot components, and halting the boot process if signature verification fails.
             },
+            &quot;soleTenantConfig&quot;: { # SoleTenantConfig contains the NodeAffinities to specify what shared sole tenant node groups should back the node pool. # Parameters for node pools to be backed by shared sole tenant node groups.
+              &quot;nodeAffinities&quot;: [ # NodeAffinities used to match to a shared sole tenant node group.
+                { # Specifies the NodeAffinity key, values, and affinity operator according to [shared sole tenant node group affinities](https://cloud.google.com/compute/docs/nodes/sole-tenant-nodes#node_affinity_and_anti-affinity).
+                  &quot;key&quot;: &quot;A String&quot;, # Key for NodeAffinity.
+                  &quot;operator&quot;: &quot;A String&quot;, # Operator for NodeAffinity.
+                  &quot;values&quot;: [ # Values for NodeAffinity.
+                    &quot;A String&quot;,
+                  ],
+                },
+              ],
+            },
             &quot;spot&quot;: True or False, # Spot flag for enabling Spot VM, which is a rebrand of the existing preemptible flag.
             &quot;tags&quot;: [ # The list of instance tags applied to all nodes. Tags are used to identify valid sources or targets for network firewalls and are specified by the client during cluster or node pool creation. Each tag within the list must comply with RFC1035.
               &quot;A String&quot;,
             ],
             &quot;taints&quot;: [ # List of kubernetes taints to be applied to each node. For more information, including usage and the valid values, see: https://kubernetes.io/docs/concepts/configuration/taint-and-toleration/
-              { # Kubernetes taint is comprised of three fields: key, value, and effect. Effect can only be one of three types: NoSchedule, PreferNoSchedule or NoExecute. See [here](https://kubernetes.io/docs/concepts/configuration/taint-and-toleration) for more information, including usage and the valid values.
+              { # Kubernetes taint is composed of three fields: key, value, and effect. Effect can only be one of three types: NoSchedule, PreferNoSchedule or NoExecute. See [here](https://kubernetes.io/docs/concepts/configuration/taint-and-toleration) for more information, including usage and the valid values.
                 &quot;effect&quot;: &quot;A String&quot;, # Effect for taint.
                 &quot;key&quot;: &quot;A String&quot;, # Key for taint.
                 &quot;value&quot;: &quot;A String&quot;, # Value for taint.
@@ -2511,6 +2664,9 @@ Returns:
             &quot;networkPerformanceConfig&quot;: { # Configuration of all network bandwidth tiers # Network bandwidth tier configuration.
               &quot;externalIpEgressBandwidthTier&quot;: &quot;A String&quot;, # Specifies the network bandwidth tier for the NodePool for traffic to external/public IP addresses.
               &quot;totalEgressBandwidthTier&quot;: &quot;A String&quot;, # Specifies the total network bandwidth tier for the NodePool.
+            },
+            &quot;podCidrOverprovisionConfig&quot;: { # [PRIVATE FIELD] Config for pod CIDR size overprovisioning. # [PRIVATE FIELD] Pod CIDR size overprovisioning config for the nodepool. Pod CIDR size per node depends on max_pods_per_node. By default, the value of max_pods_per_node is rounded off to next power of 2 and we then double that to get the size of pod CIDR block per node. Example: max_pods_per_node of 30 would result in 64 IPs (/26). This config can disable the doubling of IPs (we still round off to next power of 2) Example: max_pods_per_node of 30 will result in 32 IPs (/27) when overprovisioning is disabled.
+              &quot;disable&quot;: True or False, # Whether Pod CIDR overprovisioning is disabled. Note: Pod CIDR overprovisioning is enabled by default.
             },
             &quot;podIpv4CidrBlock&quot;: &quot;A String&quot;, # The IP address range for pod IPs in this node pool. Only applicable if `create_pod_range` is true. Set to blank to have a range chosen with the default size. Set to /netmask (e.g. `/14`) to have a range chosen with a specific netmask. Set to a [CIDR](https://en.wikipedia.org/wiki/Classless_Inter-Domain_Routing) notation (e.g. `10.96.0.0/14`) to pick a specific range to use. Only applicable if `ip_allocation_policy.use_ip_aliases` is true. This field cannot be changed after the node pool has been created.
             &quot;podRange&quot;: &quot;A String&quot;, # The ID of the secondary range for pod IPs. If `create_pod_range` is true, this ID is used for the new range. If `create_pod_range` is false, uses an existing secondary range with this ID. Only applicable if `ip_allocation_policy.use_ip_aliases` is true. This field cannot be changed after the node pool has been created.
@@ -2584,7 +2740,7 @@ Returns:
         },
         &quot;workloadVulnerabilityMode&quot;: &quot;A String&quot;, # Sets which mode to use for Protect workload vulnerability scanning feature.
       },
-      &quot;releaseChannel&quot;: { # ReleaseChannel indicates which release channel a cluster is subscribed to. Release channels are arranged in order of risk. When a cluster is subscribed to a release channel, Google maintains both the master version and the node version. Node auto-upgrade defaults to true and cannot be disabled. # Release channel configuration.
+      &quot;releaseChannel&quot;: { # ReleaseChannel indicates which release channel a cluster is subscribed to. Release channels are arranged in order of risk. When a cluster is subscribed to a release channel, Google maintains both the master version and the node version. Node auto-upgrade defaults to true and cannot be disabled. # Release channel configuration. If left unspecified on cluster creation and a version is specified, the cluster is enrolled in the most mature release channel where the version is available (first checking STABLE, then REGULAR, and finally RAPID). Otherwise, if no release channel configuration and no version is specified, the cluster is enrolled in the REGULAR channel with its default version.
         &quot;channel&quot;: &quot;A String&quot;, # channel specifies which release channel the cluster is subscribed to.
       },
       &quot;resourceLabels&quot;: { # The resource labels for the cluster to use to annotate any related Google Compute Engine resources.
@@ -2709,11 +2865,11 @@ Returns:
     ],
     &quot;status&quot;: &quot;A String&quot;, # Status of an operation stage. Unset for single-stage operations.
   },
-  &quot;selfLink&quot;: &quot;A String&quot;, # Server-defined URL for the resource.
+  &quot;selfLink&quot;: &quot;A String&quot;, # Server-defined URI for the operation. Example: `https://container.googleapis.com/v1alpha1/projects/123/locations/us-central1/operations/operation-123`.
   &quot;startTime&quot;: &quot;A String&quot;, # [Output only] The time the operation started, in [RFC3339](https://www.ietf.org/rfc/rfc3339.txt) text format.
   &quot;status&quot;: &quot;A String&quot;, # The current status of the operation.
   &quot;statusMessage&quot;: &quot;A String&quot;, # Output only. If an error has occurred, a textual description of the error. Deprecated. Use field error instead.
-  &quot;targetLink&quot;: &quot;A String&quot;, # Server-defined URL for the target of the operation.
+  &quot;targetLink&quot;: &quot;A String&quot;, # Server-defined URI for the target of the operation. The format of this is a URI to the resource being modified (such as a cluster, node pool, or node). For node pool repairs, there may be multiple nodes being repaired, but only one will be the target. Examples: - ## `https://container.googleapis.com/v1/projects/123/locations/us-central1/clusters/my-cluster` ## `https://container.googleapis.com/v1/projects/123/zones/us-central1-c/clusters/my-cluster/nodePools/my-np` `https://container.googleapis.com/v1/projects/123/zones/us-central1-c/clusters/my-cluster/nodePools/my-np/node/my-node`
   &quot;zone&quot;: &quot;A String&quot;, # The name of the Google Compute Engine [zone](https://cloud.google.com/compute/docs/zones#available) in which the operation is taking place. This field is deprecated, use location instead.
 }</pre>
 </div>
@@ -2789,11 +2945,11 @@ Returns:
     ],
     &quot;status&quot;: &quot;A String&quot;, # Status of an operation stage. Unset for single-stage operations.
   },
-  &quot;selfLink&quot;: &quot;A String&quot;, # Server-defined URL for the resource.
+  &quot;selfLink&quot;: &quot;A String&quot;, # Server-defined URI for the operation. Example: `https://container.googleapis.com/v1alpha1/projects/123/locations/us-central1/operations/operation-123`.
   &quot;startTime&quot;: &quot;A String&quot;, # [Output only] The time the operation started, in [RFC3339](https://www.ietf.org/rfc/rfc3339.txt) text format.
   &quot;status&quot;: &quot;A String&quot;, # The current status of the operation.
   &quot;statusMessage&quot;: &quot;A String&quot;, # Output only. If an error has occurred, a textual description of the error. Deprecated. Use field error instead.
-  &quot;targetLink&quot;: &quot;A String&quot;, # Server-defined URL for the target of the operation.
+  &quot;targetLink&quot;: &quot;A String&quot;, # Server-defined URI for the target of the operation. The format of this is a URI to the resource being modified (such as a cluster, node pool, or node). For node pool repairs, there may be multiple nodes being repaired, but only one will be the target. Examples: - ## `https://container.googleapis.com/v1/projects/123/locations/us-central1/clusters/my-cluster` ## `https://container.googleapis.com/v1/projects/123/zones/us-central1-c/clusters/my-cluster/nodePools/my-np` `https://container.googleapis.com/v1/projects/123/zones/us-central1-c/clusters/my-cluster/nodePools/my-np/node/my-node`
   &quot;zone&quot;: &quot;A String&quot;, # The name of the Google Compute Engine [zone](https://cloud.google.com/compute/docs/zones#available) in which the operation is taking place. This field is deprecated, use location instead.
 }</pre>
 </div>
@@ -2869,11 +3025,11 @@ Returns:
     ],
     &quot;status&quot;: &quot;A String&quot;, # Status of an operation stage. Unset for single-stage operations.
   },
-  &quot;selfLink&quot;: &quot;A String&quot;, # Server-defined URL for the resource.
+  &quot;selfLink&quot;: &quot;A String&quot;, # Server-defined URI for the operation. Example: `https://container.googleapis.com/v1alpha1/projects/123/locations/us-central1/operations/operation-123`.
   &quot;startTime&quot;: &quot;A String&quot;, # [Output only] The time the operation started, in [RFC3339](https://www.ietf.org/rfc/rfc3339.txt) text format.
   &quot;status&quot;: &quot;A String&quot;, # The current status of the operation.
   &quot;statusMessage&quot;: &quot;A String&quot;, # Output only. If an error has occurred, a textual description of the error. Deprecated. Use field error instead.
-  &quot;targetLink&quot;: &quot;A String&quot;, # Server-defined URL for the target of the operation.
+  &quot;targetLink&quot;: &quot;A String&quot;, # Server-defined URI for the target of the operation. The format of this is a URI to the resource being modified (such as a cluster, node pool, or node). For node pool repairs, there may be multiple nodes being repaired, but only one will be the target. Examples: - ## `https://container.googleapis.com/v1/projects/123/locations/us-central1/clusters/my-cluster` ## `https://container.googleapis.com/v1/projects/123/zones/us-central1-c/clusters/my-cluster/nodePools/my-np` `https://container.googleapis.com/v1/projects/123/zones/us-central1-c/clusters/my-cluster/nodePools/my-np/node/my-node`
   &quot;zone&quot;: &quot;A String&quot;, # The name of the Google Compute Engine [zone](https://cloud.google.com/compute/docs/zones#available) in which the operation is taking place. This field is deprecated, use location instead.
 }</pre>
 </div>
@@ -2949,11 +3105,11 @@ Returns:
     ],
     &quot;status&quot;: &quot;A String&quot;, # Status of an operation stage. Unset for single-stage operations.
   },
-  &quot;selfLink&quot;: &quot;A String&quot;, # Server-defined URL for the resource.
+  &quot;selfLink&quot;: &quot;A String&quot;, # Server-defined URI for the operation. Example: `https://container.googleapis.com/v1alpha1/projects/123/locations/us-central1/operations/operation-123`.
   &quot;startTime&quot;: &quot;A String&quot;, # [Output only] The time the operation started, in [RFC3339](https://www.ietf.org/rfc/rfc3339.txt) text format.
   &quot;status&quot;: &quot;A String&quot;, # The current status of the operation.
   &quot;statusMessage&quot;: &quot;A String&quot;, # Output only. If an error has occurred, a textual description of the error. Deprecated. Use field error instead.
-  &quot;targetLink&quot;: &quot;A String&quot;, # Server-defined URL for the target of the operation.
+  &quot;targetLink&quot;: &quot;A String&quot;, # Server-defined URI for the target of the operation. The format of this is a URI to the resource being modified (such as a cluster, node pool, or node). For node pool repairs, there may be multiple nodes being repaired, but only one will be the target. Examples: - ## `https://container.googleapis.com/v1/projects/123/locations/us-central1/clusters/my-cluster` ## `https://container.googleapis.com/v1/projects/123/zones/us-central1-c/clusters/my-cluster/nodePools/my-np` `https://container.googleapis.com/v1/projects/123/zones/us-central1-c/clusters/my-cluster/nodePools/my-np/node/my-node`
   &quot;zone&quot;: &quot;A String&quot;, # The name of the Google Compute Engine [zone](https://cloud.google.com/compute/docs/zones#available) in which the operation is taking place. This field is deprecated, use location instead.
 }</pre>
 </div>
@@ -3032,11 +3188,11 @@ Returns:
     ],
     &quot;status&quot;: &quot;A String&quot;, # Status of an operation stage. Unset for single-stage operations.
   },
-  &quot;selfLink&quot;: &quot;A String&quot;, # Server-defined URL for the resource.
+  &quot;selfLink&quot;: &quot;A String&quot;, # Server-defined URI for the operation. Example: `https://container.googleapis.com/v1alpha1/projects/123/locations/us-central1/operations/operation-123`.
   &quot;startTime&quot;: &quot;A String&quot;, # [Output only] The time the operation started, in [RFC3339](https://www.ietf.org/rfc/rfc3339.txt) text format.
   &quot;status&quot;: &quot;A String&quot;, # The current status of the operation.
   &quot;statusMessage&quot;: &quot;A String&quot;, # Output only. If an error has occurred, a textual description of the error. Deprecated. Use field error instead.
-  &quot;targetLink&quot;: &quot;A String&quot;, # Server-defined URL for the target of the operation.
+  &quot;targetLink&quot;: &quot;A String&quot;, # Server-defined URI for the target of the operation. The format of this is a URI to the resource being modified (such as a cluster, node pool, or node). For node pool repairs, there may be multiple nodes being repaired, but only one will be the target. Examples: - ## `https://container.googleapis.com/v1/projects/123/locations/us-central1/clusters/my-cluster` ## `https://container.googleapis.com/v1/projects/123/zones/us-central1-c/clusters/my-cluster/nodePools/my-np` `https://container.googleapis.com/v1/projects/123/zones/us-central1-c/clusters/my-cluster/nodePools/my-np/node/my-node`
   &quot;zone&quot;: &quot;A String&quot;, # The name of the Google Compute Engine [zone](https://cloud.google.com/compute/docs/zones#available) in which the operation is taking place. This field is deprecated, use location instead.
 }</pre>
 </div>
@@ -3139,11 +3295,11 @@ Returns:
     ],
     &quot;status&quot;: &quot;A String&quot;, # Status of an operation stage. Unset for single-stage operations.
   },
-  &quot;selfLink&quot;: &quot;A String&quot;, # Server-defined URL for the resource.
+  &quot;selfLink&quot;: &quot;A String&quot;, # Server-defined URI for the operation. Example: `https://container.googleapis.com/v1alpha1/projects/123/locations/us-central1/operations/operation-123`.
   &quot;startTime&quot;: &quot;A String&quot;, # [Output only] The time the operation started, in [RFC3339](https://www.ietf.org/rfc/rfc3339.txt) text format.
   &quot;status&quot;: &quot;A String&quot;, # The current status of the operation.
   &quot;statusMessage&quot;: &quot;A String&quot;, # Output only. If an error has occurred, a textual description of the error. Deprecated. Use field error instead.
-  &quot;targetLink&quot;: &quot;A String&quot;, # Server-defined URL for the target of the operation.
+  &quot;targetLink&quot;: &quot;A String&quot;, # Server-defined URI for the target of the operation. The format of this is a URI to the resource being modified (such as a cluster, node pool, or node). For node pool repairs, there may be multiple nodes being repaired, but only one will be the target. Examples: - ## `https://container.googleapis.com/v1/projects/123/locations/us-central1/clusters/my-cluster` ## `https://container.googleapis.com/v1/projects/123/zones/us-central1-c/clusters/my-cluster/nodePools/my-np` `https://container.googleapis.com/v1/projects/123/zones/us-central1-c/clusters/my-cluster/nodePools/my-np/node/my-node`
   &quot;zone&quot;: &quot;A String&quot;, # The name of the Google Compute Engine [zone](https://cloud.google.com/compute/docs/zones#available) in which the operation is taking place. This field is deprecated, use location instead.
 }</pre>
 </div>
@@ -3229,11 +3385,11 @@ Returns:
     ],
     &quot;status&quot;: &quot;A String&quot;, # Status of an operation stage. Unset for single-stage operations.
   },
-  &quot;selfLink&quot;: &quot;A String&quot;, # Server-defined URL for the resource.
+  &quot;selfLink&quot;: &quot;A String&quot;, # Server-defined URI for the operation. Example: `https://container.googleapis.com/v1alpha1/projects/123/locations/us-central1/operations/operation-123`.
   &quot;startTime&quot;: &quot;A String&quot;, # [Output only] The time the operation started, in [RFC3339](https://www.ietf.org/rfc/rfc3339.txt) text format.
   &quot;status&quot;: &quot;A String&quot;, # The current status of the operation.
   &quot;statusMessage&quot;: &quot;A String&quot;, # Output only. If an error has occurred, a textual description of the error. Deprecated. Use field error instead.
-  &quot;targetLink&quot;: &quot;A String&quot;, # Server-defined URL for the target of the operation.
+  &quot;targetLink&quot;: &quot;A String&quot;, # Server-defined URI for the target of the operation. The format of this is a URI to the resource being modified (such as a cluster, node pool, or node). For node pool repairs, there may be multiple nodes being repaired, but only one will be the target. Examples: - ## `https://container.googleapis.com/v1/projects/123/locations/us-central1/clusters/my-cluster` ## `https://container.googleapis.com/v1/projects/123/zones/us-central1-c/clusters/my-cluster/nodePools/my-np` `https://container.googleapis.com/v1/projects/123/zones/us-central1-c/clusters/my-cluster/nodePools/my-np/node/my-node`
   &quot;zone&quot;: &quot;A String&quot;, # The name of the Google Compute Engine [zone](https://cloud.google.com/compute/docs/zones#available) in which the operation is taking place. This field is deprecated, use location instead.
 }</pre>
 </div>
@@ -3312,11 +3468,11 @@ Returns:
     ],
     &quot;status&quot;: &quot;A String&quot;, # Status of an operation stage. Unset for single-stage operations.
   },
-  &quot;selfLink&quot;: &quot;A String&quot;, # Server-defined URL for the resource.
+  &quot;selfLink&quot;: &quot;A String&quot;, # Server-defined URI for the operation. Example: `https://container.googleapis.com/v1alpha1/projects/123/locations/us-central1/operations/operation-123`.
   &quot;startTime&quot;: &quot;A String&quot;, # [Output only] The time the operation started, in [RFC3339](https://www.ietf.org/rfc/rfc3339.txt) text format.
   &quot;status&quot;: &quot;A String&quot;, # The current status of the operation.
   &quot;statusMessage&quot;: &quot;A String&quot;, # Output only. If an error has occurred, a textual description of the error. Deprecated. Use field error instead.
-  &quot;targetLink&quot;: &quot;A String&quot;, # Server-defined URL for the target of the operation.
+  &quot;targetLink&quot;: &quot;A String&quot;, # Server-defined URI for the target of the operation. The format of this is a URI to the resource being modified (such as a cluster, node pool, or node). For node pool repairs, there may be multiple nodes being repaired, but only one will be the target. Examples: - ## `https://container.googleapis.com/v1/projects/123/locations/us-central1/clusters/my-cluster` ## `https://container.googleapis.com/v1/projects/123/zones/us-central1-c/clusters/my-cluster/nodePools/my-np` `https://container.googleapis.com/v1/projects/123/zones/us-central1-c/clusters/my-cluster/nodePools/my-np/node/my-node`
   &quot;zone&quot;: &quot;A String&quot;, # The name of the Google Compute Engine [zone](https://cloud.google.com/compute/docs/zones#available) in which the operation is taking place. This field is deprecated, use location instead.
 }</pre>
 </div>
@@ -3392,11 +3548,11 @@ Returns:
     ],
     &quot;status&quot;: &quot;A String&quot;, # Status of an operation stage. Unset for single-stage operations.
   },
-  &quot;selfLink&quot;: &quot;A String&quot;, # Server-defined URL for the resource.
+  &quot;selfLink&quot;: &quot;A String&quot;, # Server-defined URI for the operation. Example: `https://container.googleapis.com/v1alpha1/projects/123/locations/us-central1/operations/operation-123`.
   &quot;startTime&quot;: &quot;A String&quot;, # [Output only] The time the operation started, in [RFC3339](https://www.ietf.org/rfc/rfc3339.txt) text format.
   &quot;status&quot;: &quot;A String&quot;, # The current status of the operation.
   &quot;statusMessage&quot;: &quot;A String&quot;, # Output only. If an error has occurred, a textual description of the error. Deprecated. Use field error instead.
-  &quot;targetLink&quot;: &quot;A String&quot;, # Server-defined URL for the target of the operation.
+  &quot;targetLink&quot;: &quot;A String&quot;, # Server-defined URI for the target of the operation. The format of this is a URI to the resource being modified (such as a cluster, node pool, or node). For node pool repairs, there may be multiple nodes being repaired, but only one will be the target. Examples: - ## `https://container.googleapis.com/v1/projects/123/locations/us-central1/clusters/my-cluster` ## `https://container.googleapis.com/v1/projects/123/zones/us-central1-c/clusters/my-cluster/nodePools/my-np` `https://container.googleapis.com/v1/projects/123/zones/us-central1-c/clusters/my-cluster/nodePools/my-np/node/my-node`
   &quot;zone&quot;: &quot;A String&quot;, # The name of the Google Compute Engine [zone](https://cloud.google.com/compute/docs/zones#available) in which the operation is taking place. This field is deprecated, use location instead.
 }</pre>
 </div>
@@ -3417,6 +3573,11 @@ Args:
   &quot;name&quot;: &quot;A String&quot;, # The name (project, location, cluster) of the cluster to update. Specified in the format `projects/*/locations/*/clusters/*`.
   &quot;projectId&quot;: &quot;A String&quot;, # Required. Deprecated. The Google Developers Console [project ID or project number](https://cloud.google.com/resource-manager/docs/creating-managing-projects). This field has been deprecated and replaced by the name field.
   &quot;update&quot;: { # ClusterUpdate describes an update to the cluster. Exactly one update can be applied to a cluster with each request, so at most one field can be provided. # Required. A description of the update.
+    &quot;additionalPodRangesConfig&quot;: { # AdditionalPodRangesConfig is the configuration for additional pod secondary ranges supporting the ClusterUpdate message. # The additional pod ranges to be added to the cluster. These pod ranges can be used by node pools to allocate pod IPs.
+      &quot;podRangeNames&quot;: [ # Name for pod secondary ipv4 range which has the actual range defined ahead.
+        &quot;A String&quot;,
+      ],
+    },
     &quot;desiredAddonsConfig&quot;: { # Configuration for the addons that can be automatically spun up in the cluster, enabling additional functionality. # Configurations for the various addons available to run in the cluster.
       &quot;cloudRunConfig&quot;: { # Configuration options for the Cloud Run feature. # Configuration for the Cloud Run addon. The `IstioConfig` addon must be enabled in order to enable Cloud Run addon. This option can only be enabled at cluster creation time.
         &quot;disabled&quot;: True or False, # Whether Cloud Run addon is enabled for this cluster.
@@ -3433,6 +3594,9 @@ Args:
       },
       &quot;gcpFilestoreCsiDriverConfig&quot;: { # Configuration for the GCP Filestore CSI driver. # Configuration for the GCP Filestore CSI driver.
         &quot;enabled&quot;: True or False, # Whether the GCP Filestore CSI driver is enabled for this cluster.
+      },
+      &quot;gcsFuseCsiDriverConfig&quot;: { # Configuration for the Cloud Storage Fuse CSI driver. # Configuration for the Cloud Storage Fuse CSI driver.
+        &quot;enabled&quot;: True or False, # Whether the Cloud Storage Fuse CSI driver is enabled for this cluster.
       },
       &quot;gkeBackupAgentConfig&quot;: { # Configuration for the Backup for GKE Agent. # Configuration for the Backup for GKE agent addon.
         &quot;enabled&quot;: True or False, # Whether the Backup for GKE agent is enabled for this cluster.
@@ -3523,7 +3687,7 @@ Args:
     },
     &quot;desiredDatabaseEncryption&quot;: { # Configuration of etcd encryption. # Configuration of etcd encryption.
       &quot;keyName&quot;: &quot;A String&quot;, # Name of CloudKMS key to use for the encryption of secrets in etcd. Ex. projects/my-project/locations/global/keyRings/my-ring/cryptoKeys/my-key
-      &quot;state&quot;: &quot;A String&quot;, # Denotes the state of etcd encryption.
+      &quot;state&quot;: &quot;A String&quot;, # The desired state of etcd encryption.
     },
     &quot;desiredDatapathProvider&quot;: &quot;A String&quot;, # The desired datapath provider for the cluster.
     &quot;desiredDefaultSnatStatus&quot;: { # DefaultSnatStatus contains the desired state of whether default sNAT should be disabled on the cluster. # The desired status of whether to disable default sNAT for this cluster.
@@ -3534,7 +3698,13 @@ Args:
       &quot;clusterDnsDomain&quot;: &quot;A String&quot;, # cluster_dns_domain is the suffix used for all cluster service records.
       &quot;clusterDnsScope&quot;: &quot;A String&quot;, # cluster_dns_scope indicates the scope of access to cluster DNS records.
     },
+    &quot;desiredEnableFqdnNetworkPolicy&quot;: True or False, # Enable/Disable FQDN Network Policy for the cluster.
     &quot;desiredEnablePrivateEndpoint&quot;: True or False, # Enable/Disable private endpoint for the cluster&#x27;s master.
+    &quot;desiredFleet&quot;: { # Fleet is the fleet configuration for the cluster. # The desired fleet configuration for the cluster.
+      &quot;membership&quot;: &quot;A String&quot;, # [Output only] The full resource name of the registered fleet membership of the cluster, in the format `//gkehub.googleapis.com/projects/*/locations/*/memberships/*`.
+      &quot;preRegistered&quot;: True or False, # [Output only] Whether the cluster has been registered through the fleet API.
+      &quot;project&quot;: &quot;A String&quot;, # The Fleet host project(project ID or project number) where this cluster will be registered to. This field cannot be changed after the cluster has been registered.
+    },
     &quot;desiredGatewayApiConfig&quot;: { # GatewayAPIConfig contains the desired config of Gateway API on this cluster. # The desired config of Gateway API on this cluster.
       &quot;channel&quot;: &quot;A String&quot;, # The Gateway API release channel to use for Gateway API.
     },
@@ -3547,6 +3717,11 @@ Args:
     &quot;desiredImageType&quot;: &quot;A String&quot;, # The desired image type for the node pool. NOTE: Set the &quot;desired_node_pool&quot; field as well.
     &quot;desiredIntraNodeVisibilityConfig&quot;: { # IntraNodeVisibilityConfig contains the desired config of the intra-node visibility on this cluster. # The desired config of Intra-node visibility.
       &quot;enabled&quot;: True or False, # Enables intra node visibility for this cluster.
+    },
+    &quot;desiredK8sBetaApis&quot;: { # Kubernetes open source beta apis enabled on the cluster. # Beta APIs enabled for cluster.
+      &quot;enabledApis&quot;: [ # api name, e.g. storage.k8s.io/v1beta1/csistoragecapacities.
+        &quot;A String&quot;,
+      ],
     },
     &quot;desiredL4ilbSubsettingConfig&quot;: { # ILBSubsettingConfig contains the desired config of L4 Internal LoadBalancer subsetting on this cluster. # The desired L4 Internal Load Balancer Subsetting configuration.
       &quot;enabled&quot;: True or False, # Enables l4 ILB subsetting for this cluster
@@ -3681,7 +3856,17 @@ Args:
       &quot;identityProvider&quot;: &quot;A String&quot;, # identity provider is the third party identity provider.
       &quot;workloadPool&quot;: &quot;A String&quot;, # The workload pool to attach all Kubernetes service accounts to.
     },
+    &quot;enableK8sBetaApis&quot;: { # Kubernetes open source beta apis enabled on the cluster. # Kubernetes open source beta apis enabled on the cluster. Only beta apis
+      &quot;enabledApis&quot;: [ # api name, e.g. storage.k8s.io/v1beta1/csistoragecapacities.
+        &quot;A String&quot;,
+      ],
+    },
     &quot;etag&quot;: &quot;A String&quot;, # The current etag of the cluster. If an etag is provided and does not match the current etag of the cluster, update will be blocked and an ABORTED error will be returned.
+    &quot;removedAdditionalPodRangesConfig&quot;: { # AdditionalPodRangesConfig is the configuration for additional pod secondary ranges supporting the ClusterUpdate message. # The additional pod ranges that are to be removed from the cluster. The pod ranges specified here must have been specified earlier in the &#x27;additional_pod_ranges_config&#x27; argument.
+      &quot;podRangeNames&quot;: [ # Name for pod secondary ipv4 range which has the actual range defined ahead.
+        &quot;A String&quot;,
+      ],
+    },
   },
   &quot;zone&quot;: &quot;A String&quot;, # Required. Deprecated. The name of the Google Compute Engine [zone](https://cloud.google.com/compute/docs/zones#available) in which the cluster resides. This field has been deprecated and replaced by the name field.
 }
@@ -3738,11 +3923,11 @@ Returns:
     ],
     &quot;status&quot;: &quot;A String&quot;, # Status of an operation stage. Unset for single-stage operations.
   },
-  &quot;selfLink&quot;: &quot;A String&quot;, # Server-defined URL for the resource.
+  &quot;selfLink&quot;: &quot;A String&quot;, # Server-defined URI for the operation. Example: `https://container.googleapis.com/v1alpha1/projects/123/locations/us-central1/operations/operation-123`.
   &quot;startTime&quot;: &quot;A String&quot;, # [Output only] The time the operation started, in [RFC3339](https://www.ietf.org/rfc/rfc3339.txt) text format.
   &quot;status&quot;: &quot;A String&quot;, # The current status of the operation.
   &quot;statusMessage&quot;: &quot;A String&quot;, # Output only. If an error has occurred, a textual description of the error. Deprecated. Use field error instead.
-  &quot;targetLink&quot;: &quot;A String&quot;, # Server-defined URL for the target of the operation.
+  &quot;targetLink&quot;: &quot;A String&quot;, # Server-defined URI for the target of the operation. The format of this is a URI to the resource being modified (such as a cluster, node pool, or node). For node pool repairs, there may be multiple nodes being repaired, but only one will be the target. Examples: - ## `https://container.googleapis.com/v1/projects/123/locations/us-central1/clusters/my-cluster` ## `https://container.googleapis.com/v1/projects/123/zones/us-central1-c/clusters/my-cluster/nodePools/my-np` `https://container.googleapis.com/v1/projects/123/zones/us-central1-c/clusters/my-cluster/nodePools/my-np/node/my-node`
   &quot;zone&quot;: &quot;A String&quot;, # The name of the Google Compute Engine [zone](https://cloud.google.com/compute/docs/zones#available) in which the operation is taking place. This field is deprecated, use location instead.
 }</pre>
 </div>

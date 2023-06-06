@@ -423,7 +423,7 @@
       }
     }
   },
-  "revision": "20230130",
+  "revision": "20230530",
   "rootUrl": "https://alertcenter.googleapis.com/",
   "schemas": {
     "AbuseDetected": {
@@ -434,24 +434,26 @@
           "$ref": "EntityList",
           "description": "List of abusive users/entities to be displayed in a table in the alert."
         },
-        "alertDescriptor": {
-          "description": "Displayed after Customer abuse detected - {alert_descriptor}. If missing, alert name will be displayed as Customer abuse detected.",
-          "type": "string"
-        },
-        "nextSteps": {
-          "description": "Customizable text to display in the next steps section of the alert. Will be parsed as HTML to allow new paragraphs and hyperlinks.",
-          "type": "string"
-        },
         "product": {
           "description": "Product that the abuse is originating from.",
           "type": "string"
         },
         "subAlertId": {
-          "description": "Unique identifier of each alert that is onboarded.",
+          "description": "Unique identifier of each sub alert that is onboarded.",
           "type": "string"
         },
-        "summary": {
-          "description": "Customizable text to display in the summary section of the alert. Will be parsed as HTML to allow new paragraphs and hyperlinks.",
+        "variationType": {
+          "description": "Variation of AbuseDetected alerts. The variation_type determines the texts displayed the alert details. This differs from sub_alert_id because each sub alert can have multiple variation_types, representing different stages of the alert.",
+          "enum": [
+            "ABUSE_DETECTED_VARIATION_TYPE_UNSPECIFIED",
+            "DRIVE_ABUSIVE_CONTENT",
+            "LIMITED_DISABLE"
+          ],
+          "enumDescriptions": [
+            "AbuseDetected alert variation type unspecified. No alert should be unspecified.",
+            "Variation displayed for Drive abusive content alerts.",
+            "Variation displayed for Limited Disable alerts, when a Google service is disabled for a user, totally or partially, due to the user's abusive behavior."
+          ],
           "type": "string"
         }
       },
@@ -764,20 +766,20 @@
       "type": "object"
     },
     "ApnsCertificateExpirationInfo": {
-      "description": "The explanation message associated with ApnsCertificationExpiring and ApnsCertificationExpired alerts.",
+      "description": "The explanation message associated with \"APNS certificate is expiring soon\" and \"APNS certificate has expired\" alerts.",
       "id": "ApnsCertificateExpirationInfo",
       "properties": {
         "appleId": {
-          "description": "The Apple ID used for the certificate may be blank if admins didn't enter it.",
+          "description": "The Apple ID used to create the certificate. It may be blank if admins didn't enter it.",
           "type": "string"
         },
         "expirationTime": {
-          "description": "The expiration date of the APNS Certificate.",
+          "description": "The expiration date of the APNS certificate.",
           "format": "google-datetime",
           "type": "string"
         },
         "uid": {
-          "description": "The UID for the certificate.",
+          "description": "The UID of the certificate.",
           "type": "string"
         }
       },
@@ -1223,6 +1225,11 @@
         },
         "recipient": {
           "description": "The recipient of this email.",
+          "type": "string"
+        },
+        "sentTime": {
+          "description": "The sent time of the email.",
+          "format": "google-datetime",
           "type": "string"
         },
         "subjectText": {

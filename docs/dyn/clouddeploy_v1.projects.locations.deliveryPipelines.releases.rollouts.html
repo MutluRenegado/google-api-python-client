@@ -80,8 +80,14 @@ h1, h2, h3 {
 <p class="firstline">Returns the jobRuns Resource.</p>
 
 <p class="toc_element">
+  <code><a href="#advance">advance(name, body=None, x__xgafv=None)</a></code></p>
+<p class="firstline">Advances a Rollout in a given project and location.</p>
+<p class="toc_element">
   <code><a href="#approve">approve(name, body=None, x__xgafv=None)</a></code></p>
 <p class="firstline">Approves a Rollout.</p>
+<p class="toc_element">
+  <code><a href="#cancel">cancel(name, body=None, x__xgafv=None)</a></code></p>
+<p class="firstline">Cancels a Rollout in a given project and location.</p>
 <p class="toc_element">
   <code><a href="#close">close()</a></code></p>
 <p class="firstline">Close httplib2 connections.</p>
@@ -92,6 +98,9 @@ h1, h2, h3 {
   <code><a href="#get">get(name, x__xgafv=None)</a></code></p>
 <p class="firstline">Gets details of a single Rollout.</p>
 <p class="toc_element">
+  <code><a href="#ignoreJob">ignoreJob(rollout, body=None, x__xgafv=None)</a></code></p>
+<p class="firstline">Ignores the specified Job in a Rollout.</p>
+<p class="toc_element">
   <code><a href="#list">list(parent, filter=None, orderBy=None, pageSize=None, pageToken=None, x__xgafv=None)</a></code></p>
 <p class="firstline">Lists Rollouts in a given project and location.</p>
 <p class="toc_element">
@@ -101,6 +110,31 @@ h1, h2, h3 {
   <code><a href="#retryJob">retryJob(rollout, body=None, x__xgafv=None)</a></code></p>
 <p class="firstline">Retries the specified Job in a Rollout.</p>
 <h3>Method Details</h3>
+<div class="method">
+    <code class="details" id="advance">advance(name, body=None, x__xgafv=None)</code>
+  <pre>Advances a Rollout in a given project and location.
+
+Args:
+  name: string, Required. Name of the Rollout. Format is projects/{project}/locations/{location}/deliveryPipelines/{deliveryPipeline}/ releases/{release}/rollouts/{rollout}. (required)
+  body: object, The request body.
+    The object takes the form of:
+
+{ # The request object used by `AdvanceRollout`.
+  &quot;phaseId&quot;: &quot;A String&quot;, # Required. The phase ID to advance the `Rollout` to.
+}
+
+  x__xgafv: string, V1 error format.
+    Allowed values
+      1 - v1 error format
+      2 - v2 error format
+
+Returns:
+  An object of the form:
+
+    { # The response object from `AdvanceRollout`.
+}</pre>
+</div>
+
 <div class="method">
     <code class="details" id="approve">approve(name, body=None, x__xgafv=None)</code>
   <pre>Approves a Rollout.
@@ -127,6 +161,30 @@ Returns:
 </div>
 
 <div class="method">
+    <code class="details" id="cancel">cancel(name, body=None, x__xgafv=None)</code>
+  <pre>Cancels a Rollout in a given project and location.
+
+Args:
+  name: string, Required. Name of the Rollout. Format is projects/{project}/locations/{location}/deliveryPipelines/{deliveryPipeline}/ releases/{release}/rollouts/{rollout}. (required)
+  body: object, The request body.
+    The object takes the form of:
+
+{ # The request object used by `CancelRollout`.
+}
+
+  x__xgafv: string, V1 error format.
+    Allowed values
+      1 - v1 error format
+      2 - v2 error format
+
+Returns:
+  An object of the form:
+
+    { # The response object from `CancelRollout`.
+}</pre>
+</div>
+
+<div class="method">
     <code class="details" id="close">close()</code>
   <pre>Close httplib2 connections.</pre>
 </div>
@@ -146,6 +204,7 @@ Args:
   },
   &quot;approvalState&quot;: &quot;A String&quot;, # Output only. Approval state of the `Rollout`.
   &quot;approveTime&quot;: &quot;A String&quot;, # Output only. Time at which the `Rollout` was approved.
+  &quot;controllerRollout&quot;: &quot;A String&quot;, # Output only. Name of the `ControllerRollout`. Format is projects/{project}/ locations/{location}/deliveryPipelines/{deliveryPipeline}/ releases/{release}/rollouts/a-z{0,62}.
   &quot;createTime&quot;: &quot;A String&quot;, # Output only. Time at which the `Rollout` was created.
   &quot;deployEndTime&quot;: &quot;A String&quot;, # Output only. Time at which the `Rollout` finished deploying.
   &quot;deployFailureCause&quot;: &quot;A String&quot;, # Output only. The reason this rollout failed. This will always be unspecified while the rollout is in progress.
@@ -170,27 +229,72 @@ Args:
   &quot;name&quot;: &quot;A String&quot;, # Optional. Name of the `Rollout`. Format is projects/{project}/ locations/{location}/deliveryPipelines/{deliveryPipeline}/ releases/{release}/rollouts/a-z{0,62}.
   &quot;phases&quot;: [ # Output only. The phases that represent the workflows of this `Rollout`.
     { # Phase represents a collection of jobs that are logically grouped together for a `Rollout`.
+      &quot;childRolloutJobs&quot;: { # ChildRollouts job composition # Output only. ChildRollout job composition.
+        &quot;advanceRolloutJobs&quot;: [ # Output only. List of AdvanceChildRolloutJobs
+          { # Job represents an operation for a `Rollout`.
+            &quot;advanceChildRolloutJob&quot;: { # An advanceChildRollout Job. # Output only. An advanceChildRollout Job.
+            },
+            &quot;createChildRolloutJob&quot;: { # A createChildRollout Job. # Output only. A createChildRollout Job.
+            },
+            &quot;deployJob&quot;: { # A deploy Job. # Output only. A deploy Job.
+            },
+            &quot;id&quot;: &quot;A String&quot;, # Output only. The ID of the Job.
+            &quot;jobRun&quot;: &quot;A String&quot;, # Output only. The name of the `JobRun` responsible for the most recent invocation of this Job.
+            &quot;skipMessage&quot;: &quot;A String&quot;, # Output only. Additional information on why the Job was skipped, if available.
+            &quot;state&quot;: &quot;A String&quot;, # Output only. The current state of the Job.
+            &quot;verifyJob&quot;: { # A verify Job. # Output only. A verify Job.
+            },
+          },
+        ],
+        &quot;createRolloutJobs&quot;: [ # Output only. List of CreateChildRolloutJobs
+          { # Job represents an operation for a `Rollout`.
+            &quot;advanceChildRolloutJob&quot;: { # An advanceChildRollout Job. # Output only. An advanceChildRollout Job.
+            },
+            &quot;createChildRolloutJob&quot;: { # A createChildRollout Job. # Output only. A createChildRollout Job.
+            },
+            &quot;deployJob&quot;: { # A deploy Job. # Output only. A deploy Job.
+            },
+            &quot;id&quot;: &quot;A String&quot;, # Output only. The ID of the Job.
+            &quot;jobRun&quot;: &quot;A String&quot;, # Output only. The name of the `JobRun` responsible for the most recent invocation of this Job.
+            &quot;skipMessage&quot;: &quot;A String&quot;, # Output only. Additional information on why the Job was skipped, if available.
+            &quot;state&quot;: &quot;A String&quot;, # Output only. The current state of the Job.
+            &quot;verifyJob&quot;: { # A verify Job. # Output only. A verify Job.
+            },
+          },
+        ],
+      },
       &quot;deploymentJobs&quot;: { # Deployment job composition. # Output only. Deployment job composition.
-        &quot;deployJob&quot;: { # Job represents an operation for a `Rollout`. # Output only. The deploy Job. This is the first job run in the phase.
+        &quot;deployJob&quot;: { # Job represents an operation for a `Rollout`. # Output only. The deploy Job. This is the deploy job in the phase.
+          &quot;advanceChildRolloutJob&quot;: { # An advanceChildRollout Job. # Output only. An advanceChildRollout Job.
+          },
+          &quot;createChildRolloutJob&quot;: { # A createChildRollout Job. # Output only. A createChildRollout Job.
+          },
           &quot;deployJob&quot;: { # A deploy Job. # Output only. A deploy Job.
           },
           &quot;id&quot;: &quot;A String&quot;, # Output only. The ID of the Job.
           &quot;jobRun&quot;: &quot;A String&quot;, # Output only. The name of the `JobRun` responsible for the most recent invocation of this Job.
+          &quot;skipMessage&quot;: &quot;A String&quot;, # Output only. Additional information on why the Job was skipped, if available.
           &quot;state&quot;: &quot;A String&quot;, # Output only. The current state of the Job.
           &quot;verifyJob&quot;: { # A verify Job. # Output only. A verify Job.
           },
         },
         &quot;verifyJob&quot;: { # Job represents an operation for a `Rollout`. # Output only. The verify Job. Runs after a deploy if the deploy succeeds.
+          &quot;advanceChildRolloutJob&quot;: { # An advanceChildRollout Job. # Output only. An advanceChildRollout Job.
+          },
+          &quot;createChildRolloutJob&quot;: { # A createChildRollout Job. # Output only. A createChildRollout Job.
+          },
           &quot;deployJob&quot;: { # A deploy Job. # Output only. A deploy Job.
           },
           &quot;id&quot;: &quot;A String&quot;, # Output only. The ID of the Job.
           &quot;jobRun&quot;: &quot;A String&quot;, # Output only. The name of the `JobRun` responsible for the most recent invocation of this Job.
+          &quot;skipMessage&quot;: &quot;A String&quot;, # Output only. Additional information on why the Job was skipped, if available.
           &quot;state&quot;: &quot;A String&quot;, # Output only. The current state of the Job.
           &quot;verifyJob&quot;: { # A verify Job. # Output only. A verify Job.
           },
         },
       },
       &quot;id&quot;: &quot;A String&quot;, # Output only. The ID of the Phase.
+      &quot;skipMessage&quot;: &quot;A String&quot;, # Output only. Additional information on why the Phase was skipped, if available.
       &quot;state&quot;: &quot;A String&quot;, # Output only. Current state of the Phase.
     },
   ],
@@ -252,6 +356,7 @@ Returns:
   },
   &quot;approvalState&quot;: &quot;A String&quot;, # Output only. Approval state of the `Rollout`.
   &quot;approveTime&quot;: &quot;A String&quot;, # Output only. Time at which the `Rollout` was approved.
+  &quot;controllerRollout&quot;: &quot;A String&quot;, # Output only. Name of the `ControllerRollout`. Format is projects/{project}/ locations/{location}/deliveryPipelines/{deliveryPipeline}/ releases/{release}/rollouts/a-z{0,62}.
   &quot;createTime&quot;: &quot;A String&quot;, # Output only. Time at which the `Rollout` was created.
   &quot;deployEndTime&quot;: &quot;A String&quot;, # Output only. Time at which the `Rollout` finished deploying.
   &quot;deployFailureCause&quot;: &quot;A String&quot;, # Output only. The reason this rollout failed. This will always be unspecified while the rollout is in progress.
@@ -276,33 +381,104 @@ Returns:
   &quot;name&quot;: &quot;A String&quot;, # Optional. Name of the `Rollout`. Format is projects/{project}/ locations/{location}/deliveryPipelines/{deliveryPipeline}/ releases/{release}/rollouts/a-z{0,62}.
   &quot;phases&quot;: [ # Output only. The phases that represent the workflows of this `Rollout`.
     { # Phase represents a collection of jobs that are logically grouped together for a `Rollout`.
+      &quot;childRolloutJobs&quot;: { # ChildRollouts job composition # Output only. ChildRollout job composition.
+        &quot;advanceRolloutJobs&quot;: [ # Output only. List of AdvanceChildRolloutJobs
+          { # Job represents an operation for a `Rollout`.
+            &quot;advanceChildRolloutJob&quot;: { # An advanceChildRollout Job. # Output only. An advanceChildRollout Job.
+            },
+            &quot;createChildRolloutJob&quot;: { # A createChildRollout Job. # Output only. A createChildRollout Job.
+            },
+            &quot;deployJob&quot;: { # A deploy Job. # Output only. A deploy Job.
+            },
+            &quot;id&quot;: &quot;A String&quot;, # Output only. The ID of the Job.
+            &quot;jobRun&quot;: &quot;A String&quot;, # Output only. The name of the `JobRun` responsible for the most recent invocation of this Job.
+            &quot;skipMessage&quot;: &quot;A String&quot;, # Output only. Additional information on why the Job was skipped, if available.
+            &quot;state&quot;: &quot;A String&quot;, # Output only. The current state of the Job.
+            &quot;verifyJob&quot;: { # A verify Job. # Output only. A verify Job.
+            },
+          },
+        ],
+        &quot;createRolloutJobs&quot;: [ # Output only. List of CreateChildRolloutJobs
+          { # Job represents an operation for a `Rollout`.
+            &quot;advanceChildRolloutJob&quot;: { # An advanceChildRollout Job. # Output only. An advanceChildRollout Job.
+            },
+            &quot;createChildRolloutJob&quot;: { # A createChildRollout Job. # Output only. A createChildRollout Job.
+            },
+            &quot;deployJob&quot;: { # A deploy Job. # Output only. A deploy Job.
+            },
+            &quot;id&quot;: &quot;A String&quot;, # Output only. The ID of the Job.
+            &quot;jobRun&quot;: &quot;A String&quot;, # Output only. The name of the `JobRun` responsible for the most recent invocation of this Job.
+            &quot;skipMessage&quot;: &quot;A String&quot;, # Output only. Additional information on why the Job was skipped, if available.
+            &quot;state&quot;: &quot;A String&quot;, # Output only. The current state of the Job.
+            &quot;verifyJob&quot;: { # A verify Job. # Output only. A verify Job.
+            },
+          },
+        ],
+      },
       &quot;deploymentJobs&quot;: { # Deployment job composition. # Output only. Deployment job composition.
-        &quot;deployJob&quot;: { # Job represents an operation for a `Rollout`. # Output only. The deploy Job. This is the first job run in the phase.
+        &quot;deployJob&quot;: { # Job represents an operation for a `Rollout`. # Output only. The deploy Job. This is the deploy job in the phase.
+          &quot;advanceChildRolloutJob&quot;: { # An advanceChildRollout Job. # Output only. An advanceChildRollout Job.
+          },
+          &quot;createChildRolloutJob&quot;: { # A createChildRollout Job. # Output only. A createChildRollout Job.
+          },
           &quot;deployJob&quot;: { # A deploy Job. # Output only. A deploy Job.
           },
           &quot;id&quot;: &quot;A String&quot;, # Output only. The ID of the Job.
           &quot;jobRun&quot;: &quot;A String&quot;, # Output only. The name of the `JobRun` responsible for the most recent invocation of this Job.
+          &quot;skipMessage&quot;: &quot;A String&quot;, # Output only. Additional information on why the Job was skipped, if available.
           &quot;state&quot;: &quot;A String&quot;, # Output only. The current state of the Job.
           &quot;verifyJob&quot;: { # A verify Job. # Output only. A verify Job.
           },
         },
         &quot;verifyJob&quot;: { # Job represents an operation for a `Rollout`. # Output only. The verify Job. Runs after a deploy if the deploy succeeds.
+          &quot;advanceChildRolloutJob&quot;: { # An advanceChildRollout Job. # Output only. An advanceChildRollout Job.
+          },
+          &quot;createChildRolloutJob&quot;: { # A createChildRollout Job. # Output only. A createChildRollout Job.
+          },
           &quot;deployJob&quot;: { # A deploy Job. # Output only. A deploy Job.
           },
           &quot;id&quot;: &quot;A String&quot;, # Output only. The ID of the Job.
           &quot;jobRun&quot;: &quot;A String&quot;, # Output only. The name of the `JobRun` responsible for the most recent invocation of this Job.
+          &quot;skipMessage&quot;: &quot;A String&quot;, # Output only. Additional information on why the Job was skipped, if available.
           &quot;state&quot;: &quot;A String&quot;, # Output only. The current state of the Job.
           &quot;verifyJob&quot;: { # A verify Job. # Output only. A verify Job.
           },
         },
       },
       &quot;id&quot;: &quot;A String&quot;, # Output only. The ID of the Phase.
+      &quot;skipMessage&quot;: &quot;A String&quot;, # Output only. Additional information on why the Phase was skipped, if available.
       &quot;state&quot;: &quot;A String&quot;, # Output only. Current state of the Phase.
     },
   ],
   &quot;state&quot;: &quot;A String&quot;, # Output only. Current state of the `Rollout`.
   &quot;targetId&quot;: &quot;A String&quot;, # Required. The ID of Target to which this `Rollout` is deploying.
   &quot;uid&quot;: &quot;A String&quot;, # Output only. Unique identifier of the `Rollout`.
+}</pre>
+</div>
+
+<div class="method">
+    <code class="details" id="ignoreJob">ignoreJob(rollout, body=None, x__xgafv=None)</code>
+  <pre>Ignores the specified Job in a Rollout.
+
+Args:
+  rollout: string, Required. Name of the Rollout. Format is projects/{project}/locations/{location}/deliveryPipelines/{deliveryPipeline}/ releases/{release}/rollouts/{rollout}. (required)
+  body: object, The request body.
+    The object takes the form of:
+
+{ # The request object used by `IgnoreJob`.
+  &quot;jobId&quot;: &quot;A String&quot;, # Required. The job ID for the Job to ignore.
+  &quot;phaseId&quot;: &quot;A String&quot;, # Required. The phase ID the Job to ignore belongs to.
+}
+
+  x__xgafv: string, V1 error format.
+    Allowed values
+      1 - v1 error format
+      2 - v2 error format
+
+Returns:
+  An object of the form:
+
+    { # The response object from `IgnoreJob`.
 }</pre>
 </div>
 
@@ -333,6 +509,7 @@ Returns:
       },
       &quot;approvalState&quot;: &quot;A String&quot;, # Output only. Approval state of the `Rollout`.
       &quot;approveTime&quot;: &quot;A String&quot;, # Output only. Time at which the `Rollout` was approved.
+      &quot;controllerRollout&quot;: &quot;A String&quot;, # Output only. Name of the `ControllerRollout`. Format is projects/{project}/ locations/{location}/deliveryPipelines/{deliveryPipeline}/ releases/{release}/rollouts/a-z{0,62}.
       &quot;createTime&quot;: &quot;A String&quot;, # Output only. Time at which the `Rollout` was created.
       &quot;deployEndTime&quot;: &quot;A String&quot;, # Output only. Time at which the `Rollout` finished deploying.
       &quot;deployFailureCause&quot;: &quot;A String&quot;, # Output only. The reason this rollout failed. This will always be unspecified while the rollout is in progress.
@@ -357,27 +534,72 @@ Returns:
       &quot;name&quot;: &quot;A String&quot;, # Optional. Name of the `Rollout`. Format is projects/{project}/ locations/{location}/deliveryPipelines/{deliveryPipeline}/ releases/{release}/rollouts/a-z{0,62}.
       &quot;phases&quot;: [ # Output only. The phases that represent the workflows of this `Rollout`.
         { # Phase represents a collection of jobs that are logically grouped together for a `Rollout`.
+          &quot;childRolloutJobs&quot;: { # ChildRollouts job composition # Output only. ChildRollout job composition.
+            &quot;advanceRolloutJobs&quot;: [ # Output only. List of AdvanceChildRolloutJobs
+              { # Job represents an operation for a `Rollout`.
+                &quot;advanceChildRolloutJob&quot;: { # An advanceChildRollout Job. # Output only. An advanceChildRollout Job.
+                },
+                &quot;createChildRolloutJob&quot;: { # A createChildRollout Job. # Output only. A createChildRollout Job.
+                },
+                &quot;deployJob&quot;: { # A deploy Job. # Output only. A deploy Job.
+                },
+                &quot;id&quot;: &quot;A String&quot;, # Output only. The ID of the Job.
+                &quot;jobRun&quot;: &quot;A String&quot;, # Output only. The name of the `JobRun` responsible for the most recent invocation of this Job.
+                &quot;skipMessage&quot;: &quot;A String&quot;, # Output only. Additional information on why the Job was skipped, if available.
+                &quot;state&quot;: &quot;A String&quot;, # Output only. The current state of the Job.
+                &quot;verifyJob&quot;: { # A verify Job. # Output only. A verify Job.
+                },
+              },
+            ],
+            &quot;createRolloutJobs&quot;: [ # Output only. List of CreateChildRolloutJobs
+              { # Job represents an operation for a `Rollout`.
+                &quot;advanceChildRolloutJob&quot;: { # An advanceChildRollout Job. # Output only. An advanceChildRollout Job.
+                },
+                &quot;createChildRolloutJob&quot;: { # A createChildRollout Job. # Output only. A createChildRollout Job.
+                },
+                &quot;deployJob&quot;: { # A deploy Job. # Output only. A deploy Job.
+                },
+                &quot;id&quot;: &quot;A String&quot;, # Output only. The ID of the Job.
+                &quot;jobRun&quot;: &quot;A String&quot;, # Output only. The name of the `JobRun` responsible for the most recent invocation of this Job.
+                &quot;skipMessage&quot;: &quot;A String&quot;, # Output only. Additional information on why the Job was skipped, if available.
+                &quot;state&quot;: &quot;A String&quot;, # Output only. The current state of the Job.
+                &quot;verifyJob&quot;: { # A verify Job. # Output only. A verify Job.
+                },
+              },
+            ],
+          },
           &quot;deploymentJobs&quot;: { # Deployment job composition. # Output only. Deployment job composition.
-            &quot;deployJob&quot;: { # Job represents an operation for a `Rollout`. # Output only. The deploy Job. This is the first job run in the phase.
+            &quot;deployJob&quot;: { # Job represents an operation for a `Rollout`. # Output only. The deploy Job. This is the deploy job in the phase.
+              &quot;advanceChildRolloutJob&quot;: { # An advanceChildRollout Job. # Output only. An advanceChildRollout Job.
+              },
+              &quot;createChildRolloutJob&quot;: { # A createChildRollout Job. # Output only. A createChildRollout Job.
+              },
               &quot;deployJob&quot;: { # A deploy Job. # Output only. A deploy Job.
               },
               &quot;id&quot;: &quot;A String&quot;, # Output only. The ID of the Job.
               &quot;jobRun&quot;: &quot;A String&quot;, # Output only. The name of the `JobRun` responsible for the most recent invocation of this Job.
+              &quot;skipMessage&quot;: &quot;A String&quot;, # Output only. Additional information on why the Job was skipped, if available.
               &quot;state&quot;: &quot;A String&quot;, # Output only. The current state of the Job.
               &quot;verifyJob&quot;: { # A verify Job. # Output only. A verify Job.
               },
             },
             &quot;verifyJob&quot;: { # Job represents an operation for a `Rollout`. # Output only. The verify Job. Runs after a deploy if the deploy succeeds.
+              &quot;advanceChildRolloutJob&quot;: { # An advanceChildRollout Job. # Output only. An advanceChildRollout Job.
+              },
+              &quot;createChildRolloutJob&quot;: { # A createChildRollout Job. # Output only. A createChildRollout Job.
+              },
               &quot;deployJob&quot;: { # A deploy Job. # Output only. A deploy Job.
               },
               &quot;id&quot;: &quot;A String&quot;, # Output only. The ID of the Job.
               &quot;jobRun&quot;: &quot;A String&quot;, # Output only. The name of the `JobRun` responsible for the most recent invocation of this Job.
+              &quot;skipMessage&quot;: &quot;A String&quot;, # Output only. Additional information on why the Job was skipped, if available.
               &quot;state&quot;: &quot;A String&quot;, # Output only. The current state of the Job.
               &quot;verifyJob&quot;: { # A verify Job. # Output only. A verify Job.
               },
             },
           },
           &quot;id&quot;: &quot;A String&quot;, # Output only. The ID of the Phase.
+          &quot;skipMessage&quot;: &quot;A String&quot;, # Output only. Additional information on why the Phase was skipped, if available.
           &quot;state&quot;: &quot;A String&quot;, # Output only. Current state of the Phase.
         },
       ],

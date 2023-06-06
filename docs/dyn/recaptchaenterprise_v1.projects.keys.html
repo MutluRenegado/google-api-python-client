@@ -97,7 +97,7 @@ h1, h2, h3 {
 <p class="firstline">Retrieves the next page of results.</p>
 <p class="toc_element">
   <code><a href="#migrate">migrate(name, body=None, x__xgafv=None)</a></code></p>
-<p class="firstline">Migrates an existing key from reCAPTCHA to reCAPTCHA Enterprise. Once a key is migrated, it can be used from either product. SiteVerify requests are billed as CreateAssessment calls. You must be authenticated as one of the current owners of the reCAPTCHA Site Key, and your user must have the reCAPTCHA Enterprise Admin IAM role in the destination project.</p>
+<p class="firstline">Migrates an existing key from reCAPTCHA to reCAPTCHA Enterprise. Once a key is migrated, it can be used from either product. SiteVerify requests are billed as CreateAssessment calls. You must be authenticated as one of the current owners of the reCAPTCHA Key, and your user must have the reCAPTCHA Enterprise Admin IAM role in the destination project.</p>
 <p class="toc_element">
   <code><a href="#patch">patch(name, body=None, updateMask=None, x__xgafv=None)</a></code></p>
 <p class="firstline">Updates the specified key.</p>
@@ -125,14 +125,20 @@ Args:
     &quot;allowedPackageNames&quot;: [ # Android package names of apps allowed to use the key. Example: &#x27;com.companyname.appname&#x27;
       &quot;A String&quot;,
     ],
+    &quot;supportNonGoogleAppStoreDistribution&quot;: True or False, # Set to true for keys that are used in an Android application that is available for download in app stores in addition to the Google Play Store.
   },
-  &quot;createTime&quot;: &quot;A String&quot;, # The timestamp corresponding to the creation of this Key.
+  &quot;createTime&quot;: &quot;A String&quot;, # Output only. The timestamp corresponding to the creation of this key.
   &quot;displayName&quot;: &quot;A String&quot;, # Human-readable display name of this key. Modifiable by user.
   &quot;iosSettings&quot;: { # Settings specific to keys that can be used by iOS apps. # Settings for keys that can be used by iOS apps.
     &quot;allowAllBundleIds&quot;: True or False, # If set to true, allowed_bundle_ids are not enforced.
     &quot;allowedBundleIds&quot;: [ # iOS bundle ids of apps allowed to use the key. Example: &#x27;com.companyname.productname.appname&#x27;
       &quot;A String&quot;,
     ],
+    &quot;appleDeveloperId&quot;: { # Contains fields that are required to perform Apple-specific integrity checks. # Apple Developer account details for the app that is protected by the reCAPTCHA Key. reCAPTCHA Enterprise leverages platform-specific checks like Apple App Attest and Apple DeviceCheck to protect your app from abuse. Providing these fields allows reCAPTCHA Enterprise to get a better assessment of the integrity of your app.
+      &quot;keyId&quot;: &quot;A String&quot;, # Required. The Apple developer key ID (10-character string).
+      &quot;privateKey&quot;: &quot;A String&quot;, # Required. Input only. A private key (downloaded as a text file with a .p8 file extension) generated for your Apple Developer account. Ensure that Apple DeviceCheck is enabled for the private key.
+      &quot;teamId&quot;: &quot;A String&quot;, # Required. The Apple team ID (10-character string) owning the provisioning profile used to build your application.
+    },
   },
   &quot;labels&quot;: { # See Creating and managing labels.
     &quot;a_key&quot;: &quot;A String&quot;,
@@ -171,14 +177,20 @@ Returns:
     &quot;allowedPackageNames&quot;: [ # Android package names of apps allowed to use the key. Example: &#x27;com.companyname.appname&#x27;
       &quot;A String&quot;,
     ],
+    &quot;supportNonGoogleAppStoreDistribution&quot;: True or False, # Set to true for keys that are used in an Android application that is available for download in app stores in addition to the Google Play Store.
   },
-  &quot;createTime&quot;: &quot;A String&quot;, # The timestamp corresponding to the creation of this Key.
+  &quot;createTime&quot;: &quot;A String&quot;, # Output only. The timestamp corresponding to the creation of this key.
   &quot;displayName&quot;: &quot;A String&quot;, # Human-readable display name of this key. Modifiable by user.
   &quot;iosSettings&quot;: { # Settings specific to keys that can be used by iOS apps. # Settings for keys that can be used by iOS apps.
     &quot;allowAllBundleIds&quot;: True or False, # If set to true, allowed_bundle_ids are not enforced.
     &quot;allowedBundleIds&quot;: [ # iOS bundle ids of apps allowed to use the key. Example: &#x27;com.companyname.productname.appname&#x27;
       &quot;A String&quot;,
     ],
+    &quot;appleDeveloperId&quot;: { # Contains fields that are required to perform Apple-specific integrity checks. # Apple Developer account details for the app that is protected by the reCAPTCHA Key. reCAPTCHA Enterprise leverages platform-specific checks like Apple App Attest and Apple DeviceCheck to protect your app from abuse. Providing these fields allows reCAPTCHA Enterprise to get a better assessment of the integrity of your app.
+      &quot;keyId&quot;: &quot;A String&quot;, # Required. The Apple developer key ID (10-character string).
+      &quot;privateKey&quot;: &quot;A String&quot;, # Required. Input only. A private key (downloaded as a text file with a .p8 file extension) generated for your Apple Developer account. Ensure that Apple DeviceCheck is enabled for the private key.
+      &quot;teamId&quot;: &quot;A String&quot;, # Required. The Apple team ID (10-character string) owning the provisioning profile used to build your application.
+    },
   },
   &quot;labels&quot;: { # See Creating and managing labels.
     &quot;a_key&quot;: &quot;A String&quot;,
@@ -242,14 +254,20 @@ Returns:
     &quot;allowedPackageNames&quot;: [ # Android package names of apps allowed to use the key. Example: &#x27;com.companyname.appname&#x27;
       &quot;A String&quot;,
     ],
+    &quot;supportNonGoogleAppStoreDistribution&quot;: True or False, # Set to true for keys that are used in an Android application that is available for download in app stores in addition to the Google Play Store.
   },
-  &quot;createTime&quot;: &quot;A String&quot;, # The timestamp corresponding to the creation of this Key.
+  &quot;createTime&quot;: &quot;A String&quot;, # Output only. The timestamp corresponding to the creation of this key.
   &quot;displayName&quot;: &quot;A String&quot;, # Human-readable display name of this key. Modifiable by user.
   &quot;iosSettings&quot;: { # Settings specific to keys that can be used by iOS apps. # Settings for keys that can be used by iOS apps.
     &quot;allowAllBundleIds&quot;: True or False, # If set to true, allowed_bundle_ids are not enforced.
     &quot;allowedBundleIds&quot;: [ # iOS bundle ids of apps allowed to use the key. Example: &#x27;com.companyname.productname.appname&#x27;
       &quot;A String&quot;,
     ],
+    &quot;appleDeveloperId&quot;: { # Contains fields that are required to perform Apple-specific integrity checks. # Apple Developer account details for the app that is protected by the reCAPTCHA Key. reCAPTCHA Enterprise leverages platform-specific checks like Apple App Attest and Apple DeviceCheck to protect your app from abuse. Providing these fields allows reCAPTCHA Enterprise to get a better assessment of the integrity of your app.
+      &quot;keyId&quot;: &quot;A String&quot;, # Required. The Apple developer key ID (10-character string).
+      &quot;privateKey&quot;: &quot;A String&quot;, # Required. Input only. A private key (downloaded as a text file with a .p8 file extension) generated for your Apple Developer account. Ensure that Apple DeviceCheck is enabled for the private key.
+      &quot;teamId&quot;: &quot;A String&quot;, # Required. The Apple team ID (10-character string) owning the provisioning profile used to build your application.
+    },
   },
   &quot;labels&quot;: { # See Creating and managing labels.
     &quot;a_key&quot;: &quot;A String&quot;,
@@ -343,14 +361,20 @@ Returns:
         &quot;allowedPackageNames&quot;: [ # Android package names of apps allowed to use the key. Example: &#x27;com.companyname.appname&#x27;
           &quot;A String&quot;,
         ],
+        &quot;supportNonGoogleAppStoreDistribution&quot;: True or False, # Set to true for keys that are used in an Android application that is available for download in app stores in addition to the Google Play Store.
       },
-      &quot;createTime&quot;: &quot;A String&quot;, # The timestamp corresponding to the creation of this Key.
+      &quot;createTime&quot;: &quot;A String&quot;, # Output only. The timestamp corresponding to the creation of this key.
       &quot;displayName&quot;: &quot;A String&quot;, # Human-readable display name of this key. Modifiable by user.
       &quot;iosSettings&quot;: { # Settings specific to keys that can be used by iOS apps. # Settings for keys that can be used by iOS apps.
         &quot;allowAllBundleIds&quot;: True or False, # If set to true, allowed_bundle_ids are not enforced.
         &quot;allowedBundleIds&quot;: [ # iOS bundle ids of apps allowed to use the key. Example: &#x27;com.companyname.productname.appname&#x27;
           &quot;A String&quot;,
         ],
+        &quot;appleDeveloperId&quot;: { # Contains fields that are required to perform Apple-specific integrity checks. # Apple Developer account details for the app that is protected by the reCAPTCHA Key. reCAPTCHA Enterprise leverages platform-specific checks like Apple App Attest and Apple DeviceCheck to protect your app from abuse. Providing these fields allows reCAPTCHA Enterprise to get a better assessment of the integrity of your app.
+          &quot;keyId&quot;: &quot;A String&quot;, # Required. The Apple developer key ID (10-character string).
+          &quot;privateKey&quot;: &quot;A String&quot;, # Required. Input only. A private key (downloaded as a text file with a .p8 file extension) generated for your Apple Developer account. Ensure that Apple DeviceCheck is enabled for the private key.
+          &quot;teamId&quot;: &quot;A String&quot;, # Required. The Apple team ID (10-character string) owning the provisioning profile used to build your application.
+        },
       },
       &quot;labels&quot;: { # See Creating and managing labels.
         &quot;a_key&quot;: &quot;A String&quot;,
@@ -395,7 +419,7 @@ Returns:
 
 <div class="method">
     <code class="details" id="migrate">migrate(name, body=None, x__xgafv=None)</code>
-  <pre>Migrates an existing key from reCAPTCHA to reCAPTCHA Enterprise. Once a key is migrated, it can be used from either product. SiteVerify requests are billed as CreateAssessment calls. You must be authenticated as one of the current owners of the reCAPTCHA Site Key, and your user must have the reCAPTCHA Enterprise Admin IAM role in the destination project.
+  <pre>Migrates an existing key from reCAPTCHA to reCAPTCHA Enterprise. Once a key is migrated, it can be used from either product. SiteVerify requests are billed as CreateAssessment calls. You must be authenticated as one of the current owners of the reCAPTCHA Key, and your user must have the reCAPTCHA Enterprise Admin IAM role in the destination project.
 
 Args:
   name: string, Required. The name of the key to be migrated, in the format &quot;projects/{project}/keys/{key}&quot;. (required)
@@ -420,14 +444,20 @@ Returns:
     &quot;allowedPackageNames&quot;: [ # Android package names of apps allowed to use the key. Example: &#x27;com.companyname.appname&#x27;
       &quot;A String&quot;,
     ],
+    &quot;supportNonGoogleAppStoreDistribution&quot;: True or False, # Set to true for keys that are used in an Android application that is available for download in app stores in addition to the Google Play Store.
   },
-  &quot;createTime&quot;: &quot;A String&quot;, # The timestamp corresponding to the creation of this Key.
+  &quot;createTime&quot;: &quot;A String&quot;, # Output only. The timestamp corresponding to the creation of this key.
   &quot;displayName&quot;: &quot;A String&quot;, # Human-readable display name of this key. Modifiable by user.
   &quot;iosSettings&quot;: { # Settings specific to keys that can be used by iOS apps. # Settings for keys that can be used by iOS apps.
     &quot;allowAllBundleIds&quot;: True or False, # If set to true, allowed_bundle_ids are not enforced.
     &quot;allowedBundleIds&quot;: [ # iOS bundle ids of apps allowed to use the key. Example: &#x27;com.companyname.productname.appname&#x27;
       &quot;A String&quot;,
     ],
+    &quot;appleDeveloperId&quot;: { # Contains fields that are required to perform Apple-specific integrity checks. # Apple Developer account details for the app that is protected by the reCAPTCHA Key. reCAPTCHA Enterprise leverages platform-specific checks like Apple App Attest and Apple DeviceCheck to protect your app from abuse. Providing these fields allows reCAPTCHA Enterprise to get a better assessment of the integrity of your app.
+      &quot;keyId&quot;: &quot;A String&quot;, # Required. The Apple developer key ID (10-character string).
+      &quot;privateKey&quot;: &quot;A String&quot;, # Required. Input only. A private key (downloaded as a text file with a .p8 file extension) generated for your Apple Developer account. Ensure that Apple DeviceCheck is enabled for the private key.
+      &quot;teamId&quot;: &quot;A String&quot;, # Required. The Apple team ID (10-character string) owning the provisioning profile used to build your application.
+    },
   },
   &quot;labels&quot;: { # See Creating and managing labels.
     &quot;a_key&quot;: &quot;A String&quot;,
@@ -468,14 +498,20 @@ Args:
     &quot;allowedPackageNames&quot;: [ # Android package names of apps allowed to use the key. Example: &#x27;com.companyname.appname&#x27;
       &quot;A String&quot;,
     ],
+    &quot;supportNonGoogleAppStoreDistribution&quot;: True or False, # Set to true for keys that are used in an Android application that is available for download in app stores in addition to the Google Play Store.
   },
-  &quot;createTime&quot;: &quot;A String&quot;, # The timestamp corresponding to the creation of this Key.
+  &quot;createTime&quot;: &quot;A String&quot;, # Output only. The timestamp corresponding to the creation of this key.
   &quot;displayName&quot;: &quot;A String&quot;, # Human-readable display name of this key. Modifiable by user.
   &quot;iosSettings&quot;: { # Settings specific to keys that can be used by iOS apps. # Settings for keys that can be used by iOS apps.
     &quot;allowAllBundleIds&quot;: True or False, # If set to true, allowed_bundle_ids are not enforced.
     &quot;allowedBundleIds&quot;: [ # iOS bundle ids of apps allowed to use the key. Example: &#x27;com.companyname.productname.appname&#x27;
       &quot;A String&quot;,
     ],
+    &quot;appleDeveloperId&quot;: { # Contains fields that are required to perform Apple-specific integrity checks. # Apple Developer account details for the app that is protected by the reCAPTCHA Key. reCAPTCHA Enterprise leverages platform-specific checks like Apple App Attest and Apple DeviceCheck to protect your app from abuse. Providing these fields allows reCAPTCHA Enterprise to get a better assessment of the integrity of your app.
+      &quot;keyId&quot;: &quot;A String&quot;, # Required. The Apple developer key ID (10-character string).
+      &quot;privateKey&quot;: &quot;A String&quot;, # Required. Input only. A private key (downloaded as a text file with a .p8 file extension) generated for your Apple Developer account. Ensure that Apple DeviceCheck is enabled for the private key.
+      &quot;teamId&quot;: &quot;A String&quot;, # Required. The Apple team ID (10-character string) owning the provisioning profile used to build your application.
+    },
   },
   &quot;labels&quot;: { # See Creating and managing labels.
     &quot;a_key&quot;: &quot;A String&quot;,
@@ -515,14 +551,20 @@ Returns:
     &quot;allowedPackageNames&quot;: [ # Android package names of apps allowed to use the key. Example: &#x27;com.companyname.appname&#x27;
       &quot;A String&quot;,
     ],
+    &quot;supportNonGoogleAppStoreDistribution&quot;: True or False, # Set to true for keys that are used in an Android application that is available for download in app stores in addition to the Google Play Store.
   },
-  &quot;createTime&quot;: &quot;A String&quot;, # The timestamp corresponding to the creation of this Key.
+  &quot;createTime&quot;: &quot;A String&quot;, # Output only. The timestamp corresponding to the creation of this key.
   &quot;displayName&quot;: &quot;A String&quot;, # Human-readable display name of this key. Modifiable by user.
   &quot;iosSettings&quot;: { # Settings specific to keys that can be used by iOS apps. # Settings for keys that can be used by iOS apps.
     &quot;allowAllBundleIds&quot;: True or False, # If set to true, allowed_bundle_ids are not enforced.
     &quot;allowedBundleIds&quot;: [ # iOS bundle ids of apps allowed to use the key. Example: &#x27;com.companyname.productname.appname&#x27;
       &quot;A String&quot;,
     ],
+    &quot;appleDeveloperId&quot;: { # Contains fields that are required to perform Apple-specific integrity checks. # Apple Developer account details for the app that is protected by the reCAPTCHA Key. reCAPTCHA Enterprise leverages platform-specific checks like Apple App Attest and Apple DeviceCheck to protect your app from abuse. Providing these fields allows reCAPTCHA Enterprise to get a better assessment of the integrity of your app.
+      &quot;keyId&quot;: &quot;A String&quot;, # Required. The Apple developer key ID (10-character string).
+      &quot;privateKey&quot;: &quot;A String&quot;, # Required. Input only. A private key (downloaded as a text file with a .p8 file extension) generated for your Apple Developer account. Ensure that Apple DeviceCheck is enabled for the private key.
+      &quot;teamId&quot;: &quot;A String&quot;, # Required. The Apple team ID (10-character string) owning the provisioning profile used to build your application.
+    },
   },
   &quot;labels&quot;: { # See Creating and managing labels.
     &quot;a_key&quot;: &quot;A String&quot;,

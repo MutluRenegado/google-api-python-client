@@ -135,13 +135,17 @@ Returns:
       ],
     },
   },
-  &quot;labels&quot;: { # Labels associated with this execution. Labels can contain at most 64 entries. Keys and values can be no longer than 63 characters and can only contain lowercase letters, numeric characters, underscores and dashes. Label keys must start with a letter. International characters are allowed.
+  &quot;labels&quot;: { # Labels associated with this execution. Labels can contain at most 64 entries. Keys and values can be no longer than 63 characters and can only contain lowercase letters, numeric characters, underscores, and dashes. Label keys must start with a letter. International characters are allowed. By default, labels are inherited from the workflow but are overridden by any labels associated with the execution.
     &quot;a_key&quot;: &quot;A String&quot;,
   },
   &quot;name&quot;: &quot;A String&quot;, # Output only. The resource name of the execution. Format: projects/{project}/locations/{location}/workflows/{workflow}/executions/{execution}
   &quot;result&quot;: &quot;A String&quot;, # Output only. Output of the execution represented as a JSON string. The value can only be present if the execution&#x27;s state is `SUCCEEDED`.
   &quot;startTime&quot;: &quot;A String&quot;, # Output only. Marks the beginning of execution.
   &quot;state&quot;: &quot;A String&quot;, # Output only. Current state of the execution.
+  &quot;stateError&quot;: { # Describes an error related to the current state of the Execution resource. # Output only. Error regarding the state of the Execution resource. For example, this field will have error details if the execution data is unavailable due to revoked KMS key permissions.
+    &quot;details&quot;: &quot;A String&quot;, # Provides specifics about the error.
+    &quot;type&quot;: &quot;A String&quot;, # The type of this state error.
+  },
   &quot;status&quot;: { # Represents the current status of this execution. # Output only. Status tracks the current steps and progress data of this execution.
     &quot;currentSteps&quot;: [ # A list of currently executing or last executed step names for the workflow execution currently running. If the workflow has succeeded or failed, this is the last attempted or executed step. Presently, if the current step is inside a subworkflow, the list only includes that step. In the future, the list will contain items for each step in the call stack, starting with the outermost step in the `main` subworkflow, and ending with the most deeply nested step.
       { # Represents a step of the workflow this execution is running.
@@ -190,13 +194,17 @@ Args:
       ],
     },
   },
-  &quot;labels&quot;: { # Labels associated with this execution. Labels can contain at most 64 entries. Keys and values can be no longer than 63 characters and can only contain lowercase letters, numeric characters, underscores and dashes. Label keys must start with a letter. International characters are allowed.
+  &quot;labels&quot;: { # Labels associated with this execution. Labels can contain at most 64 entries. Keys and values can be no longer than 63 characters and can only contain lowercase letters, numeric characters, underscores, and dashes. Label keys must start with a letter. International characters are allowed. By default, labels are inherited from the workflow but are overridden by any labels associated with the execution.
     &quot;a_key&quot;: &quot;A String&quot;,
   },
   &quot;name&quot;: &quot;A String&quot;, # Output only. The resource name of the execution. Format: projects/{project}/locations/{location}/workflows/{workflow}/executions/{execution}
   &quot;result&quot;: &quot;A String&quot;, # Output only. Output of the execution represented as a JSON string. The value can only be present if the execution&#x27;s state is `SUCCEEDED`.
   &quot;startTime&quot;: &quot;A String&quot;, # Output only. Marks the beginning of execution.
   &quot;state&quot;: &quot;A String&quot;, # Output only. Current state of the execution.
+  &quot;stateError&quot;: { # Describes an error related to the current state of the Execution resource. # Output only. Error regarding the state of the Execution resource. For example, this field will have error details if the execution data is unavailable due to revoked KMS key permissions.
+    &quot;details&quot;: &quot;A String&quot;, # Provides specifics about the error.
+    &quot;type&quot;: &quot;A String&quot;, # The type of this state error.
+  },
   &quot;status&quot;: { # Represents the current status of this execution. # Output only. Status tracks the current steps and progress data of this execution.
     &quot;currentSteps&quot;: [ # A list of currently executing or last executed step names for the workflow execution currently running. If the workflow has succeeded or failed, this is the last attempted or executed step. Presently, if the current step is inside a subworkflow, the list only includes that step. In the future, the list will contain items for each step in the call stack, starting with the outermost step in the `main` subworkflow, and ending with the most deeply nested step.
       { # Represents a step of the workflow this execution is running.
@@ -238,13 +246,17 @@ Returns:
       ],
     },
   },
-  &quot;labels&quot;: { # Labels associated with this execution. Labels can contain at most 64 entries. Keys and values can be no longer than 63 characters and can only contain lowercase letters, numeric characters, underscores and dashes. Label keys must start with a letter. International characters are allowed.
+  &quot;labels&quot;: { # Labels associated with this execution. Labels can contain at most 64 entries. Keys and values can be no longer than 63 characters and can only contain lowercase letters, numeric characters, underscores, and dashes. Label keys must start with a letter. International characters are allowed. By default, labels are inherited from the workflow but are overridden by any labels associated with the execution.
     &quot;a_key&quot;: &quot;A String&quot;,
   },
   &quot;name&quot;: &quot;A String&quot;, # Output only. The resource name of the execution. Format: projects/{project}/locations/{location}/workflows/{workflow}/executions/{execution}
   &quot;result&quot;: &quot;A String&quot;, # Output only. Output of the execution represented as a JSON string. The value can only be present if the execution&#x27;s state is `SUCCEEDED`.
   &quot;startTime&quot;: &quot;A String&quot;, # Output only. Marks the beginning of execution.
   &quot;state&quot;: &quot;A String&quot;, # Output only. Current state of the execution.
+  &quot;stateError&quot;: { # Describes an error related to the current state of the Execution resource. # Output only. Error regarding the state of the Execution resource. For example, this field will have error details if the execution data is unavailable due to revoked KMS key permissions.
+    &quot;details&quot;: &quot;A String&quot;, # Provides specifics about the error.
+    &quot;type&quot;: &quot;A String&quot;, # The type of this state error.
+  },
   &quot;status&quot;: { # Represents the current status of this execution. # Output only. Status tracks the current steps and progress data of this execution.
     &quot;currentSteps&quot;: [ # A list of currently executing or last executed step names for the workflow execution currently running. If the workflow has succeeded or failed, this is the last attempted or executed step. Presently, if the current step is inside a subworkflow, the list only includes that step. In the future, the list will contain items for each step in the call stack, starting with the outermost step in the `main` subworkflow, and ending with the most deeply nested step.
       { # Represents a step of the workflow this execution is running.
@@ -266,7 +278,7 @@ Args:
   view: string, Optional. A view defining which fields should be filled in the returned execution. The API will default to the FULL view.
     Allowed values
       EXECUTION_VIEW_UNSPECIFIED - The default / unset value.
-      BASIC - Includes only basic metadata about the execution. Following fields are returned: name, start_time, end_time, duration, state and workflow_revision_id.
+      BASIC - Includes only basic metadata about the execution. The following fields are returned: name, start_time, end_time, duration, state, and workflow_revision_id.
       FULL - Includes all data.
   x__xgafv: string, V1 error format.
     Allowed values
@@ -298,13 +310,17 @@ Returns:
       ],
     },
   },
-  &quot;labels&quot;: { # Labels associated with this execution. Labels can contain at most 64 entries. Keys and values can be no longer than 63 characters and can only contain lowercase letters, numeric characters, underscores and dashes. Label keys must start with a letter. International characters are allowed.
+  &quot;labels&quot;: { # Labels associated with this execution. Labels can contain at most 64 entries. Keys and values can be no longer than 63 characters and can only contain lowercase letters, numeric characters, underscores, and dashes. Label keys must start with a letter. International characters are allowed. By default, labels are inherited from the workflow but are overridden by any labels associated with the execution.
     &quot;a_key&quot;: &quot;A String&quot;,
   },
   &quot;name&quot;: &quot;A String&quot;, # Output only. The resource name of the execution. Format: projects/{project}/locations/{location}/workflows/{workflow}/executions/{execution}
   &quot;result&quot;: &quot;A String&quot;, # Output only. Output of the execution represented as a JSON string. The value can only be present if the execution&#x27;s state is `SUCCEEDED`.
   &quot;startTime&quot;: &quot;A String&quot;, # Output only. Marks the beginning of execution.
   &quot;state&quot;: &quot;A String&quot;, # Output only. Current state of the execution.
+  &quot;stateError&quot;: { # Describes an error related to the current state of the Execution resource. # Output only. Error regarding the state of the Execution resource. For example, this field will have error details if the execution data is unavailable due to revoked KMS key permissions.
+    &quot;details&quot;: &quot;A String&quot;, # Provides specifics about the error.
+    &quot;type&quot;: &quot;A String&quot;, # The type of this state error.
+  },
   &quot;status&quot;: { # Represents the current status of this execution. # Output only. Status tracks the current steps and progress data of this execution.
     &quot;currentSteps&quot;: [ # A list of currently executing or last executed step names for the workflow execution currently running. If the workflow has succeeded or failed, this is the last attempted or executed step. Presently, if the current step is inside a subworkflow, the list only includes that step. In the future, the list will contain items for each step in the call stack, starting with the outermost step in the `main` subworkflow, and ending with the most deeply nested step.
       { # Represents a step of the workflow this execution is running.
@@ -324,13 +340,13 @@ Returns:
 Args:
   parent: string, Required. Name of the workflow for which the executions should be listed. Format: projects/{project}/locations/{location}/workflows/{workflow} (required)
   filter: string, Optional. Filters applied to the [Executions.ListExecutions] results. The following fields are supported for filtering: executionID, state, startTime, endTime, duration, workflowRevisionID, stepName, and label.
-  orderBy: string, Optional. The orderding applied to the [Executions.ListExecutions] results. By default the ordering is based on descending start time. The following fields are supported for order by: executionID, startTime, endTime, duration, state, and workflowRevisionID.
+  orderBy: string, Optional. The ordering applied to the [Executions.ListExecutions] results. By default the ordering is based on descending start time. The following fields are supported for order by: executionID, startTime, endTime, duration, state, and workflowRevisionID.
   pageSize: integer, Maximum number of executions to return per call. Max supported value depends on the selected Execution view: it&#x27;s 1000 for BASIC and 100 for FULL. The default value used if the field is not specified is 100, regardless of the selected view. Values greater than the max value will be coerced down to it.
-  pageToken: string, A page token, received from a previous `ListExecutions` call. Provide this to retrieve the subsequent page. When paginating, all other parameters provided to `ListExecutions` must match the call that provided the page token.
+  pageToken: string, A page token, received from a previous `ListExecutions` call. Provide this to retrieve the subsequent page. When paginating, all other parameters provided to `ListExecutions` must match the call that provided the page token. Note that pagination is applied to dynamic data. The list of executions returned can change between page requests.
   view: string, Optional. A view defining which fields should be filled in the returned executions. The API will default to the BASIC view.
     Allowed values
       EXECUTION_VIEW_UNSPECIFIED - The default / unset value.
-      BASIC - Includes only basic metadata about the execution. Following fields are returned: name, start_time, end_time, duration, state and workflow_revision_id.
+      BASIC - Includes only basic metadata about the execution. The following fields are returned: name, start_time, end_time, duration, state, and workflow_revision_id.
       FULL - Includes all data.
   x__xgafv: string, V1 error format.
     Allowed values
@@ -364,13 +380,17 @@ Returns:
           ],
         },
       },
-      &quot;labels&quot;: { # Labels associated with this execution. Labels can contain at most 64 entries. Keys and values can be no longer than 63 characters and can only contain lowercase letters, numeric characters, underscores and dashes. Label keys must start with a letter. International characters are allowed.
+      &quot;labels&quot;: { # Labels associated with this execution. Labels can contain at most 64 entries. Keys and values can be no longer than 63 characters and can only contain lowercase letters, numeric characters, underscores, and dashes. Label keys must start with a letter. International characters are allowed. By default, labels are inherited from the workflow but are overridden by any labels associated with the execution.
         &quot;a_key&quot;: &quot;A String&quot;,
       },
       &quot;name&quot;: &quot;A String&quot;, # Output only. The resource name of the execution. Format: projects/{project}/locations/{location}/workflows/{workflow}/executions/{execution}
       &quot;result&quot;: &quot;A String&quot;, # Output only. Output of the execution represented as a JSON string. The value can only be present if the execution&#x27;s state is `SUCCEEDED`.
       &quot;startTime&quot;: &quot;A String&quot;, # Output only. Marks the beginning of execution.
       &quot;state&quot;: &quot;A String&quot;, # Output only. Current state of the execution.
+      &quot;stateError&quot;: { # Describes an error related to the current state of the Execution resource. # Output only. Error regarding the state of the Execution resource. For example, this field will have error details if the execution data is unavailable due to revoked KMS key permissions.
+        &quot;details&quot;: &quot;A String&quot;, # Provides specifics about the error.
+        &quot;type&quot;: &quot;A String&quot;, # The type of this state error.
+      },
       &quot;status&quot;: { # Represents the current status of this execution. # Output only. Status tracks the current steps and progress data of this execution.
         &quot;currentSteps&quot;: [ # A list of currently executing or last executed step names for the workflow execution currently running. If the workflow has succeeded or failed, this is the last attempted or executed step. Presently, if the current step is inside a subworkflow, the list only includes that step. In the future, the list will contain items for each step in the call stack, starting with the outermost step in the `main` subworkflow, and ending with the most deeply nested step.
           { # Represents a step of the workflow this execution is running.

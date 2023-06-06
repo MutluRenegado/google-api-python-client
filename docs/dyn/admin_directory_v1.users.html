@@ -95,7 +95,7 @@ h1, h2, h3 {
 <p class="firstline">Retrieves a user.</p>
 <p class="toc_element">
   <code><a href="#insert">insert(body=None, x__xgafv=None)</a></code></p>
-<p class="firstline">Creates a user.</p>
+<p class="firstline">Creates a user. Mutate calls immediately following user creation might sometimes fail as the user isn't fully created due to propagation delay in our backends. Check the error details for the "User creation is not complete" message to see if this is the case. Retrying the calls after some time can help in this case.</p>
 <p class="toc_element">
   <code><a href="#list">list(customFieldMask=None, customer=None, domain=None, event=None, maxResults=None, orderBy=None, pageToken=None, projection=None, query=None, showDeleted=None, sortOrder=None, viewType=None, x__xgafv=None)</a></code></p>
 <p class="firstline">Retrieves a paginated list of either deleted users or all users in a domain.</p>
@@ -163,7 +163,7 @@ Args:
 Returns:
   An object of the form:
 
-    { # The Directory API allows you to create and manage your account&#x27;s users, user aliases, and user Gmail chat profile photos. For more information about common tasks, see the [User Accounts Developer&#x27;s Guide](/admin-sdk/directory/v1/guides/manage-users.html) and the [User Aliases Developer&#x27;s Guide](/admin-sdk/directory/v1/guides/manage-user-aliases.html).
+    { # The Directory API allows you to create and manage your account&#x27;s users, user aliases, and user Google profile photos. For more information about common tasks, see the [User Accounts Developer&#x27;s Guide](/admin-sdk/directory/v1/guides/manage-users.html) and the [User Aliases Developer&#x27;s Guide](/admin-sdk/directory/v1/guides/manage-user-aliases.html).
   &quot;addresses&quot;: &quot;&quot;, # The list of the user&#x27;s addresses. The maximum allowed data size for this field is 10KB.
   &quot;agreedToTerms&quot;: True or False, # Output only. This property is `true` if the user has completed an initial login and accepted the Terms of Service agreement.
   &quot;aliases&quot;: [ # Output only. The list of the user&#x27;s alias email addresses.
@@ -221,20 +221,20 @@ Returns:
   &quot;suspended&quot;: True or False, # Indicates if user is suspended.
   &quot;suspensionReason&quot;: &quot;A String&quot;, # Output only. Has the reason a user account is suspended either by the administrator or by Google at the time of suspension. The property is returned only if the `suspended` property is `true`.
   &quot;thumbnailPhotoEtag&quot;: &quot;A String&quot;, # Output only. ETag of the user&#x27;s photo (Read-only)
-  &quot;thumbnailPhotoUrl&quot;: &quot;A String&quot;, # Output only. Photo Url of the user (Read-only)
+  &quot;thumbnailPhotoUrl&quot;: &quot;A String&quot;, # Output only. The URL of the user&#x27;s profile photo. The URL might be temporary or private.
   &quot;websites&quot;: &quot;&quot;, # The user&#x27;s websites. The maximum allowed data size for this field is 2KB.
 }</pre>
 </div>
 
 <div class="method">
     <code class="details" id="insert">insert(body=None, x__xgafv=None)</code>
-  <pre>Creates a user.
+  <pre>Creates a user. Mutate calls immediately following user creation might sometimes fail as the user isn&#x27;t fully created due to propagation delay in our backends. Check the error details for the &quot;User creation is not complete&quot; message to see if this is the case. Retrying the calls after some time can help in this case.
 
 Args:
   body: object, The request body.
     The object takes the form of:
 
-{ # The Directory API allows you to create and manage your account&#x27;s users, user aliases, and user Gmail chat profile photos. For more information about common tasks, see the [User Accounts Developer&#x27;s Guide](/admin-sdk/directory/v1/guides/manage-users.html) and the [User Aliases Developer&#x27;s Guide](/admin-sdk/directory/v1/guides/manage-user-aliases.html).
+{ # The Directory API allows you to create and manage your account&#x27;s users, user aliases, and user Google profile photos. For more information about common tasks, see the [User Accounts Developer&#x27;s Guide](/admin-sdk/directory/v1/guides/manage-users.html) and the [User Aliases Developer&#x27;s Guide](/admin-sdk/directory/v1/guides/manage-user-aliases.html).
   &quot;addresses&quot;: &quot;&quot;, # The list of the user&#x27;s addresses. The maximum allowed data size for this field is 10KB.
   &quot;agreedToTerms&quot;: True or False, # Output only. This property is `true` if the user has completed an initial login and accepted the Terms of Service agreement.
   &quot;aliases&quot;: [ # Output only. The list of the user&#x27;s alias email addresses.
@@ -292,7 +292,7 @@ Args:
   &quot;suspended&quot;: True or False, # Indicates if user is suspended.
   &quot;suspensionReason&quot;: &quot;A String&quot;, # Output only. Has the reason a user account is suspended either by the administrator or by Google at the time of suspension. The property is returned only if the `suspended` property is `true`.
   &quot;thumbnailPhotoEtag&quot;: &quot;A String&quot;, # Output only. ETag of the user&#x27;s photo (Read-only)
-  &quot;thumbnailPhotoUrl&quot;: &quot;A String&quot;, # Output only. Photo Url of the user (Read-only)
+  &quot;thumbnailPhotoUrl&quot;: &quot;A String&quot;, # Output only. The URL of the user&#x27;s profile photo. The URL might be temporary or private.
   &quot;websites&quot;: &quot;&quot;, # The user&#x27;s websites. The maximum allowed data size for this field is 2KB.
 }
 
@@ -304,7 +304,7 @@ Args:
 Returns:
   An object of the form:
 
-    { # The Directory API allows you to create and manage your account&#x27;s users, user aliases, and user Gmail chat profile photos. For more information about common tasks, see the [User Accounts Developer&#x27;s Guide](/admin-sdk/directory/v1/guides/manage-users.html) and the [User Aliases Developer&#x27;s Guide](/admin-sdk/directory/v1/guides/manage-user-aliases.html).
+    { # The Directory API allows you to create and manage your account&#x27;s users, user aliases, and user Google profile photos. For more information about common tasks, see the [User Accounts Developer&#x27;s Guide](/admin-sdk/directory/v1/guides/manage-users.html) and the [User Aliases Developer&#x27;s Guide](/admin-sdk/directory/v1/guides/manage-user-aliases.html).
   &quot;addresses&quot;: &quot;&quot;, # The list of the user&#x27;s addresses. The maximum allowed data size for this field is 10KB.
   &quot;agreedToTerms&quot;: True or False, # Output only. This property is `true` if the user has completed an initial login and accepted the Terms of Service agreement.
   &quot;aliases&quot;: [ # Output only. The list of the user&#x27;s alias email addresses.
@@ -362,7 +362,7 @@ Returns:
   &quot;suspended&quot;: True or False, # Indicates if user is suspended.
   &quot;suspensionReason&quot;: &quot;A String&quot;, # Output only. Has the reason a user account is suspended either by the administrator or by Google at the time of suspension. The property is returned only if the `suspended` property is `true`.
   &quot;thumbnailPhotoEtag&quot;: &quot;A String&quot;, # Output only. ETag of the user&#x27;s photo (Read-only)
-  &quot;thumbnailPhotoUrl&quot;: &quot;A String&quot;, # Output only. Photo Url of the user (Read-only)
+  &quot;thumbnailPhotoUrl&quot;: &quot;A String&quot;, # Output only. The URL of the user&#x27;s profile photo. The URL might be temporary or private.
   &quot;websites&quot;: &quot;&quot;, # The user&#x27;s websites. The maximum allowed data size for this field is 2KB.
 }</pre>
 </div>
@@ -418,7 +418,7 @@ Returns:
   &quot;nextPageToken&quot;: &quot;A String&quot;, # Token used to access next page of this result.
   &quot;trigger_event&quot;: &quot;A String&quot;, # Event that triggered this response (only used in case of Push Response)
   &quot;users&quot;: [ # A list of user objects.
-    { # The Directory API allows you to create and manage your account&#x27;s users, user aliases, and user Gmail chat profile photos. For more information about common tasks, see the [User Accounts Developer&#x27;s Guide](/admin-sdk/directory/v1/guides/manage-users.html) and the [User Aliases Developer&#x27;s Guide](/admin-sdk/directory/v1/guides/manage-user-aliases.html).
+    { # The Directory API allows you to create and manage your account&#x27;s users, user aliases, and user Google profile photos. For more information about common tasks, see the [User Accounts Developer&#x27;s Guide](/admin-sdk/directory/v1/guides/manage-users.html) and the [User Aliases Developer&#x27;s Guide](/admin-sdk/directory/v1/guides/manage-user-aliases.html).
       &quot;addresses&quot;: &quot;&quot;, # The list of the user&#x27;s addresses. The maximum allowed data size for this field is 10KB.
       &quot;agreedToTerms&quot;: True or False, # Output only. This property is `true` if the user has completed an initial login and accepted the Terms of Service agreement.
       &quot;aliases&quot;: [ # Output only. The list of the user&#x27;s alias email addresses.
@@ -476,7 +476,7 @@ Returns:
       &quot;suspended&quot;: True or False, # Indicates if user is suspended.
       &quot;suspensionReason&quot;: &quot;A String&quot;, # Output only. Has the reason a user account is suspended either by the administrator or by Google at the time of suspension. The property is returned only if the `suspended` property is `true`.
       &quot;thumbnailPhotoEtag&quot;: &quot;A String&quot;, # Output only. ETag of the user&#x27;s photo (Read-only)
-      &quot;thumbnailPhotoUrl&quot;: &quot;A String&quot;, # Output only. Photo Url of the user (Read-only)
+      &quot;thumbnailPhotoUrl&quot;: &quot;A String&quot;, # Output only. The URL of the user&#x27;s profile photo. The URL might be temporary or private.
       &quot;websites&quot;: &quot;&quot;, # The user&#x27;s websites. The maximum allowed data size for this field is 2KB.
     },
   ],
@@ -526,7 +526,7 @@ Args:
   body: object, The request body.
     The object takes the form of:
 
-{ # The Directory API allows you to create and manage your account&#x27;s users, user aliases, and user Gmail chat profile photos. For more information about common tasks, see the [User Accounts Developer&#x27;s Guide](/admin-sdk/directory/v1/guides/manage-users.html) and the [User Aliases Developer&#x27;s Guide](/admin-sdk/directory/v1/guides/manage-user-aliases.html).
+{ # The Directory API allows you to create and manage your account&#x27;s users, user aliases, and user Google profile photos. For more information about common tasks, see the [User Accounts Developer&#x27;s Guide](/admin-sdk/directory/v1/guides/manage-users.html) and the [User Aliases Developer&#x27;s Guide](/admin-sdk/directory/v1/guides/manage-user-aliases.html).
   &quot;addresses&quot;: &quot;&quot;, # The list of the user&#x27;s addresses. The maximum allowed data size for this field is 10KB.
   &quot;agreedToTerms&quot;: True or False, # Output only. This property is `true` if the user has completed an initial login and accepted the Terms of Service agreement.
   &quot;aliases&quot;: [ # Output only. The list of the user&#x27;s alias email addresses.
@@ -584,7 +584,7 @@ Args:
   &quot;suspended&quot;: True or False, # Indicates if user is suspended.
   &quot;suspensionReason&quot;: &quot;A String&quot;, # Output only. Has the reason a user account is suspended either by the administrator or by Google at the time of suspension. The property is returned only if the `suspended` property is `true`.
   &quot;thumbnailPhotoEtag&quot;: &quot;A String&quot;, # Output only. ETag of the user&#x27;s photo (Read-only)
-  &quot;thumbnailPhotoUrl&quot;: &quot;A String&quot;, # Output only. Photo Url of the user (Read-only)
+  &quot;thumbnailPhotoUrl&quot;: &quot;A String&quot;, # Output only. The URL of the user&#x27;s profile photo. The URL might be temporary or private.
   &quot;websites&quot;: &quot;&quot;, # The user&#x27;s websites. The maximum allowed data size for this field is 2KB.
 }
 
@@ -596,7 +596,7 @@ Args:
 Returns:
   An object of the form:
 
-    { # The Directory API allows you to create and manage your account&#x27;s users, user aliases, and user Gmail chat profile photos. For more information about common tasks, see the [User Accounts Developer&#x27;s Guide](/admin-sdk/directory/v1/guides/manage-users.html) and the [User Aliases Developer&#x27;s Guide](/admin-sdk/directory/v1/guides/manage-user-aliases.html).
+    { # The Directory API allows you to create and manage your account&#x27;s users, user aliases, and user Google profile photos. For more information about common tasks, see the [User Accounts Developer&#x27;s Guide](/admin-sdk/directory/v1/guides/manage-users.html) and the [User Aliases Developer&#x27;s Guide](/admin-sdk/directory/v1/guides/manage-user-aliases.html).
   &quot;addresses&quot;: &quot;&quot;, # The list of the user&#x27;s addresses. The maximum allowed data size for this field is 10KB.
   &quot;agreedToTerms&quot;: True or False, # Output only. This property is `true` if the user has completed an initial login and accepted the Terms of Service agreement.
   &quot;aliases&quot;: [ # Output only. The list of the user&#x27;s alias email addresses.
@@ -654,7 +654,7 @@ Returns:
   &quot;suspended&quot;: True or False, # Indicates if user is suspended.
   &quot;suspensionReason&quot;: &quot;A String&quot;, # Output only. Has the reason a user account is suspended either by the administrator or by Google at the time of suspension. The property is returned only if the `suspended` property is `true`.
   &quot;thumbnailPhotoEtag&quot;: &quot;A String&quot;, # Output only. ETag of the user&#x27;s photo (Read-only)
-  &quot;thumbnailPhotoUrl&quot;: &quot;A String&quot;, # Output only. Photo Url of the user (Read-only)
+  &quot;thumbnailPhotoUrl&quot;: &quot;A String&quot;, # Output only. The URL of the user&#x27;s profile photo. The URL might be temporary or private.
   &quot;websites&quot;: &quot;&quot;, # The user&#x27;s websites. The maximum allowed data size for this field is 2KB.
 }</pre>
 </div>
@@ -701,7 +701,7 @@ Args:
   body: object, The request body.
     The object takes the form of:
 
-{ # The Directory API allows you to create and manage your account&#x27;s users, user aliases, and user Gmail chat profile photos. For more information about common tasks, see the [User Accounts Developer&#x27;s Guide](/admin-sdk/directory/v1/guides/manage-users.html) and the [User Aliases Developer&#x27;s Guide](/admin-sdk/directory/v1/guides/manage-user-aliases.html).
+{ # The Directory API allows you to create and manage your account&#x27;s users, user aliases, and user Google profile photos. For more information about common tasks, see the [User Accounts Developer&#x27;s Guide](/admin-sdk/directory/v1/guides/manage-users.html) and the [User Aliases Developer&#x27;s Guide](/admin-sdk/directory/v1/guides/manage-user-aliases.html).
   &quot;addresses&quot;: &quot;&quot;, # The list of the user&#x27;s addresses. The maximum allowed data size for this field is 10KB.
   &quot;agreedToTerms&quot;: True or False, # Output only. This property is `true` if the user has completed an initial login and accepted the Terms of Service agreement.
   &quot;aliases&quot;: [ # Output only. The list of the user&#x27;s alias email addresses.
@@ -759,7 +759,7 @@ Args:
   &quot;suspended&quot;: True or False, # Indicates if user is suspended.
   &quot;suspensionReason&quot;: &quot;A String&quot;, # Output only. Has the reason a user account is suspended either by the administrator or by Google at the time of suspension. The property is returned only if the `suspended` property is `true`.
   &quot;thumbnailPhotoEtag&quot;: &quot;A String&quot;, # Output only. ETag of the user&#x27;s photo (Read-only)
-  &quot;thumbnailPhotoUrl&quot;: &quot;A String&quot;, # Output only. Photo Url of the user (Read-only)
+  &quot;thumbnailPhotoUrl&quot;: &quot;A String&quot;, # Output only. The URL of the user&#x27;s profile photo. The URL might be temporary or private.
   &quot;websites&quot;: &quot;&quot;, # The user&#x27;s websites. The maximum allowed data size for this field is 2KB.
 }
 
@@ -771,7 +771,7 @@ Args:
 Returns:
   An object of the form:
 
-    { # The Directory API allows you to create and manage your account&#x27;s users, user aliases, and user Gmail chat profile photos. For more information about common tasks, see the [User Accounts Developer&#x27;s Guide](/admin-sdk/directory/v1/guides/manage-users.html) and the [User Aliases Developer&#x27;s Guide](/admin-sdk/directory/v1/guides/manage-user-aliases.html).
+    { # The Directory API allows you to create and manage your account&#x27;s users, user aliases, and user Google profile photos. For more information about common tasks, see the [User Accounts Developer&#x27;s Guide](/admin-sdk/directory/v1/guides/manage-users.html) and the [User Aliases Developer&#x27;s Guide](/admin-sdk/directory/v1/guides/manage-user-aliases.html).
   &quot;addresses&quot;: &quot;&quot;, # The list of the user&#x27;s addresses. The maximum allowed data size for this field is 10KB.
   &quot;agreedToTerms&quot;: True or False, # Output only. This property is `true` if the user has completed an initial login and accepted the Terms of Service agreement.
   &quot;aliases&quot;: [ # Output only. The list of the user&#x27;s alias email addresses.
@@ -829,7 +829,7 @@ Returns:
   &quot;suspended&quot;: True or False, # Indicates if user is suspended.
   &quot;suspensionReason&quot;: &quot;A String&quot;, # Output only. Has the reason a user account is suspended either by the administrator or by Google at the time of suspension. The property is returned only if the `suspended` property is `true`.
   &quot;thumbnailPhotoEtag&quot;: &quot;A String&quot;, # Output only. ETag of the user&#x27;s photo (Read-only)
-  &quot;thumbnailPhotoUrl&quot;: &quot;A String&quot;, # Output only. Photo Url of the user (Read-only)
+  &quot;thumbnailPhotoUrl&quot;: &quot;A String&quot;, # Output only. The URL of the user&#x27;s profile photo. The URL might be temporary or private.
   &quot;websites&quot;: &quot;&quot;, # The user&#x27;s websites. The maximum allowed data size for this field is 2KB.
 }</pre>
 </div>

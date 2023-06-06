@@ -90,6 +90,9 @@ h1, h2, h3 {
   <code><a href="#getIamPolicy">getIamPolicy(resource, body=None, x__xgafv=None)</a></code></p>
 <p class="firstline">Gets the access control policy for a TagKey. The returned policy may be empty if no such policy or resource exists. The `resource` field should be the TagKey's resource name. For example, "tagKeys/1234". The caller must have `cloudresourcemanager.googleapis.com/tagKeys.getIamPolicy` permission on the specified TagKey.</p>
 <p class="toc_element">
+  <code><a href="#getNamespaced">getNamespaced(name=None, x__xgafv=None)</a></code></p>
+<p class="firstline">Retrieves a TagKey by its namespaced name. This method will return `PERMISSION_DENIED` if the key does not exist or the user does not have permission to view it.</p>
+<p class="toc_element">
   <code><a href="#list">list(pageSize=None, pageToken=None, parent=None, x__xgafv=None)</a></code></p>
 <p class="firstline">Lists all TagKeys for a parent resource.</p>
 <p class="toc_element">
@@ -124,7 +127,7 @@ Args:
   &quot;etag&quot;: &quot;A String&quot;, # Optional. Entity tag which users can pass to prevent race conditions. This field is always set in server responses. See UpdateTagKeyRequest for details.
   &quot;name&quot;: &quot;A String&quot;, # Immutable. The resource name for a TagKey. Must be in the format `tagKeys/{tag_key_id}`, where `tag_key_id` is the generated numeric id for the TagKey.
   &quot;namespacedName&quot;: &quot;A String&quot;, # Output only. Immutable. Namespaced name of the TagKey.
-  &quot;parent&quot;: &quot;A String&quot;, # Immutable. The resource name of the new TagKey&#x27;s parent. Must be of the form `organizations/{org_id}`.
+  &quot;parent&quot;: &quot;A String&quot;, # Immutable. The resource name of the TagKey&#x27;s parent. A TagKey can be parented by an Organization or a Project. For a TagKey parented by an Organization, its parent must be in the form `organizations/{org_id}`. For a TagKey parented by a Project, its parent can be in the form `projects/{project_id}` or `projects/{project_number}`.
   &quot;purpose&quot;: &quot;A String&quot;, # Optional. A purpose denotes that this Tag is intended for use in policies of a specific policy engine, and will involve that policy engine in management operations involving this Tag. A purpose does not grant a policy engine exclusive rights to the Tag, and it may be referenced by other policy engines. A purpose cannot be changed once set.
   &quot;purposeData&quot;: { # Optional. Purpose data corresponds to the policy system that the tag is intended for. See documentation for `Purpose` for formatting of this field. Purpose data cannot be changed once set.
     &quot;a_key&quot;: &quot;A String&quot;,
@@ -220,7 +223,7 @@ Returns:
   &quot;etag&quot;: &quot;A String&quot;, # Optional. Entity tag which users can pass to prevent race conditions. This field is always set in server responses. See UpdateTagKeyRequest for details.
   &quot;name&quot;: &quot;A String&quot;, # Immutable. The resource name for a TagKey. Must be in the format `tagKeys/{tag_key_id}`, where `tag_key_id` is the generated numeric id for the TagKey.
   &quot;namespacedName&quot;: &quot;A String&quot;, # Output only. Immutable. Namespaced name of the TagKey.
-  &quot;parent&quot;: &quot;A String&quot;, # Immutable. The resource name of the new TagKey&#x27;s parent. Must be of the form `organizations/{org_id}`.
+  &quot;parent&quot;: &quot;A String&quot;, # Immutable. The resource name of the TagKey&#x27;s parent. A TagKey can be parented by an Organization or a Project. For a TagKey parented by an Organization, its parent must be in the form `organizations/{org_id}`. For a TagKey parented by a Project, its parent can be in the form `projects/{project_id}` or `projects/{project_number}`.
   &quot;purpose&quot;: &quot;A String&quot;, # Optional. A purpose denotes that this Tag is intended for use in policies of a specific policy engine, and will involve that policy engine in management operations involving this Tag. A purpose does not grant a policy engine exclusive rights to the Tag, and it may be referenced by other policy engines. A purpose cannot be changed once set.
   &quot;purposeData&quot;: { # Optional. Purpose data corresponds to the policy system that the tag is intended for. See documentation for `Purpose` for formatting of this field. Purpose data cannot be changed once set.
     &quot;a_key&quot;: &quot;A String&quot;,
@@ -287,13 +290,43 @@ Returns:
 </div>
 
 <div class="method">
+    <code class="details" id="getNamespaced">getNamespaced(name=None, x__xgafv=None)</code>
+  <pre>Retrieves a TagKey by its namespaced name. This method will return `PERMISSION_DENIED` if the key does not exist or the user does not have permission to view it.
+
+Args:
+  name: string, Required. A namespaced tag key name in the format `{parentId}/{tagKeyShort}`, such as `42/foo` for a key with short name &quot;foo&quot; under the organization with ID 42 or `r2-d2/bar` for a key with short name &quot;bar&quot; under the project `r2-d2`.
+  x__xgafv: string, V1 error format.
+    Allowed values
+      1 - v1 error format
+      2 - v2 error format
+
+Returns:
+  An object of the form:
+
+    { # A TagKey, used to group a set of TagValues.
+  &quot;createTime&quot;: &quot;A String&quot;, # Output only. Creation time.
+  &quot;description&quot;: &quot;A String&quot;, # Optional. User-assigned description of the TagKey. Must not exceed 256 characters. Read-write.
+  &quot;etag&quot;: &quot;A String&quot;, # Optional. Entity tag which users can pass to prevent race conditions. This field is always set in server responses. See UpdateTagKeyRequest for details.
+  &quot;name&quot;: &quot;A String&quot;, # Immutable. The resource name for a TagKey. Must be in the format `tagKeys/{tag_key_id}`, where `tag_key_id` is the generated numeric id for the TagKey.
+  &quot;namespacedName&quot;: &quot;A String&quot;, # Output only. Immutable. Namespaced name of the TagKey.
+  &quot;parent&quot;: &quot;A String&quot;, # Immutable. The resource name of the TagKey&#x27;s parent. A TagKey can be parented by an Organization or a Project. For a TagKey parented by an Organization, its parent must be in the form `organizations/{org_id}`. For a TagKey parented by a Project, its parent can be in the form `projects/{project_id}` or `projects/{project_number}`.
+  &quot;purpose&quot;: &quot;A String&quot;, # Optional. A purpose denotes that this Tag is intended for use in policies of a specific policy engine, and will involve that policy engine in management operations involving this Tag. A purpose does not grant a policy engine exclusive rights to the Tag, and it may be referenced by other policy engines. A purpose cannot be changed once set.
+  &quot;purposeData&quot;: { # Optional. Purpose data corresponds to the policy system that the tag is intended for. See documentation for `Purpose` for formatting of this field. Purpose data cannot be changed once set.
+    &quot;a_key&quot;: &quot;A String&quot;,
+  },
+  &quot;shortName&quot;: &quot;A String&quot;, # Required. Immutable. The user friendly name for a TagKey. The short name should be unique for TagKeys within the same tag namespace. The short name must be 1-63 characters, beginning and ending with an alphanumeric character ([a-z0-9A-Z]) with dashes (-), underscores (_), dots (.), and alphanumerics between.
+  &quot;updateTime&quot;: &quot;A String&quot;, # Output only. Update time.
+}</pre>
+</div>
+
+<div class="method">
     <code class="details" id="list">list(pageSize=None, pageToken=None, parent=None, x__xgafv=None)</code>
   <pre>Lists all TagKeys for a parent resource.
 
 Args:
   pageSize: integer, Optional. The maximum number of TagKeys to return in the response. The server allows a maximum of 300 TagKeys to return. If unspecified, the server will use 100 as the default.
   pageToken: string, Optional. A pagination token returned from a previous call to `ListTagKey` that indicates where this listing should continue from.
-  parent: string, Required. The resource name of the new TagKey&#x27;s parent. Must be of the form `folders/{folder_id}` or `organizations/{org_id}`.
+  parent: string, Required. The resource name of the TagKey&#x27;s parent. Must be of the form `organizations/{org_id}` or `projects/{project_id}` or `projects/{project_number}`
   x__xgafv: string, V1 error format.
     Allowed values
       1 - v1 error format
@@ -311,7 +344,7 @@ Returns:
       &quot;etag&quot;: &quot;A String&quot;, # Optional. Entity tag which users can pass to prevent race conditions. This field is always set in server responses. See UpdateTagKeyRequest for details.
       &quot;name&quot;: &quot;A String&quot;, # Immutable. The resource name for a TagKey. Must be in the format `tagKeys/{tag_key_id}`, where `tag_key_id` is the generated numeric id for the TagKey.
       &quot;namespacedName&quot;: &quot;A String&quot;, # Output only. Immutable. Namespaced name of the TagKey.
-      &quot;parent&quot;: &quot;A String&quot;, # Immutable. The resource name of the new TagKey&#x27;s parent. Must be of the form `organizations/{org_id}`.
+      &quot;parent&quot;: &quot;A String&quot;, # Immutable. The resource name of the TagKey&#x27;s parent. A TagKey can be parented by an Organization or a Project. For a TagKey parented by an Organization, its parent must be in the form `organizations/{org_id}`. For a TagKey parented by a Project, its parent can be in the form `projects/{project_id}` or `projects/{project_number}`.
       &quot;purpose&quot;: &quot;A String&quot;, # Optional. A purpose denotes that this Tag is intended for use in policies of a specific policy engine, and will involve that policy engine in management operations involving this Tag. A purpose does not grant a policy engine exclusive rights to the Tag, and it may be referenced by other policy engines. A purpose cannot be changed once set.
       &quot;purposeData&quot;: { # Optional. Purpose data corresponds to the policy system that the tag is intended for. See documentation for `Purpose` for formatting of this field. Purpose data cannot be changed once set.
         &quot;a_key&quot;: &quot;A String&quot;,
@@ -352,7 +385,7 @@ Args:
   &quot;etag&quot;: &quot;A String&quot;, # Optional. Entity tag which users can pass to prevent race conditions. This field is always set in server responses. See UpdateTagKeyRequest for details.
   &quot;name&quot;: &quot;A String&quot;, # Immutable. The resource name for a TagKey. Must be in the format `tagKeys/{tag_key_id}`, where `tag_key_id` is the generated numeric id for the TagKey.
   &quot;namespacedName&quot;: &quot;A String&quot;, # Output only. Immutable. Namespaced name of the TagKey.
-  &quot;parent&quot;: &quot;A String&quot;, # Immutable. The resource name of the new TagKey&#x27;s parent. Must be of the form `organizations/{org_id}`.
+  &quot;parent&quot;: &quot;A String&quot;, # Immutable. The resource name of the TagKey&#x27;s parent. A TagKey can be parented by an Organization or a Project. For a TagKey parented by an Organization, its parent must be in the form `organizations/{org_id}`. For a TagKey parented by a Project, its parent can be in the form `projects/{project_id}` or `projects/{project_number}`.
   &quot;purpose&quot;: &quot;A String&quot;, # Optional. A purpose denotes that this Tag is intended for use in policies of a specific policy engine, and will involve that policy engine in management operations involving this Tag. A purpose does not grant a policy engine exclusive rights to the Tag, and it may be referenced by other policy engines. A purpose cannot be changed once set.
   &quot;purposeData&quot;: { # Optional. Purpose data corresponds to the policy system that the tag is intended for. See documentation for `Purpose` for formatting of this field. Purpose data cannot be changed once set.
     &quot;a_key&quot;: &quot;A String&quot;,

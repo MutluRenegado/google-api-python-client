@@ -144,13 +144,32 @@ Args:
         &quot;boolValue&quot;: True or False, # Value is a bool.
         &quot;intValue&quot;: &quot;A String&quot;, # Value is an integer
         &quot;key&quot;: &quot;A String&quot;, # Key of the config variable.
+        &quot;keyValue&quot;: { # Encryption Key value. # Value is a Encryption Key.
+          &quot;kmsKeyName&quot;: &quot;A String&quot;, # The [KMS key name] with which the content of the Operation is encrypted. The expected format: `projects/*/locations/*/keyRings/*/cryptoKeys/*`. Will be empty string if google managed.
+          &quot;type&quot;: &quot;A String&quot;, # Type.
+        },
         &quot;secretValue&quot;: { # Secret provides a reference to entries in Secret Manager. # Value is a secret.
           &quot;secretVersion&quot;: &quot;A String&quot;, # The resource name of the secret version in the format, format as: `projects/*/secrets/*/versions/*`.
         },
         &quot;stringValue&quot;: &quot;A String&quot;, # Value is a string.
       },
     ],
+    &quot;authKey&quot;: &quot;A String&quot;, # Identifier key for auth config
     &quot;authType&quot;: &quot;A String&quot;, # The type of authentication configured.
+    &quot;oauth2AuthCodeFlow&quot;: { # Parameters to support Oauth 2.0 Auth Code Grant Authentication. See https://www.rfc-editor.org/rfc/rfc6749#section-1.3.1 for more details. # Oauth2AuthCodeFlow.
+      &quot;authCode&quot;: &quot;A String&quot;, # Authorization code to be exchanged for access and refresh tokens.
+      &quot;authUri&quot;: &quot;A String&quot;, # Auth URL for Authorization Code Flow
+      &quot;clientId&quot;: &quot;A String&quot;, # Client ID for user-provided OAuth app.
+      &quot;clientSecret&quot;: { # Secret provides a reference to entries in Secret Manager. # Client secret for user-provided OAuth app.
+        &quot;secretVersion&quot;: &quot;A String&quot;, # The resource name of the secret version in the format, format as: `projects/*/secrets/*/versions/*`.
+      },
+      &quot;enablePkce&quot;: True or False, # Whether to enable PKCE when the user performs the auth code flow.
+      &quot;pkceVerifier&quot;: &quot;A String&quot;, # PKCE verifier to be used during the auth code exchange.
+      &quot;redirectUri&quot;: &quot;A String&quot;, # Redirect URI to be provided during the auth code exchange.
+      &quot;scopes&quot;: [ # Scopes the connection will request when the user performs the auth code flow.
+        &quot;A String&quot;,
+      ],
+    },
     &quot;oauth2ClientCredentials&quot;: { # Parameters to support Oauth 2.0 Client Credentials Grant Authentication. See https://tools.ietf.org/html/rfc6749#section-1.3.4 for more details. # Oauth2ClientCredentials.
       &quot;clientId&quot;: &quot;A String&quot;, # The client identifier.
       &quot;clientSecret&quot;: { # Secret provides a reference to entries in Secret Manager. # Secret version reference containing the client secret.
@@ -189,13 +208,19 @@ Args:
       &quot;boolValue&quot;: True or False, # Value is a bool.
       &quot;intValue&quot;: &quot;A String&quot;, # Value is an integer
       &quot;key&quot;: &quot;A String&quot;, # Key of the config variable.
+      &quot;keyValue&quot;: { # Encryption Key value. # Value is a Encryption Key.
+        &quot;kmsKeyName&quot;: &quot;A String&quot;, # The [KMS key name] with which the content of the Operation is encrypted. The expected format: `projects/*/locations/*/keyRings/*/cryptoKeys/*`. Will be empty string if google managed.
+        &quot;type&quot;: &quot;A String&quot;, # Type.
+      },
       &quot;secretValue&quot;: { # Secret provides a reference to entries in Secret Manager. # Value is a secret.
         &quot;secretVersion&quot;: &quot;A String&quot;, # The resource name of the secret version in the format, format as: `projects/*/secrets/*/versions/*`.
       },
       &quot;stringValue&quot;: &quot;A String&quot;, # Value is a string.
     },
   ],
+  &quot;connectionRevision&quot;: &quot;A String&quot;, # Output only. Connection revision. This field is only updated when the connection is created or updated by User.
   &quot;connectorVersion&quot;: &quot;A String&quot;, # Required. Connector version on which the connection is created. The format is: projects/*/locations/*/providers/*/connectors/*/versions/* Only global location is supported for ConnectorVersion resource.
+  &quot;connectorVersionLaunchStage&quot;: &quot;A String&quot;, # Output only. Flag to mark the version indicating the launch stage.
   &quot;createTime&quot;: &quot;A String&quot;, # Output only. Created time.
   &quot;description&quot;: &quot;A String&quot;, # Optional. Description of the resource.
   &quot;destinationConfigs&quot;: [ # Optional. Configuration of the Connector&#x27;s destination. Only accepted for Connectors that accepts user defined destination(s).
@@ -219,6 +244,9 @@ Args:
     &quot;locked&quot;: True or False, # Indicates whether or not the connection is locked.
     &quot;reason&quot;: &quot;A String&quot;, # Describes why a connection is locked.
   },
+  &quot;logConfig&quot;: { # Log configuration for the connection. # Optional. Log configuration for the connection.
+    &quot;enabled&quot;: True or False, # Enabled represents whether logging is enabled or not for a connection.
+  },
   &quot;name&quot;: &quot;A String&quot;, # Output only. Resource name of the Connection. Format: projects/{project}/locations/{location}/connections/{connection}
   &quot;nodeConfig&quot;: { # Node configuration for the connection. # Optional. Node configuration for the connection.
     &quot;maxNodeCount&quot;: 42, # Maximum number of nodes in the runtime nodes.
@@ -226,11 +254,46 @@ Args:
   },
   &quot;serviceAccount&quot;: &quot;A String&quot;, # Optional. Service account needed for runtime plane to access GCP resources.
   &quot;serviceDirectory&quot;: &quot;A String&quot;, # Output only. The name of the Service Directory service name. Used for Private Harpoon to resolve the ILB address. e.g. &quot;projects/cloud-connectors-e2e-testing/locations/us-central1/namespaces/istio-system/services/istio-ingressgateway-connectors&quot;
+  &quot;sslConfig&quot;: { # SSL Configuration of a connection # Optional. Ssl config of a connection
+    &quot;additionalVariables&quot;: [ # Additional SSL related field values
+      { # ConfigVariable represents a configuration variable present in a Connection. or AuthConfig.
+        &quot;boolValue&quot;: True or False, # Value is a bool.
+        &quot;intValue&quot;: &quot;A String&quot;, # Value is an integer
+        &quot;key&quot;: &quot;A String&quot;, # Key of the config variable.
+        &quot;keyValue&quot;: { # Encryption Key value. # Value is a Encryption Key.
+          &quot;kmsKeyName&quot;: &quot;A String&quot;, # The [KMS key name] with which the content of the Operation is encrypted. The expected format: `projects/*/locations/*/keyRings/*/cryptoKeys/*`. Will be empty string if google managed.
+          &quot;type&quot;: &quot;A String&quot;, # Type.
+        },
+        &quot;secretValue&quot;: { # Secret provides a reference to entries in Secret Manager. # Value is a secret.
+          &quot;secretVersion&quot;: &quot;A String&quot;, # The resource name of the secret version in the format, format as: `projects/*/secrets/*/versions/*`.
+        },
+        &quot;stringValue&quot;: &quot;A String&quot;, # Value is a string.
+      },
+    ],
+    &quot;clientCertType&quot;: &quot;A String&quot;, # Type of Client Cert (PEM/JKS/.. etc.)
+    &quot;clientCertificate&quot;: { # Secret provides a reference to entries in Secret Manager. # Client Certificate
+      &quot;secretVersion&quot;: &quot;A String&quot;, # The resource name of the secret version in the format, format as: `projects/*/secrets/*/versions/*`.
+    },
+    &quot;clientPrivateKey&quot;: { # Secret provides a reference to entries in Secret Manager. # Client Private Key
+      &quot;secretVersion&quot;: &quot;A String&quot;, # The resource name of the secret version in the format, format as: `projects/*/secrets/*/versions/*`.
+    },
+    &quot;clientPrivateKeyPass&quot;: { # Secret provides a reference to entries in Secret Manager. # Secret containing the passphrase protecting the Client Private Key
+      &quot;secretVersion&quot;: &quot;A String&quot;, # The resource name of the secret version in the format, format as: `projects/*/secrets/*/versions/*`.
+    },
+    &quot;privateServerCertificate&quot;: { # Secret provides a reference to entries in Secret Manager. # Private Server Certificate. Needs to be specified if trust model is `PRIVATE`.
+      &quot;secretVersion&quot;: &quot;A String&quot;, # The resource name of the secret version in the format, format as: `projects/*/secrets/*/versions/*`.
+    },
+    &quot;serverCertType&quot;: &quot;A String&quot;, # Type of Server Cert (PEM/JKS/.. etc.)
+    &quot;trustModel&quot;: &quot;A String&quot;, # Trust Model of the SSL connection
+    &quot;type&quot;: &quot;A String&quot;, # Controls the ssl type for the given connector version.
+    &quot;useSsl&quot;: True or False, # Bool for enabling SSL
+  },
   &quot;status&quot;: { # ConnectionStatus indicates the state of the connection. # Output only. Current status of the connection.
     &quot;description&quot;: &quot;A String&quot;, # Description.
     &quot;state&quot;: &quot;A String&quot;, # State.
     &quot;status&quot;: &quot;A String&quot;, # Status provides detailed information for the state.
   },
+  &quot;subscriptionType&quot;: &quot;A String&quot;, # Output only. This subscription type enum states the subscription type of the project.
   &quot;suspended&quot;: True or False, # Optional. Suspended indicates if a user has suspended a connection or not.
   &quot;updateTime&quot;: &quot;A String&quot;, # Output only. Updated time.
 }
@@ -326,13 +389,32 @@ Returns:
         &quot;boolValue&quot;: True or False, # Value is a bool.
         &quot;intValue&quot;: &quot;A String&quot;, # Value is an integer
         &quot;key&quot;: &quot;A String&quot;, # Key of the config variable.
+        &quot;keyValue&quot;: { # Encryption Key value. # Value is a Encryption Key.
+          &quot;kmsKeyName&quot;: &quot;A String&quot;, # The [KMS key name] with which the content of the Operation is encrypted. The expected format: `projects/*/locations/*/keyRings/*/cryptoKeys/*`. Will be empty string if google managed.
+          &quot;type&quot;: &quot;A String&quot;, # Type.
+        },
         &quot;secretValue&quot;: { # Secret provides a reference to entries in Secret Manager. # Value is a secret.
           &quot;secretVersion&quot;: &quot;A String&quot;, # The resource name of the secret version in the format, format as: `projects/*/secrets/*/versions/*`.
         },
         &quot;stringValue&quot;: &quot;A String&quot;, # Value is a string.
       },
     ],
+    &quot;authKey&quot;: &quot;A String&quot;, # Identifier key for auth config
     &quot;authType&quot;: &quot;A String&quot;, # The type of authentication configured.
+    &quot;oauth2AuthCodeFlow&quot;: { # Parameters to support Oauth 2.0 Auth Code Grant Authentication. See https://www.rfc-editor.org/rfc/rfc6749#section-1.3.1 for more details. # Oauth2AuthCodeFlow.
+      &quot;authCode&quot;: &quot;A String&quot;, # Authorization code to be exchanged for access and refresh tokens.
+      &quot;authUri&quot;: &quot;A String&quot;, # Auth URL for Authorization Code Flow
+      &quot;clientId&quot;: &quot;A String&quot;, # Client ID for user-provided OAuth app.
+      &quot;clientSecret&quot;: { # Secret provides a reference to entries in Secret Manager. # Client secret for user-provided OAuth app.
+        &quot;secretVersion&quot;: &quot;A String&quot;, # The resource name of the secret version in the format, format as: `projects/*/secrets/*/versions/*`.
+      },
+      &quot;enablePkce&quot;: True or False, # Whether to enable PKCE when the user performs the auth code flow.
+      &quot;pkceVerifier&quot;: &quot;A String&quot;, # PKCE verifier to be used during the auth code exchange.
+      &quot;redirectUri&quot;: &quot;A String&quot;, # Redirect URI to be provided during the auth code exchange.
+      &quot;scopes&quot;: [ # Scopes the connection will request when the user performs the auth code flow.
+        &quot;A String&quot;,
+      ],
+    },
     &quot;oauth2ClientCredentials&quot;: { # Parameters to support Oauth 2.0 Client Credentials Grant Authentication. See https://tools.ietf.org/html/rfc6749#section-1.3.4 for more details. # Oauth2ClientCredentials.
       &quot;clientId&quot;: &quot;A String&quot;, # The client identifier.
       &quot;clientSecret&quot;: { # Secret provides a reference to entries in Secret Manager. # Secret version reference containing the client secret.
@@ -371,13 +453,19 @@ Returns:
       &quot;boolValue&quot;: True or False, # Value is a bool.
       &quot;intValue&quot;: &quot;A String&quot;, # Value is an integer
       &quot;key&quot;: &quot;A String&quot;, # Key of the config variable.
+      &quot;keyValue&quot;: { # Encryption Key value. # Value is a Encryption Key.
+        &quot;kmsKeyName&quot;: &quot;A String&quot;, # The [KMS key name] with which the content of the Operation is encrypted. The expected format: `projects/*/locations/*/keyRings/*/cryptoKeys/*`. Will be empty string if google managed.
+        &quot;type&quot;: &quot;A String&quot;, # Type.
+      },
       &quot;secretValue&quot;: { # Secret provides a reference to entries in Secret Manager. # Value is a secret.
         &quot;secretVersion&quot;: &quot;A String&quot;, # The resource name of the secret version in the format, format as: `projects/*/secrets/*/versions/*`.
       },
       &quot;stringValue&quot;: &quot;A String&quot;, # Value is a string.
     },
   ],
+  &quot;connectionRevision&quot;: &quot;A String&quot;, # Output only. Connection revision. This field is only updated when the connection is created or updated by User.
   &quot;connectorVersion&quot;: &quot;A String&quot;, # Required. Connector version on which the connection is created. The format is: projects/*/locations/*/providers/*/connectors/*/versions/* Only global location is supported for ConnectorVersion resource.
+  &quot;connectorVersionLaunchStage&quot;: &quot;A String&quot;, # Output only. Flag to mark the version indicating the launch stage.
   &quot;createTime&quot;: &quot;A String&quot;, # Output only. Created time.
   &quot;description&quot;: &quot;A String&quot;, # Optional. Description of the resource.
   &quot;destinationConfigs&quot;: [ # Optional. Configuration of the Connector&#x27;s destination. Only accepted for Connectors that accepts user defined destination(s).
@@ -401,6 +489,9 @@ Returns:
     &quot;locked&quot;: True or False, # Indicates whether or not the connection is locked.
     &quot;reason&quot;: &quot;A String&quot;, # Describes why a connection is locked.
   },
+  &quot;logConfig&quot;: { # Log configuration for the connection. # Optional. Log configuration for the connection.
+    &quot;enabled&quot;: True or False, # Enabled represents whether logging is enabled or not for a connection.
+  },
   &quot;name&quot;: &quot;A String&quot;, # Output only. Resource name of the Connection. Format: projects/{project}/locations/{location}/connections/{connection}
   &quot;nodeConfig&quot;: { # Node configuration for the connection. # Optional. Node configuration for the connection.
     &quot;maxNodeCount&quot;: 42, # Maximum number of nodes in the runtime nodes.
@@ -408,11 +499,46 @@ Returns:
   },
   &quot;serviceAccount&quot;: &quot;A String&quot;, # Optional. Service account needed for runtime plane to access GCP resources.
   &quot;serviceDirectory&quot;: &quot;A String&quot;, # Output only. The name of the Service Directory service name. Used for Private Harpoon to resolve the ILB address. e.g. &quot;projects/cloud-connectors-e2e-testing/locations/us-central1/namespaces/istio-system/services/istio-ingressgateway-connectors&quot;
+  &quot;sslConfig&quot;: { # SSL Configuration of a connection # Optional. Ssl config of a connection
+    &quot;additionalVariables&quot;: [ # Additional SSL related field values
+      { # ConfigVariable represents a configuration variable present in a Connection. or AuthConfig.
+        &quot;boolValue&quot;: True or False, # Value is a bool.
+        &quot;intValue&quot;: &quot;A String&quot;, # Value is an integer
+        &quot;key&quot;: &quot;A String&quot;, # Key of the config variable.
+        &quot;keyValue&quot;: { # Encryption Key value. # Value is a Encryption Key.
+          &quot;kmsKeyName&quot;: &quot;A String&quot;, # The [KMS key name] with which the content of the Operation is encrypted. The expected format: `projects/*/locations/*/keyRings/*/cryptoKeys/*`. Will be empty string if google managed.
+          &quot;type&quot;: &quot;A String&quot;, # Type.
+        },
+        &quot;secretValue&quot;: { # Secret provides a reference to entries in Secret Manager. # Value is a secret.
+          &quot;secretVersion&quot;: &quot;A String&quot;, # The resource name of the secret version in the format, format as: `projects/*/secrets/*/versions/*`.
+        },
+        &quot;stringValue&quot;: &quot;A String&quot;, # Value is a string.
+      },
+    ],
+    &quot;clientCertType&quot;: &quot;A String&quot;, # Type of Client Cert (PEM/JKS/.. etc.)
+    &quot;clientCertificate&quot;: { # Secret provides a reference to entries in Secret Manager. # Client Certificate
+      &quot;secretVersion&quot;: &quot;A String&quot;, # The resource name of the secret version in the format, format as: `projects/*/secrets/*/versions/*`.
+    },
+    &quot;clientPrivateKey&quot;: { # Secret provides a reference to entries in Secret Manager. # Client Private Key
+      &quot;secretVersion&quot;: &quot;A String&quot;, # The resource name of the secret version in the format, format as: `projects/*/secrets/*/versions/*`.
+    },
+    &quot;clientPrivateKeyPass&quot;: { # Secret provides a reference to entries in Secret Manager. # Secret containing the passphrase protecting the Client Private Key
+      &quot;secretVersion&quot;: &quot;A String&quot;, # The resource name of the secret version in the format, format as: `projects/*/secrets/*/versions/*`.
+    },
+    &quot;privateServerCertificate&quot;: { # Secret provides a reference to entries in Secret Manager. # Private Server Certificate. Needs to be specified if trust model is `PRIVATE`.
+      &quot;secretVersion&quot;: &quot;A String&quot;, # The resource name of the secret version in the format, format as: `projects/*/secrets/*/versions/*`.
+    },
+    &quot;serverCertType&quot;: &quot;A String&quot;, # Type of Server Cert (PEM/JKS/.. etc.)
+    &quot;trustModel&quot;: &quot;A String&quot;, # Trust Model of the SSL connection
+    &quot;type&quot;: &quot;A String&quot;, # Controls the ssl type for the given connector version.
+    &quot;useSsl&quot;: True or False, # Bool for enabling SSL
+  },
   &quot;status&quot;: { # ConnectionStatus indicates the state of the connection. # Output only. Current status of the connection.
     &quot;description&quot;: &quot;A String&quot;, # Description.
     &quot;state&quot;: &quot;A String&quot;, # State.
     &quot;status&quot;: &quot;A String&quot;, # Status provides detailed information for the state.
   },
+  &quot;subscriptionType&quot;: &quot;A String&quot;, # Output only. This subscription type enum states the subscription type of the project.
   &quot;suspended&quot;: True or False, # Optional. Suspended indicates if a user has suspended a connection or not.
   &quot;updateTime&quot;: &quot;A String&quot;, # Output only. Updated time.
 }</pre>
@@ -483,7 +609,7 @@ Returns:
         &quot;location&quot;: &quot;A String&quot;, # Optional. String indicating the location of the expression for error reporting, e.g. a file name and a position in the file.
         &quot;title&quot;: &quot;A String&quot;, # Optional. Title for the expression, i.e. a short string describing its purpose. This can be used e.g. in UIs which allow to enter the expression.
       },
-      &quot;members&quot;: [ # Specifies the principals requesting access for a Google Cloud resource. `members` can have the following values: * `allUsers`: A special identifier that represents anyone who is on the internet; with or without a Google account. * `allAuthenticatedUsers`: A special identifier that represents anyone who is authenticated with a Google account or a service account. Does not include identities that come from external identity providers (IdPs) through identity federation. * `user:{emailid}`: An email address that represents a specific Google account. For example, `alice@example.com` . * `serviceAccount:{emailid}`: An email address that represents a Google service account. For example, `my-other-app@appspot.gserviceaccount.com`. * `serviceAccount:{projectid}.svc.id.goog[{namespace}/{kubernetes-sa}]`: An identifier for a [Kubernetes service account](https://cloud.google.com/kubernetes-engine/docs/how-to/kubernetes-service-accounts). For example, `my-project.svc.id.goog[my-namespace/my-kubernetes-sa]`. * `group:{emailid}`: An email address that represents a Google group. For example, `admins@example.com`. * `deleted:user:{emailid}?uid={uniqueid}`: An email address (plus unique identifier) representing a user that has been recently deleted. For example, `alice@example.com?uid=123456789012345678901`. If the user is recovered, this value reverts to `user:{emailid}` and the recovered user retains the role in the binding. * `deleted:serviceAccount:{emailid}?uid={uniqueid}`: An email address (plus unique identifier) representing a service account that has been recently deleted. For example, `my-other-app@appspot.gserviceaccount.com?uid=123456789012345678901`. If the service account is undeleted, this value reverts to `serviceAccount:{emailid}` and the undeleted service account retains the role in the binding. * `deleted:group:{emailid}?uid={uniqueid}`: An email address (plus unique identifier) representing a Google group that has been recently deleted. For example, `admins@example.com?uid=123456789012345678901`. If the group is recovered, this value reverts to `group:{emailid}` and the recovered group retains the role in the binding. * `domain:{domain}`: The G Suite domain (primary) that represents all the users of that domain. For example, `google.com` or `example.com`.
+      &quot;members&quot;: [ # Specifies the principals requesting access for a Google Cloud resource. `members` can have the following values: * `allUsers`: A special identifier that represents anyone who is on the internet; with or without a Google account. * `allAuthenticatedUsers`: A special identifier that represents anyone who is authenticated with a Google account or a service account. Does not include identities that come from external identity providers (IdPs) through identity federation. * `user:{emailid}`: An email address that represents a specific Google account. For example, `alice@example.com` . * `serviceAccount:{emailid}`: An email address that represents a Google service account. For example, `my-other-app@appspot.gserviceaccount.com`. * `serviceAccount:{projectid}.svc.id.goog[{namespace}/{kubernetes-sa}]`: An identifier for a [Kubernetes service account](https://cloud.google.com/kubernetes-engine/docs/how-to/kubernetes-service-accounts). For example, `my-project.svc.id.goog[my-namespace/my-kubernetes-sa]`. * `group:{emailid}`: An email address that represents a Google group. For example, `admins@example.com`. * `domain:{domain}`: The G Suite domain (primary) that represents all the users of that domain. For example, `google.com` or `example.com`. * `deleted:user:{emailid}?uid={uniqueid}`: An email address (plus unique identifier) representing a user that has been recently deleted. For example, `alice@example.com?uid=123456789012345678901`. If the user is recovered, this value reverts to `user:{emailid}` and the recovered user retains the role in the binding. * `deleted:serviceAccount:{emailid}?uid={uniqueid}`: An email address (plus unique identifier) representing a service account that has been recently deleted. For example, `my-other-app@appspot.gserviceaccount.com?uid=123456789012345678901`. If the service account is undeleted, this value reverts to `serviceAccount:{emailid}` and the undeleted service account retains the role in the binding. * `deleted:group:{emailid}?uid={uniqueid}`: An email address (plus unique identifier) representing a Google group that has been recently deleted. For example, `admins@example.com?uid=123456789012345678901`. If the group is recovered, this value reverts to `group:{emailid}` and the recovered group retains the role in the binding.
         &quot;A String&quot;,
       ],
       &quot;role&quot;: &quot;A String&quot;, # Role that is assigned to the list of `members`, or principals. For example, `roles/viewer`, `roles/editor`, or `roles/owner`.
@@ -526,13 +652,32 @@ Returns:
             &quot;boolValue&quot;: True or False, # Value is a bool.
             &quot;intValue&quot;: &quot;A String&quot;, # Value is an integer
             &quot;key&quot;: &quot;A String&quot;, # Key of the config variable.
+            &quot;keyValue&quot;: { # Encryption Key value. # Value is a Encryption Key.
+              &quot;kmsKeyName&quot;: &quot;A String&quot;, # The [KMS key name] with which the content of the Operation is encrypted. The expected format: `projects/*/locations/*/keyRings/*/cryptoKeys/*`. Will be empty string if google managed.
+              &quot;type&quot;: &quot;A String&quot;, # Type.
+            },
             &quot;secretValue&quot;: { # Secret provides a reference to entries in Secret Manager. # Value is a secret.
               &quot;secretVersion&quot;: &quot;A String&quot;, # The resource name of the secret version in the format, format as: `projects/*/secrets/*/versions/*`.
             },
             &quot;stringValue&quot;: &quot;A String&quot;, # Value is a string.
           },
         ],
+        &quot;authKey&quot;: &quot;A String&quot;, # Identifier key for auth config
         &quot;authType&quot;: &quot;A String&quot;, # The type of authentication configured.
+        &quot;oauth2AuthCodeFlow&quot;: { # Parameters to support Oauth 2.0 Auth Code Grant Authentication. See https://www.rfc-editor.org/rfc/rfc6749#section-1.3.1 for more details. # Oauth2AuthCodeFlow.
+          &quot;authCode&quot;: &quot;A String&quot;, # Authorization code to be exchanged for access and refresh tokens.
+          &quot;authUri&quot;: &quot;A String&quot;, # Auth URL for Authorization Code Flow
+          &quot;clientId&quot;: &quot;A String&quot;, # Client ID for user-provided OAuth app.
+          &quot;clientSecret&quot;: { # Secret provides a reference to entries in Secret Manager. # Client secret for user-provided OAuth app.
+            &quot;secretVersion&quot;: &quot;A String&quot;, # The resource name of the secret version in the format, format as: `projects/*/secrets/*/versions/*`.
+          },
+          &quot;enablePkce&quot;: True or False, # Whether to enable PKCE when the user performs the auth code flow.
+          &quot;pkceVerifier&quot;: &quot;A String&quot;, # PKCE verifier to be used during the auth code exchange.
+          &quot;redirectUri&quot;: &quot;A String&quot;, # Redirect URI to be provided during the auth code exchange.
+          &quot;scopes&quot;: [ # Scopes the connection will request when the user performs the auth code flow.
+            &quot;A String&quot;,
+          ],
+        },
         &quot;oauth2ClientCredentials&quot;: { # Parameters to support Oauth 2.0 Client Credentials Grant Authentication. See https://tools.ietf.org/html/rfc6749#section-1.3.4 for more details. # Oauth2ClientCredentials.
           &quot;clientId&quot;: &quot;A String&quot;, # The client identifier.
           &quot;clientSecret&quot;: { # Secret provides a reference to entries in Secret Manager. # Secret version reference containing the client secret.
@@ -571,13 +716,19 @@ Returns:
           &quot;boolValue&quot;: True or False, # Value is a bool.
           &quot;intValue&quot;: &quot;A String&quot;, # Value is an integer
           &quot;key&quot;: &quot;A String&quot;, # Key of the config variable.
+          &quot;keyValue&quot;: { # Encryption Key value. # Value is a Encryption Key.
+            &quot;kmsKeyName&quot;: &quot;A String&quot;, # The [KMS key name] with which the content of the Operation is encrypted. The expected format: `projects/*/locations/*/keyRings/*/cryptoKeys/*`. Will be empty string if google managed.
+            &quot;type&quot;: &quot;A String&quot;, # Type.
+          },
           &quot;secretValue&quot;: { # Secret provides a reference to entries in Secret Manager. # Value is a secret.
             &quot;secretVersion&quot;: &quot;A String&quot;, # The resource name of the secret version in the format, format as: `projects/*/secrets/*/versions/*`.
           },
           &quot;stringValue&quot;: &quot;A String&quot;, # Value is a string.
         },
       ],
+      &quot;connectionRevision&quot;: &quot;A String&quot;, # Output only. Connection revision. This field is only updated when the connection is created or updated by User.
       &quot;connectorVersion&quot;: &quot;A String&quot;, # Required. Connector version on which the connection is created. The format is: projects/*/locations/*/providers/*/connectors/*/versions/* Only global location is supported for ConnectorVersion resource.
+      &quot;connectorVersionLaunchStage&quot;: &quot;A String&quot;, # Output only. Flag to mark the version indicating the launch stage.
       &quot;createTime&quot;: &quot;A String&quot;, # Output only. Created time.
       &quot;description&quot;: &quot;A String&quot;, # Optional. Description of the resource.
       &quot;destinationConfigs&quot;: [ # Optional. Configuration of the Connector&#x27;s destination. Only accepted for Connectors that accepts user defined destination(s).
@@ -601,6 +752,9 @@ Returns:
         &quot;locked&quot;: True or False, # Indicates whether or not the connection is locked.
         &quot;reason&quot;: &quot;A String&quot;, # Describes why a connection is locked.
       },
+      &quot;logConfig&quot;: { # Log configuration for the connection. # Optional. Log configuration for the connection.
+        &quot;enabled&quot;: True or False, # Enabled represents whether logging is enabled or not for a connection.
+      },
       &quot;name&quot;: &quot;A String&quot;, # Output only. Resource name of the Connection. Format: projects/{project}/locations/{location}/connections/{connection}
       &quot;nodeConfig&quot;: { # Node configuration for the connection. # Optional. Node configuration for the connection.
         &quot;maxNodeCount&quot;: 42, # Maximum number of nodes in the runtime nodes.
@@ -608,11 +762,46 @@ Returns:
       },
       &quot;serviceAccount&quot;: &quot;A String&quot;, # Optional. Service account needed for runtime plane to access GCP resources.
       &quot;serviceDirectory&quot;: &quot;A String&quot;, # Output only. The name of the Service Directory service name. Used for Private Harpoon to resolve the ILB address. e.g. &quot;projects/cloud-connectors-e2e-testing/locations/us-central1/namespaces/istio-system/services/istio-ingressgateway-connectors&quot;
+      &quot;sslConfig&quot;: { # SSL Configuration of a connection # Optional. Ssl config of a connection
+        &quot;additionalVariables&quot;: [ # Additional SSL related field values
+          { # ConfigVariable represents a configuration variable present in a Connection. or AuthConfig.
+            &quot;boolValue&quot;: True or False, # Value is a bool.
+            &quot;intValue&quot;: &quot;A String&quot;, # Value is an integer
+            &quot;key&quot;: &quot;A String&quot;, # Key of the config variable.
+            &quot;keyValue&quot;: { # Encryption Key value. # Value is a Encryption Key.
+              &quot;kmsKeyName&quot;: &quot;A String&quot;, # The [KMS key name] with which the content of the Operation is encrypted. The expected format: `projects/*/locations/*/keyRings/*/cryptoKeys/*`. Will be empty string if google managed.
+              &quot;type&quot;: &quot;A String&quot;, # Type.
+            },
+            &quot;secretValue&quot;: { # Secret provides a reference to entries in Secret Manager. # Value is a secret.
+              &quot;secretVersion&quot;: &quot;A String&quot;, # The resource name of the secret version in the format, format as: `projects/*/secrets/*/versions/*`.
+            },
+            &quot;stringValue&quot;: &quot;A String&quot;, # Value is a string.
+          },
+        ],
+        &quot;clientCertType&quot;: &quot;A String&quot;, # Type of Client Cert (PEM/JKS/.. etc.)
+        &quot;clientCertificate&quot;: { # Secret provides a reference to entries in Secret Manager. # Client Certificate
+          &quot;secretVersion&quot;: &quot;A String&quot;, # The resource name of the secret version in the format, format as: `projects/*/secrets/*/versions/*`.
+        },
+        &quot;clientPrivateKey&quot;: { # Secret provides a reference to entries in Secret Manager. # Client Private Key
+          &quot;secretVersion&quot;: &quot;A String&quot;, # The resource name of the secret version in the format, format as: `projects/*/secrets/*/versions/*`.
+        },
+        &quot;clientPrivateKeyPass&quot;: { # Secret provides a reference to entries in Secret Manager. # Secret containing the passphrase protecting the Client Private Key
+          &quot;secretVersion&quot;: &quot;A String&quot;, # The resource name of the secret version in the format, format as: `projects/*/secrets/*/versions/*`.
+        },
+        &quot;privateServerCertificate&quot;: { # Secret provides a reference to entries in Secret Manager. # Private Server Certificate. Needs to be specified if trust model is `PRIVATE`.
+          &quot;secretVersion&quot;: &quot;A String&quot;, # The resource name of the secret version in the format, format as: `projects/*/secrets/*/versions/*`.
+        },
+        &quot;serverCertType&quot;: &quot;A String&quot;, # Type of Server Cert (PEM/JKS/.. etc.)
+        &quot;trustModel&quot;: &quot;A String&quot;, # Trust Model of the SSL connection
+        &quot;type&quot;: &quot;A String&quot;, # Controls the ssl type for the given connector version.
+        &quot;useSsl&quot;: True or False, # Bool for enabling SSL
+      },
       &quot;status&quot;: { # ConnectionStatus indicates the state of the connection. # Output only. Current status of the connection.
         &quot;description&quot;: &quot;A String&quot;, # Description.
         &quot;state&quot;: &quot;A String&quot;, # State.
         &quot;status&quot;: &quot;A String&quot;, # Status provides detailed information for the state.
       },
+      &quot;subscriptionType&quot;: &quot;A String&quot;, # Output only. This subscription type enum states the subscription type of the project.
       &quot;suspended&quot;: True or False, # Optional. Suspended indicates if a user has suspended a connection or not.
       &quot;updateTime&quot;: &quot;A String&quot;, # Output only. Updated time.
     },
@@ -654,13 +843,32 @@ Args:
         &quot;boolValue&quot;: True or False, # Value is a bool.
         &quot;intValue&quot;: &quot;A String&quot;, # Value is an integer
         &quot;key&quot;: &quot;A String&quot;, # Key of the config variable.
+        &quot;keyValue&quot;: { # Encryption Key value. # Value is a Encryption Key.
+          &quot;kmsKeyName&quot;: &quot;A String&quot;, # The [KMS key name] with which the content of the Operation is encrypted. The expected format: `projects/*/locations/*/keyRings/*/cryptoKeys/*`. Will be empty string if google managed.
+          &quot;type&quot;: &quot;A String&quot;, # Type.
+        },
         &quot;secretValue&quot;: { # Secret provides a reference to entries in Secret Manager. # Value is a secret.
           &quot;secretVersion&quot;: &quot;A String&quot;, # The resource name of the secret version in the format, format as: `projects/*/secrets/*/versions/*`.
         },
         &quot;stringValue&quot;: &quot;A String&quot;, # Value is a string.
       },
     ],
+    &quot;authKey&quot;: &quot;A String&quot;, # Identifier key for auth config
     &quot;authType&quot;: &quot;A String&quot;, # The type of authentication configured.
+    &quot;oauth2AuthCodeFlow&quot;: { # Parameters to support Oauth 2.0 Auth Code Grant Authentication. See https://www.rfc-editor.org/rfc/rfc6749#section-1.3.1 for more details. # Oauth2AuthCodeFlow.
+      &quot;authCode&quot;: &quot;A String&quot;, # Authorization code to be exchanged for access and refresh tokens.
+      &quot;authUri&quot;: &quot;A String&quot;, # Auth URL for Authorization Code Flow
+      &quot;clientId&quot;: &quot;A String&quot;, # Client ID for user-provided OAuth app.
+      &quot;clientSecret&quot;: { # Secret provides a reference to entries in Secret Manager. # Client secret for user-provided OAuth app.
+        &quot;secretVersion&quot;: &quot;A String&quot;, # The resource name of the secret version in the format, format as: `projects/*/secrets/*/versions/*`.
+      },
+      &quot;enablePkce&quot;: True or False, # Whether to enable PKCE when the user performs the auth code flow.
+      &quot;pkceVerifier&quot;: &quot;A String&quot;, # PKCE verifier to be used during the auth code exchange.
+      &quot;redirectUri&quot;: &quot;A String&quot;, # Redirect URI to be provided during the auth code exchange.
+      &quot;scopes&quot;: [ # Scopes the connection will request when the user performs the auth code flow.
+        &quot;A String&quot;,
+      ],
+    },
     &quot;oauth2ClientCredentials&quot;: { # Parameters to support Oauth 2.0 Client Credentials Grant Authentication. See https://tools.ietf.org/html/rfc6749#section-1.3.4 for more details. # Oauth2ClientCredentials.
       &quot;clientId&quot;: &quot;A String&quot;, # The client identifier.
       &quot;clientSecret&quot;: { # Secret provides a reference to entries in Secret Manager. # Secret version reference containing the client secret.
@@ -699,13 +907,19 @@ Args:
       &quot;boolValue&quot;: True or False, # Value is a bool.
       &quot;intValue&quot;: &quot;A String&quot;, # Value is an integer
       &quot;key&quot;: &quot;A String&quot;, # Key of the config variable.
+      &quot;keyValue&quot;: { # Encryption Key value. # Value is a Encryption Key.
+        &quot;kmsKeyName&quot;: &quot;A String&quot;, # The [KMS key name] with which the content of the Operation is encrypted. The expected format: `projects/*/locations/*/keyRings/*/cryptoKeys/*`. Will be empty string if google managed.
+        &quot;type&quot;: &quot;A String&quot;, # Type.
+      },
       &quot;secretValue&quot;: { # Secret provides a reference to entries in Secret Manager. # Value is a secret.
         &quot;secretVersion&quot;: &quot;A String&quot;, # The resource name of the secret version in the format, format as: `projects/*/secrets/*/versions/*`.
       },
       &quot;stringValue&quot;: &quot;A String&quot;, # Value is a string.
     },
   ],
+  &quot;connectionRevision&quot;: &quot;A String&quot;, # Output only. Connection revision. This field is only updated when the connection is created or updated by User.
   &quot;connectorVersion&quot;: &quot;A String&quot;, # Required. Connector version on which the connection is created. The format is: projects/*/locations/*/providers/*/connectors/*/versions/* Only global location is supported for ConnectorVersion resource.
+  &quot;connectorVersionLaunchStage&quot;: &quot;A String&quot;, # Output only. Flag to mark the version indicating the launch stage.
   &quot;createTime&quot;: &quot;A String&quot;, # Output only. Created time.
   &quot;description&quot;: &quot;A String&quot;, # Optional. Description of the resource.
   &quot;destinationConfigs&quot;: [ # Optional. Configuration of the Connector&#x27;s destination. Only accepted for Connectors that accepts user defined destination(s).
@@ -729,6 +943,9 @@ Args:
     &quot;locked&quot;: True or False, # Indicates whether or not the connection is locked.
     &quot;reason&quot;: &quot;A String&quot;, # Describes why a connection is locked.
   },
+  &quot;logConfig&quot;: { # Log configuration for the connection. # Optional. Log configuration for the connection.
+    &quot;enabled&quot;: True or False, # Enabled represents whether logging is enabled or not for a connection.
+  },
   &quot;name&quot;: &quot;A String&quot;, # Output only. Resource name of the Connection. Format: projects/{project}/locations/{location}/connections/{connection}
   &quot;nodeConfig&quot;: { # Node configuration for the connection. # Optional. Node configuration for the connection.
     &quot;maxNodeCount&quot;: 42, # Maximum number of nodes in the runtime nodes.
@@ -736,11 +953,46 @@ Args:
   },
   &quot;serviceAccount&quot;: &quot;A String&quot;, # Optional. Service account needed for runtime plane to access GCP resources.
   &quot;serviceDirectory&quot;: &quot;A String&quot;, # Output only. The name of the Service Directory service name. Used for Private Harpoon to resolve the ILB address. e.g. &quot;projects/cloud-connectors-e2e-testing/locations/us-central1/namespaces/istio-system/services/istio-ingressgateway-connectors&quot;
+  &quot;sslConfig&quot;: { # SSL Configuration of a connection # Optional. Ssl config of a connection
+    &quot;additionalVariables&quot;: [ # Additional SSL related field values
+      { # ConfigVariable represents a configuration variable present in a Connection. or AuthConfig.
+        &quot;boolValue&quot;: True or False, # Value is a bool.
+        &quot;intValue&quot;: &quot;A String&quot;, # Value is an integer
+        &quot;key&quot;: &quot;A String&quot;, # Key of the config variable.
+        &quot;keyValue&quot;: { # Encryption Key value. # Value is a Encryption Key.
+          &quot;kmsKeyName&quot;: &quot;A String&quot;, # The [KMS key name] with which the content of the Operation is encrypted. The expected format: `projects/*/locations/*/keyRings/*/cryptoKeys/*`. Will be empty string if google managed.
+          &quot;type&quot;: &quot;A String&quot;, # Type.
+        },
+        &quot;secretValue&quot;: { # Secret provides a reference to entries in Secret Manager. # Value is a secret.
+          &quot;secretVersion&quot;: &quot;A String&quot;, # The resource name of the secret version in the format, format as: `projects/*/secrets/*/versions/*`.
+        },
+        &quot;stringValue&quot;: &quot;A String&quot;, # Value is a string.
+      },
+    ],
+    &quot;clientCertType&quot;: &quot;A String&quot;, # Type of Client Cert (PEM/JKS/.. etc.)
+    &quot;clientCertificate&quot;: { # Secret provides a reference to entries in Secret Manager. # Client Certificate
+      &quot;secretVersion&quot;: &quot;A String&quot;, # The resource name of the secret version in the format, format as: `projects/*/secrets/*/versions/*`.
+    },
+    &quot;clientPrivateKey&quot;: { # Secret provides a reference to entries in Secret Manager. # Client Private Key
+      &quot;secretVersion&quot;: &quot;A String&quot;, # The resource name of the secret version in the format, format as: `projects/*/secrets/*/versions/*`.
+    },
+    &quot;clientPrivateKeyPass&quot;: { # Secret provides a reference to entries in Secret Manager. # Secret containing the passphrase protecting the Client Private Key
+      &quot;secretVersion&quot;: &quot;A String&quot;, # The resource name of the secret version in the format, format as: `projects/*/secrets/*/versions/*`.
+    },
+    &quot;privateServerCertificate&quot;: { # Secret provides a reference to entries in Secret Manager. # Private Server Certificate. Needs to be specified if trust model is `PRIVATE`.
+      &quot;secretVersion&quot;: &quot;A String&quot;, # The resource name of the secret version in the format, format as: `projects/*/secrets/*/versions/*`.
+    },
+    &quot;serverCertType&quot;: &quot;A String&quot;, # Type of Server Cert (PEM/JKS/.. etc.)
+    &quot;trustModel&quot;: &quot;A String&quot;, # Trust Model of the SSL connection
+    &quot;type&quot;: &quot;A String&quot;, # Controls the ssl type for the given connector version.
+    &quot;useSsl&quot;: True or False, # Bool for enabling SSL
+  },
   &quot;status&quot;: { # ConnectionStatus indicates the state of the connection. # Output only. Current status of the connection.
     &quot;description&quot;: &quot;A String&quot;, # Description.
     &quot;state&quot;: &quot;A String&quot;, # State.
     &quot;status&quot;: &quot;A String&quot;, # Status provides detailed information for the state.
   },
+  &quot;subscriptionType&quot;: &quot;A String&quot;, # Output only. This subscription type enum states the subscription type of the project.
   &quot;suspended&quot;: True or False, # Optional. Suspended indicates if a user has suspended a connection or not.
   &quot;updateTime&quot;: &quot;A String&quot;, # Output only. Updated time.
 }
@@ -807,7 +1059,7 @@ Args:
           &quot;location&quot;: &quot;A String&quot;, # Optional. String indicating the location of the expression for error reporting, e.g. a file name and a position in the file.
           &quot;title&quot;: &quot;A String&quot;, # Optional. Title for the expression, i.e. a short string describing its purpose. This can be used e.g. in UIs which allow to enter the expression.
         },
-        &quot;members&quot;: [ # Specifies the principals requesting access for a Google Cloud resource. `members` can have the following values: * `allUsers`: A special identifier that represents anyone who is on the internet; with or without a Google account. * `allAuthenticatedUsers`: A special identifier that represents anyone who is authenticated with a Google account or a service account. Does not include identities that come from external identity providers (IdPs) through identity federation. * `user:{emailid}`: An email address that represents a specific Google account. For example, `alice@example.com` . * `serviceAccount:{emailid}`: An email address that represents a Google service account. For example, `my-other-app@appspot.gserviceaccount.com`. * `serviceAccount:{projectid}.svc.id.goog[{namespace}/{kubernetes-sa}]`: An identifier for a [Kubernetes service account](https://cloud.google.com/kubernetes-engine/docs/how-to/kubernetes-service-accounts). For example, `my-project.svc.id.goog[my-namespace/my-kubernetes-sa]`. * `group:{emailid}`: An email address that represents a Google group. For example, `admins@example.com`. * `deleted:user:{emailid}?uid={uniqueid}`: An email address (plus unique identifier) representing a user that has been recently deleted. For example, `alice@example.com?uid=123456789012345678901`. If the user is recovered, this value reverts to `user:{emailid}` and the recovered user retains the role in the binding. * `deleted:serviceAccount:{emailid}?uid={uniqueid}`: An email address (plus unique identifier) representing a service account that has been recently deleted. For example, `my-other-app@appspot.gserviceaccount.com?uid=123456789012345678901`. If the service account is undeleted, this value reverts to `serviceAccount:{emailid}` and the undeleted service account retains the role in the binding. * `deleted:group:{emailid}?uid={uniqueid}`: An email address (plus unique identifier) representing a Google group that has been recently deleted. For example, `admins@example.com?uid=123456789012345678901`. If the group is recovered, this value reverts to `group:{emailid}` and the recovered group retains the role in the binding. * `domain:{domain}`: The G Suite domain (primary) that represents all the users of that domain. For example, `google.com` or `example.com`.
+        &quot;members&quot;: [ # Specifies the principals requesting access for a Google Cloud resource. `members` can have the following values: * `allUsers`: A special identifier that represents anyone who is on the internet; with or without a Google account. * `allAuthenticatedUsers`: A special identifier that represents anyone who is authenticated with a Google account or a service account. Does not include identities that come from external identity providers (IdPs) through identity federation. * `user:{emailid}`: An email address that represents a specific Google account. For example, `alice@example.com` . * `serviceAccount:{emailid}`: An email address that represents a Google service account. For example, `my-other-app@appspot.gserviceaccount.com`. * `serviceAccount:{projectid}.svc.id.goog[{namespace}/{kubernetes-sa}]`: An identifier for a [Kubernetes service account](https://cloud.google.com/kubernetes-engine/docs/how-to/kubernetes-service-accounts). For example, `my-project.svc.id.goog[my-namespace/my-kubernetes-sa]`. * `group:{emailid}`: An email address that represents a Google group. For example, `admins@example.com`. * `domain:{domain}`: The G Suite domain (primary) that represents all the users of that domain. For example, `google.com` or `example.com`. * `deleted:user:{emailid}?uid={uniqueid}`: An email address (plus unique identifier) representing a user that has been recently deleted. For example, `alice@example.com?uid=123456789012345678901`. If the user is recovered, this value reverts to `user:{emailid}` and the recovered user retains the role in the binding. * `deleted:serviceAccount:{emailid}?uid={uniqueid}`: An email address (plus unique identifier) representing a service account that has been recently deleted. For example, `my-other-app@appspot.gserviceaccount.com?uid=123456789012345678901`. If the service account is undeleted, this value reverts to `serviceAccount:{emailid}` and the undeleted service account retains the role in the binding. * `deleted:group:{emailid}?uid={uniqueid}`: An email address (plus unique identifier) representing a Google group that has been recently deleted. For example, `admins@example.com?uid=123456789012345678901`. If the group is recovered, this value reverts to `group:{emailid}` and the recovered group retains the role in the binding.
           &quot;A String&quot;,
         ],
         &quot;role&quot;: &quot;A String&quot;, # Role that is assigned to the list of `members`, or principals. For example, `roles/viewer`, `roles/editor`, or `roles/owner`.
@@ -849,7 +1101,7 @@ Returns:
         &quot;location&quot;: &quot;A String&quot;, # Optional. String indicating the location of the expression for error reporting, e.g. a file name and a position in the file.
         &quot;title&quot;: &quot;A String&quot;, # Optional. Title for the expression, i.e. a short string describing its purpose. This can be used e.g. in UIs which allow to enter the expression.
       },
-      &quot;members&quot;: [ # Specifies the principals requesting access for a Google Cloud resource. `members` can have the following values: * `allUsers`: A special identifier that represents anyone who is on the internet; with or without a Google account. * `allAuthenticatedUsers`: A special identifier that represents anyone who is authenticated with a Google account or a service account. Does not include identities that come from external identity providers (IdPs) through identity federation. * `user:{emailid}`: An email address that represents a specific Google account. For example, `alice@example.com` . * `serviceAccount:{emailid}`: An email address that represents a Google service account. For example, `my-other-app@appspot.gserviceaccount.com`. * `serviceAccount:{projectid}.svc.id.goog[{namespace}/{kubernetes-sa}]`: An identifier for a [Kubernetes service account](https://cloud.google.com/kubernetes-engine/docs/how-to/kubernetes-service-accounts). For example, `my-project.svc.id.goog[my-namespace/my-kubernetes-sa]`. * `group:{emailid}`: An email address that represents a Google group. For example, `admins@example.com`. * `deleted:user:{emailid}?uid={uniqueid}`: An email address (plus unique identifier) representing a user that has been recently deleted. For example, `alice@example.com?uid=123456789012345678901`. If the user is recovered, this value reverts to `user:{emailid}` and the recovered user retains the role in the binding. * `deleted:serviceAccount:{emailid}?uid={uniqueid}`: An email address (plus unique identifier) representing a service account that has been recently deleted. For example, `my-other-app@appspot.gserviceaccount.com?uid=123456789012345678901`. If the service account is undeleted, this value reverts to `serviceAccount:{emailid}` and the undeleted service account retains the role in the binding. * `deleted:group:{emailid}?uid={uniqueid}`: An email address (plus unique identifier) representing a Google group that has been recently deleted. For example, `admins@example.com?uid=123456789012345678901`. If the group is recovered, this value reverts to `group:{emailid}` and the recovered group retains the role in the binding. * `domain:{domain}`: The G Suite domain (primary) that represents all the users of that domain. For example, `google.com` or `example.com`.
+      &quot;members&quot;: [ # Specifies the principals requesting access for a Google Cloud resource. `members` can have the following values: * `allUsers`: A special identifier that represents anyone who is on the internet; with or without a Google account. * `allAuthenticatedUsers`: A special identifier that represents anyone who is authenticated with a Google account or a service account. Does not include identities that come from external identity providers (IdPs) through identity federation. * `user:{emailid}`: An email address that represents a specific Google account. For example, `alice@example.com` . * `serviceAccount:{emailid}`: An email address that represents a Google service account. For example, `my-other-app@appspot.gserviceaccount.com`. * `serviceAccount:{projectid}.svc.id.goog[{namespace}/{kubernetes-sa}]`: An identifier for a [Kubernetes service account](https://cloud.google.com/kubernetes-engine/docs/how-to/kubernetes-service-accounts). For example, `my-project.svc.id.goog[my-namespace/my-kubernetes-sa]`. * `group:{emailid}`: An email address that represents a Google group. For example, `admins@example.com`. * `domain:{domain}`: The G Suite domain (primary) that represents all the users of that domain. For example, `google.com` or `example.com`. * `deleted:user:{emailid}?uid={uniqueid}`: An email address (plus unique identifier) representing a user that has been recently deleted. For example, `alice@example.com?uid=123456789012345678901`. If the user is recovered, this value reverts to `user:{emailid}` and the recovered user retains the role in the binding. * `deleted:serviceAccount:{emailid}?uid={uniqueid}`: An email address (plus unique identifier) representing a service account that has been recently deleted. For example, `my-other-app@appspot.gserviceaccount.com?uid=123456789012345678901`. If the service account is undeleted, this value reverts to `serviceAccount:{emailid}` and the undeleted service account retains the role in the binding. * `deleted:group:{emailid}?uid={uniqueid}`: An email address (plus unique identifier) representing a Google group that has been recently deleted. For example, `admins@example.com?uid=123456789012345678901`. If the group is recovered, this value reverts to `group:{emailid}` and the recovered group retains the role in the binding.
         &quot;A String&quot;,
       ],
       &quot;role&quot;: &quot;A String&quot;, # Role that is assigned to the list of `members`, or principals. For example, `roles/viewer`, `roles/editor`, or `roles/owner`.

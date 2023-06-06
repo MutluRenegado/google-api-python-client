@@ -136,11 +136,12 @@ h1, h2, h3 {
   <pre>Creates a new migration job in a given project and location.
 
 Args:
-  parent: string, Required. The parent, which owns this collection of migration jobs. (required)
+  parent: string, Required. The parent which owns this collection of migration jobs. (required)
   body: object, The request body.
     The object takes the form of:
 
 { # Represents a Database Migration Service migration job object.
+  &quot;cmekKeyName&quot;: &quot;A String&quot;, # The CMEK (customer-managed encryption key) fully qualified key name used for the migration job. This field supports all migration jobs types except for: * Mysql to Mysql (use the cmek field in the cloudsql connection profile instead). * PostrgeSQL to PostgreSQL (use the cmek field in the cloudsql connection profile instead). * PostgreSQL to AlloyDB (use the kms_key_name field in the alloydb connection profile instead). Each Cloud CMEK key has the following format: projects/[PROJECT]/locations/[REGION]/keyRings/[RING]/cryptoKeys/[KEY_NAME]
   &quot;conversionWorkspace&quot;: { # A conversion workspace&#x27;s version. # The conversion workspace used by the migration.
     &quot;commitId&quot;: &quot;A String&quot;, # The commit ID of the conversion workspace.
     &quot;name&quot;: &quot;A String&quot;, # The resource name (URI) of the conversion workspace.
@@ -190,7 +191,7 @@ Args:
     &quot;provider&quot;: &quot;A String&quot;, # The database provider.
   },
   &quot;state&quot;: &quot;A String&quot;, # The current migration job state.
-  &quot;staticIpConnectivity&quot;: { # The source database will allow incoming connections from the destination database&#x27;s public IP. You can retrieve the Cloud SQL instance&#x27;s public IP from the Cloud SQL console or using Cloud SQL APIs. No additional configuration is required. # static ip connectivity data (default, no additional details needed).
+  &quot;staticIpConnectivity&quot;: { # The source database will allow incoming connections from the public IP of the destination database. You can retrieve the public IP of the Cloud SQL instance from the Cloud SQL console or using Cloud SQL APIs. No additional configuration is required. # static ip connectivity data (default, no additional details needed).
   },
   &quot;type&quot;: &quot;A String&quot;, # Required. The migration job type.
   &quot;updateTime&quot;: &quot;A String&quot;, # Output only. The timestamp when the migration job resource was last updated. A timestamp in RFC3339 UTC &quot;Zulu&quot; format, accurate to nanoseconds. Example: &quot;2014-10-02T15:01:23.045123456Z&quot;.
@@ -200,7 +201,7 @@ Args:
 }
 
   migrationJobId: string, Required. The ID of the instance to create.
-  requestId: string, A unique id used to identify the request. If the server receives two requests with the same id, then the second request will be ignored. It is recommended to always set this value to a UUID. The id must contain only letters (a-z, A-Z), numbers (0-9), underscores (_), and hyphens (-). The maximum length is 40 characters.
+  requestId: string, A unique ID used to identify the request. If the server receives two requests with the same ID, then the second request is ignored. It is recommended to always set this value to a UUID. The ID must contain only letters (a-z, A-Z), numbers (0-9), underscores (_), and hyphens (-). The maximum length is 40 characters.
   x__xgafv: string, V1 error format.
     Allowed values
       1 - v1 error format
@@ -237,7 +238,7 @@ Returns:
 Args:
   name: string, Required. Name of the migration job resource to delete. (required)
   force: boolean, The destination CloudSQL connection profile is always deleted with the migration job. In case of force delete, the destination CloudSQL replica database is also deleted.
-  requestId: string, A unique id used to identify the request. If the server receives two requests with the same id, then the second request will be ignored. It is recommended to always set this value to a UUID. The id must contain only letters (a-z, A-Z), numbers (0-9), underscores (_), and hyphens (-). The maximum length is 40 characters.
+  requestId: string, A unique ID used to identify the request. If the server receives two requests with the same ID, then the second request is ignored. It is recommended to always set this value to a UUID. The ID must contain only letters (a-z, A-Z), numbers (0-9), underscores (_), and hyphens (-). The maximum length is 40 characters.
   x__xgafv: string, V1 error format.
     Allowed values
       1 - v1 error format
@@ -283,7 +284,7 @@ Args:
     &quot;vmMachineType&quot;: &quot;A String&quot;, # Required. VM instance machine type to create.
     &quot;vmZone&quot;: &quot;A String&quot;, # The Google Cloud Platform zone to create the VM in.
   },
-  &quot;vmPort&quot;: 42, # The port that will be open on the bastion host
+  &quot;vmPort&quot;: 42, # The port that will be open on the bastion host.
   &quot;vmSelectionConfig&quot;: { # VM selection configuration message # The VM selection configuration
     &quot;vmZone&quot;: &quot;A String&quot;, # Required. The Google Cloud Platform zone the VM is located.
   },
@@ -317,6 +318,7 @@ Returns:
   An object of the form:
 
     { # Represents a Database Migration Service migration job object.
+  &quot;cmekKeyName&quot;: &quot;A String&quot;, # The CMEK (customer-managed encryption key) fully qualified key name used for the migration job. This field supports all migration jobs types except for: * Mysql to Mysql (use the cmek field in the cloudsql connection profile instead). * PostrgeSQL to PostgreSQL (use the cmek field in the cloudsql connection profile instead). * PostgreSQL to AlloyDB (use the kms_key_name field in the alloydb connection profile instead). Each Cloud CMEK key has the following format: projects/[PROJECT]/locations/[REGION]/keyRings/[RING]/cryptoKeys/[KEY_NAME]
   &quot;conversionWorkspace&quot;: { # A conversion workspace&#x27;s version. # The conversion workspace used by the migration.
     &quot;commitId&quot;: &quot;A String&quot;, # The commit ID of the conversion workspace.
     &quot;name&quot;: &quot;A String&quot;, # The resource name (URI) of the conversion workspace.
@@ -366,7 +368,7 @@ Returns:
     &quot;provider&quot;: &quot;A String&quot;, # The database provider.
   },
   &quot;state&quot;: &quot;A String&quot;, # The current migration job state.
-  &quot;staticIpConnectivity&quot;: { # The source database will allow incoming connections from the destination database&#x27;s public IP. You can retrieve the Cloud SQL instance&#x27;s public IP from the Cloud SQL console or using Cloud SQL APIs. No additional configuration is required. # static ip connectivity data (default, no additional details needed).
+  &quot;staticIpConnectivity&quot;: { # The source database will allow incoming connections from the public IP of the destination database. You can retrieve the public IP of the Cloud SQL instance from the Cloud SQL console or using Cloud SQL APIs. No additional configuration is required. # static ip connectivity data (default, no additional details needed).
   },
   &quot;type&quot;: &quot;A String&quot;, # Required. The migration job type.
   &quot;updateTime&quot;: &quot;A String&quot;, # Output only. The timestamp when the migration job resource was last updated. A timestamp in RFC3339 UTC &quot;Zulu&quot; format, accurate to nanoseconds. Example: &quot;2014-10-02T15:01:23.045123456Z&quot;.
@@ -413,7 +415,7 @@ Returns:
         &quot;location&quot;: &quot;A String&quot;, # Optional. String indicating the location of the expression for error reporting, e.g. a file name and a position in the file.
         &quot;title&quot;: &quot;A String&quot;, # Optional. Title for the expression, i.e. a short string describing its purpose. This can be used e.g. in UIs which allow to enter the expression.
       },
-      &quot;members&quot;: [ # Specifies the principals requesting access for a Google Cloud resource. `members` can have the following values: * `allUsers`: A special identifier that represents anyone who is on the internet; with or without a Google account. * `allAuthenticatedUsers`: A special identifier that represents anyone who is authenticated with a Google account or a service account. Does not include identities that come from external identity providers (IdPs) through identity federation. * `user:{emailid}`: An email address that represents a specific Google account. For example, `alice@example.com` . * `serviceAccount:{emailid}`: An email address that represents a Google service account. For example, `my-other-app@appspot.gserviceaccount.com`. * `serviceAccount:{projectid}.svc.id.goog[{namespace}/{kubernetes-sa}]`: An identifier for a [Kubernetes service account](https://cloud.google.com/kubernetes-engine/docs/how-to/kubernetes-service-accounts). For example, `my-project.svc.id.goog[my-namespace/my-kubernetes-sa]`. * `group:{emailid}`: An email address that represents a Google group. For example, `admins@example.com`. * `deleted:user:{emailid}?uid={uniqueid}`: An email address (plus unique identifier) representing a user that has been recently deleted. For example, `alice@example.com?uid=123456789012345678901`. If the user is recovered, this value reverts to `user:{emailid}` and the recovered user retains the role in the binding. * `deleted:serviceAccount:{emailid}?uid={uniqueid}`: An email address (plus unique identifier) representing a service account that has been recently deleted. For example, `my-other-app@appspot.gserviceaccount.com?uid=123456789012345678901`. If the service account is undeleted, this value reverts to `serviceAccount:{emailid}` and the undeleted service account retains the role in the binding. * `deleted:group:{emailid}?uid={uniqueid}`: An email address (plus unique identifier) representing a Google group that has been recently deleted. For example, `admins@example.com?uid=123456789012345678901`. If the group is recovered, this value reverts to `group:{emailid}` and the recovered group retains the role in the binding. * `domain:{domain}`: The G Suite domain (primary) that represents all the users of that domain. For example, `google.com` or `example.com`.
+      &quot;members&quot;: [ # Specifies the principals requesting access for a Google Cloud resource. `members` can have the following values: * `allUsers`: A special identifier that represents anyone who is on the internet; with or without a Google account. * `allAuthenticatedUsers`: A special identifier that represents anyone who is authenticated with a Google account or a service account. Does not include identities that come from external identity providers (IdPs) through identity federation. * `user:{emailid}`: An email address that represents a specific Google account. For example, `alice@example.com` . * `serviceAccount:{emailid}`: An email address that represents a Google service account. For example, `my-other-app@appspot.gserviceaccount.com`. * `serviceAccount:{projectid}.svc.id.goog[{namespace}/{kubernetes-sa}]`: An identifier for a [Kubernetes service account](https://cloud.google.com/kubernetes-engine/docs/how-to/kubernetes-service-accounts). For example, `my-project.svc.id.goog[my-namespace/my-kubernetes-sa]`. * `group:{emailid}`: An email address that represents a Google group. For example, `admins@example.com`. * `domain:{domain}`: The G Suite domain (primary) that represents all the users of that domain. For example, `google.com` or `example.com`. * `deleted:user:{emailid}?uid={uniqueid}`: An email address (plus unique identifier) representing a user that has been recently deleted. For example, `alice@example.com?uid=123456789012345678901`. If the user is recovered, this value reverts to `user:{emailid}` and the recovered user retains the role in the binding. * `deleted:serviceAccount:{emailid}?uid={uniqueid}`: An email address (plus unique identifier) representing a service account that has been recently deleted. For example, `my-other-app@appspot.gserviceaccount.com?uid=123456789012345678901`. If the service account is undeleted, this value reverts to `serviceAccount:{emailid}` and the undeleted service account retains the role in the binding. * `deleted:group:{emailid}?uid={uniqueid}`: An email address (plus unique identifier) representing a Google group that has been recently deleted. For example, `admins@example.com?uid=123456789012345678901`. If the group is recovered, this value reverts to `group:{emailid}` and the recovered group retains the role in the binding.
         &quot;A String&quot;,
       ],
       &quot;role&quot;: &quot;A String&quot;, # Role that is assigned to the list of `members`, or principals. For example, `roles/viewer`, `roles/editor`, or `roles/owner`.
@@ -429,10 +431,10 @@ Returns:
   <pre>Lists migration jobs in a given project and location.
 
 Args:
-  parent: string, Required. The parent, which owns this collection of migrationJobs. (required)
+  parent: string, Required. The parent which owns this collection of migrationJobs. (required)
   filter: string, A filter expression that filters migration jobs listed in the response. The expression must specify the field name, a comparison operator, and the value that you want to use for filtering. The value must be a string, a number, or a boolean. The comparison operator must be either =, !=, &gt;, or &lt;. For example, list migration jobs created this year by specifying **createTime %gt; 2020-01-01T00:00:00.000000000Z.** You can also filter nested fields. For example, you could specify **reverseSshConnectivity.vmIp = &quot;1.2.3.4&quot;** to select all migration jobs connecting through the specific SSH tunnel bastion.
   orderBy: string, Sort the results based on the migration job name. Valid values are: &quot;name&quot;, &quot;name asc&quot;, and &quot;name desc&quot;.
-  pageSize: integer, The maximum number of migration jobs to return. The service may return fewer than this value. If unspecified, at most 50 migration jobs will be returned. The maximum value is 1000; values above 1000 will be coerced to 1000.
+  pageSize: integer, The maximum number of migration jobs to return. The service may return fewer than this value. If unspecified, at most 50 migration jobs will be returned. The maximum value is 1000; values above 1000 are coerced to 1000.
   pageToken: string, The nextPageToken value received in the previous call to migrationJobs.list, used in the subsequent request to retrieve the next page of results. On first call this should be left blank. When paginating, all other parameters provided to migrationJobs.list must match the call that provided the page token.
   x__xgafv: string, V1 error format.
     Allowed values
@@ -445,6 +447,7 @@ Returns:
     { # Response message for &#x27;ListMigrationJobs&#x27; request.
   &quot;migrationJobs&quot;: [ # The list of migration jobs objects.
     { # Represents a Database Migration Service migration job object.
+      &quot;cmekKeyName&quot;: &quot;A String&quot;, # The CMEK (customer-managed encryption key) fully qualified key name used for the migration job. This field supports all migration jobs types except for: * Mysql to Mysql (use the cmek field in the cloudsql connection profile instead). * PostrgeSQL to PostgreSQL (use the cmek field in the cloudsql connection profile instead). * PostgreSQL to AlloyDB (use the kms_key_name field in the alloydb connection profile instead). Each Cloud CMEK key has the following format: projects/[PROJECT]/locations/[REGION]/keyRings/[RING]/cryptoKeys/[KEY_NAME]
       &quot;conversionWorkspace&quot;: { # A conversion workspace&#x27;s version. # The conversion workspace used by the migration.
         &quot;commitId&quot;: &quot;A String&quot;, # The commit ID of the conversion workspace.
         &quot;name&quot;: &quot;A String&quot;, # The resource name (URI) of the conversion workspace.
@@ -494,7 +497,7 @@ Returns:
         &quot;provider&quot;: &quot;A String&quot;, # The database provider.
       },
       &quot;state&quot;: &quot;A String&quot;, # The current migration job state.
-      &quot;staticIpConnectivity&quot;: { # The source database will allow incoming connections from the destination database&#x27;s public IP. You can retrieve the Cloud SQL instance&#x27;s public IP from the Cloud SQL console or using Cloud SQL APIs. No additional configuration is required. # static ip connectivity data (default, no additional details needed).
+      &quot;staticIpConnectivity&quot;: { # The source database will allow incoming connections from the public IP of the destination database. You can retrieve the public IP of the Cloud SQL instance from the Cloud SQL console or using Cloud SQL APIs. No additional configuration is required. # static ip connectivity data (default, no additional details needed).
       },
       &quot;type&quot;: &quot;A String&quot;, # Required. The migration job type.
       &quot;updateTime&quot;: &quot;A String&quot;, # Output only. The timestamp when the migration job resource was last updated. A timestamp in RFC3339 UTC &quot;Zulu&quot; format, accurate to nanoseconds. Example: &quot;2014-10-02T15:01:23.045123456Z&quot;.
@@ -503,7 +506,7 @@ Returns:
       },
     },
   ],
-  &quot;nextPageToken&quot;: &quot;A String&quot;, # A token, which can be sent as `page_token` to retrieve the next page. If this field is omitted, there are no subsequent pages.
+  &quot;nextPageToken&quot;: &quot;A String&quot;, # A token which can be sent as `page_token` to retrieve the next page. If this field is omitted, there are no subsequent pages.
   &quot;unreachable&quot;: [ # Locations that could not be reached.
     &quot;A String&quot;,
   ],
@@ -534,6 +537,7 @@ Args:
     The object takes the form of:
 
 { # Represents a Database Migration Service migration job object.
+  &quot;cmekKeyName&quot;: &quot;A String&quot;, # The CMEK (customer-managed encryption key) fully qualified key name used for the migration job. This field supports all migration jobs types except for: * Mysql to Mysql (use the cmek field in the cloudsql connection profile instead). * PostrgeSQL to PostgreSQL (use the cmek field in the cloudsql connection profile instead). * PostgreSQL to AlloyDB (use the kms_key_name field in the alloydb connection profile instead). Each Cloud CMEK key has the following format: projects/[PROJECT]/locations/[REGION]/keyRings/[RING]/cryptoKeys/[KEY_NAME]
   &quot;conversionWorkspace&quot;: { # A conversion workspace&#x27;s version. # The conversion workspace used by the migration.
     &quot;commitId&quot;: &quot;A String&quot;, # The commit ID of the conversion workspace.
     &quot;name&quot;: &quot;A String&quot;, # The resource name (URI) of the conversion workspace.
@@ -583,7 +587,7 @@ Args:
     &quot;provider&quot;: &quot;A String&quot;, # The database provider.
   },
   &quot;state&quot;: &quot;A String&quot;, # The current migration job state.
-  &quot;staticIpConnectivity&quot;: { # The source database will allow incoming connections from the destination database&#x27;s public IP. You can retrieve the Cloud SQL instance&#x27;s public IP from the Cloud SQL console or using Cloud SQL APIs. No additional configuration is required. # static ip connectivity data (default, no additional details needed).
+  &quot;staticIpConnectivity&quot;: { # The source database will allow incoming connections from the public IP of the destination database. You can retrieve the public IP of the Cloud SQL instance from the Cloud SQL console or using Cloud SQL APIs. No additional configuration is required. # static ip connectivity data (default, no additional details needed).
   },
   &quot;type&quot;: &quot;A String&quot;, # Required. The migration job type.
   &quot;updateTime&quot;: &quot;A String&quot;, # Output only. The timestamp when the migration job resource was last updated. A timestamp in RFC3339 UTC &quot;Zulu&quot; format, accurate to nanoseconds. Example: &quot;2014-10-02T15:01:23.045123456Z&quot;.
@@ -592,8 +596,8 @@ Args:
   },
 }
 
-  requestId: string, A unique id used to identify the request. If the server receives two requests with the same id, then the second request will be ignored. It is recommended to always set this value to a UUID. The id must contain only letters (a-z, A-Z), numbers (0-9), underscores (_), and hyphens (-). The maximum length is 40 characters.
-  updateMask: string, Required. Field mask is used to specify the fields to be overwritten in the migration job resource by the update.
+  requestId: string, A unique ID used to identify the request. If the server receives two requests with the same ID, then the second request is ignored. It is recommended to always set this value to a UUID. The ID must contain only letters (a-z, A-Z), numbers (0-9), underscores (_), and hyphens (-). The maximum length is 40 characters.
+  updateMask: string, Required. Field mask is used to specify the fields to be overwritten by the update in the conversion workspace resource.
   x__xgafv: string, V1 error format.
     Allowed values
       1 - v1 error format
@@ -778,7 +782,7 @@ Args:
           &quot;location&quot;: &quot;A String&quot;, # Optional. String indicating the location of the expression for error reporting, e.g. a file name and a position in the file.
           &quot;title&quot;: &quot;A String&quot;, # Optional. Title for the expression, i.e. a short string describing its purpose. This can be used e.g. in UIs which allow to enter the expression.
         },
-        &quot;members&quot;: [ # Specifies the principals requesting access for a Google Cloud resource. `members` can have the following values: * `allUsers`: A special identifier that represents anyone who is on the internet; with or without a Google account. * `allAuthenticatedUsers`: A special identifier that represents anyone who is authenticated with a Google account or a service account. Does not include identities that come from external identity providers (IdPs) through identity federation. * `user:{emailid}`: An email address that represents a specific Google account. For example, `alice@example.com` . * `serviceAccount:{emailid}`: An email address that represents a Google service account. For example, `my-other-app@appspot.gserviceaccount.com`. * `serviceAccount:{projectid}.svc.id.goog[{namespace}/{kubernetes-sa}]`: An identifier for a [Kubernetes service account](https://cloud.google.com/kubernetes-engine/docs/how-to/kubernetes-service-accounts). For example, `my-project.svc.id.goog[my-namespace/my-kubernetes-sa]`. * `group:{emailid}`: An email address that represents a Google group. For example, `admins@example.com`. * `deleted:user:{emailid}?uid={uniqueid}`: An email address (plus unique identifier) representing a user that has been recently deleted. For example, `alice@example.com?uid=123456789012345678901`. If the user is recovered, this value reverts to `user:{emailid}` and the recovered user retains the role in the binding. * `deleted:serviceAccount:{emailid}?uid={uniqueid}`: An email address (plus unique identifier) representing a service account that has been recently deleted. For example, `my-other-app@appspot.gserviceaccount.com?uid=123456789012345678901`. If the service account is undeleted, this value reverts to `serviceAccount:{emailid}` and the undeleted service account retains the role in the binding. * `deleted:group:{emailid}?uid={uniqueid}`: An email address (plus unique identifier) representing a Google group that has been recently deleted. For example, `admins@example.com?uid=123456789012345678901`. If the group is recovered, this value reverts to `group:{emailid}` and the recovered group retains the role in the binding. * `domain:{domain}`: The G Suite domain (primary) that represents all the users of that domain. For example, `google.com` or `example.com`.
+        &quot;members&quot;: [ # Specifies the principals requesting access for a Google Cloud resource. `members` can have the following values: * `allUsers`: A special identifier that represents anyone who is on the internet; with or without a Google account. * `allAuthenticatedUsers`: A special identifier that represents anyone who is authenticated with a Google account or a service account. Does not include identities that come from external identity providers (IdPs) through identity federation. * `user:{emailid}`: An email address that represents a specific Google account. For example, `alice@example.com` . * `serviceAccount:{emailid}`: An email address that represents a Google service account. For example, `my-other-app@appspot.gserviceaccount.com`. * `serviceAccount:{projectid}.svc.id.goog[{namespace}/{kubernetes-sa}]`: An identifier for a [Kubernetes service account](https://cloud.google.com/kubernetes-engine/docs/how-to/kubernetes-service-accounts). For example, `my-project.svc.id.goog[my-namespace/my-kubernetes-sa]`. * `group:{emailid}`: An email address that represents a Google group. For example, `admins@example.com`. * `domain:{domain}`: The G Suite domain (primary) that represents all the users of that domain. For example, `google.com` or `example.com`. * `deleted:user:{emailid}?uid={uniqueid}`: An email address (plus unique identifier) representing a user that has been recently deleted. For example, `alice@example.com?uid=123456789012345678901`. If the user is recovered, this value reverts to `user:{emailid}` and the recovered user retains the role in the binding. * `deleted:serviceAccount:{emailid}?uid={uniqueid}`: An email address (plus unique identifier) representing a service account that has been recently deleted. For example, `my-other-app@appspot.gserviceaccount.com?uid=123456789012345678901`. If the service account is undeleted, this value reverts to `serviceAccount:{emailid}` and the undeleted service account retains the role in the binding. * `deleted:group:{emailid}?uid={uniqueid}`: An email address (plus unique identifier) representing a Google group that has been recently deleted. For example, `admins@example.com?uid=123456789012345678901`. If the group is recovered, this value reverts to `group:{emailid}` and the recovered group retains the role in the binding.
           &quot;A String&quot;,
         ],
         &quot;role&quot;: &quot;A String&quot;, # Role that is assigned to the list of `members`, or principals. For example, `roles/viewer`, `roles/editor`, or `roles/owner`.
@@ -820,7 +824,7 @@ Returns:
         &quot;location&quot;: &quot;A String&quot;, # Optional. String indicating the location of the expression for error reporting, e.g. a file name and a position in the file.
         &quot;title&quot;: &quot;A String&quot;, # Optional. Title for the expression, i.e. a short string describing its purpose. This can be used e.g. in UIs which allow to enter the expression.
       },
-      &quot;members&quot;: [ # Specifies the principals requesting access for a Google Cloud resource. `members` can have the following values: * `allUsers`: A special identifier that represents anyone who is on the internet; with or without a Google account. * `allAuthenticatedUsers`: A special identifier that represents anyone who is authenticated with a Google account or a service account. Does not include identities that come from external identity providers (IdPs) through identity federation. * `user:{emailid}`: An email address that represents a specific Google account. For example, `alice@example.com` . * `serviceAccount:{emailid}`: An email address that represents a Google service account. For example, `my-other-app@appspot.gserviceaccount.com`. * `serviceAccount:{projectid}.svc.id.goog[{namespace}/{kubernetes-sa}]`: An identifier for a [Kubernetes service account](https://cloud.google.com/kubernetes-engine/docs/how-to/kubernetes-service-accounts). For example, `my-project.svc.id.goog[my-namespace/my-kubernetes-sa]`. * `group:{emailid}`: An email address that represents a Google group. For example, `admins@example.com`. * `deleted:user:{emailid}?uid={uniqueid}`: An email address (plus unique identifier) representing a user that has been recently deleted. For example, `alice@example.com?uid=123456789012345678901`. If the user is recovered, this value reverts to `user:{emailid}` and the recovered user retains the role in the binding. * `deleted:serviceAccount:{emailid}?uid={uniqueid}`: An email address (plus unique identifier) representing a service account that has been recently deleted. For example, `my-other-app@appspot.gserviceaccount.com?uid=123456789012345678901`. If the service account is undeleted, this value reverts to `serviceAccount:{emailid}` and the undeleted service account retains the role in the binding. * `deleted:group:{emailid}?uid={uniqueid}`: An email address (plus unique identifier) representing a Google group that has been recently deleted. For example, `admins@example.com?uid=123456789012345678901`. If the group is recovered, this value reverts to `group:{emailid}` and the recovered group retains the role in the binding. * `domain:{domain}`: The G Suite domain (primary) that represents all the users of that domain. For example, `google.com` or `example.com`.
+      &quot;members&quot;: [ # Specifies the principals requesting access for a Google Cloud resource. `members` can have the following values: * `allUsers`: A special identifier that represents anyone who is on the internet; with or without a Google account. * `allAuthenticatedUsers`: A special identifier that represents anyone who is authenticated with a Google account or a service account. Does not include identities that come from external identity providers (IdPs) through identity federation. * `user:{emailid}`: An email address that represents a specific Google account. For example, `alice@example.com` . * `serviceAccount:{emailid}`: An email address that represents a Google service account. For example, `my-other-app@appspot.gserviceaccount.com`. * `serviceAccount:{projectid}.svc.id.goog[{namespace}/{kubernetes-sa}]`: An identifier for a [Kubernetes service account](https://cloud.google.com/kubernetes-engine/docs/how-to/kubernetes-service-accounts). For example, `my-project.svc.id.goog[my-namespace/my-kubernetes-sa]`. * `group:{emailid}`: An email address that represents a Google group. For example, `admins@example.com`. * `domain:{domain}`: The G Suite domain (primary) that represents all the users of that domain. For example, `google.com` or `example.com`. * `deleted:user:{emailid}?uid={uniqueid}`: An email address (plus unique identifier) representing a user that has been recently deleted. For example, `alice@example.com?uid=123456789012345678901`. If the user is recovered, this value reverts to `user:{emailid}` and the recovered user retains the role in the binding. * `deleted:serviceAccount:{emailid}?uid={uniqueid}`: An email address (plus unique identifier) representing a service account that has been recently deleted. For example, `my-other-app@appspot.gserviceaccount.com?uid=123456789012345678901`. If the service account is undeleted, this value reverts to `serviceAccount:{emailid}` and the undeleted service account retains the role in the binding. * `deleted:group:{emailid}?uid={uniqueid}`: An email address (plus unique identifier) representing a Google group that has been recently deleted. For example, `admins@example.com?uid=123456789012345678901`. If the group is recovered, this value reverts to `group:{emailid}` and the recovered group retains the role in the binding.
         &quot;A String&quot;,
       ],
       &quot;role&quot;: &quot;A String&quot;, # Role that is assigned to the list of `members`, or principals. For example, `roles/viewer`, `roles/editor`, or `roles/owner`.

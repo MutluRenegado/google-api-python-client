@@ -269,7 +269,7 @@
       }
     }
   },
-  "revision": "20230117",
+  "revision": "20230521",
   "rootUrl": "https://workflowexecutions.googleapis.com/",
   "schemas": {
     "CancelExecutionRequest": {

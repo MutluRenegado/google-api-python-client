@@ -886,7 +886,7 @@
         "lro": {
           "methods": {
             "list": {
-              "description": "Lists operations that match the specified filter in the request. If the server doesn't support this method, it returns `UNIMPLEMENTED`. NOTE: the `name` binding allows API services to override the binding to use different resource name schemes, such as `users/*/operations`. To override the binding, API services can add a binding such as `\"/v1/{name=users/*}/operations\"` to their service configuration. For backwards compatibility, the default name includes the operations collection id, however overriding users must ensure the name binding is the parent resource, without the operations collection id.",
+              "description": "Lists operations that match the specified filter in the request. If the server doesn't support this method, it returns `UNIMPLEMENTED`.",
               "flatPath": "v1/operations/{operationsId}/lro",
               "httpMethod": "GET",
               "id": "cloudsearch.operations.lro.list",
@@ -937,6 +937,25 @@
     },
     "query": {
       "methods": {
+        "removeActivity": {
+          "description": "Provides functionality to remove logged activity for a user. Currently to be used only for dynamite 1p clients **Note:** This API requires a standard end user account to execute. A service account can't perform Remove Activity requests directly; to use a service account to perform queries, set up [Google Workspace domain-wide delegation of authority](https://developers.google.com/cloud-search/docs/guides/delegation/).",
+          "flatPath": "v1/query:removeActivity",
+          "httpMethod": "POST",
+          "id": "cloudsearch.query.removeActivity",
+          "parameterOrder": [],
+          "parameters": {},
+          "path": "v1/query:removeActivity",
+          "request": {
+            "$ref": "RemoveActivityRequest"
+          },
+          "response": {
+            "$ref": "RemoveActivityResponse"
+          },
+          "scopes": [
+            "https://www.googleapis.com/auth/cloud_search",
+            "https://www.googleapis.com/auth/cloud_search.query"
+          ]
+        },
         "search": {
           "description": "The Cloud Search Query API provides the search method, which returns the most relevant results from a user query. The results can come from Google Workspace apps, such as Gmail or Google Drive, or they can come from data that you have indexed from a third party. **Note:** This API requires a standard end user account to execute. A service account can't perform Query API requests directly; to use a service account to perform queries, set up [Google Workspace domain-wide delegation of authority](https://developers.google.com/cloud-search/docs/guides/delegation/).",
           "flatPath": "v1/query/search",
@@ -2077,7 +2096,7 @@
       }
     }
   },
-  "revision": "20230117",
+  "revision": "20230524",
   "rootUrl": "https://cloudsearch.googleapis.com/",
   "schemas": {
     "AbuseReportingConfig": {
@@ -2237,6 +2256,35 @@
       },
       "type": "object"
     },
+    "AddOnFrameStartingState": {
+      "description": "Starting state for an individual add-on frame.",
+      "id": "AddOnFrameStartingState",
+      "properties": {
+        "additionalData": {
+          "description": "Additional data internal to the add-on that can be used to initialize itself.",
+          "type": "string"
+        },
+        "uri": {
+          "description": "The uri of the artifact being used for an add-on co-activity.",
+          "type": "string"
+        }
+      },
+      "type": "object"
+    },
+    "AddOnStartingState": {
+      "description": "Starting state properties for add-on co-activity.",
+      "id": "AddOnStartingState",
+      "properties": {
+        "addOnFrameStartingStates": {
+          "additionalProperties": {
+            "$ref": "AddOnFrameStartingState"
+          },
+          "description": "List of starting state frames for the add-on co-activity. Keys for this map are the values of the AddOnFrameType enum.",
+          "type": "object"
+        }
+      },
+      "type": "object"
+    },
     "AddonComposeUiActionMarkup": {
       "id": "AddonComposeUiActionMarkup",
       "properties": {
@@ -2322,7 +2370,7 @@
       "type": "object"
     },
     "Annotation": {
-      "description": "NOTE WHEN ADDING NEW PROTO FIELDS: Be sure to add datapol annotations to new fields with potential PII, so they get scrubbed when logging protos for errors. NEXT TAG: 29",
+      "description": "NOTE WHEN ADDING NEW PROTO FIELDS: Be sure to add datapol annotations to new fields with potential PII, so they get scrubbed when logging protos for errors. NEXT TAG: 32",
       "id": "Annotation",
       "properties": {
         "babelPlaceholderMetadata": {
@@ -2333,7 +2381,7 @@
           "description": "LINT.ThenChange(//depot/google3/java/com/google/apps/dynamite/v1/backend/action/common/SystemMessageHelper.java)"
         },
         "chipRenderType": {
-          "description": "Whether the annotation should be rendered as a chip. If this is missing or unspecified, fallback to should_not_render on the metadata.",
+          "description": "Whether the annotation should be rendered as a preview chip. If this is missing or unspecified, fallback to should_not_render on the metadata.",
           "enum": [
             "CHIP_RENDER_TYPE_UNSPECIFIED",
             "RENDER",
@@ -2342,11 +2390,15 @@
           ],
           "enumDescriptions": [
             "",
-            "Clients must render the annotation as a chip, and if they cannot render this many Annotations, show a fallback card.",
+            "Clients must render the annotation as a preview chip, and if they cannot render this many Annotations, show a fallback card.",
             "Client can render the annotation if it has room to render it.",
-            "Client should not render the annotation as a chip."
+            "Client should not render the annotation as a preview chip."
           ],
           "type": "string"
+        },
+        "componentSearchInfo": {
+          "$ref": "AppsDynamiteSharedMessageComponentSearchInfo",
+          "description": "Contains additional metadata that further enhances the annotation when it is returned as part of search response. For example, this can be used to define how the annotation matches the search. Information can be used to highlight in rendering search results. The following are the different annotation text fields that can be highlighted by this field: 1. DriveMetadata.title 2. UploadMetadata.content_name 3. GsuiteIntegrationMetadata.TasksMessageIntegrationRenderData.title 4. GsuiteIntegrationMetadata.CalendarEventAnnotationData.title"
         },
         "consentedAppUnfurlMetadata": {
           "$ref": "ConsentedAppUnfurlMetadata"
@@ -2374,9 +2426,25 @@
         "incomingWebhookChangedMetadata": {
           "$ref": "IncomingWebhookChangedMetadata"
         },
+        "inlineRenderFormat": {
+          "description": "The inline render format of this annotation. go/drive-smart-chips-chat-v2.",
+          "enum": [
+            "INLINE_RENDER_FORMAT_UNSPECIFIED",
+            "SMART_CHIP"
+          ],
+          "enumDescriptions": [
+            "",
+            ""
+          ],
+          "type": "string"
+        },
         "integrationConfigUpdated": {
           "$ref": "IntegrationConfigUpdatedMetadata",
           "description": "LINT.ThenChange(//depot/google3/java/com/google/apps/dynamite/v1/backend/action/common/SystemMessageHelper.java)"
+        },
+        "interactionData": {
+          "$ref": "InteractionData",
+          "description": "Additional interaction data for this annotation."
         },
         "length": {
           "description": "Length of the text_body substring beginning from start_index the Annotation corresponds to.",
@@ -2384,7 +2452,7 @@
           "type": "integer"
         },
         "localId": {
-          "description": "A unique client-assigned ID for this annotation. This is helpful in matching the back-filled annotations to the original annotations on client side, without having to re-parse the message.",
+          "description": "* A client-assigned ID for this annotation. This is helpful in matching the back-filled annotations to the original annotations on client side, without having to re-parse the message. There is no guarantee an annotation has a local_id, it's a purely client used and controlled field with no guarantee of uniqueness.",
           "type": "string"
         },
         "membershipChanged": {
@@ -2396,7 +2464,7 @@
         },
         "requiredMessageFeaturesMetadata": {
           "$ref": "RequiredMessageFeaturesMetadata",
-          "description": "Metadata that defines all of the required features that must be rendered in the message. Clients can use this to see whether they support the entire message, or show a fallback chip otherwise. See go/message-quoting-client-to-server for details. LINT.ThenChange( //depot/google3/java/com/google/apps/dynamite/v1/allshared/parser/AnnotationSanitizer.java, //depot/google3/java/com/google/apps/dynamite/v1/backend/action/common/SystemMessageHelper.java, //depot/google3/java/com/google/caribou/eli/mediation/chat/AnnotationTranslator.java )"
+          "description": "Metadata that defines all of the required features that must be rendered in the message. Clients can use this to see whether they support the entire message, or show a fallback chip otherwise. See go/message-quoting-client-to-server for details. LINT.ThenChange( //depot/google3/java/com/google/apps/dynamite/v1/allshared/parser/AnnotationSanitizer.java, //depot/google3/java/com/google/apps/dynamite/v1/backend/action/common/SystemMessageHelper.java, //depot/google3/java/com/google/caribou/eli/mediation/chat/AnnotationConverter.java )"
         },
         "roomUpdated": {
           "$ref": "RoomUpdatedMetadata"
@@ -2480,7 +2548,7 @@
           "type": "string"
         },
         "uniqueId": {
-          "description": "A unique server-assigned ID for this annotation. This is helpful in matching annotation objects when fetched from service.",
+          "description": "* A unique server-assigned ID for this annotation. This is helpful in matching annotation objects when fetched from service. All uploads should have a unique_id after the message they are attached to is successfully sent. Url annotations that originally were uploads (i.e. policy violations) will have a unique_id after the message they are attached to is successfully sent. No other url annotations should have a unique_id. All drive annotations should have a unique_id after the message they are attached to is successfully sent.",
           "type": "string"
         },
         "uploadMetadata": {
@@ -2498,6 +2566,24 @@
         },
         "youtubeMetadata": {
           "$ref": "YoutubeMetadata"
+        }
+      },
+      "type": "object"
+    },
+    "AnnotationInfo": {
+      "description": "Information about the screen annotation session.",
+      "id": "AnnotationInfo",
+      "properties": {
+        "coannotatorDeviceIds": {
+          "description": "The device resource names of other devices which can annotate the screen.",
+          "items": {
+            "type": "string"
+          },
+          "type": "array"
+        },
+        "isActive": {
+          "description": "Whether the annotation is active.",
+          "type": "boolean"
         }
       },
       "type": "object"
@@ -2536,7 +2622,8 @@
             "CONTACTS_APP",
             "ACTIVITY_FEED_APP",
             "DRIVE_APP",
-            "CHAT_IN_MEET_APP"
+            "CHAT_IN_MEET_APP",
+            "SHORTCUT_APP"
           ],
           "enumDescriptions": [
             "",
@@ -2547,6 +2634,7 @@
             "",
             "",
             "Powered by Bullseye",
+            "",
             "",
             "",
             "",
@@ -2791,7 +2879,7 @@
       "type": "object"
     },
     "AppsDynamiteSharedBackendUploadMetadata": {
-      "description": "Metadata used only in Dynamite backend for uploaded attachments.",
+      "description": "Metadata used only in Dynamite backend for uploaded attachments. NEXT ID: 20",
       "id": "AppsDynamiteSharedBackendUploadMetadata",
       "properties": {
         "blobPath": {
@@ -2830,9 +2918,11 @@
             "SCAN_SKIPPED_NO_MESSAGE",
             "SCAN_SKIPPED_USER_ACKNOWLEDGED_WARNING",
             "SCAN_SKIPPED_MESSAGE_FROM_UNSUPPORTED_ORIGIN",
+            "SCAN_SKIPPED_MESSAGE_SENT_DURING_SPACE_MIGRATION",
             "SCAN_RULE_EVALUATION_SKIPPED_NO_RULES_FOUND",
             "SCAN_RULE_EVALUATION_SKIPPED_NO_APPLICABLE_RULES_FOR_ACTION_PARAMS",
             "SCAN_RULE_EVALUATION_SKIPPED_NO_APPLICABLE_RULES_FOR_TRIGGER",
+            "SCAN_RULE_EVALUATION_SKIPPED_NO_APPLICABLE_RULES",
             "SCAN_RULE_EVALUATION_SKIPPED_CHANGELING_PERMANENT_ERROR",
             "SCAN_RULE_EVALUATION_SKIPPED_CHANGELING_EMPTY_RESPONSE",
             "SCAN_RULE_EVALUATION_SKIPPED_UNSUPPORTED_FILE_TYPE",
@@ -2858,9 +2948,11 @@
             "Rule fetch and evaluation are skipped because there is no message to scan. Deprecated: this should not happen since there must be message or attachment for DLP scan.",
             "Rule fetch and evaluation are skipped because the user has acknowledged the warning on the message that triggered the Warn violation and sent the message anyway.",
             "Scanning was skipped because the message originated from Interop or Babel.",
+            "Scanning was skipped because the message was sent while the space is in migration mode. See go/migration-mode for details.",
             "Rule fetch happened, but rule evaluation is skipped because no rules were found.",
-            "Rule fetch happened, but rule evaluation is skipped because none of the rules are applicable to the given action params.",
-            "Rule fetch happened, but rule evaluation is skipped because none of the rules are applicable to the given trigger.",
+            "Rule fetch happened, but rule evaluation is skipped because none of the rules are applicable to the given action params. Deprecated. Use SCAN_RULE_EVALUATION_SKIPPED_NO_APPLICABLE_RULES",
+            "Rule fetch happened, but rule evaluation is skipped because none of the rules are applicable to the given trigger. Deprecated. Use SCAN_RULE_EVALUATION_SKIPPED_NO_APPLICABLE_RULES",
+            "Rule fetch happened, but rule evaluation is skipped because none of the rules are applicable.",
             "Rule fetch happened, but rule evaluation is skipped because Changeling returned permanent failure while converting the attachment to text.",
             "Rule fetch happened, but rule evaluation is skipped because Changeling returned an empty response while converting the attachment to text.",
             "Rule fetch happened, but rule evaluation is skipped because file type is unsupported.",
@@ -2875,13 +2967,31 @@
           "$ref": "DlpScanSummary",
           "description": "Summary of a Data Loss Prevention (DLP) scan of the attachment. Attachments are evaluated in the backend when they are uploaded."
         },
+        "experiment": {
+          "description": "The list of experiments this video is enabled for",
+          "items": {
+            "enum": [
+              "UNKNOWN_EXPERIMENT",
+              "KRONOS_FAST_FORMAT"
+            ],
+            "enumDescriptions": [
+              "",
+              ""
+            ],
+            "type": "string"
+          },
+          "type": "array"
+        },
         "groupId": {
           "$ref": "GroupId",
           "description": "GroupId to which this attachment is uploaded."
         },
         "isClientSideTranscodedVideo": {
-          "description": "If the uploaded file is a video that has been transcoded on the client side Next tag: 18",
+          "description": "If the uploaded file is a video that has been transcoded on the client side",
           "type": "boolean"
+        },
+        "migratedFromHangoutsMetadata": {
+          "$ref": "AppsDynamiteSharedBackendUploadMetadataMigratedFromHangoutsMetadata"
         },
         "originalDimension": {
           "$ref": "AppsDynamiteSharedDimension",
@@ -2929,6 +3039,34 @@
             "",
             "The document violates Google's policy for executables and archives."
           ],
+          "type": "string"
+        }
+      },
+      "type": "object"
+    },
+    "AppsDynamiteSharedBackendUploadMetadataMigratedFromHangoutsMetadata": {
+      "description": "Metadata for attachments migrated from Hangouts",
+      "id": "AppsDynamiteSharedBackendUploadMetadataMigratedFromHangoutsMetadata",
+      "properties": {
+        "photoId": {
+          "$ref": "AppsDynamiteSharedBackendUploadMetadataMigratedFromHangoutsMetadataPhotoId"
+        },
+        "updateTimestampUsec": {
+          "format": "int64",
+          "type": "string"
+        }
+      },
+      "type": "object"
+    },
+    "AppsDynamiteSharedBackendUploadMetadataMigratedFromHangoutsMetadataPhotoId": {
+      "id": "AppsDynamiteSharedBackendUploadMetadataMigratedFromHangoutsMetadataPhotoId",
+      "properties": {
+        "photoId": {
+          "format": "int64",
+          "type": "string"
+        },
+        "userId": {
+          "format": "int64",
           "type": "string"
         }
       },
@@ -3171,8 +3309,8 @@
             "FLAT_ROOM",
             "THREADED_ROOM",
             "IMMUTABLE_MEMBERSHIP_HUMAN_DM",
-            "POST_ROOM",
-            "ACTIVITY_FEED"
+            "ACTIVITY_FEED",
+            "SHORTCUT"
           ],
           "enumDescriptions": [
             "LINT.IfChange",
@@ -3182,8 +3320,8 @@
             "A flat room that contains a single thread.",
             "A threaded room. Topics in this room are threaded, and users can reply to any topic.",
             "A DM with immutable group membership. It can be a 1:1 DM or a group DM with multiple human users.",
-            "A post room. Topics in this room are organized in a post/reply style. See the design doc for more details: go/PostRoomsInDynamite. Deprecated. Post rooms are no longer supported.",
-            "Represents an Activity Feed space. These groups are modeled like flat rooms and contain items for users to catch up on important things. Each user should only have one group of this type. See go/activity-feed. Deprecated: The go/activity-feed project is cancelled and this should no longer be used. LINT.ThenChange(//depot/google3/logs/proto/apps_dynamite/dynamite_visual_element_entry.proto:LoggingGroupType,//depot/google3/java/com/google/apps/dynamite/v1/web/ui/group/groups.js:LoggingGroupType)"
+            "Represents an Activity Feed space. These groups are modeled like flat rooms and contain items for users to catch up on important things. Each user should only have one group of this type. See go/activity-feed. Deprecated: The go/activity-feed project is cancelled and this should no longer be used.",
+            "Represents a shortcut space. These groups are modeled like flat rooms and contain items for users to catch up on important things such as user mentioned messages and starred messages. LINT.ThenChange(//depot/google3/logs/proto/apps_dynamite/dynamite_visual_element_entry.proto:LoggingGroupType,//depot/google3/java/com/google/apps/dynamite/v1/web/ui/group/groups.js:LoggingGroupType)"
           ],
           "type": "string"
         },
@@ -3527,9 +3665,38 @@
           "description": "Required. A globally unique code (e.g. \"cxv-zbgj-wzw\") that points to a meeting space. Note: Meeting codes may be regenerated, which will cause old meeting codes to become invalid.",
           "type": "string"
         },
+        "meetingType": {
+          "description": "Required. Type of the meeting. This controls the chat client UX.",
+          "enum": [
+            "MEETING_TYPE_UNSPECIFIED",
+            "HUDDLE",
+            "CALL"
+          ],
+          "enumDescriptions": [
+            "",
+            "",
+            ""
+          ],
+          "type": "string"
+        },
         "meetingUrl": {
           "description": "Required. A URL, in the format \"https://meet.google.com/*\" (e.g. https://meet.google.com/cxv-zbgj-wzw), to identify and access the meeting space.",
           "type": "string"
+        }
+      },
+      "type": "object"
+    },
+    "AppsDynamiteSharedMessageComponentSearchInfo": {
+      "description": "Metadata used to describe search information in a specific component of a chat message, for example an annotation or an attachment.",
+      "id": "AppsDynamiteSharedMessageComponentSearchInfo",
+      "properties": {
+        "matchedSearch": {
+          "description": "Whether the whole component matched the search.",
+          "type": "boolean"
+        },
+        "titleTextWithDescription": {
+          "$ref": "AppsDynamiteSharedTextWithDescription",
+          "description": "Backend should always set TextWithDescription.text_body based on the title (or its snippet) of the annotation or attachment."
         }
       },
       "type": "object"
@@ -3585,6 +3752,20 @@
             ""
           ],
           "type": "string"
+        }
+      },
+      "type": "object"
+    },
+    "AppsDynamiteSharedMessageSearchInfo": {
+      "description": "Metadata used to describe how to render a message in search results page, e.g., highlighting and snipetting. In future, we can use this proto to return more search specific data attached to a message.",
+      "id": "AppsDynamiteSharedMessageSearchInfo",
+      "properties": {
+        "matchedSegmentsInTextBody": {
+          "description": "Current usage: - DescriptionType=KEYWORD_MATCH is populated in this field to return metadata for keyword matches, which clients can use to highlight matched segments in a message's text_body. - DescriptionType=SNIPPET can be used to return metadata describing how a message's text_body can be broken up to provide a snippet.",
+          "items": {
+            "$ref": "AppsDynamiteSharedTextSegmentsWithDescription"
+          },
+          "type": "array"
         }
       },
       "type": "object"
@@ -3775,8 +3956,13 @@
           "type": "string"
         },
         "numMembers": {
+          "description": "Deprecated. Use segmented_membership_counts instead which also includes other counts such as rosters.",
           "format": "int32",
           "type": "integer"
+        },
+        "segmentedMembershipCounts": {
+          "$ref": "AppsDynamiteSharedSegmentedMembershipCounts",
+          "description": "Member counts object with types of members and their respective counts."
         },
         "userMembershipState": {
           "description": "searching user's membership state in this space",
@@ -3902,6 +4088,65 @@
       "properties": {},
       "type": "object"
     },
+    "AppsDynamiteSharedTextSegment": {
+      "description": "Defines a segment in a text.",
+      "id": "AppsDynamiteSharedTextSegment",
+      "properties": {
+        "length": {
+          "description": "Length of the segment in the text.",
+          "format": "int32",
+          "type": "integer"
+        },
+        "startIndex": {
+          "description": "Start index (0-indexed and inclusive) of the segment in the text.",
+          "format": "int32",
+          "type": "integer"
+        }
+      },
+      "type": "object"
+    },
+    "AppsDynamiteSharedTextSegmentsWithDescription": {
+      "description": "Defines text segments with description type associated.",
+      "id": "AppsDynamiteSharedTextSegmentsWithDescription",
+      "properties": {
+        "descriptionType": {
+          "enum": [
+            "DESCRIPTION_TYPE_UNSPECIFIED",
+            "KEYWORD_MATCH",
+            "SNIPPET"
+          ],
+          "enumDescriptions": [
+            "",
+            "Indicates the text segments contain matched keywords. Client can highlight them in search results page.",
+            "Indicates the text segments represent parts of the snippeted text. Clients can display just these in SRP as shortened message. Multiple TextSegments with this DescriptionType are returned to denote disjointed snippets i.e. \"a long test message\" -> \"a ... message\""
+          ],
+          "type": "string"
+        },
+        "textSegment": {
+          "items": {
+            "$ref": "AppsDynamiteSharedTextSegment"
+          },
+          "type": "array"
+        }
+      },
+      "type": "object"
+    },
+    "AppsDynamiteSharedTextWithDescription": {
+      "description": "Defines a text with descriptive text segments associated.",
+      "id": "AppsDynamiteSharedTextWithDescription",
+      "properties": {
+        "textBody": {
+          "type": "string"
+        },
+        "textSegmentsWithDescription": {
+          "items": {
+            "$ref": "AppsDynamiteSharedTextSegmentsWithDescription"
+          },
+          "type": "array"
+        }
+      },
+      "type": "object"
+    },
     "AppsDynamiteSharedUserBlockRelationship": {
       "description": "User-block relationship",
       "id": "AppsDynamiteSharedUserBlockRelationship",
@@ -3986,6 +4231,10 @@
             "$ref": "AppsDynamiteStorageActionActionParameter"
           },
           "type": "array"
+        },
+        "persistValues": {
+          "description": "Indicates whether form values persist after the action. The default value is `false`. If `true`, form values remain after the action is triggered. When using [LoadIndicator.NONE](workspace/add-ons/reference/rpc/google.apps.card.v1#loadindicator) for actions, `persist_values` = `true`is recommended, as it ensures that any changes made by the user after form or on change actions are sent to the server are not overwritten by the response. If `false`, the form values are cleared when the action is triggered. When `persist_values` is set to `false`, it is strongly recommended that the card use [LoadIndicator.SPINNER](workspace/add-ons/reference/rpc/google.apps.card.v1#loadindicator) for all actions, as this locks the UI to ensure no changes are made by the user while the action is being processed.",
+          "type": "boolean"
         }
       },
       "type": "object"
@@ -4006,7 +4255,7 @@
       "type": "object"
     },
     "AppsDynamiteStorageBorderStyle": {
-      "description": "Represents the complete border style applied to widgets.",
+      "description": "The style options for the border of a card or widget, including the border type and color.",
       "id": "AppsDynamiteStorageBorderStyle",
       "properties": {
         "cornerRadius": {
@@ -4189,25 +4438,11 @@
       "id": "AppsDynamiteStorageColumns",
       "properties": {
         "columnItems": {
-          "description": "Each card supports up to 2 columns.",
+          "description": "Each card supports up to 2 columns. If the user's screen width is less than or equal to 480 pixels, the second column wraps below the first column.",
           "items": {
             "$ref": "AppsDynamiteStorageColumnsColumn"
           },
           "type": "array"
-        },
-        "wrapStyle": {
-          "description": "Controls how the column resizes based on screen width.",
-          "enum": [
-            "WRAP_STYLE_UNSPECIFIED",
-            "NOWRAP",
-            "WRAP"
-          ],
-          "enumDescriptions": [
-            "Unspecified.",
-            "Column widgets don't wrap.",
-            "Column Widgets wrap."
-          ],
-          "type": "string"
         }
       },
       "type": "object"
@@ -4549,6 +4784,10 @@
         "knownIcon": {
           "description": "The icon specified by the string name of a list of known icons",
           "type": "string"
+        },
+        "materialIcon": {
+          "$ref": "AppsDynamiteStorageMaterialIcon",
+          "description": "Display one of the [Google Material Icons](https://fonts.google.com/icons). For example, to display a [check box icon](https://fonts.google.com/icons?selected=Material%20Symbols%20Outlined%3Acheck_box%3AFILL%400%3Bwght%40400%3BGRAD%400%3Bopsz%4048), use \"material_icon\": { \"name\": \"check_box\" }"
         }
       },
       "type": "object"
@@ -4619,6 +4858,31 @@
             "Applies a rectangular crop with a 4:3 aspect ratio."
           ],
           "type": "string"
+        }
+      },
+      "type": "object"
+    },
+    "AppsDynamiteStorageMaterialIcon": {
+      "description": "A [Google Font Icon](https://fonts.google.com/icons), which includes over 2500+ options. For example, to display a [check box icon](https://fonts.google.com/icons?selected=Material%20Symbols%20Outlined%3Acheck_box%3AFILL%400%3Bwght%40400%3BGRAD%400%3Bopsz%4048) with customized weight and grade, write { \"name\": \"check_box\", \"fill\": true, \"weight\": 300, \"grade\": -25 }",
+      "id": "AppsDynamiteStorageMaterialIcon",
+      "properties": {
+        "fill": {
+          "description": "Whether it renders a filled icon. Default value is false. See Customization in [Google Font Icon](https://fonts.google.com/icons) for details.",
+          "type": "boolean"
+        },
+        "grade": {
+          "description": "Weight and grade affect a symbol\u2019s thickness. Adjustments to grade are more granular than adjustments to weight and have a small impact on the size of the symbol. Choose from {-25, 0, 200}. If absent, default value is 0. If any other value is specified, a broken image icon will be displayed. See Customization in [Google Font Icon](https://fonts.google.com/icons) for details.",
+          "format": "int32",
+          "type": "integer"
+        },
+        "name": {
+          "description": "The icon name defined in the [Google Material Icon](https://fonts.google.com/icons) in snake_case. e.g. \"check_box\". Any invalid name will be trimmed as empty string result in the icon falied to render.",
+          "type": "string"
+        },
+        "weight": {
+          "description": "The stroke weight of the icon. Choose from {100, 200, 300, 400, 500, 600, 700}. If absent, default value is 400. If any other value is specified, a broken image icon will be displayed. See Customization in [Google Font Icon](https://fonts.google.com/icons) for details.",
+          "format": "int32",
+          "type": "integer"
         }
       },
       "type": "object"
@@ -4760,13 +5024,15 @@
             "CHECK_BOX",
             "RADIO_BUTTON",
             "SWITCH",
-            "DROPDOWN"
+            "DROPDOWN",
+            "MULTI_SELECT"
           ],
           "enumDescriptions": [
             "The selection type is a checkbox.",
             "The selection type is a radio button.",
             "The selection type is a switch.",
-            "The selection type is a dropdown."
+            "The selection type is a dropdown.",
+            "The selection type is multi-select"
           ],
           "type": "string"
         }
@@ -5336,6 +5602,10 @@
           "$ref": "AppsDynamiteStorageCard",
           "description": "Card AddOn attachment with the possibility for specifying editable widgets."
         },
+        "componentSearchInfo": {
+          "$ref": "AppsDynamiteSharedMessageComponentSearchInfo",
+          "description": "Contains additional metadata that further enhance the annotation when it is returned as part of search response. For example, this can be used to define how the attachment matches the search. Information can be used to highlight in rendering search results. The following are the different attachment text fields that are covered by this field: 1. ContextualAddOn.Card.CardHeader.title 2. CardItem.CardItemHeader.title"
+        },
         "deprecatedAddOnData": {
           "$ref": "ContextualAddOnMarkup",
           "description": "Deprecated version of Gmail AddOn attachment."
@@ -5657,6 +5927,20 @@
             "type": "string"
           },
           "type": "array"
+        },
+        "uninstallCapability": {
+          "description": "Determine how uninstall is permitted for this app.",
+          "enum": [
+            "UNSPECIFIED_UNINSTALL_CAPABILITY",
+            "ALWAYS_ALLOWED",
+            "NEVER_ALLOWED"
+          ],
+          "enumDescriptions": [
+            "Defaults to ALWAYS_ALLOWED.",
+            "",
+            ""
+          ],
+          "type": "string"
         }
       },
       "type": "object"
@@ -5828,13 +6112,40 @@
               "ACCESS_TYPE_UNSPECIFIED",
               "ACCESS_TYPE_OPEN",
               "ACCESS_TYPE_TRUSTED",
-              "ACCESS_TYPE_RESTRICTED"
+              "ACCESS_TYPE_RESTRICTED",
+              "ACCESS_TYPE_CLOSED"
             ],
             "enumDescriptions": [
               "Default value. This value is unused.",
               "Anyone with meeting join information (url, phone access...) can join, no knocking required. (Subject to organization policies)",
               "Members of the Host's organization, invited external users, and dial-in users can join without knocking, everyone else must knock. (Subject to organization policies)",
-              "Only participants invited by a host can automatically join, everyone else must knock and be admitted. (Subject to organization policies) Participants cannot dial out from the meeting. And only hosts can accept knocks."
+              "Only participants invited by a host can automatically join, everyone else must knock and be admitted. (Subject to organization policies) Participants cannot dial out from the meeting. And only hosts can accept knocks.",
+              "Only participants invited by a host can join. Knocking is not allowed, dial in and dial out are also disabled."
+            ],
+            "type": "string"
+          },
+          "type": "array"
+        },
+        "availableAnnotationToolTypes": {
+          "description": "Available screen annotation tool types.",
+          "items": {
+            "enum": [
+              "ANNOTATION_TOOL_TYPE_UNSPECIFIED",
+              "ANNOTATION_TOOL_CLEAR_ALL",
+              "ANNOTATION_TOOL_LINE",
+              "ANNOTATION_TOOL_MAGIC_ERASER",
+              "ANNOTATION_TOOL_PEN",
+              "ANNOTATION_TOOL_SHAPE",
+              "ANNOTATION_TOOL_TEXT_BOX"
+            ],
+            "enumDescriptions": [
+              "Annotation tool type unspecified.",
+              "Clears all annotations.",
+              "Draws vector lines.",
+              "Deletes elements that are touched.",
+              "Draws freeform strokes.",
+              "Draws simple vector shapes (such as rectangles or ellipses).",
+              "Allows adding/editing text at this location."
             ],
             "type": "string"
           },
@@ -5941,13 +6252,15 @@
             "ACCESS_TYPE_UNSPECIFIED",
             "ACCESS_TYPE_OPEN",
             "ACCESS_TYPE_TRUSTED",
-            "ACCESS_TYPE_RESTRICTED"
+            "ACCESS_TYPE_RESTRICTED",
+            "ACCESS_TYPE_CLOSED"
           ],
           "enumDescriptions": [
             "Default value. This value is unused.",
             "Anyone with meeting join information (url, phone access...) can join, no knocking required. (Subject to organization policies)",
             "Members of the Host's organization, invited external users, and dial-in users can join without knocking, everyone else must knock. (Subject to organization policies)",
-            "Only participants invited by a host can automatically join, everyone else must knock and be admitted. (Subject to organization policies) Participants cannot dial out from the meeting. And only hosts can accept knocks."
+            "Only participants invited by a host can automatically join, everyone else must knock and be admitted. (Subject to organization policies) Participants cannot dial out from the meeting. And only hosts can accept knocks.",
+            "Only participants invited by a host can join. Knocking is not allowed, dial in and dial out are also disabled."
           ],
           "type": "string"
         },
@@ -5965,6 +6278,10 @@
         },
         "chatLock": {
           "description": "Indicates whether the chat lock is currently on or off.",
+          "type": "boolean"
+        },
+        "coActivityLock": {
+          "description": "Indicates whether the co-activity lock is currently on or off.",
           "type": "boolean"
         },
         "cseEnabled": {
@@ -6418,6 +6735,14 @@
           "description": "The title of the activity in this co-activity session. For example, this might be the title of the video being co-watched, or the name of the round of a game being co-played.",
           "type": "string"
         },
+        "addOnId": {
+          "description": "The add-on id of the current add-on being used for co-activity.",
+          "type": "string"
+        },
+        "addOnStartingState": {
+          "$ref": "AddOnStartingState",
+          "description": "The starting state of the add-on frames for co-activity."
+        },
         "coActivityApp": {
           "description": "Identifies the app handling this co-activity.",
           "enum": [
@@ -6429,7 +6754,8 @@
             "CO_ACTIVITY_APP_KAHOOT",
             "CO_ACTIVITY_APP_GQUEUES",
             "CO_ACTIVITY_APP_YOU_TUBE_MUSIC",
-            "CO_ACTIVITY_APP_SAMSUNG_NOTES"
+            "CO_ACTIVITY_APP_SAMSUNG_NOTES",
+            "CO_ACTIVITY_APP_HAPPY_AARDVARK"
           ],
           "enumDescriptions": [
             "Should never be used.",
@@ -6440,8 +6766,22 @@
             "Kahoot! educational software.",
             "GQueues task manager.",
             "YouTube Music",
-            "Samsung Notes"
+            "Samsung Notes",
+            "."
           ],
+          "type": "string"
+        },
+        "initiatorDeviceId": {
+          "description": "The resource name of the device that initiated the co-activity.",
+          "type": "string"
+        },
+        "presentationDeviceId": {
+          "description": "The resource name of the device that is presenting the add-on.",
+          "type": "string"
+        },
+        "projectNumber": {
+          "description": "The project number of the add-on to determine version.",
+          "format": "int64",
           "type": "string"
         }
       },
@@ -6467,7 +6807,7 @@
       "type": "object"
     },
     "Color": {
-      "description": "Represents a color in the RGBA color space. This representation is designed for simplicity of conversion to/from color representations in various languages over compactness. For example, the fields of this representation can be trivially provided to the constructor of `java.awt.Color` in Java; it can also be trivially provided to UIColor's `+colorWithRed:green:blue:alpha` method in iOS; and, with just a little work, it can be easily formatted into a CSS `rgba()` string in JavaScript. This reference page doesn't carry information about the absolute color space that should be used to interpret the RGB value (e.g. sRGB, Adobe RGB, DCI-P3, BT.2020, etc.). By default, applications should assume the sRGB color space. When color equality needs to be decided, implementations, unless documented otherwise, treat two colors as equal if all their red, green, blue, and alpha values each differ by at most 1e-5. Example (Java): import com.google.type.Color; // ... public static java.awt.Color fromProto(Color protocolor) { float alpha = protocolor.hasAlpha() ? protocolor.getAlpha().getValue() : 1.0; return new java.awt.Color( protocolor.getRed(), protocolor.getGreen(), protocolor.getBlue(), alpha); } public static Color toProto(java.awt.Color color) { float red = (float) color.getRed(); float green = (float) color.getGreen(); float blue = (float) color.getBlue(); float denominator = 255.0; Color.Builder resultBuilder = Color .newBuilder() .setRed(red / denominator) .setGreen(green / denominator) .setBlue(blue / denominator); int alpha = color.getAlpha(); if (alpha != 255) { result.setAlpha( FloatValue .newBuilder() .setValue(((float) alpha) / denominator) .build()); } return resultBuilder.build(); } // ... Example (iOS / Obj-C): // ... static UIColor* fromProto(Color* protocolor) { float red = [protocolor red]; float green = [protocolor green]; float blue = [protocolor blue]; FloatValue* alpha_wrapper = [protocolor alpha]; float alpha = 1.0; if (alpha_wrapper != nil) { alpha = [alpha_wrapper value]; } return [UIColor colorWithRed:red green:green blue:blue alpha:alpha]; } static Color* toProto(UIColor* color) { CGFloat red, green, blue, alpha; if (![color getRed:&red green:&green blue:&blue alpha:&alpha]) { return nil; } Color* result = [[Color alloc] init]; [result setRed:red]; [result setGreen:green]; [result setBlue:blue]; if (alpha <= 0.9999) { [result setAlpha:floatWrapperWithValue(alpha)]; } [result autorelease]; return result; } // ... Example (JavaScript): // ... var protoToCssColor = function(rgb_color) { var redFrac = rgb_color.red || 0.0; var greenFrac = rgb_color.green || 0.0; var blueFrac = rgb_color.blue || 0.0; var red = Math.floor(redFrac * 255); var green = Math.floor(greenFrac * 255); var blue = Math.floor(blueFrac * 255); if (!('alpha' in rgb_color)) { return rgbToCssColor(red, green, blue); } var alphaFrac = rgb_color.alpha.value || 0.0; var rgbParams = [red, green, blue].join(','); return ['rgba(', rgbParams, ',', alphaFrac, ')'].join(''); }; var rgbToCssColor = function(red, green, blue) { var rgbNumber = new Number((red << 16) | (green << 8) | blue); var hexString = rgbNumber.toString(16); var missingZeros = 6 - hexString.length; var resultBuilder = ['#']; for (var i = 0; i < missingZeros; i++) { resultBuilder.push('0'); } resultBuilder.push(hexString); return resultBuilder.join(''); }; // ...",
+      "description": "Represents a color in the RGBA color space. This representation is designed for simplicity of conversion to and from color representations in various languages over compactness. For example, the fields of this representation can be trivially provided to the constructor of `java.awt.Color` in Java; it can also be trivially provided to UIColor's `+colorWithRed:green:blue:alpha` method in iOS; and, with just a little work, it can be easily formatted into a CSS `rgba()` string in JavaScript. This reference page does not have information about the absolute color space that should be used to interpret the RGB value\u2014for example, sRGB, Adobe RGB, DCI-P3, and BT.2020. By default, applications should assume the sRGB color space. When color equality needs to be decided, implementations, unless documented otherwise, treat two colors as equal if all their red, green, blue, and alpha values each differ by at most `1e-5`. Example (Java): import com.google.type.Color; // ... public static java.awt.Color fromProto(Color protocolor) { float alpha = protocolor.hasAlpha() ? protocolor.getAlpha().getValue() : 1.0; return new java.awt.Color( protocolor.getRed(), protocolor.getGreen(), protocolor.getBlue(), alpha); } public static Color toProto(java.awt.Color color) { float red = (float) color.getRed(); float green = (float) color.getGreen(); float blue = (float) color.getBlue(); float denominator = 255.0; Color.Builder resultBuilder = Color .newBuilder() .setRed(red / denominator) .setGreen(green / denominator) .setBlue(blue / denominator); int alpha = color.getAlpha(); if (alpha != 255) { result.setAlpha( FloatValue .newBuilder() .setValue(((float) alpha) / denominator) .build()); } return resultBuilder.build(); } // ... Example (iOS / Obj-C): // ... static UIColor* fromProto(Color* protocolor) { float red = [protocolor red]; float green = [protocolor green]; float blue = [protocolor blue]; FloatValue* alpha_wrapper = [protocolor alpha]; float alpha = 1.0; if (alpha_wrapper != nil) { alpha = [alpha_wrapper value]; } return [UIColor colorWithRed:red green:green blue:blue alpha:alpha]; } static Color* toProto(UIColor* color) { CGFloat red, green, blue, alpha; if (![color getRed:&red green:&green blue:&blue alpha:&alpha]) { return nil; } Color* result = [[Color alloc] init]; [result setRed:red]; [result setGreen:green]; [result setBlue:blue]; if (alpha <= 0.9999) { [result setAlpha:floatWrapperWithValue(alpha)]; } [result autorelease]; return result; } // ... Example (JavaScript): // ... var protoToCssColor = function(rgb_color) { var redFrac = rgb_color.red || 0.0; var greenFrac = rgb_color.green || 0.0; var blueFrac = rgb_color.blue || 0.0; var red = Math.floor(redFrac * 255); var green = Math.floor(greenFrac * 255); var blue = Math.floor(blueFrac * 255); if (!('alpha' in rgb_color)) { return rgbToCssColor(red, green, blue); } var alphaFrac = rgb_color.alpha.value || 0.0; var rgbParams = [red, green, blue].join(','); return ['rgba(', rgbParams, ',', alphaFrac, ')'].join(''); }; var rgbToCssColor = function(red, green, blue) { var rgbNumber = new Number((red << 16) | (green << 8) | blue); var hexString = rgbNumber.toString(16); var missingZeros = 6 - hexString.length; var resultBuilder = ['#']; for (var i = 0; i < missingZeros; i++) { resultBuilder.push('0'); } resultBuilder.push(hexString); return resultBuilder.join(''); }; // ...",
       "id": "Color",
       "properties": {
         "alpha": {
@@ -6818,9 +7158,13 @@
       "description": "Annotation metadata for Data Loss Prevention that pertains to DLP violation on message send or edit events. It is used for client -> BE communication and other downstream process in BE (e.g. storage and audit logging), and it should never be returned to the client.",
       "id": "DataLossPreventionMetadata",
       "properties": {
+        "dlpMessageScanRecord": {
+          "$ref": "DlpMessageScanRecord",
+          "description": "The scan record contains the action taken on the message send as well as scan the summary for the message contents and the attachment, if applicable."
+        },
         "dlpScanSummary": {
           "$ref": "DlpScanSummary",
-          "description": "The DLP scan summary that should only be set after the message is scanned in the Chat backend."
+          "description": "Deprecated. To be replaced by DLP scan record. The DLP scan summary that should only be set after the message is scanned in the Chat backend."
         },
         "warnAcknowledged": {
           "description": "Flag set by client on message resend to bypass WARN violation.",
@@ -7130,20 +7474,49 @@
       "properties": {},
       "type": "object"
     },
-    "DlpScanSummary": {
-      "description": "A summary of a DLP scan event. This is a summary and should contain the minimum amount of data required to identify and process DLP scans. It is written to Starcast and encoded & returned to the client on attachment upload.",
-      "id": "DlpScanSummary",
+    "DlpAction": {
+      "id": "DlpAction",
       "properties": {
-        "scanId": {
-          "description": "The scan ID of the corresponding {@link DlpViolationScanRecord} in the {@link EphemeralDlpScans} Spanner table. This can be used to fetch additional details about the scan, e.g. for audit logging.",
+        "actionType": {
+          "enum": [
+            "NO_ACTION",
+            "BLOCK",
+            "AUDIT_ONLY",
+            "WARN"
+          ],
+          "enumDescriptions": [
+            "LINT.IfChange",
+            "",
+            "",
+            "LINT.ThenChange(//depot/google3/java/com/google/apps/dynamite/v1/external/dlp/ApplicableDlpActionEvaluator.java)"
+          ],
           "type": "string"
         },
-        "scanNotApplicableForContext": {
-          "description": "Indicates that was no attempt to scan a message or attachment because it was not applicable in the given context (e.g. atomic mutuate). If this is true, scan_outcome should not be set. This flag is used to identify messages that DLP did not attempt to scan for monitoring scan coverage. Contents that DLP attempted to scan but skipped can be identified by DlpScanOutcome.SCAN_SKIPPED_* reasons.",
-          "type": "boolean"
+        "unsafeHtmlMessageBody": {
+          "description": "The custom error message defined by the customer administrator.",
+          "type": "string"
+        }
+      },
+      "type": "object"
+    },
+    "DlpMessageScanRecord": {
+      "description": "A summary of a DLP scan. This is a combination summary that contains both scan on message and scan on attachments if any.",
+      "id": "DlpMessageScanRecord",
+      "properties": {
+        "attachmentScanSummary": {
+          "$ref": "DlpScanSummary",
+          "description": "Summaries of the attachment scan if any."
+        },
+        "dlpAction": {
+          "$ref": "DlpAction",
+          "description": "The applied action."
+        },
+        "messageScanSummary": {
+          "$ref": "DlpScanSummary",
+          "description": "Summaries of the message scan."
         },
         "scanOutcome": {
-          "description": "The outcome of a DLP Scan. If this is set, scan_not_applicable_for_context should not be true.",
+          "description": "The DLP scan outcome for the message.",
           "enum": [
             "SCAN_UNKNOWN_OUTCOME",
             "SCAN_SUCCEEDED_NO_VIOLATION",
@@ -7161,9 +7534,11 @@
             "SCAN_SKIPPED_NO_MESSAGE",
             "SCAN_SKIPPED_USER_ACKNOWLEDGED_WARNING",
             "SCAN_SKIPPED_MESSAGE_FROM_UNSUPPORTED_ORIGIN",
+            "SCAN_SKIPPED_MESSAGE_SENT_DURING_SPACE_MIGRATION",
             "SCAN_RULE_EVALUATION_SKIPPED_NO_RULES_FOUND",
             "SCAN_RULE_EVALUATION_SKIPPED_NO_APPLICABLE_RULES_FOR_ACTION_PARAMS",
             "SCAN_RULE_EVALUATION_SKIPPED_NO_APPLICABLE_RULES_FOR_TRIGGER",
+            "SCAN_RULE_EVALUATION_SKIPPED_NO_APPLICABLE_RULES",
             "SCAN_RULE_EVALUATION_SKIPPED_CHANGELING_PERMANENT_ERROR",
             "SCAN_RULE_EVALUATION_SKIPPED_CHANGELING_EMPTY_RESPONSE",
             "SCAN_RULE_EVALUATION_SKIPPED_UNSUPPORTED_FILE_TYPE",
@@ -7189,9 +7564,11 @@
             "Rule fetch and evaluation are skipped because there is no message to scan. Deprecated: this should not happen since there must be message or attachment for DLP scan.",
             "Rule fetch and evaluation are skipped because the user has acknowledged the warning on the message that triggered the Warn violation and sent the message anyway.",
             "Scanning was skipped because the message originated from Interop or Babel.",
+            "Scanning was skipped because the message was sent while the space is in migration mode. See go/migration-mode for details.",
             "Rule fetch happened, but rule evaluation is skipped because no rules were found.",
-            "Rule fetch happened, but rule evaluation is skipped because none of the rules are applicable to the given action params.",
-            "Rule fetch happened, but rule evaluation is skipped because none of the rules are applicable to the given trigger.",
+            "Rule fetch happened, but rule evaluation is skipped because none of the rules are applicable to the given action params. Deprecated. Use SCAN_RULE_EVALUATION_SKIPPED_NO_APPLICABLE_RULES",
+            "Rule fetch happened, but rule evaluation is skipped because none of the rules are applicable to the given trigger. Deprecated. Use SCAN_RULE_EVALUATION_SKIPPED_NO_APPLICABLE_RULES",
+            "Rule fetch happened, but rule evaluation is skipped because none of the rules are applicable.",
             "Rule fetch happened, but rule evaluation is skipped because Changeling returned permanent failure while converting the attachment to text.",
             "Rule fetch happened, but rule evaluation is skipped because Changeling returned an empty response while converting the attachment to text.",
             "Rule fetch happened, but rule evaluation is skipped because file type is unsupported.",
@@ -7199,6 +7576,102 @@
             "Rules were fetched but some evaluations failed. A blocking violation was found in the rules that were successfully evaluated. The message/attachment will be blocked, the user will be notified, and the violation will be logged to BIP. A blocking violation takes precedence over all other violation types.",
             "Rules were fetched but some evaluations failed. A warn violation was found in the rules that were successfully evaluated. The user will be warned, and the violation will be logged to BIP.",
             "Rules were fetched but some evaluations failed. An audit-only violation was found in the rules that were successfully evaluated. The violation will be logged to BIP (no user-facing action performed)."
+          ],
+          "type": "string"
+        }
+      },
+      "type": "object"
+    },
+    "DlpScanSummary": {
+      "description": "A summary of a DLP scan event. This is a summary and should contain the minimum amount of data required to identify and process DLP scans. It is written to Starcast and encoded & returned to the client on attachment upload.",
+      "id": "DlpScanSummary",
+      "properties": {
+        "dlpAction": {
+          "$ref": "DlpAction"
+        },
+        "scanId": {
+          "description": "The scan ID of the corresponding {@link DlpViolationScanRecord} in the {@link EphemeralDlpScans} Spanner table. This can be used to fetch additional details about the scan, e.g. for audit logging.",
+          "type": "string"
+        },
+        "scanNotApplicableForContext": {
+          "description": "Indicates that was no attempt to scan a message or attachment because it was not applicable in the given context (e.g. atomic mutuate). If this is true, scan_outcome should not be set. This flag is used to identify messages that DLP did not attempt to scan for monitoring scan coverage. Contents that DLP attempted to scan but skipped can be identified by DlpScanOutcome.SCAN_SKIPPED_* reasons. DEPRECATED: The prober can determine this from the context.",
+          "type": "boolean"
+        },
+        "scanOutcome": {
+          "description": "The outcome of a DLP Scan. If this is set, scan_not_applicable_for_context should not be true.",
+          "enum": [
+            "SCAN_UNKNOWN_OUTCOME",
+            "SCAN_SUCCEEDED_NO_VIOLATION",
+            "SCAN_SUCCEEDED_BLOCK",
+            "SCAN_SUCCEEDED_WARN",
+            "SCAN_SUCCEEDED_AUDIT_ONLY",
+            "SCAN_FAILURE_EXCEPTION",
+            "SCAN_FAILURE_RULE_FETCH_FAILED",
+            "SCAN_FAILURE_TIMEOUT",
+            "SCAN_FAILURE_ALL_RULES_FAILED",
+            "SCAN_FAILURE_ILLEGAL_STATE_FOR_ATTACHMENTS",
+            "SCAN_SKIPPED_EXPERIMENT_DISABLED",
+            "SCAN_SKIPPED_CONSUMER",
+            "SCAN_SKIPPED_NON_HUMAN_USER",
+            "SCAN_SKIPPED_NO_MESSAGE",
+            "SCAN_SKIPPED_USER_ACKNOWLEDGED_WARNING",
+            "SCAN_SKIPPED_MESSAGE_FROM_UNSUPPORTED_ORIGIN",
+            "SCAN_SKIPPED_MESSAGE_SENT_DURING_SPACE_MIGRATION",
+            "SCAN_RULE_EVALUATION_SKIPPED_NO_RULES_FOUND",
+            "SCAN_RULE_EVALUATION_SKIPPED_NO_APPLICABLE_RULES_FOR_ACTION_PARAMS",
+            "SCAN_RULE_EVALUATION_SKIPPED_NO_APPLICABLE_RULES_FOR_TRIGGER",
+            "SCAN_RULE_EVALUATION_SKIPPED_NO_APPLICABLE_RULES",
+            "SCAN_RULE_EVALUATION_SKIPPED_CHANGELING_PERMANENT_ERROR",
+            "SCAN_RULE_EVALUATION_SKIPPED_CHANGELING_EMPTY_RESPONSE",
+            "SCAN_RULE_EVALUATION_SKIPPED_UNSUPPORTED_FILE_TYPE",
+            "SCAN_SUCCEEDED_WITH_FAILURES_NO_VIOLATION",
+            "SCAN_SUCCEEDED_WITH_FAILURES_BLOCK",
+            "SCAN_SUCCEEDED_WITH_FAILURES_WARN",
+            "SCAN_SUCCEEDED_WITH_FAILURES_AUDIT_ONLY"
+          ],
+          "enumDescriptions": [
+            "",
+            "This means no violation is detected on the given message/attachment.",
+            "Violation is detected. The message/attachment will be blocked (or deleted if this happens in failure recovery), the user will be warned, and the violation will be logged to BIP.",
+            "Violation is detected. The user will be warned, and the violation will be logged to BIP.",
+            "Violation is detected and will be logged to BIP (no user-facing action performed).",
+            "Rule fetch and evaluation were attempted but an exception occurred.",
+            "Rule fetch was attempted but failed, so rule evaluation could not be performed.",
+            "Rule fetch and evaluation were attempted but the scanning timed out.",
+            "Rule fetch completed and evaluation were attempted, but all of the rules failed to be evaluated.",
+            "An IllegalStateException is thrown when executing DLP on attachments. This could happen if the space row is missing.",
+            "Rule fetch and evaluation is skipped because DLP is not enabled for the user.",
+            "Rule fetch and evaluation are skipped because the user sending message is consumer.",
+            "Rule fetch and evaluation are skipped because the user sending message is a non-human user (i.e. a bot).",
+            "Rule fetch and evaluation are skipped because there is no message to scan. Deprecated: this should not happen since there must be message or attachment for DLP scan.",
+            "Rule fetch and evaluation are skipped because the user has acknowledged the warning on the message that triggered the Warn violation and sent the message anyway.",
+            "Scanning was skipped because the message originated from Interop or Babel.",
+            "Scanning was skipped because the message was sent while the space is in migration mode. See go/migration-mode for details.",
+            "Rule fetch happened, but rule evaluation is skipped because no rules were found.",
+            "Rule fetch happened, but rule evaluation is skipped because none of the rules are applicable to the given action params. Deprecated. Use SCAN_RULE_EVALUATION_SKIPPED_NO_APPLICABLE_RULES",
+            "Rule fetch happened, but rule evaluation is skipped because none of the rules are applicable to the given trigger. Deprecated. Use SCAN_RULE_EVALUATION_SKIPPED_NO_APPLICABLE_RULES",
+            "Rule fetch happened, but rule evaluation is skipped because none of the rules are applicable.",
+            "Rule fetch happened, but rule evaluation is skipped because Changeling returned permanent failure while converting the attachment to text.",
+            "Rule fetch happened, but rule evaluation is skipped because Changeling returned an empty response while converting the attachment to text.",
+            "Rule fetch happened, but rule evaluation is skipped because file type is unsupported.",
+            "Rules were fetched but some evaluations failed. No violation was found in the rules that were successfully evaluated.",
+            "Rules were fetched but some evaluations failed. A blocking violation was found in the rules that were successfully evaluated. The message/attachment will be blocked, the user will be notified, and the violation will be logged to BIP. A blocking violation takes precedence over all other violation types.",
+            "Rules were fetched but some evaluations failed. A warn violation was found in the rules that were successfully evaluated. The user will be warned, and the violation will be logged to BIP.",
+            "Rules were fetched but some evaluations failed. An audit-only violation was found in the rules that were successfully evaluated. The violation will be logged to BIP (no user-facing action performed)."
+          ],
+          "type": "string"
+        },
+        "scanTrigger": {
+          "description": "The event that triggered the scan. This corresponds to the rule trigger configured in admin console and maps to the different things that can be scanned.",
+          "enum": [
+            "UNKNOWN_TRIGGER_TYPE",
+            "MESSAGE_SENT",
+            "ATTACHMENT_UPLOADED"
+          ],
+          "enumDescriptions": [
+            "LINT.IfChange",
+            "",
+            "LINT.ThenChange(//depot/google3/java/com/google/apps/dynamite/v1/external/dlp/DlpTriggerInfo.java)"
           ],
           "type": "string"
         }
@@ -7520,6 +7993,33 @@
       "description": "This is the proto for holding message level scoring information. This data is used for logging in query-api server and for testing purposes.",
       "id": "DynamiteMessagesScoringInfo",
       "properties": {
+        "commonContactCount": {
+          "format": "int64",
+          "type": "string"
+        },
+        "commonCountToContactListCountRatio": {
+          "format": "double",
+          "type": "number"
+        },
+        "commonCountToMembershipCountRatio": {
+          "format": "double",
+          "type": "number"
+        },
+        "creatorGaiaId": {
+          "format": "int64",
+          "type": "string"
+        },
+        "creatorInSearcherContactList": {
+          "type": "boolean"
+        },
+        "crowdingMultiplier": {
+          "format": "double",
+          "type": "number"
+        },
+        "dasContactCount": {
+          "format": "int64",
+          "type": "string"
+        },
         "finalScore": {
           "format": "double",
           "type": "number"
@@ -7532,6 +8032,10 @@
           "format": "double",
           "type": "number"
         },
+        "lastReadTimestampAgeInDays": {
+          "format": "double",
+          "type": "number"
+        },
         "messageAgeInDays": {
           "format": "double",
           "type": "number"
@@ -7539,6 +8043,14 @@
         "messageSenderAffinityScore": {
           "format": "double",
           "type": "number"
+        },
+        "spaceId": {
+          "format": "int64",
+          "type": "string"
+        },
+        "spaceMembershipCount": {
+          "format": "int64",
+          "type": "string"
         },
         "topicalityScore": {
           "format": "double",
@@ -7586,6 +8098,10 @@
         "lastReadTimestampSecs": {
           "format": "int64",
           "type": "string"
+        },
+        "memberCountScore": {
+          "format": "double",
+          "type": "number"
         },
         "memberMetadataCount": {
           "format": "double",
@@ -9388,7 +9904,7 @@
       "type": "object"
     },
     "GoogleChatV1ContextualAddOnMarkupCard": {
-      "description": "A card is a UI element that can contain UI widgets such as texts, images.",
+      "description": "A card is a UI element that can contain UI widgets such as text and images.",
       "id": "GoogleChatV1ContextualAddOnMarkupCard",
       "properties": {
         "cardActions": {
@@ -9435,7 +9951,7 @@
       "id": "GoogleChatV1ContextualAddOnMarkupCardCardHeader",
       "properties": {
         "imageStyle": {
-          "description": "The image's type (e.g. square border or circular border).",
+          "description": "The image's type (for example, square border or circular border).",
           "enum": [
             "IMAGE_STYLE_UNSPECIFIED",
             "IMAGE",
@@ -9457,22 +9973,22 @@
           "type": "string"
         },
         "title": {
-          "description": "The title must be specified. The header has a fixed height: if both a title and subtitle is specified, each will take up 1 line. If only the title is specified, it will take up both lines.",
+          "description": "The title must be specified. The header has a fixed height: if both a title and subtitle is specified, each takes up one line. If only the title is specified, it takes up both lines.",
           "type": "string"
         }
       },
       "type": "object"
     },
     "GoogleChatV1ContextualAddOnMarkupCardSection": {
-      "description": "A section contains a collection of widgets that are rendered (vertically) in the order that they are specified. Across all platforms, cards have a narrow fixed width, so there is currently no need for layout properties (e.g. float).",
+      "description": "A section contains a collection of widgets that are rendered (vertically) in the order that they are specified. Across all platforms, cards have a narrow fixed width, so there's currently no need for layout properties (for example, float).",
       "id": "GoogleChatV1ContextualAddOnMarkupCardSection",
       "properties": {
         "header": {
-          "description": "The header of the section, text formatted supported.",
+          "description": "The header of the section. Formatted text is supported. For more information about formatting text, see [Formatting text in Google Chat apps](https://developers.google.com/chat/api/guides/message-formats/cards#card_text_formatting) and [Formatting text in Google Workspace Add-ons](https://developers.google.com/apps-script/add-ons/concepts/widgets#text_formatting).",
           "type": "string"
         },
         "widgets": {
-          "description": "A section must contain at least 1 widget.",
+          "description": "A section must contain at least one widget.",
           "items": {
             "$ref": "GoogleChatV1WidgetMarkup"
           },
@@ -9482,11 +9998,11 @@
       "type": "object"
     },
     "GoogleChatV1WidgetMarkup": {
-      "description": "A widget is a UI element that presents texts, images, etc.",
+      "description": "A widget is a UI element that presents text and images.",
       "id": "GoogleChatV1WidgetMarkup",
       "properties": {
         "buttons": {
-          "description": "A list of buttons. Buttons is also oneof data and only one of these fields should be set.",
+          "description": "A list of buttons. Buttons is also `oneof data` and only one of these fields should be set.",
           "items": {
             "$ref": "GoogleChatV1WidgetMarkupButton"
           },
@@ -9513,21 +10029,21 @@
       "properties": {
         "imageButton": {
           "$ref": "GoogleChatV1WidgetMarkupImageButton",
-          "description": "A button with image and onclick action."
+          "description": "A button with image and `onclick` action."
         },
         "textButton": {
           "$ref": "GoogleChatV1WidgetMarkupTextButton",
-          "description": "A button with text and onclick action."
+          "description": "A button with text and `onclick` action."
         }
       },
       "type": "object"
     },
     "GoogleChatV1WidgetMarkupFormAction": {
-      "description": "A form action describes the behavior when the form is submitted. For example, an Apps Script can be invoked to handle the form.",
+      "description": "A form action describes the behavior when the form is submitted. For example, you can invoke Apps Script to handle the form.",
       "id": "GoogleChatV1WidgetMarkupFormAction",
       "properties": {
         "actionMethodName": {
-          "description": "The method name is used to identify which part of the form triggered the form submission. This information is echoed back to the Chat app as part of the card click event. The same method name can be used for several elements that trigger a common behavior if desired.",
+          "description": "The method name is used to identify which part of the form triggered the form submission. This information is echoed back to the Chat app as part of the card click event. You can use the same method name for several elements that trigger a common behavior.",
           "type": "string"
         },
         "parameters": {
@@ -9541,7 +10057,7 @@
       "type": "object"
     },
     "GoogleChatV1WidgetMarkupFormActionActionParameter": {
-      "description": "List of string parameters to supply when the action method is invoked. For example, consider three snooze buttons: snooze now, snooze 1 day, snooze next week. You might use action method = snooze(), passing the snooze type and snooze time in the list of string parameters.",
+      "description": "List of string parameters to supply when the action method is invoked. For example, consider three snooze buttons: snooze now, snooze one day, snooze next week. You might use `action method = snooze()`, passing the snooze type and snooze time in the list of string parameters.",
       "id": "GoogleChatV1WidgetMarkupFormActionActionParameter",
       "properties": {
         "key": {
@@ -9556,11 +10072,11 @@
       "type": "object"
     },
     "GoogleChatV1WidgetMarkupImage": {
-      "description": "An image that is specified by a URL and can have an onclick action.",
+      "description": "An image that's specified by a URL and can have an `onclick` action.",
       "id": "GoogleChatV1WidgetMarkupImage",
       "properties": {
         "aspectRatio": {
-          "description": "The aspect ratio of this image (width/height). This field allows clients to reserve the right height for the image while waiting for it to load. It's not meant to override the native aspect ratio of the image. If unset, the server fills it by prefetching the image.",
+          "description": "The aspect ratio of this image (width and height). This field lets you reserve the right height for the image while waiting for it to load. It's not meant to override the built-in aspect ratio of the image. If unset, the server fills it by prefetching the image.",
           "format": "double",
           "type": "number"
         },
@@ -9570,17 +10086,17 @@
         },
         "onClick": {
           "$ref": "GoogleChatV1WidgetMarkupOnClick",
-          "description": "The onclick action."
+          "description": "The `onclick` action."
         }
       },
       "type": "object"
     },
     "GoogleChatV1WidgetMarkupImageButton": {
-      "description": "An image button with an onclick action.",
+      "description": "An image button with an `onclick` action.",
       "id": "GoogleChatV1WidgetMarkupImageButton",
       "properties": {
         "icon": {
-          "description": "The icon specified by an enum that indices to an icon provided by Chat API.",
+          "description": "The icon specified by an `enum` that indices to an icon provided by Chat API.",
           "enum": [
             "ICON_UNSPECIFIED",
             "AIRPLANE",
@@ -9654,22 +10170,22 @@
           "type": "string"
         },
         "name": {
-          "description": "The name of this image_button which will be used for accessibility. Default value will be provided if developers don't specify.",
+          "description": "The name of this `image_button` that's used for accessibility. Default value is provided if this name isn't specified.",
           "type": "string"
         },
         "onClick": {
           "$ref": "GoogleChatV1WidgetMarkupOnClick",
-          "description": "The onclick action."
+          "description": "The `onclick` action."
         }
       },
       "type": "object"
     },
     "GoogleChatV1WidgetMarkupKeyValue": {
-      "description": "A UI element contains a key (label) and a value (content). And this element may also contain some actions such as onclick button.",
+      "description": "A UI element contains a key (label) and a value (content). This element can also contain some actions such as `onclick` button.",
       "id": "GoogleChatV1WidgetMarkupKeyValue",
       "properties": {
         "bottomLabel": {
-          "description": "The text of the bottom label. Formatted text supported.",
+          "description": "The text of the bottom label. Formatted text supported. For more information about formatting text, see [Formatting text in Google Chat apps](https://developers.google.com/chat/api/guides/message-formats/cards#card_text_formatting) and [Formatting text in Google Workspace Add-ons](https://developers.google.com/apps-script/add-ons/concepts/widgets#text_formatting).",
           "type": "string"
         },
         "button": {
@@ -9677,7 +10193,7 @@
           "description": "A button that can be clicked to trigger an action."
         },
         "content": {
-          "description": "The text of the content. Formatted text supported and always required.",
+          "description": "The text of the content. Formatted text supported and always required. For more information about formatting text, see [Formatting text in Google Chat apps](https://developers.google.com/chat/api/guides/message-formats/cards#card_text_formatting) and [Formatting text in Google Workspace Add-ons](https://developers.google.com/apps-script/add-ons/concepts/widgets#text_formatting).",
           "type": "string"
         },
         "contentMultiline": {
@@ -9685,7 +10201,7 @@
           "type": "boolean"
         },
         "icon": {
-          "description": "An enum value that will be replaced by the Chat API with the corresponding icon image.",
+          "description": "An enum value that's replaced by the Chat API with the corresponding icon image.",
           "enum": [
             "ICON_UNSPECIFIED",
             "AIRPLANE",
@@ -9760,26 +10276,26 @@
         },
         "onClick": {
           "$ref": "GoogleChatV1WidgetMarkupOnClick",
-          "description": "The onclick action. Only the top label, bottom label and content region are clickable."
+          "description": "The `onclick` action. Only the top label, bottom label, and content region are clickable."
         },
         "topLabel": {
-          "description": "The text of the top label. Formatted text supported.",
+          "description": "The text of the top label. Formatted text supported. For more information about formatting text, see [Formatting text in Google Chat apps](https://developers.google.com/chat/api/guides/message-formats/cards#card_text_formatting) and [Formatting text in Google Workspace Add-ons](https://developers.google.com/apps-script/add-ons/concepts/widgets#text_formatting).",
           "type": "string"
         }
       },
       "type": "object"
     },
     "GoogleChatV1WidgetMarkupOnClick": {
-      "description": "An onclick action (e.g. open a link).",
+      "description": "An `onclick` action (for example, open a link).",
       "id": "GoogleChatV1WidgetMarkupOnClick",
       "properties": {
         "action": {
           "$ref": "GoogleChatV1WidgetMarkupFormAction",
-          "description": "A form action will be triggered by this onclick if specified."
+          "description": "A form action is triggered by this `onclick` action if specified."
         },
         "openLink": {
           "$ref": "GoogleChatV1WidgetMarkupOpenLink",
-          "description": "This onclick triggers an open link action if specified."
+          "description": "This `onclick` action triggers an open link action if specified."
         }
       },
       "type": "object"
@@ -9796,12 +10312,12 @@
       "type": "object"
     },
     "GoogleChatV1WidgetMarkupTextButton": {
-      "description": "A button with text and onclick action.",
+      "description": "A button with text and `onclick` action.",
       "id": "GoogleChatV1WidgetMarkupTextButton",
       "properties": {
         "onClick": {
           "$ref": "GoogleChatV1WidgetMarkupOnClick",
-          "description": "The onclick action of the button."
+          "description": "The `onclick` action of the button."
         },
         "text": {
           "description": "The text of the button.",
@@ -9811,7 +10327,7 @@
       "type": "object"
     },
     "GoogleChatV1WidgetMarkupTextParagraph": {
-      "description": "A paragraph of text. Formatted text supported.",
+      "description": "A paragraph of text. Formatted text supported. For more information about formatting text, see [Formatting text in Google Chat apps](https://developers.google.com/chat/api/guides/message-formats/cards#card_text_formatting) and [Formatting text in Google Workspace Add-ons](https://developers.google.com/apps-script/add-ons/concepts/widgets#text_formatting).",
       "id": "GoogleChatV1WidgetMarkupTextParagraph",
       "properties": {
         "text": {
@@ -10073,7 +10589,7 @@
       "type": "object"
     },
     "GsuiteIntegrationMetadata": {
-      "description": "Annotation metadata for an GsuiteIntegration artifact.",
+      "description": "Annotation metadata for a GsuiteIntegration artifact.",
       "id": "GsuiteIntegrationMetadata",
       "properties": {
         "activityFeedData": {
@@ -10493,7 +11009,7 @@
       "id": "Id",
       "properties": {
         "creatorUserId": {
-          "description": "The User account in which the DirEntry was originally created. If name_space==GAIA, then it's the gaia_id of the user this id is referring to.",
+          "description": "The User account in which the DirEntry was originally created. If name_space==GAIA, then it's the gaia_id of the user this id is referring to. This field should really be called the \"bucket ID\", not the creator ID. In some circumstances, such as copying a Google Docs file, a user can create an item in a different user's bucket, so it should not be relied upon for anything other than bucket location. To look up the requesting user who initially created item, use the `creator_id` DirEntry field instead.",
           "format": "uint64",
           "type": "string"
         },
@@ -10781,6 +11297,7 @@
             "YANDEX_BROWSER",
             "SILK_BROWSER",
             "COC_COC_BROWSER",
+            "HEADLESS_CHROME",
             "MAX_BROWSER_APP_VALUE",
             "GMAIL_APP",
             "GMAIL_INBOX_APP",
@@ -10879,6 +11396,7 @@
             "from customized OEM flavours). Yandex Browser",
             "Amazon Silk browser",
             "Popoular browser in Vietnam",
+            "Headless version of Chrome",
             "Tag for the maximum enum value that represents a browser. Enum values (strictly) between OTHER_APP and this value represent browsers. This should never appear in real data.",
             "Email apps Gmail",
             "Inbox by Gmail",
@@ -11423,6 +11941,17 @@
             "This interaction indicates the user edited the item."
           ],
           "type": "string"
+        }
+      },
+      "type": "object"
+    },
+    "InteractionData": {
+      "description": "Interaction data for an annotation, which may be supplemental to the metadata oneof. For example, this will contain the fully built navigation target for smart chips. NEXT TAG: 2",
+      "id": "InteractionData",
+      "properties": {
+        "url": {
+          "$ref": "SafeUrlProto",
+          "description": "A general navigation target associated with the annotation this message is contained in. For smart chips, this will be the destination of the tap/click target and will be returned by the server. For scenarios where the chip originated from a user-provided url, this value will be provided by clients; otherwise it will be built by the corresponding metadata parts."
         }
       },
       "type": "object"
@@ -12505,7 +13034,7 @@
       "type": "object"
     },
     "MembershipChangedMetadata": {
-      "description": "Annotation metadata to display system messages for membership changes. Next Tag: 8",
+      "description": "Annotation metadata to display system messages for membership changes. Next Tag: 13",
       "id": "MembershipChangedMetadata",
       "properties": {
         "affectedMemberProfiles": {
@@ -12561,20 +13090,24 @@
             "BOT_REMOVED",
             "KICKED_DUE_TO_OTR_CONFLICT",
             "ROLE_UPDATED",
-            "ROLE_TARGET_AUDIENCE_UPDATED"
+            "ROLE_TARGET_AUDIENCE_UPDATED",
+            "SPACE_LIMIT_EXCEEDED",
+            "HUMAN_MEMBERSHIP_DISPLAY_DISABLED"
           ],
           "enumDescriptions": [
             "Default value for the enum. DO NOT USE.",
             "Non-member -> Can join. Multiple groups and users.",
             "Can join -> Member. One user.",
             "Non-member -> Member. Multiple users.",
-            "Can join -> Non-member. One group or user.",
-            "Member -> Can join. One user.",
+            "Member or can join -> Non-member. One group or user.",
+            "Before April 2023, a user transitioned from joined",
             "Bot added to the room.",
             "Bot removed from the room.",
             "This signifies the user is kicked because the user's OTR policy is conflicted with the room history settings. Joined -> Non-member. One user.",
             "MembershipRole changed. Multiple users.",
-            "The room is now joinable by an"
+            "The room is now joinable by an",
+            "Space limit exceeded",
+            "HUMAN_MEMBERSHIP_DISPLAY_DISABLED indicates that the space has crossed the member size threshold above which human membership change system messages will be muted. This event can only occur once for a space over its lifetime. When this event is received, clients should display a system message stating that human membership changes will no longer be displayed in the space."
           ],
           "type": "string"
         }
@@ -12706,69 +13239,9 @@
           "description": "Was this message deleted by Vault (Only used for Vault support) This is false if message is live or message was deleted by user.",
           "type": "boolean"
         },
-        "dlpScanOutcome": {
-          "description": "Data Loss Prevention scan information for this message. Messages are evaluated in the backend on create message/topic and edit message actions. DEPRECATED: use dlp_scan_summary instead.",
-          "enum": [
-            "SCAN_UNKNOWN_OUTCOME",
-            "SCAN_SUCCEEDED_NO_VIOLATION",
-            "SCAN_SUCCEEDED_BLOCK",
-            "SCAN_SUCCEEDED_WARN",
-            "SCAN_SUCCEEDED_AUDIT_ONLY",
-            "SCAN_FAILURE_EXCEPTION",
-            "SCAN_FAILURE_RULE_FETCH_FAILED",
-            "SCAN_FAILURE_TIMEOUT",
-            "SCAN_FAILURE_ALL_RULES_FAILED",
-            "SCAN_FAILURE_ILLEGAL_STATE_FOR_ATTACHMENTS",
-            "SCAN_SKIPPED_EXPERIMENT_DISABLED",
-            "SCAN_SKIPPED_CONSUMER",
-            "SCAN_SKIPPED_NON_HUMAN_USER",
-            "SCAN_SKIPPED_NO_MESSAGE",
-            "SCAN_SKIPPED_USER_ACKNOWLEDGED_WARNING",
-            "SCAN_SKIPPED_MESSAGE_FROM_UNSUPPORTED_ORIGIN",
-            "SCAN_RULE_EVALUATION_SKIPPED_NO_RULES_FOUND",
-            "SCAN_RULE_EVALUATION_SKIPPED_NO_APPLICABLE_RULES_FOR_ACTION_PARAMS",
-            "SCAN_RULE_EVALUATION_SKIPPED_NO_APPLICABLE_RULES_FOR_TRIGGER",
-            "SCAN_RULE_EVALUATION_SKIPPED_CHANGELING_PERMANENT_ERROR",
-            "SCAN_RULE_EVALUATION_SKIPPED_CHANGELING_EMPTY_RESPONSE",
-            "SCAN_RULE_EVALUATION_SKIPPED_UNSUPPORTED_FILE_TYPE",
-            "SCAN_SUCCEEDED_WITH_FAILURES_NO_VIOLATION",
-            "SCAN_SUCCEEDED_WITH_FAILURES_BLOCK",
-            "SCAN_SUCCEEDED_WITH_FAILURES_WARN",
-            "SCAN_SUCCEEDED_WITH_FAILURES_AUDIT_ONLY"
-          ],
-          "enumDescriptions": [
-            "",
-            "This means no violation is detected on the given message/attachment.",
-            "Violation is detected. The message/attachment will be blocked (or deleted if this happens in failure recovery), the user will be warned, and the violation will be logged to BIP.",
-            "Violation is detected. The user will be warned, and the violation will be logged to BIP.",
-            "Violation is detected and will be logged to BIP (no user-facing action performed).",
-            "Rule fetch and evaluation were attempted but an exception occurred.",
-            "Rule fetch was attempted but failed, so rule evaluation could not be performed.",
-            "Rule fetch and evaluation were attempted but the scanning timed out.",
-            "Rule fetch completed and evaluation were attempted, but all of the rules failed to be evaluated.",
-            "An IllegalStateException is thrown when executing DLP on attachments. This could happen if the space row is missing.",
-            "Rule fetch and evaluation is skipped because DLP is not enabled for the user.",
-            "Rule fetch and evaluation are skipped because the user sending message is consumer.",
-            "Rule fetch and evaluation are skipped because the user sending message is a non-human user (i.e. a bot).",
-            "Rule fetch and evaluation are skipped because there is no message to scan. Deprecated: this should not happen since there must be message or attachment for DLP scan.",
-            "Rule fetch and evaluation are skipped because the user has acknowledged the warning on the message that triggered the Warn violation and sent the message anyway.",
-            "Scanning was skipped because the message originated from Interop or Babel.",
-            "Rule fetch happened, but rule evaluation is skipped because no rules were found.",
-            "Rule fetch happened, but rule evaluation is skipped because none of the rules are applicable to the given action params.",
-            "Rule fetch happened, but rule evaluation is skipped because none of the rules are applicable to the given trigger.",
-            "Rule fetch happened, but rule evaluation is skipped because Changeling returned permanent failure while converting the attachment to text.",
-            "Rule fetch happened, but rule evaluation is skipped because Changeling returned an empty response while converting the attachment to text.",
-            "Rule fetch happened, but rule evaluation is skipped because file type is unsupported.",
-            "Rules were fetched but some evaluations failed. No violation was found in the rules that were successfully evaluated.",
-            "Rules were fetched but some evaluations failed. A blocking violation was found in the rules that were successfully evaluated. The message/attachment will be blocked, the user will be notified, and the violation will be logged to BIP. A blocking violation takes precedence over all other violation types.",
-            "Rules were fetched but some evaluations failed. A warn violation was found in the rules that were successfully evaluated. The user will be warned, and the violation will be logged to BIP.",
-            "Rules were fetched but some evaluations failed. An audit-only violation was found in the rules that were successfully evaluated. The violation will be logged to BIP (no user-facing action performed)."
-          ],
-          "type": "string"
-        },
         "dlpScanSummary": {
           "$ref": "DlpScanSummary",
-          "description": "Data Loss Prevention scan information for this message. Messages are evaluated in the backend on create message/topic and edit message actions."
+          "description": "Data Loss Prevention scan information for this message. Messages are evaluated in the backend on create message/topic and edit message actions. DEPRECATED: Use DATA_LOSS_PREVENTION Annotation."
         },
         "editableBy": {
           "description": "Indicates who can edit the message. This field is set on the read path (e.g. ListTopics) but doesn\u2019t have any effect on the write path (e.g. CreateMessageRequest).",
@@ -12847,6 +13320,14 @@
           ],
           "type": "string"
         },
+        "messageReference": {
+          "$ref": "MessageReference",
+          "description": "Contains reference to another message. It is used in shortcuts which are used to collect messages from different spaces with a certain common property into another space. For example, all @mentions of a user are collected into a mention shortcut space (go/chat-shortcuts-backend-design for more details). Most information from the source message (like text) are copied onto top-level Message fields of shortcut messages by the server. The MessageReference is helpful for clients to enable things like click navigation to source message."
+        },
+        "messageSearchInfo": {
+          "$ref": "AppsDynamiteSharedMessageSearchInfo",
+          "description": "Contains additional metadata that further annotates this message when returned as a search response. For example, this field can be used to highlight messages during search results rendering. In this case, clients can use this field to highlight matched segments in the message text_body (defined with tag 6)."
+        },
         "messageState": {
           "description": "State of the message, indicating whether the message is visible to all members in the group or is only visible to the sender only, or the private_message_viewer if it is set.",
           "enum": [
@@ -12858,6 +13339,11 @@
             "Private state - only visible to the message creator, and the private_message_viewer if set."
           ],
           "type": "string"
+        },
+        "numberOfUnicodeEmojis": {
+          "description": "Indicates the number of unicode emojis in the message.",
+          "format": "int32",
+          "type": "integer"
         },
         "originAppSuggestions": {
           "description": "Indicates if this message contains any suggestions that were provided by any Apps.",
@@ -13028,6 +13514,13 @@
             "$ref": "MultiKey"
           },
           "type": "array"
+        },
+        "wonderCardMappings": {
+          "description": "Value of coproc's message delete history record extension that exports /wonder/message_mapping/{vertical} attribute of deleted messages which have smartmail label (eg. ^cob_sm_invoice, etc).",
+          "items": {
+            "$ref": "WonderCardDelete"
+          },
+          "type": "array"
         }
       },
       "type": "object"
@@ -13050,6 +13543,18 @@
     "MessageInfo": {
       "id": "MessageInfo",
       "properties": {
+        "authorUserType": {
+          "description": "Message author\u2019s user type (human/bot).",
+          "enum": [
+            "HUMAN",
+            "BOT"
+          ],
+          "enumDescriptions": [
+            "Notes on HUMAN type: 1) Leaving UserId.UserType field empty will return HUMAN as default value. This is expected because all the existing UserIds are without explicitly setting UserType, most of which are HUMAN Ids. For Bot Ids we will always set BOT in UserType field. 2) DO NOT explicitly set HUMAN as type. This is a proto2 issue, that a UserId with explicitly set default value HUMAN as type is NOT equal to an id without setting the field. aka. UserId id1 = UserId.newBuilder() .setId(\"dummy\").setType(UserType.HUMAN).build(); UserId id2 = UserId.newBuilder().setId(\"dummy\").build(); AssertThat(id1).isNotEqual(id2); AssertThat(id2.getType()).isEqualTo(UserType.HUMAN);",
+            ""
+          ],
+          "type": "string"
+        },
         "message": {
           "$ref": "Message",
           "description": "The content of a matching message."
@@ -13092,6 +13597,16 @@
       "properties": {
         "babelProps": {
           "$ref": "BabelMessageProps"
+        }
+      },
+      "type": "object"
+    },
+    "MessageReference": {
+      "description": "Contains reference to another message. It is used in shortcuts which are used to collect messages from different spaces with a certain common property into another space. For example, all @mentions of a user are collected into a mention shortcut space (go/chat-shortcuts-backend-design for more details). Clients can use this reference to enable navigation to the source message when the shortcut message is clicked and also to identify a few other details about the source message. Other fields (like text) from the source message are copied on to the top-level fields in the Message proto by the server (More details in go/chat-shortcuts-client-server-design).",
+      "id": "MessageReference",
+      "properties": {
+        "sourceInfo": {
+          "$ref": "SourceMessageInfo"
         }
       },
       "type": "object"
@@ -13881,6 +14396,10 @@
       "description": "Presenter contains information about which device is currently presenting as well as which device requested the presenter to be set.",
       "id": "Presenter",
       "properties": {
+        "annotationInfo": {
+          "$ref": "AnnotationInfo",
+          "description": "Screen annotation information associated with this presentation session."
+        },
         "byDeviceId": {
           "description": "The device resource name of the device which requested the current presenter to be set. This field can not be modified by clients.",
           "type": "string"
@@ -14346,6 +14865,17 @@
         "item": {
           "$ref": "PushItem",
           "description": "Item to push onto the queue."
+        }
+      },
+      "type": "object"
+    },
+    "QueryActivity": {
+      "description": "Details about a user's query activity.",
+      "id": "QueryActivity",
+      "properties": {
+        "query": {
+          "description": "User input query to be logged/removed.",
+          "type": "string"
         }
       },
       "type": "object"
@@ -14894,6 +15424,27 @@
       },
       "type": "object"
     },
+    "RemoveActivityRequest": {
+      "description": "Remove Logged Activity Request.",
+      "id": "RemoveActivityRequest",
+      "properties": {
+        "requestOptions": {
+          "$ref": "RequestOptions",
+          "description": "Request options, such as the search application and clientId."
+        },
+        "userActivity": {
+          "$ref": "UserActivity",
+          "description": "User Activity containing the data to be deleted."
+        }
+      },
+      "type": "object"
+    },
+    "RemoveActivityResponse": {
+      "description": "Remove Logged Activity Response. will return an empty response for now. Will be revisited in later phases.",
+      "id": "RemoveActivityResponse",
+      "properties": {},
+      "type": "object"
+    },
     "RenameEvent": {
       "id": "RenameEvent",
       "properties": {
@@ -14997,9 +15548,13 @@
               "REQUIRED_FEATURE_UNSPECIFIED",
               "REQUIRED_FEATURE_MESSAGE_QUOTING",
               "REQUIRED_FEATURE_TOMBSTONES_IN_DMS_AND_UFRS",
-              "REQUIRED_FEATURE_CUSTOM_HYPERLINK"
+              "REQUIRED_FEATURE_CUSTOM_HYPERLINK",
+              "REQUIRED_FEATURE_DRIVE_SMART_CHIP",
+              "REQUIRED_FEATURE_LEGACY_TOPIC_START"
             ],
             "enumDescriptions": [
+              "",
+              "",
               "",
               "",
               "",
@@ -15499,6 +16054,26 @@
       },
       "type": "object"
     },
+    "SearchLinkData": {
+      "description": "SearchLink metadata, for SEARCH_LINK segments. For a search link, the \"text\" field should contain the display text. This is currently not indexed.",
+      "id": "SearchLinkData",
+      "properties": {
+        "kgEntityConfidence": {
+          "description": "For lightweight scoring in serving time.",
+          "format": "float",
+          "type": "number"
+        },
+        "mid": {
+          "description": "MID of the KG entity being linked.",
+          "type": "string"
+        },
+        "queryBroadnessScore": {
+          "format": "float",
+          "type": "number"
+        }
+      },
+      "type": "object"
+    },
     "SearchQualityMetadata": {
       "description": "Additional search quality metadata of the item.",
       "id": "SearchQualityMetadata",
@@ -15705,6 +16280,10 @@
           "$ref": "LinkData",
           "description": "Type-specific metadata. At most one of these should be populated, and the one that is populated should correspond to the type of the Segment. For LINK type:"
         },
+        "searchLinkData": {
+          "$ref": "SearchLinkData",
+          "description": "For SEARCH_LINK type:"
+        },
         "text": {
           "description": "Text content of the Segment. As a general rule, this field should contain the actual text that should be rendered in the UI. Thus, for a hashtag, it should be \"#Foo\", and for a link, it should be the display text. Clients that do not understand a particular segment type may use this text, along with the Formatting info below, as a fallback for display. The field is not required -- if all relevant information is carried in other metadata fields and there is no need for a fallback, or it is not practical for a fallback to be provided for any other reason, the field may be left blank. A standard example would be a user reference being transmitted between server layers, where a gaia-ID representation may be sufficient and there is no need for a textual fallback. In such a case, it would be valid and useful - though not required - for servers to compute and populate a fallback on the serving path.",
           "type": "string"
@@ -15717,7 +16296,8 @@
             "LINK",
             "USER_MENTION",
             "ALL_USER_MENTION",
-            "HASHTAG"
+            "HASHTAG",
+            "SEARCH_LINK"
           ],
           "enumDescriptions": [
             "A TEXT segment represents plain-text subject to particular formatting constraints (as represented in the \"formatting\" field of the Segment).",
@@ -15725,7 +16305,8 @@
             "A LINK segment represents a link to a web entity. The \"text\" field should be used for anchor text. Additional link data should be put in the link_data protobuf.",
             "A USER_MENTION segment represents a reference to a (possibly non-Gaia, possibly off-network) user. The \"text\" field may be populated as a fallback, but information identifying the user should be contained in the user_mention_data protobuf. (The set of fields that are populated in user_mention_data may differ depending on the context in which the segment is viewed, but the interpretation of the fields is uniform. See comments over UserMentionData).",
             "An ALL_USER_MENTION segment represents a reference to all users in the context, that is, the conversation, discussion, or other context containing the segment. For example, an ALL_USER_MENTION segment (\"@all\") can be useful to ping all participants in a conversation if the notification setting of the conversation is not set to ping on normal messages. An ALL_USER_MENTION should be treated as a USER_MENTION for all users who receives the segment.",
-            "A HASHTAG segment represents a structured reference to a topic. The \"text\" field should represent display text (e.g. \"#Google\"), and additional metadata should be put in the Segment's hashtag_data field."
+            "A HASHTAG segment represents a structured reference to a topic. The \"text\" field should represent display text (e.g. \"#Google\"), and additional metadata should be put in the Segment's hashtag_data field.",
+            "A SEARCH_LINK segment respresents a link to search results for a KG entity. The \"text\" field should represent the part of the comment where the KG entity is extracted from, and additional metadata of the entity should be put in the Segment's search_link_data field."
           ],
           "type": "string"
         },
@@ -15947,13 +16528,15 @@
             "ACCESS_TYPE_UNSPECIFIED",
             "ACCESS_TYPE_OPEN",
             "ACCESS_TYPE_TRUSTED",
-            "ACCESS_TYPE_RESTRICTED"
+            "ACCESS_TYPE_RESTRICTED",
+            "ACCESS_TYPE_CLOSED"
           ],
           "enumDescriptions": [
             "Default value. This value is unused.",
             "Anyone with meeting join information (url, phone access...) can join, no knocking required. (Subject to organization policies)",
             "Members of the Host's organization, invited external users, and dial-in users can join without knocking, everyone else must knock. (Subject to organization policies)",
-            "Only participants invited by a host can automatically join, everyone else must knock and be admitted. (Subject to organization policies) Participants cannot dial out from the meeting. And only hosts can accept knocks."
+            "Only participants invited by a host can automatically join, everyone else must knock and be admitted. (Subject to organization policies) Participants cannot dial out from the meeting. And only hosts can accept knocks.",
+            "Only participants invited by a host can join. Knocking is not allowed, dial in and dial out are also disabled."
           ],
           "type": "string"
         },
@@ -15967,6 +16550,10 @@
         },
         "chatLock": {
           "description": "The chat lock of the meeting space that lets owner control whether the participants can send chat messages.",
+          "type": "boolean"
+        },
+        "coActivityLock": {
+          "description": "The co-activity lock of the meeting space that lets owner control whether the participants can start/stop or update the state of co-activity.",
           "type": "boolean"
         },
         "cohostArtifactSharingEnabled": {
@@ -16295,6 +16882,29 @@
       },
       "type": "object"
     },
+    "SourceMessageInfo": {
+      "id": "SourceMessageInfo",
+      "properties": {
+        "messageId": {
+          "$ref": "MessageId",
+          "description": "Source message ID"
+        },
+        "messageType": {
+          "enum": [
+            "SOURCE_MESSAGE_TYPE_UNDEFINED",
+            "ROOT_MESSAGE",
+            "INLINE_REPLY"
+          ],
+          "enumDescriptions": [
+            "",
+            "",
+            ""
+          ],
+          "type": "string"
+        }
+      },
+      "type": "object"
+    },
     "SourceResultCount": {
       "description": "Per source result count information.",
       "id": "SourceResultCount",
@@ -16357,6 +16967,20 @@
       "properties": {
         "suggestedQuery": {
           "description": "The suggested spelling of the query.",
+          "type": "string"
+        },
+        "suggestionType": {
+          "description": "Suggestion triggered for the current query.",
+          "enum": [
+            "SUGGESTION_TYPE_UNSPECIFIED",
+            "NON_EMPTY_RESULTS_SPELL_SUGGESTION",
+            "ZERO_RESULTS_FULL_PAGE_REPLACEMENT"
+          ],
+          "enumDescriptions": [
+            "Default spell check type",
+            "Spell suggestion without any results changed. The results are still shown for the original query (which has non zero / results) with a suggestion for spelling that would have results.",
+            "Spell suggestion triggered when original query has no results. When the original query has no results, and spell suggestion has results we trigger results for the spell corrected query."
+          ],
           "type": "string"
         }
       },
@@ -17521,7 +18145,7 @@
       "id": "UploadMetadata",
       "properties": {
         "attachmentToken": {
-          "description": "Opaque token. Clients shall simply pass it back to the Backend. This field will NOT be saved into storage.",
+          "description": "Opaque token. Clients shall simply pass it back to the Backend. There is no guarantee the attachment_token returned on subsequent reads is the same even if nothing has changed. This field will NOT be saved into storage.",
           "type": "string"
         },
         "backendUploadMetadata": {
@@ -17565,6 +18189,10 @@
         "dlpMetricsMetadata": {
           "$ref": "AppsDynamiteSharedDlpMetricsMetadata",
           "description": "The metrics metadata of the Data Loss Prevention attachment scan."
+        },
+        "internalOnlyComponentSearchInfo": {
+          "$ref": "AppsDynamiteSharedMessageComponentSearchInfo",
+          "description": "Message component search metadata for this upload_metadata (currently used for message highlighting and snippeting). For use by Search backend only; clients should get upload_metadata search info from Annotation.component_search_info. This field is necessary because backend Message keeps UploadMetadata in a separate field. Upon converting from backend message to frontend message, this field will be copied to Annotation.component_search_info while the corresponding UploadMetadata is converted into an Annotation."
         },
         "latestVirusScanTimestamp": {
           "description": "The timestamp of the most recent virus scan completed (in microseconds).",
@@ -17787,6 +18415,17 @@
       },
       "type": "object"
     },
+    "UserActivity": {
+      "description": "User's single or bulk query activity. This can be a logging query or deletion query.",
+      "id": "UserActivity",
+      "properties": {
+        "queryActivity": {
+          "$ref": "QueryActivity",
+          "description": "Contains data which needs to be logged/removed."
+        }
+      },
+      "type": "object"
+    },
     "UserDisplayInfo": {
       "description": "Resource for displaying user info",
       "id": "UserDisplayInfo",
@@ -17936,11 +18575,23 @@
           ],
           "enumDescriptions": [
             "Default value for the enum. DO NOT USE.",
-            "",
-            "",
-            "",
-            "",
+            "An @mention that invites a new member into the space",
+            "DEPRECATED: An @mention that removes a member from a space. Support for this has been removed.",
+            "An @mention of an existing member in the space.",
+            "An @mention of all members in the space.",
             "Server-generated user mention, for clients to strikethrough."
+          ],
+          "type": "string"
+        },
+        "userMentionError": {
+          "description": "Specific reason for the user mention failing, for fine-grained processing by clients (i.e. specific error message for space limit exceeded case) IMPORTANT: Set this only for FAILED_TO_ADD case.",
+          "enum": [
+            "USER_MENTION_ERROR_UNSPECIFIED",
+            "MEMBERSHIP_LIMIT_EXCEEDED"
+          ],
+          "enumDescriptions": [
+            "",
+            "Failure caused by adding user to a room that is full"
           ],
           "type": "string"
         }
@@ -18172,6 +18823,39 @@
         "textParagraph": {
           "$ref": "TextParagraph",
           "description": "Read-only Widgets"
+        }
+      },
+      "type": "object"
+    },
+    "WonderCardDelete": {
+      "description": "Message delete history record extension that exports /wonder/message_mapping/{vertical} attribute of deleted messages which have any smartmail label (eg. ^cob_sm_invoice). go/how-dd-card-deletion",
+      "id": "WonderCardDelete",
+      "properties": {
+        "messageMappings": {
+          "additionalProperties": {
+            "$ref": "WonderMessageMapping"
+          },
+          "description": "Contains <{@code WonderCardType} enum value, value of /wonder/message_mapping/{vertical} attribute of deleted message> pairs.",
+          "type": "object"
+        },
+        "msgId": {
+          "description": "Message ID of the original deleted message",
+          "format": "uint64",
+          "type": "string"
+        }
+      },
+      "type": "object"
+    },
+    "WonderMessageMapping": {
+      "description": "Card mapping attached to original message as an attribute stored at /wonder/message_mapping/{vertical} Next ID: 2",
+      "id": "WonderMessageMapping",
+      "properties": {
+        "wonderCardMessageId": {
+          "description": "List of wonder card (client-generated) message IDs generated based on the original message.",
+          "items": {
+            "type": "string"
+          },
+          "type": "array"
         }
       },
       "type": "object"

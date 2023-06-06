@@ -103,7 +103,7 @@ h1, h2, h3 {
 <p class="firstline">Deletes selected per-instance configurations for the managed instance group.</p>
 <p class="toc_element">
   <code><a href="#get">get(project, zone, instanceGroupManager, x__xgafv=None)</a></code></p>
-<p class="firstline">Returns all of the details about the specified managed instance group. Gets a list of available managed instance groups by making a list() request.</p>
+<p class="firstline">Returns all of the details about the specified managed instance group.</p>
 <p class="toc_element">
   <code><a href="#insert">insert(project, zone, body=None, requestId=None, x__xgafv=None)</a></code></p>
 <p class="firstline">Creates a managed instance group using the information that you specify in the request. After the group is created, instances in the group are created using the specified instance template. This operation is marked as DONE when the group is created even if the instances in the group have not yet been created. You must separately verify the status of the individual instances with the listmanagedinstances method. A managed instance group can have up to 1000 VM instances per group. Please contact Cloud Support if you need an increase in this limit.</p>
@@ -286,7 +286,7 @@ Returns:
           &quot;autoHealingPolicies&quot;: [ # The autohealing policy for this managed instance group. You can specify only one value.
             {
               &quot;healthCheck&quot;: &quot;A String&quot;, # The URL for the health check that signals autohealing.
-              &quot;initialDelaySec&quot;: 42, # The number of seconds that the managed instance group waits before it applies autohealing policies to new instances or recently recreated instances. This initial delay allows instances to initialize and run their startup scripts before the instance group determines that they are UNHEALTHY. This prevents the managed instance group from recreating its instances prematurely. This value must be from range [0, 3600].
+              &quot;initialDelaySec&quot;: 42, # The initial delay is the number of seconds that a new VM takes to initialize and run its startup script. During a VM&#x27;s initial delay period, the MIG ignores unsuccessful health checks because the VM might be in the startup process. This prevents the MIG from prematurely recreating a VM. If the health check receives a healthy response during the initial delay, it indicates that the startup process is complete and the VM is ready. The value of initial delay must be between 0 and 3600 seconds. The default value is 0.
             },
           ],
           &quot;baseInstanceName&quot;: &quot;A String&quot;, # The base instance name to use for instances in this group. The value must be 1-58 characters long. Instances are named by appending a hyphen and a random four-character string to the base instance name. The base instance name must comply with RFC1035.
@@ -770,7 +770,7 @@ Args:
     The object takes the form of:
 
 {
-  &quot;instances&quot;: [ # The URLs of one or more instances to delete. This can be a full URL or a partial URL, such as zones/[ZONE]/instances/[INSTANCE_NAME].
+  &quot;instances&quot;: [ # The URLs of one or more instances to delete. This can be a full URL or a partial URL, such as zones/[ZONE]/instances/[INSTANCE_NAME]. Queued instances do not have URL and can be deleted only by name. One cannot specify both URLs and names in a single request.
     &quot;A String&quot;,
   ],
   &quot;skipInstancesOnValidationError&quot;: True or False, # Specifies whether the request should proceed despite the inclusion of instances that are not members of the group or that are already in the process of being deleted or abandoned. If this field is set to `false` and such an instance is specified in the request, the operation fails. The operation always fails if the request contains a malformed instance URL or a reference to an instance that exists in a zone or region other than the group&#x27;s zone or region.
@@ -968,7 +968,7 @@ Returns:
 
 <div class="method">
     <code class="details" id="get">get(project, zone, instanceGroupManager, x__xgafv=None)</code>
-  <pre>Returns all of the details about the specified managed instance group. Gets a list of available managed instance groups by making a list() request.
+  <pre>Returns all of the details about the specified managed instance group.
 
 Args:
   project: string, Project ID for this request. (required)
@@ -986,7 +986,7 @@ Returns:
   &quot;autoHealingPolicies&quot;: [ # The autohealing policy for this managed instance group. You can specify only one value.
     {
       &quot;healthCheck&quot;: &quot;A String&quot;, # The URL for the health check that signals autohealing.
-      &quot;initialDelaySec&quot;: 42, # The number of seconds that the managed instance group waits before it applies autohealing policies to new instances or recently recreated instances. This initial delay allows instances to initialize and run their startup scripts before the instance group determines that they are UNHEALTHY. This prevents the managed instance group from recreating its instances prematurely. This value must be from range [0, 3600].
+      &quot;initialDelaySec&quot;: 42, # The initial delay is the number of seconds that a new VM takes to initialize and run its startup script. During a VM&#x27;s initial delay period, the MIG ignores unsuccessful health checks because the VM might be in the startup process. This prevents the MIG from prematurely recreating a VM. If the health check receives a healthy response during the initial delay, it indicates that the startup process is complete and the VM is ready. The value of initial delay must be between 0 and 3600 seconds. The default value is 0.
     },
   ],
   &quot;baseInstanceName&quot;: &quot;A String&quot;, # The base instance name to use for instances in this group. The value must be 1-58 characters long. Instances are named by appending a hyphen and a random four-character string to the base instance name. The base instance name must comply with RFC1035.
@@ -1102,7 +1102,7 @@ Args:
   &quot;autoHealingPolicies&quot;: [ # The autohealing policy for this managed instance group. You can specify only one value.
     {
       &quot;healthCheck&quot;: &quot;A String&quot;, # The URL for the health check that signals autohealing.
-      &quot;initialDelaySec&quot;: 42, # The number of seconds that the managed instance group waits before it applies autohealing policies to new instances or recently recreated instances. This initial delay allows instances to initialize and run their startup scripts before the instance group determines that they are UNHEALTHY. This prevents the managed instance group from recreating its instances prematurely. This value must be from range [0, 3600].
+      &quot;initialDelaySec&quot;: 42, # The initial delay is the number of seconds that a new VM takes to initialize and run its startup script. During a VM&#x27;s initial delay period, the MIG ignores unsuccessful health checks because the VM might be in the startup process. This prevents the MIG from prematurely recreating a VM. If the health check receives a healthy response during the initial delay, it indicates that the startup process is complete and the VM is ready. The value of initial delay must be between 0 and 3600 seconds. The default value is 0.
     },
   ],
   &quot;baseInstanceName&quot;: &quot;A String&quot;, # The base instance name to use for instances in this group. The value must be 1-58 characters long. Instances are named by appending a hyphen and a random four-character string to the base instance name. The base instance name must comply with RFC1035.
@@ -1317,7 +1317,7 @@ Returns:
       &quot;autoHealingPolicies&quot;: [ # The autohealing policy for this managed instance group. You can specify only one value.
         {
           &quot;healthCheck&quot;: &quot;A String&quot;, # The URL for the health check that signals autohealing.
-          &quot;initialDelaySec&quot;: 42, # The number of seconds that the managed instance group waits before it applies autohealing policies to new instances or recently recreated instances. This initial delay allows instances to initialize and run their startup scripts before the instance group determines that they are UNHEALTHY. This prevents the managed instance group from recreating its instances prematurely. This value must be from range [0, 3600].
+          &quot;initialDelaySec&quot;: 42, # The initial delay is the number of seconds that a new VM takes to initialize and run its startup script. During a VM&#x27;s initial delay period, the MIG ignores unsuccessful health checks because the VM might be in the startup process. This prevents the MIG from prematurely recreating a VM. If the health check receives a healthy response during the initial delay, it indicates that the startup process is complete and the VM is ready. The value of initial delay must be between 0 and 3600 seconds. The default value is 0.
         },
       ],
       &quot;baseInstanceName&quot;: &quot;A String&quot;, # The base instance name to use for instances in this group. The value must be 1-58 characters long. Instances are named by appending a hyphen and a random four-character string to the base instance name. The base instance name must comply with RFC1035.
@@ -1713,7 +1713,7 @@ Args:
   &quot;autoHealingPolicies&quot;: [ # The autohealing policy for this managed instance group. You can specify only one value.
     {
       &quot;healthCheck&quot;: &quot;A String&quot;, # The URL for the health check that signals autohealing.
-      &quot;initialDelaySec&quot;: 42, # The number of seconds that the managed instance group waits before it applies autohealing policies to new instances or recently recreated instances. This initial delay allows instances to initialize and run their startup scripts before the instance group determines that they are UNHEALTHY. This prevents the managed instance group from recreating its instances prematurely. This value must be from range [0, 3600].
+      &quot;initialDelaySec&quot;: 42, # The initial delay is the number of seconds that a new VM takes to initialize and run its startup script. During a VM&#x27;s initial delay period, the MIG ignores unsuccessful health checks because the VM might be in the startup process. This prevents the MIG from prematurely recreating a VM. If the health check receives a healthy response during the initial delay, it indicates that the startup process is complete and the VM is ready. The value of initial delay must be between 0 and 3600 seconds. The default value is 0.
     },
   ],
   &quot;baseInstanceName&quot;: &quot;A String&quot;, # The base instance name to use for instances in this group. The value must be 1-58 characters long. Instances are named by appending a hyphen and a random four-character string to the base instance name. The base instance name must comply with RFC1035.

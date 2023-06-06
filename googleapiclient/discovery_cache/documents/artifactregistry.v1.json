@@ -200,6 +200,32 @@
                 "https://www.googleapis.com/auth/cloud-platform.read-only"
               ]
             },
+            "getVpcscConfig": {
+              "description": "Retrieves the VPCSC Config for the Project.",
+              "flatPath": "v1/projects/{projectsId}/locations/{locationsId}/vpcscConfig",
+              "httpMethod": "GET",
+              "id": "artifactregistry.projects.locations.getVpcscConfig",
+              "parameterOrder": [
+                "name"
+              ],
+              "parameters": {
+                "name": {
+                  "description": "Required. The name of the VPCSCConfig resource.",
+                  "location": "path",
+                  "pattern": "^projects/[^/]+/locations/[^/]+/vpcscConfig$",
+                  "required": true,
+                  "type": "string"
+                }
+              },
+              "path": "v1/{+name}",
+              "response": {
+                "$ref": "VPCSCConfig"
+              },
+              "scopes": [
+                "https://www.googleapis.com/auth/cloud-platform",
+                "https://www.googleapis.com/auth/cloud-platform.read-only"
+              ]
+            },
             "list": {
               "description": "Lists information about the supported locations for this service.",
               "flatPath": "v1/projects/{projectsId}/locations",
@@ -240,6 +266,40 @@
               "scopes": [
                 "https://www.googleapis.com/auth/cloud-platform",
                 "https://www.googleapis.com/auth/cloud-platform.read-only"
+              ]
+            },
+            "updateVpcscConfig": {
+              "description": "Updates the VPCSC Config for the Project.",
+              "flatPath": "v1/projects/{projectsId}/locations/{locationsId}/vpcscConfig",
+              "httpMethod": "PATCH",
+              "id": "artifactregistry.projects.locations.updateVpcscConfig",
+              "parameterOrder": [
+                "name"
+              ],
+              "parameters": {
+                "name": {
+                  "description": "The name of the project's VPC SC Config. Always of the form: projects/{projectID}/locations/{location}/vpcscConfig In update request: never set In response: always set",
+                  "location": "path",
+                  "pattern": "^projects/[^/]+/locations/[^/]+/vpcscConfig$",
+                  "required": true,
+                  "type": "string"
+                },
+                "updateMask": {
+                  "description": "Field mask to support partial updates.",
+                  "format": "google-fieldmask",
+                  "location": "query",
+                  "type": "string"
+                }
+              },
+              "path": "v1/{+name}",
+              "request": {
+                "$ref": "VPCSCConfig"
+              },
+              "response": {
+                "$ref": "VPCSCConfig"
+              },
+              "scopes": [
+                "https://www.googleapis.com/auth/cloud-platform"
               ]
             }
           },
@@ -678,7 +738,7 @@
                       ],
                       "parameters": {
                         "name": {
-                          "description": "The name of the file to retrieve.",
+                          "description": "Required. The name of the file to retrieve.",
                           "location": "path",
                           "pattern": "^projects/[^/]+/locations/[^/]+/repositories/[^/]+/files/.*$",
                           "required": true,
@@ -725,7 +785,7 @@
                           "type": "string"
                         },
                         "parent": {
-                          "description": "The name of the repository whose files will be listed. For example: \"projects/p1/locations/us-central1/repositories/repo1",
+                          "description": "Required. The name of the repository whose files will be listed. For example: \"projects/p1/locations/us-central1/repositories/repo1",
                           "location": "path",
                           "pattern": "^projects/[^/]+/locations/[^/]+/repositories/[^/]+$",
                           "required": true,
@@ -740,6 +800,78 @@
                         "https://www.googleapis.com/auth/cloud-platform",
                         "https://www.googleapis.com/auth/cloud-platform.read-only"
                       ]
+                    }
+                  }
+                },
+                "googetArtifacts": {
+                  "methods": {
+                    "import": {
+                      "description": "Imports GooGet artifacts. The returned Operation will complete once the resources are imported. Package, Version, and File resources are created based on the imported artifacts. Imported artifacts that conflict with existing resources are ignored.",
+                      "flatPath": "v1/projects/{projectsId}/locations/{locationsId}/repositories/{repositoriesId}/googetArtifacts:import",
+                      "httpMethod": "POST",
+                      "id": "artifactregistry.projects.locations.repositories.googetArtifacts.import",
+                      "parameterOrder": [
+                        "parent"
+                      ],
+                      "parameters": {
+                        "parent": {
+                          "description": "The name of the parent resource where the artifacts will be imported.",
+                          "location": "path",
+                          "pattern": "^projects/[^/]+/locations/[^/]+/repositories/[^/]+$",
+                          "required": true,
+                          "type": "string"
+                        }
+                      },
+                      "path": "v1/{+parent}/googetArtifacts:import",
+                      "request": {
+                        "$ref": "ImportGoogetArtifactsRequest"
+                      },
+                      "response": {
+                        "$ref": "Operation"
+                      },
+                      "scopes": [
+                        "https://www.googleapis.com/auth/cloud-platform"
+                      ]
+                    },
+                    "upload": {
+                      "description": "Directly uploads a GooGet artifact. The returned Operation will complete once the resources are uploaded. Package, Version, and File resources are created based on the imported artifact. Imported artifacts that conflict with existing resources are ignored.",
+                      "flatPath": "v1/projects/{projectsId}/locations/{locationsId}/repositories/{repositoriesId}/googetArtifacts:create",
+                      "httpMethod": "POST",
+                      "id": "artifactregistry.projects.locations.repositories.googetArtifacts.upload",
+                      "mediaUpload": {
+                        "accept": [
+                          "*/*"
+                        ],
+                        "protocols": {
+                          "simple": {
+                            "multipart": true,
+                            "path": "/upload/v1/{+parent}/googetArtifacts:create"
+                          }
+                        }
+                      },
+                      "parameterOrder": [
+                        "parent"
+                      ],
+                      "parameters": {
+                        "parent": {
+                          "description": "The name of the parent resource where the artifacts will be uploaded.",
+                          "location": "path",
+                          "pattern": "^projects/[^/]+/locations/[^/]+/repositories/[^/]+$",
+                          "required": true,
+                          "type": "string"
+                        }
+                      },
+                      "path": "v1/{+parent}/googetArtifacts:create",
+                      "request": {
+                        "$ref": "UploadGoogetArtifactRequest"
+                      },
+                      "response": {
+                        "$ref": "UploadGoogetArtifactMediaResponse"
+                      },
+                      "scopes": [
+                        "https://www.googleapis.com/auth/cloud-platform"
+                      ],
+                      "supportsMediaUpload": true
                     }
                   }
                 },
@@ -1125,7 +1257,7 @@
                               "type": "string"
                             },
                             "parent": {
-                              "description": "The name of the parent resource whose tags will be listed.",
+                              "description": "The name of the parent package whose tags will be listed. Example: \"projects/p1/locations/us-central1/repositories/repo1/packages/pkg1",
                               "location": "path",
                               "pattern": "^projects/[^/]+/locations/[^/]+/repositories/[^/]+/packages/[^/]+$",
                               "required": true,
@@ -1457,7 +1589,7 @@
       }
     }
   },
-  "revision": "20230123",
+  "revision": "20230529",
   "rootUrl": "https://artifactregistry.googleapis.com/",
   "schemas": {
     "AptArtifact": {
@@ -1531,7 +1663,7 @@
           "description": "The condition that is associated with this binding. If the condition evaluates to `true`, then this binding applies to the current request. If the condition evaluates to `false`, then this binding does not apply to the current request. However, a different role binding might grant the same role to one or more of the principals in this binding. To learn which resources support conditions in their IAM policies, see the [IAM documentation](https://cloud.google.com/iam/help/conditions/resource-policies)."
         },
         "members": {
-          "description": "Specifies the principals requesting access for a Google Cloud resource. `members` can have the following values: * `allUsers`: A special identifier that represents anyone who is on the internet; with or without a Google account. * `allAuthenticatedUsers`: A special identifier that represents anyone who is authenticated with a Google account or a service account. Does not include identities that come from external identity providers (IdPs) through identity federation. * `user:{emailid}`: An email address that represents a specific Google account. For example, `alice@example.com` . * `serviceAccount:{emailid}`: An email address that represents a Google service account. For example, `my-other-app@appspot.gserviceaccount.com`. * `serviceAccount:{projectid}.svc.id.goog[{namespace}/{kubernetes-sa}]`: An identifier for a [Kubernetes service account](https://cloud.google.com/kubernetes-engine/docs/how-to/kubernetes-service-accounts). For example, `my-project.svc.id.goog[my-namespace/my-kubernetes-sa]`. * `group:{emailid}`: An email address that represents a Google group. For example, `admins@example.com`. * `deleted:user:{emailid}?uid={uniqueid}`: An email address (plus unique identifier) representing a user that has been recently deleted. For example, `alice@example.com?uid=123456789012345678901`. If the user is recovered, this value reverts to `user:{emailid}` and the recovered user retains the role in the binding. * `deleted:serviceAccount:{emailid}?uid={uniqueid}`: An email address (plus unique identifier) representing a service account that has been recently deleted. For example, `my-other-app@appspot.gserviceaccount.com?uid=123456789012345678901`. If the service account is undeleted, this value reverts to `serviceAccount:{emailid}` and the undeleted service account retains the role in the binding. * `deleted:group:{emailid}?uid={uniqueid}`: An email address (plus unique identifier) representing a Google group that has been recently deleted. For example, `admins@example.com?uid=123456789012345678901`. If the group is recovered, this value reverts to `group:{emailid}` and the recovered group retains the role in the binding. * `domain:{domain}`: The G Suite domain (primary) that represents all the users of that domain. For example, `google.com` or `example.com`. ",
+          "description": "Specifies the principals requesting access for a Google Cloud resource. `members` can have the following values: * `allUsers`: A special identifier that represents anyone who is on the internet; with or without a Google account. * `allAuthenticatedUsers`: A special identifier that represents anyone who is authenticated with a Google account or a service account. Does not include identities that come from external identity providers (IdPs) through identity federation. * `user:{emailid}`: An email address that represents a specific Google account. For example, `alice@example.com` . * `serviceAccount:{emailid}`: An email address that represents a Google service account. For example, `my-other-app@appspot.gserviceaccount.com`. * `serviceAccount:{projectid}.svc.id.goog[{namespace}/{kubernetes-sa}]`: An identifier for a [Kubernetes service account](https://cloud.google.com/kubernetes-engine/docs/how-to/kubernetes-service-accounts). For example, `my-project.svc.id.goog[my-namespace/my-kubernetes-sa]`. * `group:{emailid}`: An email address that represents a Google group. For example, `admins@example.com`. * `domain:{domain}`: The G Suite domain (primary) that represents all the users of that domain. For example, `google.com` or `example.com`. * `deleted:user:{emailid}?uid={uniqueid}`: An email address (plus unique identifier) representing a user that has been recently deleted. For example, `alice@example.com?uid=123456789012345678901`. If the user is recovered, this value reverts to `user:{emailid}` and the recovered user retains the role in the binding. * `deleted:serviceAccount:{emailid}?uid={uniqueid}`: An email address (plus unique identifier) representing a service account that has been recently deleted. For example, `my-other-app@appspot.gserviceaccount.com?uid=123456789012345678901`. If the service account is undeleted, this value reverts to `serviceAccount:{emailid}` and the undeleted service account retains the role in the binding. * `deleted:group:{emailid}?uid={uniqueid}`: An email address (plus unique identifier) representing a Google group that has been recently deleted. For example, `admins@example.com?uid=123456789012345678901`. If the group is recovered, this value reverts to `group:{emailid}` and the recovered group retains the role in the binding.",
           "items": {
             "type": "string"
           },
@@ -1591,6 +1723,36 @@
       },
       "type": "object"
     },
+    "DockerRepository": {
+      "description": "Configuration for a Docker remote repository.",
+      "id": "DockerRepository",
+      "properties": {
+        "publicRepository": {
+          "description": "One of the publicly available Docker repositories supported by Artifact Registry.",
+          "enum": [
+            "PUBLIC_REPOSITORY_UNSPECIFIED",
+            "DOCKER_HUB"
+          ],
+          "enumDescriptions": [
+            "Unspecified repository.",
+            "Docker Hub."
+          ],
+          "type": "string"
+        }
+      },
+      "type": "object"
+    },
+    "DockerRepositoryConfig": {
+      "description": "DockerRepositoryConfig is docker related repository details. Provides additional configuration details for repositories of the docker format type.",
+      "id": "DockerRepositoryConfig",
+      "properties": {
+        "immutableTags": {
+          "description": "The repository which enabled this flag prevents all tags from being modified, moved or deleted. This does not prevent tags from being created.",
+          "type": "boolean"
+        }
+      },
+      "type": "object"
+    },
     "Empty": {
       "description": "A generic empty message that you can re-use to avoid defining duplicated empty messages in your APIs. A typical example is to use it as the request or the response type of an API method. For instance: service Foo { rpc Bar(google.protobuf.Empty) returns (google.protobuf.Empty); }",
       "id": "Empty",
@@ -1620,13 +1782,42 @@
       },
       "type": "object"
     },
+    "GoogetArtifact": {
+      "description": "A detailed representation of a GooGet artifact.",
+      "id": "GoogetArtifact",
+      "properties": {
+        "architecture": {
+          "description": "Output only. Operating system architecture of the artifact.",
+          "readOnly": true,
+          "type": "string"
+        },
+        "name": {
+          "description": "Output only. The Artifact Registry resource name of the artifact.",
+          "readOnly": true,
+          "type": "string"
+        },
+        "packageName": {
+          "description": "Output only. The GooGet package name of the artifact.",
+          "readOnly": true,
+          "type": "string"
+        }
+      },
+      "type": "object"
+    },
     "GoogleDevtoolsArtifactregistryV1File": {
       "description": "Files store content that is potentially associated with Packages or Versions.",
       "id": "GoogleDevtoolsArtifactregistryV1File",
       "properties": {
         "createTime": {
-          "description": "The time when the File was created.",
+          "description": "Output only. The time when the File was created.",
           "format": "google-datetime",
+          "readOnly": true,
+          "type": "string"
+        },
+        "fetchTime": {
+          "description": "Output only. The time when the last attempt to refresh the file's data was made. Only set when the repository is remote.",
+          "format": "google-datetime",
+          "readOnly": true,
           "type": "string"
         },
         "hashes": {
@@ -1650,8 +1841,9 @@
           "type": "string"
         },
         "updateTime": {
-          "description": "The time when the File was last updated.",
+          "description": "Output only. The time when the File was last updated.",
           "format": "google-datetime",
+          "readOnly": true,
           "type": "string"
         }
       },
@@ -1754,6 +1946,77 @@
       },
       "type": "object"
     },
+    "ImportGoogetArtifactsErrorInfo": {
+      "description": "Error information explaining why a package was not imported.",
+      "id": "ImportGoogetArtifactsErrorInfo",
+      "properties": {
+        "error": {
+          "$ref": "Status",
+          "description": "The detailed error status."
+        },
+        "gcsSource": {
+          "$ref": "ImportGoogetArtifactsGcsSource",
+          "description": "Google Cloud Storage location requested."
+        }
+      },
+      "type": "object"
+    },
+    "ImportGoogetArtifactsGcsSource": {
+      "description": "Google Cloud Storage location where the artifacts currently reside.",
+      "id": "ImportGoogetArtifactsGcsSource",
+      "properties": {
+        "uris": {
+          "description": "Cloud Storage paths URI (e.g., `gs://my_bucket/my_object`).",
+          "items": {
+            "type": "string"
+          },
+          "type": "array"
+        },
+        "useWildcards": {
+          "description": "Supports URI wildcards for matching multiple objects from a single URI.",
+          "type": "boolean"
+        }
+      },
+      "type": "object"
+    },
+    "ImportGoogetArtifactsMetadata": {
+      "description": "The operation metadata for importing artifacts.",
+      "id": "ImportGoogetArtifactsMetadata",
+      "properties": {},
+      "type": "object"
+    },
+    "ImportGoogetArtifactsRequest": {
+      "description": "The request to import new googet artifacts.",
+      "id": "ImportGoogetArtifactsRequest",
+      "properties": {
+        "gcsSource": {
+          "$ref": "ImportGoogetArtifactsGcsSource",
+          "description": "Google Cloud Storage location where input content is located."
+        }
+      },
+      "type": "object"
+    },
+    "ImportGoogetArtifactsResponse": {
+      "description": "The response message from importing artifacts.",
+      "id": "ImportGoogetArtifactsResponse",
+      "properties": {
+        "errors": {
+          "description": "Detailed error info for packages that were not imported.",
+          "items": {
+            "$ref": "ImportGoogetArtifactsErrorInfo"
+          },
+          "type": "array"
+        },
+        "googetArtifacts": {
+          "description": "The GooGet artifacts updated.",
+          "items": {
+            "$ref": "GoogetArtifact"
+          },
+          "type": "array"
+        }
+      },
+      "type": "object"
+    },
     "ImportYumArtifactsErrorInfo": {
       "description": "Error information explaining why a package was not imported.",
       "id": "ImportYumArtifactsErrorInfo",
@@ -1826,7 +2089,7 @@
       "type": "object"
     },
     "KfpArtifact": {
-      "description": "A detailed representation of a GooGet artifact.",
+      "description": "A detailed representation of a KFP artifact.",
       "id": "KfpArtifact",
       "properties": {
         "name": {
@@ -2022,7 +2285,7 @@
       "type": "object"
     },
     "Location": {
-      "description": "A resource that represents Google Cloud Platform location.",
+      "description": "A resource that represents a Google Cloud location.",
       "id": "Location",
       "properties": {
         "displayName": {
@@ -2094,6 +2357,25 @@
       },
       "type": "object"
     },
+    "MavenRepository": {
+      "description": "Configuration for a Maven remote repository.",
+      "id": "MavenRepository",
+      "properties": {
+        "publicRepository": {
+          "description": "One of the publicly available Maven repositories supported by Artifact Registry.",
+          "enum": [
+            "PUBLIC_REPOSITORY_UNSPECIFIED",
+            "MAVEN_CENTRAL"
+          ],
+          "enumDescriptions": [
+            "Unspecified repository.",
+            "Maven Central."
+          ],
+          "type": "string"
+        }
+      },
+      "type": "object"
+    },
     "MavenRepositoryConfig": {
       "description": "MavenRepositoryConfig is maven related repository details. Provides additional configuration details for repositories of the maven format type.",
       "id": "MavenRepositoryConfig",
@@ -2157,6 +2439,25 @@
       },
       "type": "object"
     },
+    "NpmRepository": {
+      "description": "Configuration for a Npm remote repository.",
+      "id": "NpmRepository",
+      "properties": {
+        "publicRepository": {
+          "description": "One of the publicly available Npm repositories supported by Artifact Registry.",
+          "enum": [
+            "PUBLIC_REPOSITORY_UNSPECIFIED",
+            "NPMJS"
+          ],
+          "enumDescriptions": [
+            "Unspecified repository.",
+            "npmjs."
+          ],
+          "type": "string"
+        }
+      },
+      "type": "object"
+    },
     "Operation": {
       "description": "This resource represents a long-running operation that is the result of a network API call.",
       "id": "Operation",
@@ -2212,7 +2513,7 @@
           "type": "string"
         },
         "name": {
-          "description": "The name of the package, for example: \"projects/p1/locations/us-central1/repositories/repo1/packages/pkg1\". If the package ID part contains slashes, the slashes are escaped.",
+          "description": "The name of the package, for example: `projects/p1/locations/us-central1/repositories/repo1/packages/pkg1`. If the package ID part contains slashes, the slashes are escaped.",
           "type": "string"
         },
         "updateTime": {
@@ -2309,18 +2610,69 @@
       },
       "type": "object"
     },
+    "PythonRepository": {
+      "description": "Configuration for a Python remote repository.",
+      "id": "PythonRepository",
+      "properties": {
+        "publicRepository": {
+          "description": "One of the publicly available Python repositories supported by Artifact Registry.",
+          "enum": [
+            "PUBLIC_REPOSITORY_UNSPECIFIED",
+            "PYPI"
+          ],
+          "enumDescriptions": [
+            "Unspecified repository.",
+            "PyPI."
+          ],
+          "type": "string"
+        }
+      },
+      "type": "object"
+    },
+    "RemoteRepositoryConfig": {
+      "description": "Remote repository configuration.",
+      "id": "RemoteRepositoryConfig",
+      "properties": {
+        "description": {
+          "description": "The description of the remote source.",
+          "type": "string"
+        },
+        "dockerRepository": {
+          "$ref": "DockerRepository",
+          "description": "Specific settings for a Docker remote repository."
+        },
+        "mavenRepository": {
+          "$ref": "MavenRepository",
+          "description": "Specific settings for a Maven remote repository."
+        },
+        "npmRepository": {
+          "$ref": "NpmRepository",
+          "description": "Specific settings for an Npm remote repository."
+        },
+        "pythonRepository": {
+          "$ref": "PythonRepository",
+          "description": "Specific settings for a Python remote repository."
+        }
+      },
+      "type": "object"
+    },
     "Repository": {
       "description": "A Repository for storing artifacts with a specific format.",
       "id": "Repository",
       "properties": {
         "createTime": {
-          "description": "The time when the repository was created.",
+          "description": "Output only. The time when the repository was created.",
           "format": "google-datetime",
+          "readOnly": true,
           "type": "string"
         },
         "description": {
           "description": "The user-provided description of the repository.",
           "type": "string"
+        },
+        "dockerConfig": {
+          "$ref": "DockerRepositoryConfig",
+          "description": "Docker repository config contains repository level configuration for the repositories of docker type."
         },
         "format": {
           "description": "The format of packages that are stored in the repository.",
@@ -2331,6 +2683,7 @@
             "NPM",
             "APT",
             "YUM",
+            "GOOGET",
             "PYTHON",
             "KFP"
           ],
@@ -2341,6 +2694,7 @@
             "NPM package format.",
             "APT package format.",
             "YUM package format.",
+            "GooGet package format.",
             "Python package format.",
             "Kubeflow Pipelines package format."
           ],
@@ -2361,9 +2715,29 @@
           "$ref": "MavenRepositoryConfig",
           "description": "Maven repository config contains repository level configuration for the repositories of maven type."
         },
+        "mode": {
+          "description": "The mode of the repository.",
+          "enum": [
+            "MODE_UNSPECIFIED",
+            "STANDARD_REPOSITORY",
+            "VIRTUAL_REPOSITORY",
+            "REMOTE_REPOSITORY"
+          ],
+          "enumDescriptions": [
+            "Unspecified mode.",
+            "A standard repository storing artifacts.",
+            "A virtual repository to serve artifacts from one or more sources.",
+            "A remote repository to serve artifacts from a remote source."
+          ],
+          "type": "string"
+        },
         "name": {
           "description": "The name of the repository, for example: \"projects/p1/locations/us-central1/repositories/repo1\".",
           "type": "string"
+        },
+        "remoteRepositoryConfig": {
+          "$ref": "RemoteRepositoryConfig",
+          "description": "Configuration specific for a Remote Repository."
         },
         "satisfiesPzs": {
           "description": "Output only. If set, the repository satisfies physical zone separation.",
@@ -2377,9 +2751,14 @@
           "type": "string"
         },
         "updateTime": {
-          "description": "The time when the repository was last updated.",
+          "description": "Output only. The time when the repository was last updated.",
           "format": "google-datetime",
+          "readOnly": true,
           "type": "string"
+        },
+        "virtualRepositoryConfig": {
+          "$ref": "VirtualRepositoryConfig",
+          "description": "Configuration specific for a Virtual Repository."
         }
       },
       "type": "object"
@@ -2502,6 +2881,43 @@
       },
       "type": "object"
     },
+    "UploadGoogetArtifactMediaResponse": {
+      "description": "The response to upload an artifact.",
+      "id": "UploadGoogetArtifactMediaResponse",
+      "properties": {
+        "operation": {
+          "$ref": "Operation",
+          "description": "Operation to be returned to the user."
+        }
+      },
+      "type": "object"
+    },
+    "UploadGoogetArtifactMetadata": {
+      "description": "The operation metadata for uploading artifacts.",
+      "id": "UploadGoogetArtifactMetadata",
+      "properties": {},
+      "type": "object"
+    },
+    "UploadGoogetArtifactRequest": {
+      "description": "The request to upload an artifact.",
+      "id": "UploadGoogetArtifactRequest",
+      "properties": {},
+      "type": "object"
+    },
+    "UploadGoogetArtifactResponse": {
+      "description": "The response of the completed artifact upload operation. This response is contained in the Operation and available to users.",
+      "id": "UploadGoogetArtifactResponse",
+      "properties": {
+        "googetArtifacts": {
+          "description": "The GooGet artifacts updated.",
+          "items": {
+            "$ref": "GoogetArtifact"
+          },
+          "type": "array"
+        }
+      },
+      "type": "object"
+    },
     "UploadKfpArtifactMediaResponse": {
       "description": "The response to upload an artifact.",
       "id": "UploadKfpArtifactMediaResponse",
@@ -2574,6 +2990,51 @@
       },
       "type": "object"
     },
+    "UpstreamPolicy": {
+      "description": "Artifact policy configuration for the repository contents.",
+      "id": "UpstreamPolicy",
+      "properties": {
+        "id": {
+          "description": "The user-provided ID of the upstream policy.",
+          "type": "string"
+        },
+        "priority": {
+          "description": "Entries with a greater priority value take precedence in the pull order.",
+          "format": "int32",
+          "type": "integer"
+        },
+        "repository": {
+          "description": "A reference to the repository resource, for example: \"projects/p1/locations/us-central1/repositories/repo1\".",
+          "type": "string"
+        }
+      },
+      "type": "object"
+    },
+    "VPCSCConfig": {
+      "description": "The Artifact Registry VPC SC config that apply to a Project.",
+      "id": "VPCSCConfig",
+      "properties": {
+        "name": {
+          "description": "The name of the project's VPC SC Config. Always of the form: projects/{projectID}/locations/{location}/vpcscConfig In update request: never set In response: always set",
+          "type": "string"
+        },
+        "vpcscPolicy": {
+          "description": "The project per location VPC SC policy that defines the VPC SC behavior for the Remote Repository (Allow/Deny).",
+          "enum": [
+            "VPCSC_POLICY_UNSPECIFIED",
+            "DENY",
+            "ALLOW"
+          ],
+          "enumDescriptions": [
+            "VPCSC_POLICY_UNSPECIFIED - the VPS SC policy is not defined. When VPS SC policy is not defined - the Service will use the default behavior (VPCSC_DENY).",
+            "VPCSC_DENY - repository will block the requests to the Upstreams for the Remote Repositories if the resource is in the perimeter.",
+            "VPCSC_ALLOW - repository will allow the requests to the Upstreams for the Remote Repositories if the resource is in the perimeter."
+          ],
+          "type": "string"
+        }
+      },
+      "type": "object"
+    },
     "Version": {
       "description": "The body of a version resource. A version resource represents a collection of components, such as files and other data. This may correspond to a version in many package management schemes.",
       "id": "Version",
@@ -2611,6 +3072,20 @@
           "description": "The time when the version was last updated.",
           "format": "google-datetime",
           "type": "string"
+        }
+      },
+      "type": "object"
+    },
+    "VirtualRepositoryConfig": {
+      "description": "Virtual repository configuration.",
+      "id": "VirtualRepositoryConfig",
+      "properties": {
+        "upstreamPolicies": {
+          "description": "Policies that configure the upstream artifacts distributed by the Virtual Repository. Upstream policies cannot be set on a standard repository.",
+          "items": {
+            "$ref": "UpstreamPolicy"
+          },
+          "type": "array"
         }
       },
       "type": "object"

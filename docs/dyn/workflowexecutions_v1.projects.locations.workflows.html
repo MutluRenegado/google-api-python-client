@@ -144,13 +144,17 @@ Returns:
       ],
     },
   },
-  &quot;labels&quot;: { # Labels associated with this execution. Labels can contain at most 64 entries. Keys and values can be no longer than 63 characters and can only contain lowercase letters, numeric characters, underscores and dashes. Label keys must start with a letter. International characters are allowed.
+  &quot;labels&quot;: { # Labels associated with this execution. Labels can contain at most 64 entries. Keys and values can be no longer than 63 characters and can only contain lowercase letters, numeric characters, underscores, and dashes. Label keys must start with a letter. International characters are allowed. By default, labels are inherited from the workflow but are overridden by any labels associated with the execution.
     &quot;a_key&quot;: &quot;A String&quot;,
   },
   &quot;name&quot;: &quot;A String&quot;, # Output only. The resource name of the execution. Format: projects/{project}/locations/{location}/workflows/{workflow}/executions/{execution}
   &quot;result&quot;: &quot;A String&quot;, # Output only. Output of the execution represented as a JSON string. The value can only be present if the execution&#x27;s state is `SUCCEEDED`.
   &quot;startTime&quot;: &quot;A String&quot;, # Output only. Marks the beginning of execution.
   &quot;state&quot;: &quot;A String&quot;, # Output only. Current state of the execution.
+  &quot;stateError&quot;: { # Describes an error related to the current state of the Execution resource. # Output only. Error regarding the state of the Execution resource. For example, this field will have error details if the execution data is unavailable due to revoked KMS key permissions.
+    &quot;details&quot;: &quot;A String&quot;, # Provides specifics about the error.
+    &quot;type&quot;: &quot;A String&quot;, # The type of this state error.
+  },
   &quot;status&quot;: { # Represents the current status of this execution. # Output only. Status tracks the current steps and progress data of this execution.
     &quot;currentSteps&quot;: [ # A list of currently executing or last executed step names for the workflow execution currently running. If the workflow has succeeded or failed, this is the last attempted or executed step. Presently, if the current step is inside a subworkflow, the list only includes that step. In the future, the list will contain items for each step in the call stack, starting with the outermost step in the `main` subworkflow, and ending with the most deeply nested step.
       { # Represents a step of the workflow this execution is running.

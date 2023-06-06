@@ -177,6 +177,9 @@ Returns:
   },
   &quot;exportContext&quot;: { # Database instance export context. # The context for export operation, if applicable.
     &quot;bakExportOptions&quot;: { # Options for exporting BAK files (SQL Server-only)
+      &quot;bakType&quot;: &quot;A String&quot;, # Type of this bak file will be export, FULL or DIFF, SQL Server only
+      &quot;copyOnly&quot;: True or False, # Whether or not the export will be exeucted with COPY_ONLY, SQL Server only deprecated as the behavior should default to copy_only = true use differential_base instead
+      &quot;differentialBase&quot;: True or False, # Whether or not the backup can be use as differential base only non copy only backup can be served as differential base
       &quot;stripeCount&quot;: 42, # Option for specifying how many stripes to use for the export. If blank, and the value of the striped field is true, the number of stripes is automatically chosen.
       &quot;striped&quot;: True or False, # Whether or not the export should be striped.
     },
@@ -206,11 +209,14 @@ Returns:
   },
   &quot;importContext&quot;: { # Database instance import context. # The context for import operation, if applicable.
     &quot;bakImportOptions&quot;: { # Import parameters specific to SQL Server .BAK files
+      &quot;bakType&quot;: &quot;A String&quot;, # Type of the bak content, FULL or DIFF.
       &quot;encryptionOptions&quot;: {
         &quot;certPath&quot;: &quot;A String&quot;, # Path to the Certificate (.cer) in Cloud Storage, in the form `gs://bucketName/fileName`. The instance must have write permissions to the bucket and read access to the file.
         &quot;pvkPassword&quot;: &quot;A String&quot;, # Password that encrypts the private key
         &quot;pvkPath&quot;: &quot;A String&quot;, # Path to the Certificate Private Key (.pvk) in Cloud Storage, in the form `gs://bucketName/fileName`. The instance must have write permissions to the bucket and read access to the file.
       },
+      &quot;noRecovery&quot;: True or False, # Whether or not the backup importing will restore database with NORECOVERY option Applies only to Cloud SQL for SQL Server.
+      &quot;recoveryOnly&quot;: True or False, # Whether or not the backup importing request will just bring database online without downloading Bak content only one of &quot;no_recovery&quot; and &quot;recovery_only&quot; can be true otherwise error will return. Applies only to Cloud SQL for SQL Server.
       &quot;striped&quot;: True or False, # Whether or not the backup set being restored is striped. Applies only to Cloud SQL for SQL Server.
     },
     &quot;csvImportOptions&quot;: { # Options for importing data as CSV.
@@ -297,6 +303,9 @@ Returns:
   },
   &quot;exportContext&quot;: { # Database instance export context. # The context for export operation, if applicable.
     &quot;bakExportOptions&quot;: { # Options for exporting BAK files (SQL Server-only)
+      &quot;bakType&quot;: &quot;A String&quot;, # Type of this bak file will be export, FULL or DIFF, SQL Server only
+      &quot;copyOnly&quot;: True or False, # Whether or not the export will be exeucted with COPY_ONLY, SQL Server only deprecated as the behavior should default to copy_only = true use differential_base instead
+      &quot;differentialBase&quot;: True or False, # Whether or not the backup can be use as differential base only non copy only backup can be served as differential base
       &quot;stripeCount&quot;: 42, # Option for specifying how many stripes to use for the export. If blank, and the value of the striped field is true, the number of stripes is automatically chosen.
       &quot;striped&quot;: True or False, # Whether or not the export should be striped.
     },
@@ -326,11 +335,14 @@ Returns:
   },
   &quot;importContext&quot;: { # Database instance import context. # The context for import operation, if applicable.
     &quot;bakImportOptions&quot;: { # Import parameters specific to SQL Server .BAK files
+      &quot;bakType&quot;: &quot;A String&quot;, # Type of the bak content, FULL or DIFF.
       &quot;encryptionOptions&quot;: {
         &quot;certPath&quot;: &quot;A String&quot;, # Path to the Certificate (.cer) in Cloud Storage, in the form `gs://bucketName/fileName`. The instance must have write permissions to the bucket and read access to the file.
         &quot;pvkPassword&quot;: &quot;A String&quot;, # Password that encrypts the private key
         &quot;pvkPath&quot;: &quot;A String&quot;, # Path to the Certificate Private Key (.pvk) in Cloud Storage, in the form `gs://bucketName/fileName`. The instance must have write permissions to the bucket and read access to the file.
       },
+      &quot;noRecovery&quot;: True or False, # Whether or not the backup importing will restore database with NORECOVERY option Applies only to Cloud SQL for SQL Server.
+      &quot;recoveryOnly&quot;: True or False, # Whether or not the backup importing request will just bring database online without downloading Bak content only one of &quot;no_recovery&quot; and &quot;recovery_only&quot; can be true otherwise error will return. Applies only to Cloud SQL for SQL Server.
       &quot;striped&quot;: True or False, # Whether or not the backup set being restored is striped. Applies only to Cloud SQL for SQL Server.
     },
     &quot;csvImportOptions&quot;: { # Options for importing data as CSV.
@@ -401,6 +413,9 @@ Returns:
   },
   &quot;exportContext&quot;: { # Database instance export context. # The context for export operation, if applicable.
     &quot;bakExportOptions&quot;: { # Options for exporting BAK files (SQL Server-only)
+      &quot;bakType&quot;: &quot;A String&quot;, # Type of this bak file will be export, FULL or DIFF, SQL Server only
+      &quot;copyOnly&quot;: True or False, # Whether or not the export will be exeucted with COPY_ONLY, SQL Server only deprecated as the behavior should default to copy_only = true use differential_base instead
+      &quot;differentialBase&quot;: True or False, # Whether or not the backup can be use as differential base only non copy only backup can be served as differential base
       &quot;stripeCount&quot;: 42, # Option for specifying how many stripes to use for the export. If blank, and the value of the striped field is true, the number of stripes is automatically chosen.
       &quot;striped&quot;: True or False, # Whether or not the export should be striped.
     },
@@ -430,11 +445,14 @@ Returns:
   },
   &quot;importContext&quot;: { # Database instance import context. # The context for import operation, if applicable.
     &quot;bakImportOptions&quot;: { # Import parameters specific to SQL Server .BAK files
+      &quot;bakType&quot;: &quot;A String&quot;, # Type of the bak content, FULL or DIFF.
       &quot;encryptionOptions&quot;: {
         &quot;certPath&quot;: &quot;A String&quot;, # Path to the Certificate (.cer) in Cloud Storage, in the form `gs://bucketName/fileName`. The instance must have write permissions to the bucket and read access to the file.
         &quot;pvkPassword&quot;: &quot;A String&quot;, # Password that encrypts the private key
         &quot;pvkPath&quot;: &quot;A String&quot;, # Path to the Certificate Private Key (.pvk) in Cloud Storage, in the form `gs://bucketName/fileName`. The instance must have write permissions to the bucket and read access to the file.
       },
+      &quot;noRecovery&quot;: True or False, # Whether or not the backup importing will restore database with NORECOVERY option Applies only to Cloud SQL for SQL Server.
+      &quot;recoveryOnly&quot;: True or False, # Whether or not the backup importing request will just bring database online without downloading Bak content only one of &quot;no_recovery&quot; and &quot;recovery_only&quot; can be true otherwise error will return. Applies only to Cloud SQL for SQL Server.
       &quot;striped&quot;: True or False, # Whether or not the backup set being restored is striped. Applies only to Cloud SQL for SQL Server.
     },
     &quot;csvImportOptions&quot;: { # Options for importing data as CSV.
@@ -523,6 +541,9 @@ Returns:
   },
   &quot;exportContext&quot;: { # Database instance export context. # The context for export operation, if applicable.
     &quot;bakExportOptions&quot;: { # Options for exporting BAK files (SQL Server-only)
+      &quot;bakType&quot;: &quot;A String&quot;, # Type of this bak file will be export, FULL or DIFF, SQL Server only
+      &quot;copyOnly&quot;: True or False, # Whether or not the export will be exeucted with COPY_ONLY, SQL Server only deprecated as the behavior should default to copy_only = true use differential_base instead
+      &quot;differentialBase&quot;: True or False, # Whether or not the backup can be use as differential base only non copy only backup can be served as differential base
       &quot;stripeCount&quot;: 42, # Option for specifying how many stripes to use for the export. If blank, and the value of the striped field is true, the number of stripes is automatically chosen.
       &quot;striped&quot;: True or False, # Whether or not the export should be striped.
     },
@@ -552,11 +573,14 @@ Returns:
   },
   &quot;importContext&quot;: { # Database instance import context. # The context for import operation, if applicable.
     &quot;bakImportOptions&quot;: { # Import parameters specific to SQL Server .BAK files
+      &quot;bakType&quot;: &quot;A String&quot;, # Type of the bak content, FULL or DIFF.
       &quot;encryptionOptions&quot;: {
         &quot;certPath&quot;: &quot;A String&quot;, # Path to the Certificate (.cer) in Cloud Storage, in the form `gs://bucketName/fileName`. The instance must have write permissions to the bucket and read access to the file.
         &quot;pvkPassword&quot;: &quot;A String&quot;, # Password that encrypts the private key
         &quot;pvkPath&quot;: &quot;A String&quot;, # Path to the Certificate Private Key (.pvk) in Cloud Storage, in the form `gs://bucketName/fileName`. The instance must have write permissions to the bucket and read access to the file.
       },
+      &quot;noRecovery&quot;: True or False, # Whether or not the backup importing will restore database with NORECOVERY option Applies only to Cloud SQL for SQL Server.
+      &quot;recoveryOnly&quot;: True or False, # Whether or not the backup importing request will just bring database online without downloading Bak content only one of &quot;no_recovery&quot; and &quot;recovery_only&quot; can be true otherwise error will return. Applies only to Cloud SQL for SQL Server.
       &quot;striped&quot;: True or False, # Whether or not the backup set being restored is striped. Applies only to Cloud SQL for SQL Server.
     },
     &quot;csvImportOptions&quot;: { # Options for importing data as CSV.
@@ -602,6 +626,9 @@ Args:
 { # Database instance export request.
   &quot;exportContext&quot;: { # Database instance export context. # Contains details about the export operation.
     &quot;bakExportOptions&quot;: { # Options for exporting BAK files (SQL Server-only)
+      &quot;bakType&quot;: &quot;A String&quot;, # Type of this bak file will be export, FULL or DIFF, SQL Server only
+      &quot;copyOnly&quot;: True or False, # Whether or not the export will be exeucted with COPY_ONLY, SQL Server only deprecated as the behavior should default to copy_only = true use differential_base instead
+      &quot;differentialBase&quot;: True or False, # Whether or not the backup can be use as differential base only non copy only backup can be served as differential base
       &quot;stripeCount&quot;: 42, # Option for specifying how many stripes to use for the export. If blank, and the value of the striped field is true, the number of stripes is automatically chosen.
       &quot;striped&quot;: True or False, # Whether or not the export should be striped.
     },
@@ -657,6 +684,9 @@ Returns:
   },
   &quot;exportContext&quot;: { # Database instance export context. # The context for export operation, if applicable.
     &quot;bakExportOptions&quot;: { # Options for exporting BAK files (SQL Server-only)
+      &quot;bakType&quot;: &quot;A String&quot;, # Type of this bak file will be export, FULL or DIFF, SQL Server only
+      &quot;copyOnly&quot;: True or False, # Whether or not the export will be exeucted with COPY_ONLY, SQL Server only deprecated as the behavior should default to copy_only = true use differential_base instead
+      &quot;differentialBase&quot;: True or False, # Whether or not the backup can be use as differential base only non copy only backup can be served as differential base
       &quot;stripeCount&quot;: 42, # Option for specifying how many stripes to use for the export. If blank, and the value of the striped field is true, the number of stripes is automatically chosen.
       &quot;striped&quot;: True or False, # Whether or not the export should be striped.
     },
@@ -686,11 +716,14 @@ Returns:
   },
   &quot;importContext&quot;: { # Database instance import context. # The context for import operation, if applicable.
     &quot;bakImportOptions&quot;: { # Import parameters specific to SQL Server .BAK files
+      &quot;bakType&quot;: &quot;A String&quot;, # Type of the bak content, FULL or DIFF.
       &quot;encryptionOptions&quot;: {
         &quot;certPath&quot;: &quot;A String&quot;, # Path to the Certificate (.cer) in Cloud Storage, in the form `gs://bucketName/fileName`. The instance must have write permissions to the bucket and read access to the file.
         &quot;pvkPassword&quot;: &quot;A String&quot;, # Password that encrypts the private key
         &quot;pvkPath&quot;: &quot;A String&quot;, # Path to the Certificate Private Key (.pvk) in Cloud Storage, in the form `gs://bucketName/fileName`. The instance must have write permissions to the bucket and read access to the file.
       },
+      &quot;noRecovery&quot;: True or False, # Whether or not the backup importing will restore database with NORECOVERY option Applies only to Cloud SQL for SQL Server.
+      &quot;recoveryOnly&quot;: True or False, # Whether or not the backup importing request will just bring database online without downloading Bak content only one of &quot;no_recovery&quot; and &quot;recovery_only&quot; can be true otherwise error will return. Applies only to Cloud SQL for SQL Server.
       &quot;striped&quot;: True or False, # Whether or not the backup set being restored is striped. Applies only to Cloud SQL for SQL Server.
     },
     &quot;csvImportOptions&quot;: { # Options for importing data as CSV.
@@ -766,6 +799,9 @@ Returns:
   },
   &quot;exportContext&quot;: { # Database instance export context. # The context for export operation, if applicable.
     &quot;bakExportOptions&quot;: { # Options for exporting BAK files (SQL Server-only)
+      &quot;bakType&quot;: &quot;A String&quot;, # Type of this bak file will be export, FULL or DIFF, SQL Server only
+      &quot;copyOnly&quot;: True or False, # Whether or not the export will be exeucted with COPY_ONLY, SQL Server only deprecated as the behavior should default to copy_only = true use differential_base instead
+      &quot;differentialBase&quot;: True or False, # Whether or not the backup can be use as differential base only non copy only backup can be served as differential base
       &quot;stripeCount&quot;: 42, # Option for specifying how many stripes to use for the export. If blank, and the value of the striped field is true, the number of stripes is automatically chosen.
       &quot;striped&quot;: True or False, # Whether or not the export should be striped.
     },
@@ -795,11 +831,14 @@ Returns:
   },
   &quot;importContext&quot;: { # Database instance import context. # The context for import operation, if applicable.
     &quot;bakImportOptions&quot;: { # Import parameters specific to SQL Server .BAK files
+      &quot;bakType&quot;: &quot;A String&quot;, # Type of the bak content, FULL or DIFF.
       &quot;encryptionOptions&quot;: {
         &quot;certPath&quot;: &quot;A String&quot;, # Path to the Certificate (.cer) in Cloud Storage, in the form `gs://bucketName/fileName`. The instance must have write permissions to the bucket and read access to the file.
         &quot;pvkPassword&quot;: &quot;A String&quot;, # Password that encrypts the private key
         &quot;pvkPath&quot;: &quot;A String&quot;, # Path to the Certificate Private Key (.pvk) in Cloud Storage, in the form `gs://bucketName/fileName`. The instance must have write permissions to the bucket and read access to the file.
       },
+      &quot;noRecovery&quot;: True or False, # Whether or not the backup importing will restore database with NORECOVERY option Applies only to Cloud SQL for SQL Server.
+      &quot;recoveryOnly&quot;: True or False, # Whether or not the backup importing request will just bring database online without downloading Bak content only one of &quot;no_recovery&quot; and &quot;recovery_only&quot; can be true otherwise error will return. Applies only to Cloud SQL for SQL Server.
       &quot;striped&quot;: True or False, # Whether or not the backup set being restored is striped. Applies only to Cloud SQL for SQL Server.
     },
     &quot;csvImportOptions&quot;: { # Options for importing data as CSV.
@@ -848,7 +887,7 @@ Returns:
   An object of the form:
 
     { # A Cloud SQL instance resource.
-  &quot;availableMaintenanceVersions&quot;: [ # List all maintenance versions applicable on the instance
+  &quot;availableMaintenanceVersions&quot;: [ # Output only. List all maintenance versions applicable on the instance
     &quot;A String&quot;,
   ],
   &quot;backendType&quot;: &quot;A String&quot;, # The backend type. `SECOND_GEN`: Cloud SQL database instance. `EXTERNAL`: A database server that is not managed by Google. This property is read-only; use the `tier` property in the `settings` object to determine the database type.
@@ -954,6 +993,9 @@ Returns:
       &quot;domain&quot;: &quot;A String&quot;, # The name of the domain (e.g., mydomain.com).
       &quot;kind&quot;: &quot;A String&quot;, # This is always sql#activeDirectoryConfig.
     },
+    &quot;advancedMachineFeatures&quot;: { # Specifies options for controlling advanced machine features. # Specifies advance machine configuration for the instance relevant only for SQL Server.
+      &quot;threadsPerCore&quot;: 42, # The number of threads per physical core.
+    },
     &quot;authorizedGaeApplications&quot;: [ # The App Engine app IDs that can access this instance. (Deprecated) Applied to First Generation instances only.
       &quot;A String&quot;,
     ],
@@ -967,7 +1009,7 @@ Returns:
       &quot;enabled&quot;: True or False, # Whether this configuration is enabled.
       &quot;kind&quot;: &quot;A String&quot;, # This is always `sql#backupConfiguration`.
       &quot;location&quot;: &quot;A String&quot;, # Location of the backup
-      &quot;pointInTimeRecoveryEnabled&quot;: True or False, # (Postgres only) Whether point in time recovery is enabled.
+      &quot;pointInTimeRecoveryEnabled&quot;: True or False, # Whether point in time recovery is enabled.
       &quot;replicationLogArchivingEnabled&quot;: True or False, # Reserved for future use.
       &quot;startTime&quot;: &quot;A String&quot;, # Start time for the daily backup configuration in UTC timezone in the 24 hour format - `HH:MM`.
       &quot;transactionLogRetentionDays&quot;: 42, # The number of days of transaction logs we retain for point in time restore, from 1-7.
@@ -1072,11 +1114,14 @@ Args:
 { # Database instance import request.
   &quot;importContext&quot;: { # Database instance import context. # Contains details about the import operation.
     &quot;bakImportOptions&quot;: { # Import parameters specific to SQL Server .BAK files
+      &quot;bakType&quot;: &quot;A String&quot;, # Type of the bak content, FULL or DIFF.
       &quot;encryptionOptions&quot;: {
         &quot;certPath&quot;: &quot;A String&quot;, # Path to the Certificate (.cer) in Cloud Storage, in the form `gs://bucketName/fileName`. The instance must have write permissions to the bucket and read access to the file.
         &quot;pvkPassword&quot;: &quot;A String&quot;, # Password that encrypts the private key
         &quot;pvkPath&quot;: &quot;A String&quot;, # Path to the Certificate Private Key (.pvk) in Cloud Storage, in the form `gs://bucketName/fileName`. The instance must have write permissions to the bucket and read access to the file.
       },
+      &quot;noRecovery&quot;: True or False, # Whether or not the backup importing will restore database with NORECOVERY option Applies only to Cloud SQL for SQL Server.
+      &quot;recoveryOnly&quot;: True or False, # Whether or not the backup importing request will just bring database online without downloading Bak content only one of &quot;no_recovery&quot; and &quot;recovery_only&quot; can be true otherwise error will return. Applies only to Cloud SQL for SQL Server.
       &quot;striped&quot;: True or False, # Whether or not the backup set being restored is striped. Applies only to Cloud SQL for SQL Server.
     },
     &quot;csvImportOptions&quot;: { # Options for importing data as CSV.
@@ -1123,6 +1168,9 @@ Returns:
   },
   &quot;exportContext&quot;: { # Database instance export context. # The context for export operation, if applicable.
     &quot;bakExportOptions&quot;: { # Options for exporting BAK files (SQL Server-only)
+      &quot;bakType&quot;: &quot;A String&quot;, # Type of this bak file will be export, FULL or DIFF, SQL Server only
+      &quot;copyOnly&quot;: True or False, # Whether or not the export will be exeucted with COPY_ONLY, SQL Server only deprecated as the behavior should default to copy_only = true use differential_base instead
+      &quot;differentialBase&quot;: True or False, # Whether or not the backup can be use as differential base only non copy only backup can be served as differential base
       &quot;stripeCount&quot;: 42, # Option for specifying how many stripes to use for the export. If blank, and the value of the striped field is true, the number of stripes is automatically chosen.
       &quot;striped&quot;: True or False, # Whether or not the export should be striped.
     },
@@ -1152,11 +1200,14 @@ Returns:
   },
   &quot;importContext&quot;: { # Database instance import context. # The context for import operation, if applicable.
     &quot;bakImportOptions&quot;: { # Import parameters specific to SQL Server .BAK files
+      &quot;bakType&quot;: &quot;A String&quot;, # Type of the bak content, FULL or DIFF.
       &quot;encryptionOptions&quot;: {
         &quot;certPath&quot;: &quot;A String&quot;, # Path to the Certificate (.cer) in Cloud Storage, in the form `gs://bucketName/fileName`. The instance must have write permissions to the bucket and read access to the file.
         &quot;pvkPassword&quot;: &quot;A String&quot;, # Password that encrypts the private key
         &quot;pvkPath&quot;: &quot;A String&quot;, # Path to the Certificate Private Key (.pvk) in Cloud Storage, in the form `gs://bucketName/fileName`. The instance must have write permissions to the bucket and read access to the file.
       },
+      &quot;noRecovery&quot;: True or False, # Whether or not the backup importing will restore database with NORECOVERY option Applies only to Cloud SQL for SQL Server.
+      &quot;recoveryOnly&quot;: True or False, # Whether or not the backup importing request will just bring database online without downloading Bak content only one of &quot;no_recovery&quot; and &quot;recovery_only&quot; can be true otherwise error will return. Applies only to Cloud SQL for SQL Server.
       &quot;striped&quot;: True or False, # Whether or not the backup set being restored is striped. Applies only to Cloud SQL for SQL Server.
     },
     &quot;csvImportOptions&quot;: { # Options for importing data as CSV.
@@ -1199,7 +1250,7 @@ Args:
     The object takes the form of:
 
 { # A Cloud SQL instance resource.
-  &quot;availableMaintenanceVersions&quot;: [ # List all maintenance versions applicable on the instance
+  &quot;availableMaintenanceVersions&quot;: [ # Output only. List all maintenance versions applicable on the instance
     &quot;A String&quot;,
   ],
   &quot;backendType&quot;: &quot;A String&quot;, # The backend type. `SECOND_GEN`: Cloud SQL database instance. `EXTERNAL`: A database server that is not managed by Google. This property is read-only; use the `tier` property in the `settings` object to determine the database type.
@@ -1305,6 +1356,9 @@ Args:
       &quot;domain&quot;: &quot;A String&quot;, # The name of the domain (e.g., mydomain.com).
       &quot;kind&quot;: &quot;A String&quot;, # This is always sql#activeDirectoryConfig.
     },
+    &quot;advancedMachineFeatures&quot;: { # Specifies options for controlling advanced machine features. # Specifies advance machine configuration for the instance relevant only for SQL Server.
+      &quot;threadsPerCore&quot;: 42, # The number of threads per physical core.
+    },
     &quot;authorizedGaeApplications&quot;: [ # The App Engine app IDs that can access this instance. (Deprecated) Applied to First Generation instances only.
       &quot;A String&quot;,
     ],
@@ -1318,7 +1372,7 @@ Args:
       &quot;enabled&quot;: True or False, # Whether this configuration is enabled.
       &quot;kind&quot;: &quot;A String&quot;, # This is always `sql#backupConfiguration`.
       &quot;location&quot;: &quot;A String&quot;, # Location of the backup
-      &quot;pointInTimeRecoveryEnabled&quot;: True or False, # (Postgres only) Whether point in time recovery is enabled.
+      &quot;pointInTimeRecoveryEnabled&quot;: True or False, # Whether point in time recovery is enabled.
       &quot;replicationLogArchivingEnabled&quot;: True or False, # Reserved for future use.
       &quot;startTime&quot;: &quot;A String&quot;, # Start time for the daily backup configuration in UTC timezone in the 24 hour format - `HH:MM`.
       &quot;transactionLogRetentionDays&quot;: 42, # The number of days of transaction logs we retain for point in time restore, from 1-7.
@@ -1435,6 +1489,9 @@ Returns:
   },
   &quot;exportContext&quot;: { # Database instance export context. # The context for export operation, if applicable.
     &quot;bakExportOptions&quot;: { # Options for exporting BAK files (SQL Server-only)
+      &quot;bakType&quot;: &quot;A String&quot;, # Type of this bak file will be export, FULL or DIFF, SQL Server only
+      &quot;copyOnly&quot;: True or False, # Whether or not the export will be exeucted with COPY_ONLY, SQL Server only deprecated as the behavior should default to copy_only = true use differential_base instead
+      &quot;differentialBase&quot;: True or False, # Whether or not the backup can be use as differential base only non copy only backup can be served as differential base
       &quot;stripeCount&quot;: 42, # Option for specifying how many stripes to use for the export. If blank, and the value of the striped field is true, the number of stripes is automatically chosen.
       &quot;striped&quot;: True or False, # Whether or not the export should be striped.
     },
@@ -1464,11 +1521,14 @@ Returns:
   },
   &quot;importContext&quot;: { # Database instance import context. # The context for import operation, if applicable.
     &quot;bakImportOptions&quot;: { # Import parameters specific to SQL Server .BAK files
+      &quot;bakType&quot;: &quot;A String&quot;, # Type of the bak content, FULL or DIFF.
       &quot;encryptionOptions&quot;: {
         &quot;certPath&quot;: &quot;A String&quot;, # Path to the Certificate (.cer) in Cloud Storage, in the form `gs://bucketName/fileName`. The instance must have write permissions to the bucket and read access to the file.
         &quot;pvkPassword&quot;: &quot;A String&quot;, # Password that encrypts the private key
         &quot;pvkPath&quot;: &quot;A String&quot;, # Path to the Certificate Private Key (.pvk) in Cloud Storage, in the form `gs://bucketName/fileName`. The instance must have write permissions to the bucket and read access to the file.
       },
+      &quot;noRecovery&quot;: True or False, # Whether or not the backup importing will restore database with NORECOVERY option Applies only to Cloud SQL for SQL Server.
+      &quot;recoveryOnly&quot;: True or False, # Whether or not the backup importing request will just bring database online without downloading Bak content only one of &quot;no_recovery&quot; and &quot;recovery_only&quot; can be true otherwise error will return. Applies only to Cloud SQL for SQL Server.
       &quot;striped&quot;: True or False, # Whether or not the backup set being restored is striped. Applies only to Cloud SQL for SQL Server.
     },
     &quot;csvImportOptions&quot;: { # Options for importing data as CSV.
@@ -1521,7 +1581,7 @@ Returns:
     { # Database instances list response.
   &quot;items&quot;: [ # List of database instance resources.
     { # A Cloud SQL instance resource.
-      &quot;availableMaintenanceVersions&quot;: [ # List all maintenance versions applicable on the instance
+      &quot;availableMaintenanceVersions&quot;: [ # Output only. List all maintenance versions applicable on the instance
         &quot;A String&quot;,
       ],
       &quot;backendType&quot;: &quot;A String&quot;, # The backend type. `SECOND_GEN`: Cloud SQL database instance. `EXTERNAL`: A database server that is not managed by Google. This property is read-only; use the `tier` property in the `settings` object to determine the database type.
@@ -1627,6 +1687,9 @@ Returns:
           &quot;domain&quot;: &quot;A String&quot;, # The name of the domain (e.g., mydomain.com).
           &quot;kind&quot;: &quot;A String&quot;, # This is always sql#activeDirectoryConfig.
         },
+        &quot;advancedMachineFeatures&quot;: { # Specifies options for controlling advanced machine features. # Specifies advance machine configuration for the instance relevant only for SQL Server.
+          &quot;threadsPerCore&quot;: 42, # The number of threads per physical core.
+        },
         &quot;authorizedGaeApplications&quot;: [ # The App Engine app IDs that can access this instance. (Deprecated) Applied to First Generation instances only.
           &quot;A String&quot;,
         ],
@@ -1640,7 +1703,7 @@ Returns:
           &quot;enabled&quot;: True or False, # Whether this configuration is enabled.
           &quot;kind&quot;: &quot;A String&quot;, # This is always `sql#backupConfiguration`.
           &quot;location&quot;: &quot;A String&quot;, # Location of the backup
-          &quot;pointInTimeRecoveryEnabled&quot;: True or False, # (Postgres only) Whether point in time recovery is enabled.
+          &quot;pointInTimeRecoveryEnabled&quot;: True or False, # Whether point in time recovery is enabled.
           &quot;replicationLogArchivingEnabled&quot;: True or False, # Reserved for future use.
           &quot;startTime&quot;: &quot;A String&quot;, # Start time for the daily backup configuration in UTC timezone in the 24 hour format - `HH:MM`.
           &quot;transactionLogRetentionDays&quot;: 42, # The number of days of transaction logs we retain for point in time restore, from 1-7.
@@ -1802,7 +1865,7 @@ Args:
     The object takes the form of:
 
 { # A Cloud SQL instance resource.
-  &quot;availableMaintenanceVersions&quot;: [ # List all maintenance versions applicable on the instance
+  &quot;availableMaintenanceVersions&quot;: [ # Output only. List all maintenance versions applicable on the instance
     &quot;A String&quot;,
   ],
   &quot;backendType&quot;: &quot;A String&quot;, # The backend type. `SECOND_GEN`: Cloud SQL database instance. `EXTERNAL`: A database server that is not managed by Google. This property is read-only; use the `tier` property in the `settings` object to determine the database type.
@@ -1908,6 +1971,9 @@ Args:
       &quot;domain&quot;: &quot;A String&quot;, # The name of the domain (e.g., mydomain.com).
       &quot;kind&quot;: &quot;A String&quot;, # This is always sql#activeDirectoryConfig.
     },
+    &quot;advancedMachineFeatures&quot;: { # Specifies options for controlling advanced machine features. # Specifies advance machine configuration for the instance relevant only for SQL Server.
+      &quot;threadsPerCore&quot;: 42, # The number of threads per physical core.
+    },
     &quot;authorizedGaeApplications&quot;: [ # The App Engine app IDs that can access this instance. (Deprecated) Applied to First Generation instances only.
       &quot;A String&quot;,
     ],
@@ -1921,7 +1987,7 @@ Args:
       &quot;enabled&quot;: True or False, # Whether this configuration is enabled.
       &quot;kind&quot;: &quot;A String&quot;, # This is always `sql#backupConfiguration`.
       &quot;location&quot;: &quot;A String&quot;, # Location of the backup
-      &quot;pointInTimeRecoveryEnabled&quot;: True or False, # (Postgres only) Whether point in time recovery is enabled.
+      &quot;pointInTimeRecoveryEnabled&quot;: True or False, # Whether point in time recovery is enabled.
       &quot;replicationLogArchivingEnabled&quot;: True or False, # Reserved for future use.
       &quot;startTime&quot;: &quot;A String&quot;, # Start time for the daily backup configuration in UTC timezone in the 24 hour format - `HH:MM`.
       &quot;transactionLogRetentionDays&quot;: 42, # The number of days of transaction logs we retain for point in time restore, from 1-7.
@@ -2038,6 +2104,9 @@ Returns:
   },
   &quot;exportContext&quot;: { # Database instance export context. # The context for export operation, if applicable.
     &quot;bakExportOptions&quot;: { # Options for exporting BAK files (SQL Server-only)
+      &quot;bakType&quot;: &quot;A String&quot;, # Type of this bak file will be export, FULL or DIFF, SQL Server only
+      &quot;copyOnly&quot;: True or False, # Whether or not the export will be exeucted with COPY_ONLY, SQL Server only deprecated as the behavior should default to copy_only = true use differential_base instead
+      &quot;differentialBase&quot;: True or False, # Whether or not the backup can be use as differential base only non copy only backup can be served as differential base
       &quot;stripeCount&quot;: 42, # Option for specifying how many stripes to use for the export. If blank, and the value of the striped field is true, the number of stripes is automatically chosen.
       &quot;striped&quot;: True or False, # Whether or not the export should be striped.
     },
@@ -2067,11 +2136,14 @@ Returns:
   },
   &quot;importContext&quot;: { # Database instance import context. # The context for import operation, if applicable.
     &quot;bakImportOptions&quot;: { # Import parameters specific to SQL Server .BAK files
+      &quot;bakType&quot;: &quot;A String&quot;, # Type of the bak content, FULL or DIFF.
       &quot;encryptionOptions&quot;: {
         &quot;certPath&quot;: &quot;A String&quot;, # Path to the Certificate (.cer) in Cloud Storage, in the form `gs://bucketName/fileName`. The instance must have write permissions to the bucket and read access to the file.
         &quot;pvkPassword&quot;: &quot;A String&quot;, # Password that encrypts the private key
         &quot;pvkPath&quot;: &quot;A String&quot;, # Path to the Certificate Private Key (.pvk) in Cloud Storage, in the form `gs://bucketName/fileName`. The instance must have write permissions to the bucket and read access to the file.
       },
+      &quot;noRecovery&quot;: True or False, # Whether or not the backup importing will restore database with NORECOVERY option Applies only to Cloud SQL for SQL Server.
+      &quot;recoveryOnly&quot;: True or False, # Whether or not the backup importing request will just bring database online without downloading Bak content only one of &quot;no_recovery&quot; and &quot;recovery_only&quot; can be true otherwise error will return. Applies only to Cloud SQL for SQL Server.
       &quot;striped&quot;: True or False, # Whether or not the backup set being restored is striped. Applies only to Cloud SQL for SQL Server.
     },
     &quot;csvImportOptions&quot;: { # Options for importing data as CSV.
@@ -2137,6 +2209,9 @@ Returns:
   },
   &quot;exportContext&quot;: { # Database instance export context. # The context for export operation, if applicable.
     &quot;bakExportOptions&quot;: { # Options for exporting BAK files (SQL Server-only)
+      &quot;bakType&quot;: &quot;A String&quot;, # Type of this bak file will be export, FULL or DIFF, SQL Server only
+      &quot;copyOnly&quot;: True or False, # Whether or not the export will be exeucted with COPY_ONLY, SQL Server only deprecated as the behavior should default to copy_only = true use differential_base instead
+      &quot;differentialBase&quot;: True or False, # Whether or not the backup can be use as differential base only non copy only backup can be served as differential base
       &quot;stripeCount&quot;: 42, # Option for specifying how many stripes to use for the export. If blank, and the value of the striped field is true, the number of stripes is automatically chosen.
       &quot;striped&quot;: True or False, # Whether or not the export should be striped.
     },
@@ -2166,11 +2241,14 @@ Returns:
   },
   &quot;importContext&quot;: { # Database instance import context. # The context for import operation, if applicable.
     &quot;bakImportOptions&quot;: { # Import parameters specific to SQL Server .BAK files
+      &quot;bakType&quot;: &quot;A String&quot;, # Type of the bak content, FULL or DIFF.
       &quot;encryptionOptions&quot;: {
         &quot;certPath&quot;: &quot;A String&quot;, # Path to the Certificate (.cer) in Cloud Storage, in the form `gs://bucketName/fileName`. The instance must have write permissions to the bucket and read access to the file.
         &quot;pvkPassword&quot;: &quot;A String&quot;, # Password that encrypts the private key
         &quot;pvkPath&quot;: &quot;A String&quot;, # Path to the Certificate Private Key (.pvk) in Cloud Storage, in the form `gs://bucketName/fileName`. The instance must have write permissions to the bucket and read access to the file.
       },
+      &quot;noRecovery&quot;: True or False, # Whether or not the backup importing will restore database with NORECOVERY option Applies only to Cloud SQL for SQL Server.
+      &quot;recoveryOnly&quot;: True or False, # Whether or not the backup importing request will just bring database online without downloading Bak content only one of &quot;no_recovery&quot; and &quot;recovery_only&quot; can be true otherwise error will return. Applies only to Cloud SQL for SQL Server.
       &quot;striped&quot;: True or False, # Whether or not the backup set being restored is striped. Applies only to Cloud SQL for SQL Server.
     },
     &quot;csvImportOptions&quot;: { # Options for importing data as CSV.
@@ -2236,6 +2314,9 @@ Returns:
   },
   &quot;exportContext&quot;: { # Database instance export context. # The context for export operation, if applicable.
     &quot;bakExportOptions&quot;: { # Options for exporting BAK files (SQL Server-only)
+      &quot;bakType&quot;: &quot;A String&quot;, # Type of this bak file will be export, FULL or DIFF, SQL Server only
+      &quot;copyOnly&quot;: True or False, # Whether or not the export will be exeucted with COPY_ONLY, SQL Server only deprecated as the behavior should default to copy_only = true use differential_base instead
+      &quot;differentialBase&quot;: True or False, # Whether or not the backup can be use as differential base only non copy only backup can be served as differential base
       &quot;stripeCount&quot;: 42, # Option for specifying how many stripes to use for the export. If blank, and the value of the striped field is true, the number of stripes is automatically chosen.
       &quot;striped&quot;: True or False, # Whether or not the export should be striped.
     },
@@ -2265,11 +2346,14 @@ Returns:
   },
   &quot;importContext&quot;: { # Database instance import context. # The context for import operation, if applicable.
     &quot;bakImportOptions&quot;: { # Import parameters specific to SQL Server .BAK files
+      &quot;bakType&quot;: &quot;A String&quot;, # Type of the bak content, FULL or DIFF.
       &quot;encryptionOptions&quot;: {
         &quot;certPath&quot;: &quot;A String&quot;, # Path to the Certificate (.cer) in Cloud Storage, in the form `gs://bucketName/fileName`. The instance must have write permissions to the bucket and read access to the file.
         &quot;pvkPassword&quot;: &quot;A String&quot;, # Password that encrypts the private key
         &quot;pvkPath&quot;: &quot;A String&quot;, # Path to the Certificate Private Key (.pvk) in Cloud Storage, in the form `gs://bucketName/fileName`. The instance must have write permissions to the bucket and read access to the file.
       },
+      &quot;noRecovery&quot;: True or False, # Whether or not the backup importing will restore database with NORECOVERY option Applies only to Cloud SQL for SQL Server.
+      &quot;recoveryOnly&quot;: True or False, # Whether or not the backup importing request will just bring database online without downloading Bak content only one of &quot;no_recovery&quot; and &quot;recovery_only&quot; can be true otherwise error will return. Applies only to Cloud SQL for SQL Server.
       &quot;striped&quot;: True or False, # Whether or not the backup set being restored is striped. Applies only to Cloud SQL for SQL Server.
     },
     &quot;csvImportOptions&quot;: { # Options for importing data as CSV.
@@ -2335,6 +2419,9 @@ Returns:
   },
   &quot;exportContext&quot;: { # Database instance export context. # The context for export operation, if applicable.
     &quot;bakExportOptions&quot;: { # Options for exporting BAK files (SQL Server-only)
+      &quot;bakType&quot;: &quot;A String&quot;, # Type of this bak file will be export, FULL or DIFF, SQL Server only
+      &quot;copyOnly&quot;: True or False, # Whether or not the export will be exeucted with COPY_ONLY, SQL Server only deprecated as the behavior should default to copy_only = true use differential_base instead
+      &quot;differentialBase&quot;: True or False, # Whether or not the backup can be use as differential base only non copy only backup can be served as differential base
       &quot;stripeCount&quot;: 42, # Option for specifying how many stripes to use for the export. If blank, and the value of the striped field is true, the number of stripes is automatically chosen.
       &quot;striped&quot;: True or False, # Whether or not the export should be striped.
     },
@@ -2364,11 +2451,14 @@ Returns:
   },
   &quot;importContext&quot;: { # Database instance import context. # The context for import operation, if applicable.
     &quot;bakImportOptions&quot;: { # Import parameters specific to SQL Server .BAK files
+      &quot;bakType&quot;: &quot;A String&quot;, # Type of the bak content, FULL or DIFF.
       &quot;encryptionOptions&quot;: {
         &quot;certPath&quot;: &quot;A String&quot;, # Path to the Certificate (.cer) in Cloud Storage, in the form `gs://bucketName/fileName`. The instance must have write permissions to the bucket and read access to the file.
         &quot;pvkPassword&quot;: &quot;A String&quot;, # Password that encrypts the private key
         &quot;pvkPath&quot;: &quot;A String&quot;, # Path to the Certificate Private Key (.pvk) in Cloud Storage, in the form `gs://bucketName/fileName`. The instance must have write permissions to the bucket and read access to the file.
       },
+      &quot;noRecovery&quot;: True or False, # Whether or not the backup importing will restore database with NORECOVERY option Applies only to Cloud SQL for SQL Server.
+      &quot;recoveryOnly&quot;: True or False, # Whether or not the backup importing request will just bring database online without downloading Bak content only one of &quot;no_recovery&quot; and &quot;recovery_only&quot; can be true otherwise error will return. Applies only to Cloud SQL for SQL Server.
       &quot;striped&quot;: True or False, # Whether or not the backup set being restored is striped. Applies only to Cloud SQL for SQL Server.
     },
     &quot;csvImportOptions&quot;: { # Options for importing data as CSV.
@@ -2446,6 +2536,9 @@ Returns:
   },
   &quot;exportContext&quot;: { # Database instance export context. # The context for export operation, if applicable.
     &quot;bakExportOptions&quot;: { # Options for exporting BAK files (SQL Server-only)
+      &quot;bakType&quot;: &quot;A String&quot;, # Type of this bak file will be export, FULL or DIFF, SQL Server only
+      &quot;copyOnly&quot;: True or False, # Whether or not the export will be exeucted with COPY_ONLY, SQL Server only deprecated as the behavior should default to copy_only = true use differential_base instead
+      &quot;differentialBase&quot;: True or False, # Whether or not the backup can be use as differential base only non copy only backup can be served as differential base
       &quot;stripeCount&quot;: 42, # Option for specifying how many stripes to use for the export. If blank, and the value of the striped field is true, the number of stripes is automatically chosen.
       &quot;striped&quot;: True or False, # Whether or not the export should be striped.
     },
@@ -2475,11 +2568,14 @@ Returns:
   },
   &quot;importContext&quot;: { # Database instance import context. # The context for import operation, if applicable.
     &quot;bakImportOptions&quot;: { # Import parameters specific to SQL Server .BAK files
+      &quot;bakType&quot;: &quot;A String&quot;, # Type of the bak content, FULL or DIFF.
       &quot;encryptionOptions&quot;: {
         &quot;certPath&quot;: &quot;A String&quot;, # Path to the Certificate (.cer) in Cloud Storage, in the form `gs://bucketName/fileName`. The instance must have write permissions to the bucket and read access to the file.
         &quot;pvkPassword&quot;: &quot;A String&quot;, # Password that encrypts the private key
         &quot;pvkPath&quot;: &quot;A String&quot;, # Path to the Certificate Private Key (.pvk) in Cloud Storage, in the form `gs://bucketName/fileName`. The instance must have write permissions to the bucket and read access to the file.
       },
+      &quot;noRecovery&quot;: True or False, # Whether or not the backup importing will restore database with NORECOVERY option Applies only to Cloud SQL for SQL Server.
+      &quot;recoveryOnly&quot;: True or False, # Whether or not the backup importing request will just bring database online without downloading Bak content only one of &quot;no_recovery&quot; and &quot;recovery_only&quot; can be true otherwise error will return. Applies only to Cloud SQL for SQL Server.
       &quot;striped&quot;: True or False, # Whether or not the backup set being restored is striped. Applies only to Cloud SQL for SQL Server.
     },
     &quot;csvImportOptions&quot;: { # Options for importing data as CSV.
@@ -2555,6 +2651,9 @@ Returns:
   },
   &quot;exportContext&quot;: { # Database instance export context. # The context for export operation, if applicable.
     &quot;bakExportOptions&quot;: { # Options for exporting BAK files (SQL Server-only)
+      &quot;bakType&quot;: &quot;A String&quot;, # Type of this bak file will be export, FULL or DIFF, SQL Server only
+      &quot;copyOnly&quot;: True or False, # Whether or not the export will be exeucted with COPY_ONLY, SQL Server only deprecated as the behavior should default to copy_only = true use differential_base instead
+      &quot;differentialBase&quot;: True or False, # Whether or not the backup can be use as differential base only non copy only backup can be served as differential base
       &quot;stripeCount&quot;: 42, # Option for specifying how many stripes to use for the export. If blank, and the value of the striped field is true, the number of stripes is automatically chosen.
       &quot;striped&quot;: True or False, # Whether or not the export should be striped.
     },
@@ -2584,11 +2683,14 @@ Returns:
   },
   &quot;importContext&quot;: { # Database instance import context. # The context for import operation, if applicable.
     &quot;bakImportOptions&quot;: { # Import parameters specific to SQL Server .BAK files
+      &quot;bakType&quot;: &quot;A String&quot;, # Type of the bak content, FULL or DIFF.
       &quot;encryptionOptions&quot;: {
         &quot;certPath&quot;: &quot;A String&quot;, # Path to the Certificate (.cer) in Cloud Storage, in the form `gs://bucketName/fileName`. The instance must have write permissions to the bucket and read access to the file.
         &quot;pvkPassword&quot;: &quot;A String&quot;, # Password that encrypts the private key
         &quot;pvkPath&quot;: &quot;A String&quot;, # Path to the Certificate Private Key (.pvk) in Cloud Storage, in the form `gs://bucketName/fileName`. The instance must have write permissions to the bucket and read access to the file.
       },
+      &quot;noRecovery&quot;: True or False, # Whether or not the backup importing will restore database with NORECOVERY option Applies only to Cloud SQL for SQL Server.
+      &quot;recoveryOnly&quot;: True or False, # Whether or not the backup importing request will just bring database online without downloading Bak content only one of &quot;no_recovery&quot; and &quot;recovery_only&quot; can be true otherwise error will return. Applies only to Cloud SQL for SQL Server.
       &quot;striped&quot;: True or False, # Whether or not the backup set being restored is striped. Applies only to Cloud SQL for SQL Server.
     },
     &quot;csvImportOptions&quot;: { # Options for importing data as CSV.
@@ -2654,6 +2756,9 @@ Returns:
   },
   &quot;exportContext&quot;: { # Database instance export context. # The context for export operation, if applicable.
     &quot;bakExportOptions&quot;: { # Options for exporting BAK files (SQL Server-only)
+      &quot;bakType&quot;: &quot;A String&quot;, # Type of this bak file will be export, FULL or DIFF, SQL Server only
+      &quot;copyOnly&quot;: True or False, # Whether or not the export will be exeucted with COPY_ONLY, SQL Server only deprecated as the behavior should default to copy_only = true use differential_base instead
+      &quot;differentialBase&quot;: True or False, # Whether or not the backup can be use as differential base only non copy only backup can be served as differential base
       &quot;stripeCount&quot;: 42, # Option for specifying how many stripes to use for the export. If blank, and the value of the striped field is true, the number of stripes is automatically chosen.
       &quot;striped&quot;: True or False, # Whether or not the export should be striped.
     },
@@ -2683,11 +2788,14 @@ Returns:
   },
   &quot;importContext&quot;: { # Database instance import context. # The context for import operation, if applicable.
     &quot;bakImportOptions&quot;: { # Import parameters specific to SQL Server .BAK files
+      &quot;bakType&quot;: &quot;A String&quot;, # Type of the bak content, FULL or DIFF.
       &quot;encryptionOptions&quot;: {
         &quot;certPath&quot;: &quot;A String&quot;, # Path to the Certificate (.cer) in Cloud Storage, in the form `gs://bucketName/fileName`. The instance must have write permissions to the bucket and read access to the file.
         &quot;pvkPassword&quot;: &quot;A String&quot;, # Password that encrypts the private key
         &quot;pvkPath&quot;: &quot;A String&quot;, # Path to the Certificate Private Key (.pvk) in Cloud Storage, in the form `gs://bucketName/fileName`. The instance must have write permissions to the bucket and read access to the file.
       },
+      &quot;noRecovery&quot;: True or False, # Whether or not the backup importing will restore database with NORECOVERY option Applies only to Cloud SQL for SQL Server.
+      &quot;recoveryOnly&quot;: True or False, # Whether or not the backup importing request will just bring database online without downloading Bak content only one of &quot;no_recovery&quot; and &quot;recovery_only&quot; can be true otherwise error will return. Applies only to Cloud SQL for SQL Server.
       &quot;striped&quot;: True or False, # Whether or not the backup set being restored is striped. Applies only to Cloud SQL for SQL Server.
     },
     &quot;csvImportOptions&quot;: { # Options for importing data as CSV.
@@ -2753,6 +2861,9 @@ Returns:
   },
   &quot;exportContext&quot;: { # Database instance export context. # The context for export operation, if applicable.
     &quot;bakExportOptions&quot;: { # Options for exporting BAK files (SQL Server-only)
+      &quot;bakType&quot;: &quot;A String&quot;, # Type of this bak file will be export, FULL or DIFF, SQL Server only
+      &quot;copyOnly&quot;: True or False, # Whether or not the export will be exeucted with COPY_ONLY, SQL Server only deprecated as the behavior should default to copy_only = true use differential_base instead
+      &quot;differentialBase&quot;: True or False, # Whether or not the backup can be use as differential base only non copy only backup can be served as differential base
       &quot;stripeCount&quot;: 42, # Option for specifying how many stripes to use for the export. If blank, and the value of the striped field is true, the number of stripes is automatically chosen.
       &quot;striped&quot;: True or False, # Whether or not the export should be striped.
     },
@@ -2782,11 +2893,14 @@ Returns:
   },
   &quot;importContext&quot;: { # Database instance import context. # The context for import operation, if applicable.
     &quot;bakImportOptions&quot;: { # Import parameters specific to SQL Server .BAK files
+      &quot;bakType&quot;: &quot;A String&quot;, # Type of the bak content, FULL or DIFF.
       &quot;encryptionOptions&quot;: {
         &quot;certPath&quot;: &quot;A String&quot;, # Path to the Certificate (.cer) in Cloud Storage, in the form `gs://bucketName/fileName`. The instance must have write permissions to the bucket and read access to the file.
         &quot;pvkPassword&quot;: &quot;A String&quot;, # Password that encrypts the private key
         &quot;pvkPath&quot;: &quot;A String&quot;, # Path to the Certificate Private Key (.pvk) in Cloud Storage, in the form `gs://bucketName/fileName`. The instance must have write permissions to the bucket and read access to the file.
       },
+      &quot;noRecovery&quot;: True or False, # Whether or not the backup importing will restore database with NORECOVERY option Applies only to Cloud SQL for SQL Server.
+      &quot;recoveryOnly&quot;: True or False, # Whether or not the backup importing request will just bring database online without downloading Bak content only one of &quot;no_recovery&quot; and &quot;recovery_only&quot; can be true otherwise error will return. Applies only to Cloud SQL for SQL Server.
       &quot;striped&quot;: True or False, # Whether or not the backup set being restored is striped. Applies only to Cloud SQL for SQL Server.
     },
     &quot;csvImportOptions&quot;: { # Options for importing data as CSV.
@@ -2862,6 +2976,9 @@ Returns:
   },
   &quot;exportContext&quot;: { # Database instance export context. # The context for export operation, if applicable.
     &quot;bakExportOptions&quot;: { # Options for exporting BAK files (SQL Server-only)
+      &quot;bakType&quot;: &quot;A String&quot;, # Type of this bak file will be export, FULL or DIFF, SQL Server only
+      &quot;copyOnly&quot;: True or False, # Whether or not the export will be exeucted with COPY_ONLY, SQL Server only deprecated as the behavior should default to copy_only = true use differential_base instead
+      &quot;differentialBase&quot;: True or False, # Whether or not the backup can be use as differential base only non copy only backup can be served as differential base
       &quot;stripeCount&quot;: 42, # Option for specifying how many stripes to use for the export. If blank, and the value of the striped field is true, the number of stripes is automatically chosen.
       &quot;striped&quot;: True or False, # Whether or not the export should be striped.
     },
@@ -2891,11 +3008,14 @@ Returns:
   },
   &quot;importContext&quot;: { # Database instance import context. # The context for import operation, if applicable.
     &quot;bakImportOptions&quot;: { # Import parameters specific to SQL Server .BAK files
+      &quot;bakType&quot;: &quot;A String&quot;, # Type of the bak content, FULL or DIFF.
       &quot;encryptionOptions&quot;: {
         &quot;certPath&quot;: &quot;A String&quot;, # Path to the Certificate (.cer) in Cloud Storage, in the form `gs://bucketName/fileName`. The instance must have write permissions to the bucket and read access to the file.
         &quot;pvkPassword&quot;: &quot;A String&quot;, # Password that encrypts the private key
         &quot;pvkPath&quot;: &quot;A String&quot;, # Path to the Certificate Private Key (.pvk) in Cloud Storage, in the form `gs://bucketName/fileName`. The instance must have write permissions to the bucket and read access to the file.
       },
+      &quot;noRecovery&quot;: True or False, # Whether or not the backup importing will restore database with NORECOVERY option Applies only to Cloud SQL for SQL Server.
+      &quot;recoveryOnly&quot;: True or False, # Whether or not the backup importing request will just bring database online without downloading Bak content only one of &quot;no_recovery&quot; and &quot;recovery_only&quot; can be true otherwise error will return. Applies only to Cloud SQL for SQL Server.
       &quot;striped&quot;: True or False, # Whether or not the backup set being restored is striped. Applies only to Cloud SQL for SQL Server.
     },
     &quot;csvImportOptions&quot;: { # Options for importing data as CSV.
@@ -2939,7 +3059,7 @@ Args:
     The object takes the form of:
 
 { # A Cloud SQL instance resource.
-  &quot;availableMaintenanceVersions&quot;: [ # List all maintenance versions applicable on the instance
+  &quot;availableMaintenanceVersions&quot;: [ # Output only. List all maintenance versions applicable on the instance
     &quot;A String&quot;,
   ],
   &quot;backendType&quot;: &quot;A String&quot;, # The backend type. `SECOND_GEN`: Cloud SQL database instance. `EXTERNAL`: A database server that is not managed by Google. This property is read-only; use the `tier` property in the `settings` object to determine the database type.
@@ -3045,6 +3165,9 @@ Args:
       &quot;domain&quot;: &quot;A String&quot;, # The name of the domain (e.g., mydomain.com).
       &quot;kind&quot;: &quot;A String&quot;, # This is always sql#activeDirectoryConfig.
     },
+    &quot;advancedMachineFeatures&quot;: { # Specifies options for controlling advanced machine features. # Specifies advance machine configuration for the instance relevant only for SQL Server.
+      &quot;threadsPerCore&quot;: 42, # The number of threads per physical core.
+    },
     &quot;authorizedGaeApplications&quot;: [ # The App Engine app IDs that can access this instance. (Deprecated) Applied to First Generation instances only.
       &quot;A String&quot;,
     ],
@@ -3058,7 +3181,7 @@ Args:
       &quot;enabled&quot;: True or False, # Whether this configuration is enabled.
       &quot;kind&quot;: &quot;A String&quot;, # This is always `sql#backupConfiguration`.
       &quot;location&quot;: &quot;A String&quot;, # Location of the backup
-      &quot;pointInTimeRecoveryEnabled&quot;: True or False, # (Postgres only) Whether point in time recovery is enabled.
+      &quot;pointInTimeRecoveryEnabled&quot;: True or False, # Whether point in time recovery is enabled.
       &quot;replicationLogArchivingEnabled&quot;: True or False, # Reserved for future use.
       &quot;startTime&quot;: &quot;A String&quot;, # Start time for the daily backup configuration in UTC timezone in the 24 hour format - `HH:MM`.
       &quot;transactionLogRetentionDays&quot;: 42, # The number of days of transaction logs we retain for point in time restore, from 1-7.
@@ -3175,6 +3298,9 @@ Returns:
   },
   &quot;exportContext&quot;: { # Database instance export context. # The context for export operation, if applicable.
     &quot;bakExportOptions&quot;: { # Options for exporting BAK files (SQL Server-only)
+      &quot;bakType&quot;: &quot;A String&quot;, # Type of this bak file will be export, FULL or DIFF, SQL Server only
+      &quot;copyOnly&quot;: True or False, # Whether or not the export will be exeucted with COPY_ONLY, SQL Server only deprecated as the behavior should default to copy_only = true use differential_base instead
+      &quot;differentialBase&quot;: True or False, # Whether or not the backup can be use as differential base only non copy only backup can be served as differential base
       &quot;stripeCount&quot;: 42, # Option for specifying how many stripes to use for the export. If blank, and the value of the striped field is true, the number of stripes is automatically chosen.
       &quot;striped&quot;: True or False, # Whether or not the export should be striped.
     },
@@ -3204,11 +3330,14 @@ Returns:
   },
   &quot;importContext&quot;: { # Database instance import context. # The context for import operation, if applicable.
     &quot;bakImportOptions&quot;: { # Import parameters specific to SQL Server .BAK files
+      &quot;bakType&quot;: &quot;A String&quot;, # Type of the bak content, FULL or DIFF.
       &quot;encryptionOptions&quot;: {
         &quot;certPath&quot;: &quot;A String&quot;, # Path to the Certificate (.cer) in Cloud Storage, in the form `gs://bucketName/fileName`. The instance must have write permissions to the bucket and read access to the file.
         &quot;pvkPassword&quot;: &quot;A String&quot;, # Password that encrypts the private key
         &quot;pvkPath&quot;: &quot;A String&quot;, # Path to the Certificate Private Key (.pvk) in Cloud Storage, in the form `gs://bucketName/fileName`. The instance must have write permissions to the bucket and read access to the file.
       },
+      &quot;noRecovery&quot;: True or False, # Whether or not the backup importing will restore database with NORECOVERY option Applies only to Cloud SQL for SQL Server.
+      &quot;recoveryOnly&quot;: True or False, # Whether or not the backup importing request will just bring database online without downloading Bak content only one of &quot;no_recovery&quot; and &quot;recovery_only&quot; can be true otherwise error will return. Applies only to Cloud SQL for SQL Server.
       &quot;striped&quot;: True or False, # Whether or not the backup set being restored is striped. Applies only to Cloud SQL for SQL Server.
     },
     &quot;csvImportOptions&quot;: { # Options for importing data as CSV.

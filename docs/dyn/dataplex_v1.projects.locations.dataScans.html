@@ -83,7 +83,7 @@ h1, h2, h3 {
   <code><a href="#close">close()</a></code></p>
 <p class="firstline">Close httplib2 connections.</p>
 <p class="toc_element">
-  <code><a href="#create">create(parent, body=None, dataScanId=None, x__xgafv=None)</a></code></p>
+  <code><a href="#create">create(parent, body=None, dataScanId=None, validateOnly=None, x__xgafv=None)</a></code></p>
 <p class="firstline">Creates a DataScan resource.</p>
 <p class="toc_element">
   <code><a href="#delete">delete(name, x__xgafv=None)</a></code></p>
@@ -101,7 +101,7 @@ h1, h2, h3 {
   <code><a href="#list_next">list_next()</a></code></p>
 <p class="firstline">Retrieves the next page of results.</p>
 <p class="toc_element">
-  <code><a href="#patch">patch(name, body=None, updateMask=None, x__xgafv=None)</a></code></p>
+  <code><a href="#patch">patch(name, body=None, updateMask=None, validateOnly=None, x__xgafv=None)</a></code></p>
 <p class="firstline">Updates a DataScan resource.</p>
 <p class="toc_element">
   <code><a href="#run">run(name, body=None, x__xgafv=None)</a></code></p>
@@ -119,7 +119,7 @@ h1, h2, h3 {
 </div>
 
 <div class="method">
-    <code class="details" id="create">create(parent, body=None, dataScanId=None, x__xgafv=None)</code>
+    <code class="details" id="create">create(parent, body=None, dataScanId=None, validateOnly=None, x__xgafv=None)</code>
   <pre>Creates a DataScan resource.
 
 Args:
@@ -131,6 +131,7 @@ Args:
   &quot;createTime&quot;: &quot;A String&quot;, # Output only. The time when the scan was created.
   &quot;data&quot;: { # The data source for DataScan. # Required. The data source for DataScan.
     &quot;entity&quot;: &quot;A String&quot;, # Immutable. The Dataplex entity that represents the data source (e.g. BigQuery table) for DataScan, of the form: projects/{project_number}/locations/{location_id}/lakes/{lake_id}/zones/{zone_id}/entities/{entity_id}.
+    &quot;resource&quot;: &quot;A String&quot;, # Immutable. The service-qualified full resource name of the cloud resource for a DataScan job to scan against. The field could be: BigQuery table of type &quot;TABLE&quot; for DataProfileScan/DataQualityScan Format: //bigquery.googleapis.com/projects/PROJECT_ID/datasets/DATASET_ID/tables/TABLE_ID
   },
   &quot;dataProfileResult&quot;: { # DataProfileResult defines the output of DataProfileScan. Each field of the table will have field type specific profile result. # Output only. The result of the data profile scan.
     &quot;profile&quot;: { # Contains name, type, mode and field type specific profile information. # The profile information per field.
@@ -171,7 +172,7 @@ Args:
               },
             ],
           },
-          &quot;type&quot;: &quot;A String&quot;, # The field data type. Possible values include: STRING BYTE INT64 INT32 INT16 DOUBLE FLOAT DECIMAL BOOLEAN BINARY TIMESTAMP DATE TIME NULL RECORD
+          &quot;type&quot;: &quot;A String&quot;, # The data type retrieved from the schema of the data source. For instance, for a BigQuery native table, it is the BigQuery Table Schema (https://cloud.google.com/bigquery/docs/reference/rest/v2/tables#tablefieldschema). For a Dataplex Entity, it is the Entity Schema (https://cloud.google.com/dataplex/docs/reference/rpc/google.cloud.dataplex.v1#type_3).
         },
       ],
     },
@@ -185,6 +186,18 @@ Args:
     },
   },
   &quot;dataProfileSpec&quot;: { # DataProfileScan related setting. # DataProfileScan related setting.
+    &quot;excludeFields&quot;: { # The specification for fields to include or exclude in data profile scan. # Optional. The fields to exclude from data profile.If specified, the fields will be excluded from data profile, regardless of include_fields value.
+      &quot;fieldNames&quot;: [ # Optional. Expected input is a list of fully qualified names of fields as in the schema.Only top-level field names for nested fields are supported. For instance, if &#x27;x&#x27; is of nested field type, listing &#x27;x&#x27; is supported but &#x27;x.y.z&#x27; is not supported. Here &#x27;y&#x27; and &#x27;y.z&#x27; are nested fields of &#x27;x&#x27;.
+        &quot;A String&quot;,
+      ],
+    },
+    &quot;includeFields&quot;: { # The specification for fields to include or exclude in data profile scan. # Optional. The fields to include in data profile.If not specified, all fields at the time of profile scan job execution are included, except for ones listed in exclude_fields.
+      &quot;fieldNames&quot;: [ # Optional. Expected input is a list of fully qualified names of fields as in the schema.Only top-level field names for nested fields are supported. For instance, if &#x27;x&#x27; is of nested field type, listing &#x27;x&#x27; is supported but &#x27;x.y.z&#x27; is not supported. Here &#x27;y&#x27; and &#x27;y.z&#x27; are nested fields of &#x27;x&#x27;.
+        &quot;A String&quot;,
+      ],
+    },
+    &quot;rowFilter&quot;: &quot;A String&quot;, # Optional. A filter applied to all rows in a single DataScan job. The filter needs to be a valid SQL expression for a WHERE clause in BigQuery standard SQL syntax. Example: col1 &gt;= 0 AND col2 &lt; 10
+    &quot;samplingPercent&quot;: 3.14, # Optional. The percentage of the records to be selected from the dataset for DataScan. Value can range between 0.0 and 100.0 with up to 3 significant decimal digits. Sampling is not applied if sampling_percent is not specified, 0 or 100.
   },
   &quot;dataQualityResult&quot;: { # The output of a DataQualityScan. # Output only. The result of the data quality scan.
     &quot;dimensions&quot;: [ # A list of results at the dimension level.
@@ -228,7 +241,7 @@ Args:
           &quot;statisticRangeExpectation&quot;: { # Evaluates whether the column aggregate statistic lies between a specified range. # ColumnAggregate rule which evaluates whether the column aggregate statistic lies between a specified range.
             &quot;maxValue&quot;: &quot;A String&quot;, # The maximum column statistic value allowed for a row to pass this validation.At least one of min_value and max_value need to be provided.
             &quot;minValue&quot;: &quot;A String&quot;, # The minimum column statistic value allowed for a row to pass this validation.At least one of min_value and max_value need to be provided.
-            &quot;statistic&quot;: &quot;A String&quot;,
+            &quot;statistic&quot;: &quot;A String&quot;, # The aggregate metric to evaluate.
             &quot;strictMaxEnabled&quot;: True or False, # Whether column statistic needs to be strictly lesser than (&#x27;&lt;&#x27;) the maximum, or if equality is allowed.Only relevant if a max_value has been defined. Default = false.
             &quot;strictMinEnabled&quot;: True or False, # Whether column statistic needs to be strictly greater than (&#x27;&gt;&#x27;) the minimum, or if equality is allowed.Only relevant if a min_value has been defined. Default = false.
           },
@@ -250,6 +263,7 @@ Args:
     },
   },
   &quot;dataQualitySpec&quot;: { # DataQualityScan related setting. # DataQualityScan related setting.
+    &quot;rowFilter&quot;: &quot;A String&quot;, # Optional. A filter applied to all rows in a single DataScan job. The filter needs to be a valid SQL expression for a WHERE clause in BigQuery standard SQL syntax. Example: col1 &gt;= 0 AND col2 &lt; 10
     &quot;rules&quot;: [ # The list of rules to evaluate against a data source. At least one rule is required.
       { # A rule captures data quality intent about a data source.
         &quot;column&quot;: &quot;A String&quot;, # Optional. The unnested column which this rule is evaluated against.
@@ -277,7 +291,7 @@ Args:
         &quot;statisticRangeExpectation&quot;: { # Evaluates whether the column aggregate statistic lies between a specified range. # ColumnAggregate rule which evaluates whether the column aggregate statistic lies between a specified range.
           &quot;maxValue&quot;: &quot;A String&quot;, # The maximum column statistic value allowed for a row to pass this validation.At least one of min_value and max_value need to be provided.
           &quot;minValue&quot;: &quot;A String&quot;, # The minimum column statistic value allowed for a row to pass this validation.At least one of min_value and max_value need to be provided.
-          &quot;statistic&quot;: &quot;A String&quot;,
+          &quot;statistic&quot;: &quot;A String&quot;, # The aggregate metric to evaluate.
           &quot;strictMaxEnabled&quot;: True or False, # Whether column statistic needs to be strictly lesser than (&#x27;&lt;&#x27;) the maximum, or if equality is allowed.Only relevant if a max_value has been defined. Default = false.
           &quot;strictMinEnabled&quot;: True or False, # Whether column statistic needs to be strictly greater than (&#x27;&gt;&#x27;) the minimum, or if equality is allowed.Only relevant if a min_value has been defined. Default = false.
         },
@@ -289,6 +303,7 @@ Args:
         },
       },
     ],
+    &quot;samplingPercent&quot;: 3.14, # Optional. The percentage of the records to be selected from the dataset for DataScan. Value can range between 0.0 and 100.0 with up to 3 significant decimal digits. Sampling is not applied if sampling_percent is not specified, 0 or 100.
   },
   &quot;description&quot;: &quot;A String&quot;, # Optional. Description of the scan. Must be between 1-1024 characters.
   &quot;displayName&quot;: &quot;A String&quot;, # Optional. User friendly display name. Must be between 1-256 characters.
@@ -317,6 +332,7 @@ Args:
 }
 
   dataScanId: string, Required. DataScan identifier. Must contain only lowercase letters, numbers and hyphens. Must start with a letter. Must end with a number or a letter. Must be between 1-63 characters. Must be unique within the customer project / location.
+  validateOnly: boolean, Optional. Only validate the request, but do not perform mutations. The default is false.
   x__xgafv: string, V1 error format.
     Allowed values
       1 - v1 error format
@@ -404,6 +420,7 @@ Returns:
   &quot;createTime&quot;: &quot;A String&quot;, # Output only. The time when the scan was created.
   &quot;data&quot;: { # The data source for DataScan. # Required. The data source for DataScan.
     &quot;entity&quot;: &quot;A String&quot;, # Immutable. The Dataplex entity that represents the data source (e.g. BigQuery table) for DataScan, of the form: projects/{project_number}/locations/{location_id}/lakes/{lake_id}/zones/{zone_id}/entities/{entity_id}.
+    &quot;resource&quot;: &quot;A String&quot;, # Immutable. The service-qualified full resource name of the cloud resource for a DataScan job to scan against. The field could be: BigQuery table of type &quot;TABLE&quot; for DataProfileScan/DataQualityScan Format: //bigquery.googleapis.com/projects/PROJECT_ID/datasets/DATASET_ID/tables/TABLE_ID
   },
   &quot;dataProfileResult&quot;: { # DataProfileResult defines the output of DataProfileScan. Each field of the table will have field type specific profile result. # Output only. The result of the data profile scan.
     &quot;profile&quot;: { # Contains name, type, mode and field type specific profile information. # The profile information per field.
@@ -444,7 +461,7 @@ Returns:
               },
             ],
           },
-          &quot;type&quot;: &quot;A String&quot;, # The field data type. Possible values include: STRING BYTE INT64 INT32 INT16 DOUBLE FLOAT DECIMAL BOOLEAN BINARY TIMESTAMP DATE TIME NULL RECORD
+          &quot;type&quot;: &quot;A String&quot;, # The data type retrieved from the schema of the data source. For instance, for a BigQuery native table, it is the BigQuery Table Schema (https://cloud.google.com/bigquery/docs/reference/rest/v2/tables#tablefieldschema). For a Dataplex Entity, it is the Entity Schema (https://cloud.google.com/dataplex/docs/reference/rpc/google.cloud.dataplex.v1#type_3).
         },
       ],
     },
@@ -458,6 +475,18 @@ Returns:
     },
   },
   &quot;dataProfileSpec&quot;: { # DataProfileScan related setting. # DataProfileScan related setting.
+    &quot;excludeFields&quot;: { # The specification for fields to include or exclude in data profile scan. # Optional. The fields to exclude from data profile.If specified, the fields will be excluded from data profile, regardless of include_fields value.
+      &quot;fieldNames&quot;: [ # Optional. Expected input is a list of fully qualified names of fields as in the schema.Only top-level field names for nested fields are supported. For instance, if &#x27;x&#x27; is of nested field type, listing &#x27;x&#x27; is supported but &#x27;x.y.z&#x27; is not supported. Here &#x27;y&#x27; and &#x27;y.z&#x27; are nested fields of &#x27;x&#x27;.
+        &quot;A String&quot;,
+      ],
+    },
+    &quot;includeFields&quot;: { # The specification for fields to include or exclude in data profile scan. # Optional. The fields to include in data profile.If not specified, all fields at the time of profile scan job execution are included, except for ones listed in exclude_fields.
+      &quot;fieldNames&quot;: [ # Optional. Expected input is a list of fully qualified names of fields as in the schema.Only top-level field names for nested fields are supported. For instance, if &#x27;x&#x27; is of nested field type, listing &#x27;x&#x27; is supported but &#x27;x.y.z&#x27; is not supported. Here &#x27;y&#x27; and &#x27;y.z&#x27; are nested fields of &#x27;x&#x27;.
+        &quot;A String&quot;,
+      ],
+    },
+    &quot;rowFilter&quot;: &quot;A String&quot;, # Optional. A filter applied to all rows in a single DataScan job. The filter needs to be a valid SQL expression for a WHERE clause in BigQuery standard SQL syntax. Example: col1 &gt;= 0 AND col2 &lt; 10
+    &quot;samplingPercent&quot;: 3.14, # Optional. The percentage of the records to be selected from the dataset for DataScan. Value can range between 0.0 and 100.0 with up to 3 significant decimal digits. Sampling is not applied if sampling_percent is not specified, 0 or 100.
   },
   &quot;dataQualityResult&quot;: { # The output of a DataQualityScan. # Output only. The result of the data quality scan.
     &quot;dimensions&quot;: [ # A list of results at the dimension level.
@@ -501,7 +530,7 @@ Returns:
           &quot;statisticRangeExpectation&quot;: { # Evaluates whether the column aggregate statistic lies between a specified range. # ColumnAggregate rule which evaluates whether the column aggregate statistic lies between a specified range.
             &quot;maxValue&quot;: &quot;A String&quot;, # The maximum column statistic value allowed for a row to pass this validation.At least one of min_value and max_value need to be provided.
             &quot;minValue&quot;: &quot;A String&quot;, # The minimum column statistic value allowed for a row to pass this validation.At least one of min_value and max_value need to be provided.
-            &quot;statistic&quot;: &quot;A String&quot;,
+            &quot;statistic&quot;: &quot;A String&quot;, # The aggregate metric to evaluate.
             &quot;strictMaxEnabled&quot;: True or False, # Whether column statistic needs to be strictly lesser than (&#x27;&lt;&#x27;) the maximum, or if equality is allowed.Only relevant if a max_value has been defined. Default = false.
             &quot;strictMinEnabled&quot;: True or False, # Whether column statistic needs to be strictly greater than (&#x27;&gt;&#x27;) the minimum, or if equality is allowed.Only relevant if a min_value has been defined. Default = false.
           },
@@ -523,6 +552,7 @@ Returns:
     },
   },
   &quot;dataQualitySpec&quot;: { # DataQualityScan related setting. # DataQualityScan related setting.
+    &quot;rowFilter&quot;: &quot;A String&quot;, # Optional. A filter applied to all rows in a single DataScan job. The filter needs to be a valid SQL expression for a WHERE clause in BigQuery standard SQL syntax. Example: col1 &gt;= 0 AND col2 &lt; 10
     &quot;rules&quot;: [ # The list of rules to evaluate against a data source. At least one rule is required.
       { # A rule captures data quality intent about a data source.
         &quot;column&quot;: &quot;A String&quot;, # Optional. The unnested column which this rule is evaluated against.
@@ -550,7 +580,7 @@ Returns:
         &quot;statisticRangeExpectation&quot;: { # Evaluates whether the column aggregate statistic lies between a specified range. # ColumnAggregate rule which evaluates whether the column aggregate statistic lies between a specified range.
           &quot;maxValue&quot;: &quot;A String&quot;, # The maximum column statistic value allowed for a row to pass this validation.At least one of min_value and max_value need to be provided.
           &quot;minValue&quot;: &quot;A String&quot;, # The minimum column statistic value allowed for a row to pass this validation.At least one of min_value and max_value need to be provided.
-          &quot;statistic&quot;: &quot;A String&quot;,
+          &quot;statistic&quot;: &quot;A String&quot;, # The aggregate metric to evaluate.
           &quot;strictMaxEnabled&quot;: True or False, # Whether column statistic needs to be strictly lesser than (&#x27;&lt;&#x27;) the maximum, or if equality is allowed.Only relevant if a max_value has been defined. Default = false.
           &quot;strictMinEnabled&quot;: True or False, # Whether column statistic needs to be strictly greater than (&#x27;&gt;&#x27;) the minimum, or if equality is allowed.Only relevant if a min_value has been defined. Default = false.
         },
@@ -562,6 +592,7 @@ Returns:
         },
       },
     ],
+    &quot;samplingPercent&quot;: 3.14, # Optional. The percentage of the records to be selected from the dataset for DataScan. Value can range between 0.0 and 100.0 with up to 3 significant decimal digits. Sampling is not applied if sampling_percent is not specified, 0 or 100.
   },
   &quot;description&quot;: &quot;A String&quot;, # Optional. Description of the scan. Must be between 1-1024 characters.
   &quot;displayName&quot;: &quot;A String&quot;, # Optional. User friendly display name. Must be between 1-256 characters.
@@ -627,7 +658,7 @@ Returns:
         &quot;location&quot;: &quot;A String&quot;, # Optional. String indicating the location of the expression for error reporting, e.g. a file name and a position in the file.
         &quot;title&quot;: &quot;A String&quot;, # Optional. Title for the expression, i.e. a short string describing its purpose. This can be used e.g. in UIs which allow to enter the expression.
       },
-      &quot;members&quot;: [ # Specifies the principals requesting access for a Google Cloud resource. members can have the following values: allUsers: A special identifier that represents anyone who is on the internet; with or without a Google account. allAuthenticatedUsers: A special identifier that represents anyone who is authenticated with a Google account or a service account. Does not include identities that come from external identity providers (IdPs) through identity federation. user:{emailid}: An email address that represents a specific Google account. For example, alice@example.com . serviceAccount:{emailid}: An email address that represents a Google service account. For example, my-other-app@appspot.gserviceaccount.com. serviceAccount:{projectid}.svc.id.goog[{namespace}/{kubernetes-sa}]: An identifier for a Kubernetes service account (https://cloud.google.com/kubernetes-engine/docs/how-to/kubernetes-service-accounts). For example, my-project.svc.id.goog[my-namespace/my-kubernetes-sa]. group:{emailid}: An email address that represents a Google group. For example, admins@example.com. deleted:user:{emailid}?uid={uniqueid}: An email address (plus unique identifier) representing a user that has been recently deleted. For example, alice@example.com?uid=123456789012345678901. If the user is recovered, this value reverts to user:{emailid} and the recovered user retains the role in the binding. deleted:serviceAccount:{emailid}?uid={uniqueid}: An email address (plus unique identifier) representing a service account that has been recently deleted. For example, my-other-app@appspot.gserviceaccount.com?uid=123456789012345678901. If the service account is undeleted, this value reverts to serviceAccount:{emailid} and the undeleted service account retains the role in the binding. deleted:group:{emailid}?uid={uniqueid}: An email address (plus unique identifier) representing a Google group that has been recently deleted. For example, admins@example.com?uid=123456789012345678901. If the group is recovered, this value reverts to group:{emailid} and the recovered group retains the role in the binding. domain:{domain}: The G Suite domain (primary) that represents all the users of that domain. For example, google.com or example.com.
+      &quot;members&quot;: [ # Specifies the principals requesting access for a Google Cloud resource. members can have the following values: allUsers: A special identifier that represents anyone who is on the internet; with or without a Google account. allAuthenticatedUsers: A special identifier that represents anyone who is authenticated with a Google account or a service account. Does not include identities that come from external identity providers (IdPs) through identity federation. user:{emailid}: An email address that represents a specific Google account. For example, alice@example.com . serviceAccount:{emailid}: An email address that represents a Google service account. For example, my-other-app@appspot.gserviceaccount.com. serviceAccount:{projectid}.svc.id.goog[{namespace}/{kubernetes-sa}]: An identifier for a Kubernetes service account (https://cloud.google.com/kubernetes-engine/docs/how-to/kubernetes-service-accounts). For example, my-project.svc.id.goog[my-namespace/my-kubernetes-sa]. group:{emailid}: An email address that represents a Google group. For example, admins@example.com. domain:{domain}: The G Suite domain (primary) that represents all the users of that domain. For example, google.com or example.com. deleted:user:{emailid}?uid={uniqueid}: An email address (plus unique identifier) representing a user that has been recently deleted. For example, alice@example.com?uid=123456789012345678901. If the user is recovered, this value reverts to user:{emailid} and the recovered user retains the role in the binding. deleted:serviceAccount:{emailid}?uid={uniqueid}: An email address (plus unique identifier) representing a service account that has been recently deleted. For example, my-other-app@appspot.gserviceaccount.com?uid=123456789012345678901. If the service account is undeleted, this value reverts to serviceAccount:{emailid} and the undeleted service account retains the role in the binding. deleted:group:{emailid}?uid={uniqueid}: An email address (plus unique identifier) representing a Google group that has been recently deleted. For example, admins@example.com?uid=123456789012345678901. If the group is recovered, this value reverts to group:{emailid} and the recovered group retains the role in the binding.
         &quot;A String&quot;,
       ],
       &quot;role&quot;: &quot;A String&quot;, # Role that is assigned to the list of members, or principals. For example, roles/viewer, roles/editor, or roles/owner.
@@ -646,7 +677,7 @@ Args:
   parent: string, Required. The resource name of the parent location: projects/{project}/locations/{location_id} where project refers to a project_id or project_number and location_id refers to a GCP region. (required)
   filter: string, Optional. Filter request.
   orderBy: string, Optional. Order by fields (name or create_time) for the result. If not specified, the ordering is undefined.
-  pageSize: integer, Optional. Maximum number of dataScans to return. The service may return fewer than this value. If unspecified, at most 10 scans will be returned. The maximum value is 1000; values above 1000 will be coerced to 1000.
+  pageSize: integer, Optional. Maximum number of dataScans to return. The service may return fewer than this value. If unspecified, at most 500 scans will be returned. The maximum value is 1000; values above 1000 will be coerced to 1000.
   pageToken: string, Optional. Page token received from a previous ListDataScans call. Provide this to retrieve the subsequent page. When paginating, all other parameters provided to ListDataScans must match the call that provided the page token.
   x__xgafv: string, V1 error format.
     Allowed values
@@ -662,6 +693,7 @@ Returns:
       &quot;createTime&quot;: &quot;A String&quot;, # Output only. The time when the scan was created.
       &quot;data&quot;: { # The data source for DataScan. # Required. The data source for DataScan.
         &quot;entity&quot;: &quot;A String&quot;, # Immutable. The Dataplex entity that represents the data source (e.g. BigQuery table) for DataScan, of the form: projects/{project_number}/locations/{location_id}/lakes/{lake_id}/zones/{zone_id}/entities/{entity_id}.
+        &quot;resource&quot;: &quot;A String&quot;, # Immutable. The service-qualified full resource name of the cloud resource for a DataScan job to scan against. The field could be: BigQuery table of type &quot;TABLE&quot; for DataProfileScan/DataQualityScan Format: //bigquery.googleapis.com/projects/PROJECT_ID/datasets/DATASET_ID/tables/TABLE_ID
       },
       &quot;dataProfileResult&quot;: { # DataProfileResult defines the output of DataProfileScan. Each field of the table will have field type specific profile result. # Output only. The result of the data profile scan.
         &quot;profile&quot;: { # Contains name, type, mode and field type specific profile information. # The profile information per field.
@@ -702,7 +734,7 @@ Returns:
                   },
                 ],
               },
-              &quot;type&quot;: &quot;A String&quot;, # The field data type. Possible values include: STRING BYTE INT64 INT32 INT16 DOUBLE FLOAT DECIMAL BOOLEAN BINARY TIMESTAMP DATE TIME NULL RECORD
+              &quot;type&quot;: &quot;A String&quot;, # The data type retrieved from the schema of the data source. For instance, for a BigQuery native table, it is the BigQuery Table Schema (https://cloud.google.com/bigquery/docs/reference/rest/v2/tables#tablefieldschema). For a Dataplex Entity, it is the Entity Schema (https://cloud.google.com/dataplex/docs/reference/rpc/google.cloud.dataplex.v1#type_3).
             },
           ],
         },
@@ -716,6 +748,18 @@ Returns:
         },
       },
       &quot;dataProfileSpec&quot;: { # DataProfileScan related setting. # DataProfileScan related setting.
+        &quot;excludeFields&quot;: { # The specification for fields to include or exclude in data profile scan. # Optional. The fields to exclude from data profile.If specified, the fields will be excluded from data profile, regardless of include_fields value.
+          &quot;fieldNames&quot;: [ # Optional. Expected input is a list of fully qualified names of fields as in the schema.Only top-level field names for nested fields are supported. For instance, if &#x27;x&#x27; is of nested field type, listing &#x27;x&#x27; is supported but &#x27;x.y.z&#x27; is not supported. Here &#x27;y&#x27; and &#x27;y.z&#x27; are nested fields of &#x27;x&#x27;.
+            &quot;A String&quot;,
+          ],
+        },
+        &quot;includeFields&quot;: { # The specification for fields to include or exclude in data profile scan. # Optional. The fields to include in data profile.If not specified, all fields at the time of profile scan job execution are included, except for ones listed in exclude_fields.
+          &quot;fieldNames&quot;: [ # Optional. Expected input is a list of fully qualified names of fields as in the schema.Only top-level field names for nested fields are supported. For instance, if &#x27;x&#x27; is of nested field type, listing &#x27;x&#x27; is supported but &#x27;x.y.z&#x27; is not supported. Here &#x27;y&#x27; and &#x27;y.z&#x27; are nested fields of &#x27;x&#x27;.
+            &quot;A String&quot;,
+          ],
+        },
+        &quot;rowFilter&quot;: &quot;A String&quot;, # Optional. A filter applied to all rows in a single DataScan job. The filter needs to be a valid SQL expression for a WHERE clause in BigQuery standard SQL syntax. Example: col1 &gt;= 0 AND col2 &lt; 10
+        &quot;samplingPercent&quot;: 3.14, # Optional. The percentage of the records to be selected from the dataset for DataScan. Value can range between 0.0 and 100.0 with up to 3 significant decimal digits. Sampling is not applied if sampling_percent is not specified, 0 or 100.
       },
       &quot;dataQualityResult&quot;: { # The output of a DataQualityScan. # Output only. The result of the data quality scan.
         &quot;dimensions&quot;: [ # A list of results at the dimension level.
@@ -759,7 +803,7 @@ Returns:
               &quot;statisticRangeExpectation&quot;: { # Evaluates whether the column aggregate statistic lies between a specified range. # ColumnAggregate rule which evaluates whether the column aggregate statistic lies between a specified range.
                 &quot;maxValue&quot;: &quot;A String&quot;, # The maximum column statistic value allowed for a row to pass this validation.At least one of min_value and max_value need to be provided.
                 &quot;minValue&quot;: &quot;A String&quot;, # The minimum column statistic value allowed for a row to pass this validation.At least one of min_value and max_value need to be provided.
-                &quot;statistic&quot;: &quot;A String&quot;,
+                &quot;statistic&quot;: &quot;A String&quot;, # The aggregate metric to evaluate.
                 &quot;strictMaxEnabled&quot;: True or False, # Whether column statistic needs to be strictly lesser than (&#x27;&lt;&#x27;) the maximum, or if equality is allowed.Only relevant if a max_value has been defined. Default = false.
                 &quot;strictMinEnabled&quot;: True or False, # Whether column statistic needs to be strictly greater than (&#x27;&gt;&#x27;) the minimum, or if equality is allowed.Only relevant if a min_value has been defined. Default = false.
               },
@@ -781,6 +825,7 @@ Returns:
         },
       },
       &quot;dataQualitySpec&quot;: { # DataQualityScan related setting. # DataQualityScan related setting.
+        &quot;rowFilter&quot;: &quot;A String&quot;, # Optional. A filter applied to all rows in a single DataScan job. The filter needs to be a valid SQL expression for a WHERE clause in BigQuery standard SQL syntax. Example: col1 &gt;= 0 AND col2 &lt; 10
         &quot;rules&quot;: [ # The list of rules to evaluate against a data source. At least one rule is required.
           { # A rule captures data quality intent about a data source.
             &quot;column&quot;: &quot;A String&quot;, # Optional. The unnested column which this rule is evaluated against.
@@ -808,7 +853,7 @@ Returns:
             &quot;statisticRangeExpectation&quot;: { # Evaluates whether the column aggregate statistic lies between a specified range. # ColumnAggregate rule which evaluates whether the column aggregate statistic lies between a specified range.
               &quot;maxValue&quot;: &quot;A String&quot;, # The maximum column statistic value allowed for a row to pass this validation.At least one of min_value and max_value need to be provided.
               &quot;minValue&quot;: &quot;A String&quot;, # The minimum column statistic value allowed for a row to pass this validation.At least one of min_value and max_value need to be provided.
-              &quot;statistic&quot;: &quot;A String&quot;,
+              &quot;statistic&quot;: &quot;A String&quot;, # The aggregate metric to evaluate.
               &quot;strictMaxEnabled&quot;: True or False, # Whether column statistic needs to be strictly lesser than (&#x27;&lt;&#x27;) the maximum, or if equality is allowed.Only relevant if a max_value has been defined. Default = false.
               &quot;strictMinEnabled&quot;: True or False, # Whether column statistic needs to be strictly greater than (&#x27;&gt;&#x27;) the minimum, or if equality is allowed.Only relevant if a min_value has been defined. Default = false.
             },
@@ -820,6 +865,7 @@ Returns:
             },
           },
         ],
+        &quot;samplingPercent&quot;: 3.14, # Optional. The percentage of the records to be selected from the dataset for DataScan. Value can range between 0.0 and 100.0 with up to 3 significant decimal digits. Sampling is not applied if sampling_percent is not specified, 0 or 100.
       },
       &quot;description&quot;: &quot;A String&quot;, # Optional. Description of the scan. Must be between 1-1024 characters.
       &quot;displayName&quot;: &quot;A String&quot;, # Optional. User friendly display name. Must be between 1-256 characters.
@@ -869,7 +915,7 @@ Returns:
 </div>
 
 <div class="method">
-    <code class="details" id="patch">patch(name, body=None, updateMask=None, x__xgafv=None)</code>
+    <code class="details" id="patch">patch(name, body=None, updateMask=None, validateOnly=None, x__xgafv=None)</code>
   <pre>Updates a DataScan resource.
 
 Args:
@@ -881,6 +927,7 @@ Args:
   &quot;createTime&quot;: &quot;A String&quot;, # Output only. The time when the scan was created.
   &quot;data&quot;: { # The data source for DataScan. # Required. The data source for DataScan.
     &quot;entity&quot;: &quot;A String&quot;, # Immutable. The Dataplex entity that represents the data source (e.g. BigQuery table) for DataScan, of the form: projects/{project_number}/locations/{location_id}/lakes/{lake_id}/zones/{zone_id}/entities/{entity_id}.
+    &quot;resource&quot;: &quot;A String&quot;, # Immutable. The service-qualified full resource name of the cloud resource for a DataScan job to scan against. The field could be: BigQuery table of type &quot;TABLE&quot; for DataProfileScan/DataQualityScan Format: //bigquery.googleapis.com/projects/PROJECT_ID/datasets/DATASET_ID/tables/TABLE_ID
   },
   &quot;dataProfileResult&quot;: { # DataProfileResult defines the output of DataProfileScan. Each field of the table will have field type specific profile result. # Output only. The result of the data profile scan.
     &quot;profile&quot;: { # Contains name, type, mode and field type specific profile information. # The profile information per field.
@@ -921,7 +968,7 @@ Args:
               },
             ],
           },
-          &quot;type&quot;: &quot;A String&quot;, # The field data type. Possible values include: STRING BYTE INT64 INT32 INT16 DOUBLE FLOAT DECIMAL BOOLEAN BINARY TIMESTAMP DATE TIME NULL RECORD
+          &quot;type&quot;: &quot;A String&quot;, # The data type retrieved from the schema of the data source. For instance, for a BigQuery native table, it is the BigQuery Table Schema (https://cloud.google.com/bigquery/docs/reference/rest/v2/tables#tablefieldschema). For a Dataplex Entity, it is the Entity Schema (https://cloud.google.com/dataplex/docs/reference/rpc/google.cloud.dataplex.v1#type_3).
         },
       ],
     },
@@ -935,6 +982,18 @@ Args:
     },
   },
   &quot;dataProfileSpec&quot;: { # DataProfileScan related setting. # DataProfileScan related setting.
+    &quot;excludeFields&quot;: { # The specification for fields to include or exclude in data profile scan. # Optional. The fields to exclude from data profile.If specified, the fields will be excluded from data profile, regardless of include_fields value.
+      &quot;fieldNames&quot;: [ # Optional. Expected input is a list of fully qualified names of fields as in the schema.Only top-level field names for nested fields are supported. For instance, if &#x27;x&#x27; is of nested field type, listing &#x27;x&#x27; is supported but &#x27;x.y.z&#x27; is not supported. Here &#x27;y&#x27; and &#x27;y.z&#x27; are nested fields of &#x27;x&#x27;.
+        &quot;A String&quot;,
+      ],
+    },
+    &quot;includeFields&quot;: { # The specification for fields to include or exclude in data profile scan. # Optional. The fields to include in data profile.If not specified, all fields at the time of profile scan job execution are included, except for ones listed in exclude_fields.
+      &quot;fieldNames&quot;: [ # Optional. Expected input is a list of fully qualified names of fields as in the schema.Only top-level field names for nested fields are supported. For instance, if &#x27;x&#x27; is of nested field type, listing &#x27;x&#x27; is supported but &#x27;x.y.z&#x27; is not supported. Here &#x27;y&#x27; and &#x27;y.z&#x27; are nested fields of &#x27;x&#x27;.
+        &quot;A String&quot;,
+      ],
+    },
+    &quot;rowFilter&quot;: &quot;A String&quot;, # Optional. A filter applied to all rows in a single DataScan job. The filter needs to be a valid SQL expression for a WHERE clause in BigQuery standard SQL syntax. Example: col1 &gt;= 0 AND col2 &lt; 10
+    &quot;samplingPercent&quot;: 3.14, # Optional. The percentage of the records to be selected from the dataset for DataScan. Value can range between 0.0 and 100.0 with up to 3 significant decimal digits. Sampling is not applied if sampling_percent is not specified, 0 or 100.
   },
   &quot;dataQualityResult&quot;: { # The output of a DataQualityScan. # Output only. The result of the data quality scan.
     &quot;dimensions&quot;: [ # A list of results at the dimension level.
@@ -978,7 +1037,7 @@ Args:
           &quot;statisticRangeExpectation&quot;: { # Evaluates whether the column aggregate statistic lies between a specified range. # ColumnAggregate rule which evaluates whether the column aggregate statistic lies between a specified range.
             &quot;maxValue&quot;: &quot;A String&quot;, # The maximum column statistic value allowed for a row to pass this validation.At least one of min_value and max_value need to be provided.
             &quot;minValue&quot;: &quot;A String&quot;, # The minimum column statistic value allowed for a row to pass this validation.At least one of min_value and max_value need to be provided.
-            &quot;statistic&quot;: &quot;A String&quot;,
+            &quot;statistic&quot;: &quot;A String&quot;, # The aggregate metric to evaluate.
             &quot;strictMaxEnabled&quot;: True or False, # Whether column statistic needs to be strictly lesser than (&#x27;&lt;&#x27;) the maximum, or if equality is allowed.Only relevant if a max_value has been defined. Default = false.
             &quot;strictMinEnabled&quot;: True or False, # Whether column statistic needs to be strictly greater than (&#x27;&gt;&#x27;) the minimum, or if equality is allowed.Only relevant if a min_value has been defined. Default = false.
           },
@@ -1000,6 +1059,7 @@ Args:
     },
   },
   &quot;dataQualitySpec&quot;: { # DataQualityScan related setting. # DataQualityScan related setting.
+    &quot;rowFilter&quot;: &quot;A String&quot;, # Optional. A filter applied to all rows in a single DataScan job. The filter needs to be a valid SQL expression for a WHERE clause in BigQuery standard SQL syntax. Example: col1 &gt;= 0 AND col2 &lt; 10
     &quot;rules&quot;: [ # The list of rules to evaluate against a data source. At least one rule is required.
       { # A rule captures data quality intent about a data source.
         &quot;column&quot;: &quot;A String&quot;, # Optional. The unnested column which this rule is evaluated against.
@@ -1027,7 +1087,7 @@ Args:
         &quot;statisticRangeExpectation&quot;: { # Evaluates whether the column aggregate statistic lies between a specified range. # ColumnAggregate rule which evaluates whether the column aggregate statistic lies between a specified range.
           &quot;maxValue&quot;: &quot;A String&quot;, # The maximum column statistic value allowed for a row to pass this validation.At least one of min_value and max_value need to be provided.
           &quot;minValue&quot;: &quot;A String&quot;, # The minimum column statistic value allowed for a row to pass this validation.At least one of min_value and max_value need to be provided.
-          &quot;statistic&quot;: &quot;A String&quot;,
+          &quot;statistic&quot;: &quot;A String&quot;, # The aggregate metric to evaluate.
           &quot;strictMaxEnabled&quot;: True or False, # Whether column statistic needs to be strictly lesser than (&#x27;&lt;&#x27;) the maximum, or if equality is allowed.Only relevant if a max_value has been defined. Default = false.
           &quot;strictMinEnabled&quot;: True or False, # Whether column statistic needs to be strictly greater than (&#x27;&gt;&#x27;) the minimum, or if equality is allowed.Only relevant if a min_value has been defined. Default = false.
         },
@@ -1039,6 +1099,7 @@ Args:
         },
       },
     ],
+    &quot;samplingPercent&quot;: 3.14, # Optional. The percentage of the records to be selected from the dataset for DataScan. Value can range between 0.0 and 100.0 with up to 3 significant decimal digits. Sampling is not applied if sampling_percent is not specified, 0 or 100.
   },
   &quot;description&quot;: &quot;A String&quot;, # Optional. Description of the scan. Must be between 1-1024 characters.
   &quot;displayName&quot;: &quot;A String&quot;, # Optional. User friendly display name. Must be between 1-256 characters.
@@ -1067,6 +1128,7 @@ Args:
 }
 
   updateMask: string, Required. Mask of fields to update.
+  validateOnly: boolean, Optional. Only validate the request, but do not perform mutations. The default is false.
   x__xgafv: string, V1 error format.
     Allowed values
       1 - v1 error format
@@ -1157,7 +1219,7 @@ Returns:
                 },
               ],
             },
-            &quot;type&quot;: &quot;A String&quot;, # The field data type. Possible values include: STRING BYTE INT64 INT32 INT16 DOUBLE FLOAT DECIMAL BOOLEAN BINARY TIMESTAMP DATE TIME NULL RECORD
+            &quot;type&quot;: &quot;A String&quot;, # The data type retrieved from the schema of the data source. For instance, for a BigQuery native table, it is the BigQuery Table Schema (https://cloud.google.com/bigquery/docs/reference/rest/v2/tables#tablefieldschema). For a Dataplex Entity, it is the Entity Schema (https://cloud.google.com/dataplex/docs/reference/rpc/google.cloud.dataplex.v1#type_3).
           },
         ],
       },
@@ -1171,6 +1233,18 @@ Returns:
       },
     },
     &quot;dataProfileSpec&quot;: { # DataProfileScan related setting. # Output only. DataProfileScan related setting.
+      &quot;excludeFields&quot;: { # The specification for fields to include or exclude in data profile scan. # Optional. The fields to exclude from data profile.If specified, the fields will be excluded from data profile, regardless of include_fields value.
+        &quot;fieldNames&quot;: [ # Optional. Expected input is a list of fully qualified names of fields as in the schema.Only top-level field names for nested fields are supported. For instance, if &#x27;x&#x27; is of nested field type, listing &#x27;x&#x27; is supported but &#x27;x.y.z&#x27; is not supported. Here &#x27;y&#x27; and &#x27;y.z&#x27; are nested fields of &#x27;x&#x27;.
+          &quot;A String&quot;,
+        ],
+      },
+      &quot;includeFields&quot;: { # The specification for fields to include or exclude in data profile scan. # Optional. The fields to include in data profile.If not specified, all fields at the time of profile scan job execution are included, except for ones listed in exclude_fields.
+        &quot;fieldNames&quot;: [ # Optional. Expected input is a list of fully qualified names of fields as in the schema.Only top-level field names for nested fields are supported. For instance, if &#x27;x&#x27; is of nested field type, listing &#x27;x&#x27; is supported but &#x27;x.y.z&#x27; is not supported. Here &#x27;y&#x27; and &#x27;y.z&#x27; are nested fields of &#x27;x&#x27;.
+          &quot;A String&quot;,
+        ],
+      },
+      &quot;rowFilter&quot;: &quot;A String&quot;, # Optional. A filter applied to all rows in a single DataScan job. The filter needs to be a valid SQL expression for a WHERE clause in BigQuery standard SQL syntax. Example: col1 &gt;= 0 AND col2 &lt; 10
+      &quot;samplingPercent&quot;: 3.14, # Optional. The percentage of the records to be selected from the dataset for DataScan. Value can range between 0.0 and 100.0 with up to 3 significant decimal digits. Sampling is not applied if sampling_percent is not specified, 0 or 100.
     },
     &quot;dataQualityResult&quot;: { # The output of a DataQualityScan. # Output only. The result of the data quality scan.
       &quot;dimensions&quot;: [ # A list of results at the dimension level.
@@ -1214,7 +1288,7 @@ Returns:
             &quot;statisticRangeExpectation&quot;: { # Evaluates whether the column aggregate statistic lies between a specified range. # ColumnAggregate rule which evaluates whether the column aggregate statistic lies between a specified range.
               &quot;maxValue&quot;: &quot;A String&quot;, # The maximum column statistic value allowed for a row to pass this validation.At least one of min_value and max_value need to be provided.
               &quot;minValue&quot;: &quot;A String&quot;, # The minimum column statistic value allowed for a row to pass this validation.At least one of min_value and max_value need to be provided.
-              &quot;statistic&quot;: &quot;A String&quot;,
+              &quot;statistic&quot;: &quot;A String&quot;, # The aggregate metric to evaluate.
               &quot;strictMaxEnabled&quot;: True or False, # Whether column statistic needs to be strictly lesser than (&#x27;&lt;&#x27;) the maximum, or if equality is allowed.Only relevant if a max_value has been defined. Default = false.
               &quot;strictMinEnabled&quot;: True or False, # Whether column statistic needs to be strictly greater than (&#x27;&gt;&#x27;) the minimum, or if equality is allowed.Only relevant if a min_value has been defined. Default = false.
             },
@@ -1236,6 +1310,7 @@ Returns:
       },
     },
     &quot;dataQualitySpec&quot;: { # DataQualityScan related setting. # Output only. DataQualityScan related setting.
+      &quot;rowFilter&quot;: &quot;A String&quot;, # Optional. A filter applied to all rows in a single DataScan job. The filter needs to be a valid SQL expression for a WHERE clause in BigQuery standard SQL syntax. Example: col1 &gt;= 0 AND col2 &lt; 10
       &quot;rules&quot;: [ # The list of rules to evaluate against a data source. At least one rule is required.
         { # A rule captures data quality intent about a data source.
           &quot;column&quot;: &quot;A String&quot;, # Optional. The unnested column which this rule is evaluated against.
@@ -1263,7 +1338,7 @@ Returns:
           &quot;statisticRangeExpectation&quot;: { # Evaluates whether the column aggregate statistic lies between a specified range. # ColumnAggregate rule which evaluates whether the column aggregate statistic lies between a specified range.
             &quot;maxValue&quot;: &quot;A String&quot;, # The maximum column statistic value allowed for a row to pass this validation.At least one of min_value and max_value need to be provided.
             &quot;minValue&quot;: &quot;A String&quot;, # The minimum column statistic value allowed for a row to pass this validation.At least one of min_value and max_value need to be provided.
-            &quot;statistic&quot;: &quot;A String&quot;,
+            &quot;statistic&quot;: &quot;A String&quot;, # The aggregate metric to evaluate.
             &quot;strictMaxEnabled&quot;: True or False, # Whether column statistic needs to be strictly lesser than (&#x27;&lt;&#x27;) the maximum, or if equality is allowed.Only relevant if a max_value has been defined. Default = false.
             &quot;strictMinEnabled&quot;: True or False, # Whether column statistic needs to be strictly greater than (&#x27;&gt;&#x27;) the minimum, or if equality is allowed.Only relevant if a min_value has been defined. Default = false.
           },
@@ -1275,6 +1350,7 @@ Returns:
           },
         },
       ],
+      &quot;samplingPercent&quot;: 3.14, # Optional. The percentage of the records to be selected from the dataset for DataScan. Value can range between 0.0 and 100.0 with up to 3 significant decimal digits. Sampling is not applied if sampling_percent is not specified, 0 or 100.
     },
     &quot;endTime&quot;: &quot;A String&quot;, # Output only. The time when the DataScanJob ended.
     &quot;message&quot;: &quot;A String&quot;, # Output only. Additional information about the current state.
@@ -1319,7 +1395,7 @@ Args:
           &quot;location&quot;: &quot;A String&quot;, # Optional. String indicating the location of the expression for error reporting, e.g. a file name and a position in the file.
           &quot;title&quot;: &quot;A String&quot;, # Optional. Title for the expression, i.e. a short string describing its purpose. This can be used e.g. in UIs which allow to enter the expression.
         },
-        &quot;members&quot;: [ # Specifies the principals requesting access for a Google Cloud resource. members can have the following values: allUsers: A special identifier that represents anyone who is on the internet; with or without a Google account. allAuthenticatedUsers: A special identifier that represents anyone who is authenticated with a Google account or a service account. Does not include identities that come from external identity providers (IdPs) through identity federation. user:{emailid}: An email address that represents a specific Google account. For example, alice@example.com . serviceAccount:{emailid}: An email address that represents a Google service account. For example, my-other-app@appspot.gserviceaccount.com. serviceAccount:{projectid}.svc.id.goog[{namespace}/{kubernetes-sa}]: An identifier for a Kubernetes service account (https://cloud.google.com/kubernetes-engine/docs/how-to/kubernetes-service-accounts). For example, my-project.svc.id.goog[my-namespace/my-kubernetes-sa]. group:{emailid}: An email address that represents a Google group. For example, admins@example.com. deleted:user:{emailid}?uid={uniqueid}: An email address (plus unique identifier) representing a user that has been recently deleted. For example, alice@example.com?uid=123456789012345678901. If the user is recovered, this value reverts to user:{emailid} and the recovered user retains the role in the binding. deleted:serviceAccount:{emailid}?uid={uniqueid}: An email address (plus unique identifier) representing a service account that has been recently deleted. For example, my-other-app@appspot.gserviceaccount.com?uid=123456789012345678901. If the service account is undeleted, this value reverts to serviceAccount:{emailid} and the undeleted service account retains the role in the binding. deleted:group:{emailid}?uid={uniqueid}: An email address (plus unique identifier) representing a Google group that has been recently deleted. For example, admins@example.com?uid=123456789012345678901. If the group is recovered, this value reverts to group:{emailid} and the recovered group retains the role in the binding. domain:{domain}: The G Suite domain (primary) that represents all the users of that domain. For example, google.com or example.com.
+        &quot;members&quot;: [ # Specifies the principals requesting access for a Google Cloud resource. members can have the following values: allUsers: A special identifier that represents anyone who is on the internet; with or without a Google account. allAuthenticatedUsers: A special identifier that represents anyone who is authenticated with a Google account or a service account. Does not include identities that come from external identity providers (IdPs) through identity federation. user:{emailid}: An email address that represents a specific Google account. For example, alice@example.com . serviceAccount:{emailid}: An email address that represents a Google service account. For example, my-other-app@appspot.gserviceaccount.com. serviceAccount:{projectid}.svc.id.goog[{namespace}/{kubernetes-sa}]: An identifier for a Kubernetes service account (https://cloud.google.com/kubernetes-engine/docs/how-to/kubernetes-service-accounts). For example, my-project.svc.id.goog[my-namespace/my-kubernetes-sa]. group:{emailid}: An email address that represents a Google group. For example, admins@example.com. domain:{domain}: The G Suite domain (primary) that represents all the users of that domain. For example, google.com or example.com. deleted:user:{emailid}?uid={uniqueid}: An email address (plus unique identifier) representing a user that has been recently deleted. For example, alice@example.com?uid=123456789012345678901. If the user is recovered, this value reverts to user:{emailid} and the recovered user retains the role in the binding. deleted:serviceAccount:{emailid}?uid={uniqueid}: An email address (plus unique identifier) representing a service account that has been recently deleted. For example, my-other-app@appspot.gserviceaccount.com?uid=123456789012345678901. If the service account is undeleted, this value reverts to serviceAccount:{emailid} and the undeleted service account retains the role in the binding. deleted:group:{emailid}?uid={uniqueid}: An email address (plus unique identifier) representing a Google group that has been recently deleted. For example, admins@example.com?uid=123456789012345678901. If the group is recovered, this value reverts to group:{emailid} and the recovered group retains the role in the binding.
           &quot;A String&quot;,
         ],
         &quot;role&quot;: &quot;A String&quot;, # Role that is assigned to the list of members, or principals. For example, roles/viewer, roles/editor, or roles/owner.
@@ -1361,7 +1437,7 @@ Returns:
         &quot;location&quot;: &quot;A String&quot;, # Optional. String indicating the location of the expression for error reporting, e.g. a file name and a position in the file.
         &quot;title&quot;: &quot;A String&quot;, # Optional. Title for the expression, i.e. a short string describing its purpose. This can be used e.g. in UIs which allow to enter the expression.
       },
-      &quot;members&quot;: [ # Specifies the principals requesting access for a Google Cloud resource. members can have the following values: allUsers: A special identifier that represents anyone who is on the internet; with or without a Google account. allAuthenticatedUsers: A special identifier that represents anyone who is authenticated with a Google account or a service account. Does not include identities that come from external identity providers (IdPs) through identity federation. user:{emailid}: An email address that represents a specific Google account. For example, alice@example.com . serviceAccount:{emailid}: An email address that represents a Google service account. For example, my-other-app@appspot.gserviceaccount.com. serviceAccount:{projectid}.svc.id.goog[{namespace}/{kubernetes-sa}]: An identifier for a Kubernetes service account (https://cloud.google.com/kubernetes-engine/docs/how-to/kubernetes-service-accounts). For example, my-project.svc.id.goog[my-namespace/my-kubernetes-sa]. group:{emailid}: An email address that represents a Google group. For example, admins@example.com. deleted:user:{emailid}?uid={uniqueid}: An email address (plus unique identifier) representing a user that has been recently deleted. For example, alice@example.com?uid=123456789012345678901. If the user is recovered, this value reverts to user:{emailid} and the recovered user retains the role in the binding. deleted:serviceAccount:{emailid}?uid={uniqueid}: An email address (plus unique identifier) representing a service account that has been recently deleted. For example, my-other-app@appspot.gserviceaccount.com?uid=123456789012345678901. If the service account is undeleted, this value reverts to serviceAccount:{emailid} and the undeleted service account retains the role in the binding. deleted:group:{emailid}?uid={uniqueid}: An email address (plus unique identifier) representing a Google group that has been recently deleted. For example, admins@example.com?uid=123456789012345678901. If the group is recovered, this value reverts to group:{emailid} and the recovered group retains the role in the binding. domain:{domain}: The G Suite domain (primary) that represents all the users of that domain. For example, google.com or example.com.
+      &quot;members&quot;: [ # Specifies the principals requesting access for a Google Cloud resource. members can have the following values: allUsers: A special identifier that represents anyone who is on the internet; with or without a Google account. allAuthenticatedUsers: A special identifier that represents anyone who is authenticated with a Google account or a service account. Does not include identities that come from external identity providers (IdPs) through identity federation. user:{emailid}: An email address that represents a specific Google account. For example, alice@example.com . serviceAccount:{emailid}: An email address that represents a Google service account. For example, my-other-app@appspot.gserviceaccount.com. serviceAccount:{projectid}.svc.id.goog[{namespace}/{kubernetes-sa}]: An identifier for a Kubernetes service account (https://cloud.google.com/kubernetes-engine/docs/how-to/kubernetes-service-accounts). For example, my-project.svc.id.goog[my-namespace/my-kubernetes-sa]. group:{emailid}: An email address that represents a Google group. For example, admins@example.com. domain:{domain}: The G Suite domain (primary) that represents all the users of that domain. For example, google.com or example.com. deleted:user:{emailid}?uid={uniqueid}: An email address (plus unique identifier) representing a user that has been recently deleted. For example, alice@example.com?uid=123456789012345678901. If the user is recovered, this value reverts to user:{emailid} and the recovered user retains the role in the binding. deleted:serviceAccount:{emailid}?uid={uniqueid}: An email address (plus unique identifier) representing a service account that has been recently deleted. For example, my-other-app@appspot.gserviceaccount.com?uid=123456789012345678901. If the service account is undeleted, this value reverts to serviceAccount:{emailid} and the undeleted service account retains the role in the binding. deleted:group:{emailid}?uid={uniqueid}: An email address (plus unique identifier) representing a Google group that has been recently deleted. For example, admins@example.com?uid=123456789012345678901. If the group is recovered, this value reverts to group:{emailid} and the recovered group retains the role in the binding.
         &quot;A String&quot;,
       ],
       &quot;role&quot;: &quot;A String&quot;, # Role that is assigned to the list of members, or principals. For example, roles/viewer, roles/editor, or roles/owner.

@@ -96,7 +96,7 @@ h1, h2, h3 {
 <p class="firstline">Gets the access control policy for a resource. May return: * A`NOT_FOUND` error if the resource doesn't exist or you don't have the permission to view it. * An empty policy if the resource exists but doesn't have a set policy. Supported resources are: - Tag templates - Entry groups Note: This method doesn't get policies from Google Cloud Platform resources ingested into Data Catalog. To call this method, you must have the following Google IAM permissions: - `datacatalog.tagTemplates.getIamPolicy` to get policies on tag templates. - `datacatalog.entryGroups.getIamPolicy` to get policies on entry groups.</p>
 <p class="toc_element">
   <code><a href="#import_">import_(parent, body=None, x__xgafv=None)</a></code></p>
-<p class="firstline">Imports entries from some source (e.g. dump in a Cloud Storage bucket) to the Data Catalog. Dump here is a snapshot of the third-party system state, that needs to be ingested in the Data Catalog. Import of entries is a sync operation that reconciles state of the third-party system and Data Catalog. ImportEntries is a long-running operation done in the background, so this method returns long-running operation resource. The resource can be queried with Operations.GetOperation which contains metadata and response.</p>
+<p class="firstline">Imports entries from a source, such as data previously dumped into a Cloud Storage bucket, into Data Catalog. Import of entries is a sync operation that reconciles the state of the third-party system with the Data Catalog. `ImportEntries` accepts source data snapshots of a third-party system. Snapshot should be delivered as a .wire or base65-encoded .txt file containing a sequence of Protocol Buffer messages of DumpItem type. `ImportEntries` returns a long-running operation resource that can be queried with Operations.GetOperation to return ImportEntriesMetadata and an ImportEntriesResponse message.</p>
 <p class="toc_element">
   <code><a href="#list">list(parent, pageSize=None, pageToken=None, readMask=None, x__xgafv=None)</a></code></p>
 <p class="firstline">Lists entries. Note: Currently, this method can list only custom entries. To get a list of both custom and automatically created entries, use SearchCatalog.</p>
@@ -164,6 +164,9 @@ Args:
     &quot;entryOverview&quot;: { # Entry overview fields for rich text descriptions of entries. # Entry overview fields for rich text descriptions of entries.
       &quot;overview&quot;: &quot;A String&quot;, # Entry overview with support for rich text. The overview must only contain Unicode characters, and should be formatted using HTML. The maximum length is 10 MiB as this value holds HTML descriptions including encoded images. The maximum length of the text without images is 100 KiB.
     },
+  },
+  &quot;cloudBigtableSystemSpec&quot;: { # Specification that applies to all entries that are part of `CLOUD_BIGTABLE` system (user_specified_type) # Specification that applies to Cloud Bigtable system. Only settable when `integrated_system` is equal to `CLOUD_BIGTABLE`
+    &quot;instanceDisplayName&quot;: &quot;A String&quot;, # Display name of the Instance. This is user specified and different from the resource name.
   },
   &quot;dataSource&quot;: { # Physical location of an entry. # Output only. Physical location of the entry.
     &quot;resource&quot;: &quot;A String&quot;, # Full name of a resource as defined by the service. For example: `//bigquery.googleapis.com/projects/{PROJECT_ID}/locations/{LOCATION}/datasets/{DATASET_ID}/tables/{TABLE_ID}`
@@ -256,7 +259,7 @@ Args:
       },
     },
   },
-  &quot;fullyQualifiedName&quot;: &quot;A String&quot;, # Fully qualified name (FQN) of the resource. Set automatically for entries representing resources from synced systems. Settable only during creation and read-only afterwards. Can be used for search and lookup of the entries. FQNs take two forms: * For non-regionalized resources: `{SYSTEM}:{PROJECT}.{PATH_TO_RESOURCE_SEPARATED_WITH_DOTS}` * For regionalized resources: `{SYSTEM}:{PROJECT}.{LOCATION_ID}.{PATH_TO_RESOURCE_SEPARATED_WITH_DOTS}` Example for a DPMS table: `dataproc_metastore:{PROJECT_ID}.{LOCATION_ID}.{INSTANCE_ID}.{DATABASE_ID}.{TABLE_ID}`
+  &quot;fullyQualifiedName&quot;: &quot;A String&quot;, # [Fully Qualified Name (FQN)](https://cloud.google.com//data-catalog/docs/fully-qualified-names) of the resource. Set automatically for entries representing resources from synced systems. Settable only during creation, and read-only later. Can be used for search and lookup of the entries.
   &quot;gcsFilesetSpec&quot;: { # Describes a Cloud Storage fileset entry. # Specification that applies to a Cloud Storage fileset. Valid only for entries with the `FILESET` type.
     &quot;filePatterns&quot;: [ # Required. Patterns to identify a set of files in Google Cloud Storage. For more information, see [Wildcard Names] (https://cloud.google.com/storage/docs/gsutil/addlhelp/WildcardNames). Note: Currently, bucket wildcards are not supported. Examples of valid `file_patterns`: * `gs://bucket_name/dir/*`: matches all files in `bucket_name/dir` directory * `gs://bucket_name/dir/**`: matches all files in `bucket_name/dir` and all subdirectories * `gs://bucket_name/file*`: matches files prefixed by `file` in `bucket_name` * `gs://bucket_name/??.txt`: matches files with two characters followed by `.txt` in `bucket_name` * `gs://bucket_name/[aeiou].txt`: matches files that contain a single vowel character followed by `.txt` in `bucket_name` * `gs://bucket_name/[a-m].txt`: matches files that contain `a`, `b`, ... or `m` followed by `.txt` in `bucket_name` * `gs://bucket_name/a/*/b`: matches all files in `bucket_name` that match the `a/*/b` pattern, such as `a/c/b`, `a/d/b` * `gs://another_bucket/a.txt`: matches `gs://another_bucket/a.txt` You can combine wildcards to match complex sets of files, for example: `gs://bucket_name/[a-m]??.j*g`
       &quot;A String&quot;,
@@ -328,6 +331,18 @@ Args:
         &quot;type&quot;: &quot;A String&quot;, # Required. Type of the column. Must be a UTF-8 string with the maximum size of 128 bytes.
       },
     ],
+  },
+  &quot;serviceSpec&quot;: { # Specification that applies to a Service resource. Valid only for entries with the `SERVICE` type. # Specification that applies to a Service resource.
+    &quot;cloudBigtableInstanceSpec&quot;: { # Specification that applies to Instance entries that are part of `CLOUD_BIGTABLE` system. (user_specified_type) # Specification that applies to Instance entries of `CLOUD_BIGTABLE` system.
+      &quot;cloudBigtableClusterSpecs&quot;: [ # The list of clusters for the Instance.
+        { # Spec that applies to clusters of an Instance of Cloud Bigtable.
+          &quot;displayName&quot;: &quot;A String&quot;, # Name of the cluster.
+          &quot;linkedResource&quot;: &quot;A String&quot;, # A link back to the parent resource, in this case Instance.
+          &quot;location&quot;: &quot;A String&quot;, # Location of the cluster, typically a Cloud zone.
+          &quot;type&quot;: &quot;A String&quot;, # Type of the resource. For a cluster this would be &quot;CLUSTER&quot;.
+        },
+      ],
+    },
   },
   &quot;sourceSystemTimestamps&quot;: { # Timestamps associated with this resource in a particular system. # Timestamps from the underlying resource, not from the Data Catalog entry. Output only when the entry has a system listed in the `IntegratedSystem` enum. For entries with `user_specified_system`, this field is optional and defaults to an empty timestamp.
     &quot;createTime&quot;: &quot;A String&quot;, # Creation timestamp of the resource within the given system.
@@ -399,6 +414,9 @@ Returns:
       &quot;overview&quot;: &quot;A String&quot;, # Entry overview with support for rich text. The overview must only contain Unicode characters, and should be formatted using HTML. The maximum length is 10 MiB as this value holds HTML descriptions including encoded images. The maximum length of the text without images is 100 KiB.
     },
   },
+  &quot;cloudBigtableSystemSpec&quot;: { # Specification that applies to all entries that are part of `CLOUD_BIGTABLE` system (user_specified_type) # Specification that applies to Cloud Bigtable system. Only settable when `integrated_system` is equal to `CLOUD_BIGTABLE`
+    &quot;instanceDisplayName&quot;: &quot;A String&quot;, # Display name of the Instance. This is user specified and different from the resource name.
+  },
   &quot;dataSource&quot;: { # Physical location of an entry. # Output only. Physical location of the entry.
     &quot;resource&quot;: &quot;A String&quot;, # Full name of a resource as defined by the service. For example: `//bigquery.googleapis.com/projects/{PROJECT_ID}/locations/{LOCATION}/datasets/{DATASET_ID}/tables/{TABLE_ID}`
     &quot;service&quot;: &quot;A String&quot;, # Service that physically stores the data.
@@ -490,7 +508,7 @@ Returns:
       },
     },
   },
-  &quot;fullyQualifiedName&quot;: &quot;A String&quot;, # Fully qualified name (FQN) of the resource. Set automatically for entries representing resources from synced systems. Settable only during creation and read-only afterwards. Can be used for search and lookup of the entries. FQNs take two forms: * For non-regionalized resources: `{SYSTEM}:{PROJECT}.{PATH_TO_RESOURCE_SEPARATED_WITH_DOTS}` * For regionalized resources: `{SYSTEM}:{PROJECT}.{LOCATION_ID}.{PATH_TO_RESOURCE_SEPARATED_WITH_DOTS}` Example for a DPMS table: `dataproc_metastore:{PROJECT_ID}.{LOCATION_ID}.{INSTANCE_ID}.{DATABASE_ID}.{TABLE_ID}`
+  &quot;fullyQualifiedName&quot;: &quot;A String&quot;, # [Fully Qualified Name (FQN)](https://cloud.google.com//data-catalog/docs/fully-qualified-names) of the resource. Set automatically for entries representing resources from synced systems. Settable only during creation, and read-only later. Can be used for search and lookup of the entries.
   &quot;gcsFilesetSpec&quot;: { # Describes a Cloud Storage fileset entry. # Specification that applies to a Cloud Storage fileset. Valid only for entries with the `FILESET` type.
     &quot;filePatterns&quot;: [ # Required. Patterns to identify a set of files in Google Cloud Storage. For more information, see [Wildcard Names] (https://cloud.google.com/storage/docs/gsutil/addlhelp/WildcardNames). Note: Currently, bucket wildcards are not supported. Examples of valid `file_patterns`: * `gs://bucket_name/dir/*`: matches all files in `bucket_name/dir` directory * `gs://bucket_name/dir/**`: matches all files in `bucket_name/dir` and all subdirectories * `gs://bucket_name/file*`: matches files prefixed by `file` in `bucket_name` * `gs://bucket_name/??.txt`: matches files with two characters followed by `.txt` in `bucket_name` * `gs://bucket_name/[aeiou].txt`: matches files that contain a single vowel character followed by `.txt` in `bucket_name` * `gs://bucket_name/[a-m].txt`: matches files that contain `a`, `b`, ... or `m` followed by `.txt` in `bucket_name` * `gs://bucket_name/a/*/b`: matches all files in `bucket_name` that match the `a/*/b` pattern, such as `a/c/b`, `a/d/b` * `gs://another_bucket/a.txt`: matches `gs://another_bucket/a.txt` You can combine wildcards to match complex sets of files, for example: `gs://bucket_name/[a-m]??.j*g`
       &quot;A String&quot;,
@@ -562,6 +580,18 @@ Returns:
         &quot;type&quot;: &quot;A String&quot;, # Required. Type of the column. Must be a UTF-8 string with the maximum size of 128 bytes.
       },
     ],
+  },
+  &quot;serviceSpec&quot;: { # Specification that applies to a Service resource. Valid only for entries with the `SERVICE` type. # Specification that applies to a Service resource.
+    &quot;cloudBigtableInstanceSpec&quot;: { # Specification that applies to Instance entries that are part of `CLOUD_BIGTABLE` system. (user_specified_type) # Specification that applies to Instance entries of `CLOUD_BIGTABLE` system.
+      &quot;cloudBigtableClusterSpecs&quot;: [ # The list of clusters for the Instance.
+        { # Spec that applies to clusters of an Instance of Cloud Bigtable.
+          &quot;displayName&quot;: &quot;A String&quot;, # Name of the cluster.
+          &quot;linkedResource&quot;: &quot;A String&quot;, # A link back to the parent resource, in this case Instance.
+          &quot;location&quot;: &quot;A String&quot;, # Location of the cluster, typically a Cloud zone.
+          &quot;type&quot;: &quot;A String&quot;, # Type of the resource. For a cluster this would be &quot;CLUSTER&quot;.
+        },
+      ],
+    },
   },
   &quot;sourceSystemTimestamps&quot;: { # Timestamps associated with this resource in a particular system. # Timestamps from the underlying resource, not from the Data Catalog entry. Output only when the entry has a system listed in the `IntegratedSystem` enum. For entries with `user_specified_system`, this field is optional and defaults to an empty timestamp.
     &quot;createTime&quot;: &quot;A String&quot;, # Creation timestamp of the resource within the given system.
@@ -657,6 +687,9 @@ Returns:
       &quot;overview&quot;: &quot;A String&quot;, # Entry overview with support for rich text. The overview must only contain Unicode characters, and should be formatted using HTML. The maximum length is 10 MiB as this value holds HTML descriptions including encoded images. The maximum length of the text without images is 100 KiB.
     },
   },
+  &quot;cloudBigtableSystemSpec&quot;: { # Specification that applies to all entries that are part of `CLOUD_BIGTABLE` system (user_specified_type) # Specification that applies to Cloud Bigtable system. Only settable when `integrated_system` is equal to `CLOUD_BIGTABLE`
+    &quot;instanceDisplayName&quot;: &quot;A String&quot;, # Display name of the Instance. This is user specified and different from the resource name.
+  },
   &quot;dataSource&quot;: { # Physical location of an entry. # Output only. Physical location of the entry.
     &quot;resource&quot;: &quot;A String&quot;, # Full name of a resource as defined by the service. For example: `//bigquery.googleapis.com/projects/{PROJECT_ID}/locations/{LOCATION}/datasets/{DATASET_ID}/tables/{TABLE_ID}`
     &quot;service&quot;: &quot;A String&quot;, # Service that physically stores the data.
@@ -748,7 +781,7 @@ Returns:
       },
     },
   },
-  &quot;fullyQualifiedName&quot;: &quot;A String&quot;, # Fully qualified name (FQN) of the resource. Set automatically for entries representing resources from synced systems. Settable only during creation and read-only afterwards. Can be used for search and lookup of the entries. FQNs take two forms: * For non-regionalized resources: `{SYSTEM}:{PROJECT}.{PATH_TO_RESOURCE_SEPARATED_WITH_DOTS}` * For regionalized resources: `{SYSTEM}:{PROJECT}.{LOCATION_ID}.{PATH_TO_RESOURCE_SEPARATED_WITH_DOTS}` Example for a DPMS table: `dataproc_metastore:{PROJECT_ID}.{LOCATION_ID}.{INSTANCE_ID}.{DATABASE_ID}.{TABLE_ID}`
+  &quot;fullyQualifiedName&quot;: &quot;A String&quot;, # [Fully Qualified Name (FQN)](https://cloud.google.com//data-catalog/docs/fully-qualified-names) of the resource. Set automatically for entries representing resources from synced systems. Settable only during creation, and read-only later. Can be used for search and lookup of the entries.
   &quot;gcsFilesetSpec&quot;: { # Describes a Cloud Storage fileset entry. # Specification that applies to a Cloud Storage fileset. Valid only for entries with the `FILESET` type.
     &quot;filePatterns&quot;: [ # Required. Patterns to identify a set of files in Google Cloud Storage. For more information, see [Wildcard Names] (https://cloud.google.com/storage/docs/gsutil/addlhelp/WildcardNames). Note: Currently, bucket wildcards are not supported. Examples of valid `file_patterns`: * `gs://bucket_name/dir/*`: matches all files in `bucket_name/dir` directory * `gs://bucket_name/dir/**`: matches all files in `bucket_name/dir` and all subdirectories * `gs://bucket_name/file*`: matches files prefixed by `file` in `bucket_name` * `gs://bucket_name/??.txt`: matches files with two characters followed by `.txt` in `bucket_name` * `gs://bucket_name/[aeiou].txt`: matches files that contain a single vowel character followed by `.txt` in `bucket_name` * `gs://bucket_name/[a-m].txt`: matches files that contain `a`, `b`, ... or `m` followed by `.txt` in `bucket_name` * `gs://bucket_name/a/*/b`: matches all files in `bucket_name` that match the `a/*/b` pattern, such as `a/c/b`, `a/d/b` * `gs://another_bucket/a.txt`: matches `gs://another_bucket/a.txt` You can combine wildcards to match complex sets of files, for example: `gs://bucket_name/[a-m]??.j*g`
       &quot;A String&quot;,
@@ -820,6 +853,18 @@ Returns:
         &quot;type&quot;: &quot;A String&quot;, # Required. Type of the column. Must be a UTF-8 string with the maximum size of 128 bytes.
       },
     ],
+  },
+  &quot;serviceSpec&quot;: { # Specification that applies to a Service resource. Valid only for entries with the `SERVICE` type. # Specification that applies to a Service resource.
+    &quot;cloudBigtableInstanceSpec&quot;: { # Specification that applies to Instance entries that are part of `CLOUD_BIGTABLE` system. (user_specified_type) # Specification that applies to Instance entries of `CLOUD_BIGTABLE` system.
+      &quot;cloudBigtableClusterSpecs&quot;: [ # The list of clusters for the Instance.
+        { # Spec that applies to clusters of an Instance of Cloud Bigtable.
+          &quot;displayName&quot;: &quot;A String&quot;, # Name of the cluster.
+          &quot;linkedResource&quot;: &quot;A String&quot;, # A link back to the parent resource, in this case Instance.
+          &quot;location&quot;: &quot;A String&quot;, # Location of the cluster, typically a Cloud zone.
+          &quot;type&quot;: &quot;A String&quot;, # Type of the resource. For a cluster this would be &quot;CLUSTER&quot;.
+        },
+      ],
+    },
   },
   &quot;sourceSystemTimestamps&quot;: { # Timestamps associated with this resource in a particular system. # Timestamps from the underlying resource, not from the Data Catalog entry. Output only when the entry has a system listed in the `IntegratedSystem` enum. For entries with `user_specified_system`, this field is optional and defaults to an empty timestamp.
     &quot;createTime&quot;: &quot;A String&quot;, # Creation timestamp of the resource within the given system.
@@ -899,7 +944,7 @@ Returns:
 
 <div class="method">
     <code class="details" id="import_">import_(parent, body=None, x__xgafv=None)</code>
-  <pre>Imports entries from some source (e.g. dump in a Cloud Storage bucket) to the Data Catalog. Dump here is a snapshot of the third-party system state, that needs to be ingested in the Data Catalog. Import of entries is a sync operation that reconciles state of the third-party system and Data Catalog. ImportEntries is a long-running operation done in the background, so this method returns long-running operation resource. The resource can be queried with Operations.GetOperation which contains metadata and response.
+  <pre>Imports entries from a source, such as data previously dumped into a Cloud Storage bucket, into Data Catalog. Import of entries is a sync operation that reconciles the state of the third-party system with the Data Catalog. `ImportEntries` accepts source data snapshots of a third-party system. Snapshot should be delivered as a .wire or base65-encoded .txt file containing a sequence of Protocol Buffer messages of DumpItem type. `ImportEntries` returns a long-running operation resource that can be queried with Operations.GetOperation to return ImportEntriesMetadata and an ImportEntriesResponse message.
 
 Args:
   parent: string, Required. Target entry group for ingested entries. (required)
@@ -908,6 +953,7 @@ Args:
 
 { # Request message for ImportEntries method.
   &quot;gcsBucketPath&quot;: &quot;A String&quot;, # Path to a Cloud Storage bucket that contains a dump ready for ingestion.
+  &quot;jobId&quot;: &quot;A String&quot;, # Optional. (Optional) Dataplex task job id, if specified will be used as part of ImportEntries LRO ID
 }
 
   x__xgafv: string, V1 error format.
@@ -986,6 +1032,9 @@ Returns:
         &quot;entryOverview&quot;: { # Entry overview fields for rich text descriptions of entries. # Entry overview fields for rich text descriptions of entries.
           &quot;overview&quot;: &quot;A String&quot;, # Entry overview with support for rich text. The overview must only contain Unicode characters, and should be formatted using HTML. The maximum length is 10 MiB as this value holds HTML descriptions including encoded images. The maximum length of the text without images is 100 KiB.
         },
+      },
+      &quot;cloudBigtableSystemSpec&quot;: { # Specification that applies to all entries that are part of `CLOUD_BIGTABLE` system (user_specified_type) # Specification that applies to Cloud Bigtable system. Only settable when `integrated_system` is equal to `CLOUD_BIGTABLE`
+        &quot;instanceDisplayName&quot;: &quot;A String&quot;, # Display name of the Instance. This is user specified and different from the resource name.
       },
       &quot;dataSource&quot;: { # Physical location of an entry. # Output only. Physical location of the entry.
         &quot;resource&quot;: &quot;A String&quot;, # Full name of a resource as defined by the service. For example: `//bigquery.googleapis.com/projects/{PROJECT_ID}/locations/{LOCATION}/datasets/{DATASET_ID}/tables/{TABLE_ID}`
@@ -1078,7 +1127,7 @@ Returns:
           },
         },
       },
-      &quot;fullyQualifiedName&quot;: &quot;A String&quot;, # Fully qualified name (FQN) of the resource. Set automatically for entries representing resources from synced systems. Settable only during creation and read-only afterwards. Can be used for search and lookup of the entries. FQNs take two forms: * For non-regionalized resources: `{SYSTEM}:{PROJECT}.{PATH_TO_RESOURCE_SEPARATED_WITH_DOTS}` * For regionalized resources: `{SYSTEM}:{PROJECT}.{LOCATION_ID}.{PATH_TO_RESOURCE_SEPARATED_WITH_DOTS}` Example for a DPMS table: `dataproc_metastore:{PROJECT_ID}.{LOCATION_ID}.{INSTANCE_ID}.{DATABASE_ID}.{TABLE_ID}`
+      &quot;fullyQualifiedName&quot;: &quot;A String&quot;, # [Fully Qualified Name (FQN)](https://cloud.google.com//data-catalog/docs/fully-qualified-names) of the resource. Set automatically for entries representing resources from synced systems. Settable only during creation, and read-only later. Can be used for search and lookup of the entries.
       &quot;gcsFilesetSpec&quot;: { # Describes a Cloud Storage fileset entry. # Specification that applies to a Cloud Storage fileset. Valid only for entries with the `FILESET` type.
         &quot;filePatterns&quot;: [ # Required. Patterns to identify a set of files in Google Cloud Storage. For more information, see [Wildcard Names] (https://cloud.google.com/storage/docs/gsutil/addlhelp/WildcardNames). Note: Currently, bucket wildcards are not supported. Examples of valid `file_patterns`: * `gs://bucket_name/dir/*`: matches all files in `bucket_name/dir` directory * `gs://bucket_name/dir/**`: matches all files in `bucket_name/dir` and all subdirectories * `gs://bucket_name/file*`: matches files prefixed by `file` in `bucket_name` * `gs://bucket_name/??.txt`: matches files with two characters followed by `.txt` in `bucket_name` * `gs://bucket_name/[aeiou].txt`: matches files that contain a single vowel character followed by `.txt` in `bucket_name` * `gs://bucket_name/[a-m].txt`: matches files that contain `a`, `b`, ... or `m` followed by `.txt` in `bucket_name` * `gs://bucket_name/a/*/b`: matches all files in `bucket_name` that match the `a/*/b` pattern, such as `a/c/b`, `a/d/b` * `gs://another_bucket/a.txt`: matches `gs://another_bucket/a.txt` You can combine wildcards to match complex sets of files, for example: `gs://bucket_name/[a-m]??.j*g`
           &quot;A String&quot;,
@@ -1150,6 +1199,18 @@ Returns:
             &quot;type&quot;: &quot;A String&quot;, # Required. Type of the column. Must be a UTF-8 string with the maximum size of 128 bytes.
           },
         ],
+      },
+      &quot;serviceSpec&quot;: { # Specification that applies to a Service resource. Valid only for entries with the `SERVICE` type. # Specification that applies to a Service resource.
+        &quot;cloudBigtableInstanceSpec&quot;: { # Specification that applies to Instance entries that are part of `CLOUD_BIGTABLE` system. (user_specified_type) # Specification that applies to Instance entries of `CLOUD_BIGTABLE` system.
+          &quot;cloudBigtableClusterSpecs&quot;: [ # The list of clusters for the Instance.
+            { # Spec that applies to clusters of an Instance of Cloud Bigtable.
+              &quot;displayName&quot;: &quot;A String&quot;, # Name of the cluster.
+              &quot;linkedResource&quot;: &quot;A String&quot;, # A link back to the parent resource, in this case Instance.
+              &quot;location&quot;: &quot;A String&quot;, # Location of the cluster, typically a Cloud zone.
+              &quot;type&quot;: &quot;A String&quot;, # Type of the resource. For a cluster this would be &quot;CLUSTER&quot;.
+            },
+          ],
+        },
       },
       &quot;sourceSystemTimestamps&quot;: { # Timestamps associated with this resource in a particular system. # Timestamps from the underlying resource, not from the Data Catalog entry. Output only when the entry has a system listed in the `IntegratedSystem` enum. For entries with `user_specified_system`, this field is optional and defaults to an empty timestamp.
         &quot;createTime&quot;: &quot;A String&quot;, # Creation timestamp of the resource within the given system.
@@ -1305,6 +1366,9 @@ Args:
       &quot;overview&quot;: &quot;A String&quot;, # Entry overview with support for rich text. The overview must only contain Unicode characters, and should be formatted using HTML. The maximum length is 10 MiB as this value holds HTML descriptions including encoded images. The maximum length of the text without images is 100 KiB.
     },
   },
+  &quot;cloudBigtableSystemSpec&quot;: { # Specification that applies to all entries that are part of `CLOUD_BIGTABLE` system (user_specified_type) # Specification that applies to Cloud Bigtable system. Only settable when `integrated_system` is equal to `CLOUD_BIGTABLE`
+    &quot;instanceDisplayName&quot;: &quot;A String&quot;, # Display name of the Instance. This is user specified and different from the resource name.
+  },
   &quot;dataSource&quot;: { # Physical location of an entry. # Output only. Physical location of the entry.
     &quot;resource&quot;: &quot;A String&quot;, # Full name of a resource as defined by the service. For example: `//bigquery.googleapis.com/projects/{PROJECT_ID}/locations/{LOCATION}/datasets/{DATASET_ID}/tables/{TABLE_ID}`
     &quot;service&quot;: &quot;A String&quot;, # Service that physically stores the data.
@@ -1396,7 +1460,7 @@ Args:
       },
     },
   },
-  &quot;fullyQualifiedName&quot;: &quot;A String&quot;, # Fully qualified name (FQN) of the resource. Set automatically for entries representing resources from synced systems. Settable only during creation and read-only afterwards. Can be used for search and lookup of the entries. FQNs take two forms: * For non-regionalized resources: `{SYSTEM}:{PROJECT}.{PATH_TO_RESOURCE_SEPARATED_WITH_DOTS}` * For regionalized resources: `{SYSTEM}:{PROJECT}.{LOCATION_ID}.{PATH_TO_RESOURCE_SEPARATED_WITH_DOTS}` Example for a DPMS table: `dataproc_metastore:{PROJECT_ID}.{LOCATION_ID}.{INSTANCE_ID}.{DATABASE_ID}.{TABLE_ID}`
+  &quot;fullyQualifiedName&quot;: &quot;A String&quot;, # [Fully Qualified Name (FQN)](https://cloud.google.com//data-catalog/docs/fully-qualified-names) of the resource. Set automatically for entries representing resources from synced systems. Settable only during creation, and read-only later. Can be used for search and lookup of the entries.
   &quot;gcsFilesetSpec&quot;: { # Describes a Cloud Storage fileset entry. # Specification that applies to a Cloud Storage fileset. Valid only for entries with the `FILESET` type.
     &quot;filePatterns&quot;: [ # Required. Patterns to identify a set of files in Google Cloud Storage. For more information, see [Wildcard Names] (https://cloud.google.com/storage/docs/gsutil/addlhelp/WildcardNames). Note: Currently, bucket wildcards are not supported. Examples of valid `file_patterns`: * `gs://bucket_name/dir/*`: matches all files in `bucket_name/dir` directory * `gs://bucket_name/dir/**`: matches all files in `bucket_name/dir` and all subdirectories * `gs://bucket_name/file*`: matches files prefixed by `file` in `bucket_name` * `gs://bucket_name/??.txt`: matches files with two characters followed by `.txt` in `bucket_name` * `gs://bucket_name/[aeiou].txt`: matches files that contain a single vowel character followed by `.txt` in `bucket_name` * `gs://bucket_name/[a-m].txt`: matches files that contain `a`, `b`, ... or `m` followed by `.txt` in `bucket_name` * `gs://bucket_name/a/*/b`: matches all files in `bucket_name` that match the `a/*/b` pattern, such as `a/c/b`, `a/d/b` * `gs://another_bucket/a.txt`: matches `gs://another_bucket/a.txt` You can combine wildcards to match complex sets of files, for example: `gs://bucket_name/[a-m]??.j*g`
       &quot;A String&quot;,
@@ -1468,6 +1532,18 @@ Args:
         &quot;type&quot;: &quot;A String&quot;, # Required. Type of the column. Must be a UTF-8 string with the maximum size of 128 bytes.
       },
     ],
+  },
+  &quot;serviceSpec&quot;: { # Specification that applies to a Service resource. Valid only for entries with the `SERVICE` type. # Specification that applies to a Service resource.
+    &quot;cloudBigtableInstanceSpec&quot;: { # Specification that applies to Instance entries that are part of `CLOUD_BIGTABLE` system. (user_specified_type) # Specification that applies to Instance entries of `CLOUD_BIGTABLE` system.
+      &quot;cloudBigtableClusterSpecs&quot;: [ # The list of clusters for the Instance.
+        { # Spec that applies to clusters of an Instance of Cloud Bigtable.
+          &quot;displayName&quot;: &quot;A String&quot;, # Name of the cluster.
+          &quot;linkedResource&quot;: &quot;A String&quot;, # A link back to the parent resource, in this case Instance.
+          &quot;location&quot;: &quot;A String&quot;, # Location of the cluster, typically a Cloud zone.
+          &quot;type&quot;: &quot;A String&quot;, # Type of the resource. For a cluster this would be &quot;CLUSTER&quot;.
+        },
+      ],
+    },
   },
   &quot;sourceSystemTimestamps&quot;: { # Timestamps associated with this resource in a particular system. # Timestamps from the underlying resource, not from the Data Catalog entry. Output only when the entry has a system listed in the `IntegratedSystem` enum. For entries with `user_specified_system`, this field is optional and defaults to an empty timestamp.
     &quot;createTime&quot;: &quot;A String&quot;, # Creation timestamp of the resource within the given system.
@@ -1539,6 +1615,9 @@ Returns:
       &quot;overview&quot;: &quot;A String&quot;, # Entry overview with support for rich text. The overview must only contain Unicode characters, and should be formatted using HTML. The maximum length is 10 MiB as this value holds HTML descriptions including encoded images. The maximum length of the text without images is 100 KiB.
     },
   },
+  &quot;cloudBigtableSystemSpec&quot;: { # Specification that applies to all entries that are part of `CLOUD_BIGTABLE` system (user_specified_type) # Specification that applies to Cloud Bigtable system. Only settable when `integrated_system` is equal to `CLOUD_BIGTABLE`
+    &quot;instanceDisplayName&quot;: &quot;A String&quot;, # Display name of the Instance. This is user specified and different from the resource name.
+  },
   &quot;dataSource&quot;: { # Physical location of an entry. # Output only. Physical location of the entry.
     &quot;resource&quot;: &quot;A String&quot;, # Full name of a resource as defined by the service. For example: `//bigquery.googleapis.com/projects/{PROJECT_ID}/locations/{LOCATION}/datasets/{DATASET_ID}/tables/{TABLE_ID}`
     &quot;service&quot;: &quot;A String&quot;, # Service that physically stores the data.
@@ -1630,7 +1709,7 @@ Returns:
       },
     },
   },
-  &quot;fullyQualifiedName&quot;: &quot;A String&quot;, # Fully qualified name (FQN) of the resource. Set automatically for entries representing resources from synced systems. Settable only during creation and read-only afterwards. Can be used for search and lookup of the entries. FQNs take two forms: * For non-regionalized resources: `{SYSTEM}:{PROJECT}.{PATH_TO_RESOURCE_SEPARATED_WITH_DOTS}` * For regionalized resources: `{SYSTEM}:{PROJECT}.{LOCATION_ID}.{PATH_TO_RESOURCE_SEPARATED_WITH_DOTS}` Example for a DPMS table: `dataproc_metastore:{PROJECT_ID}.{LOCATION_ID}.{INSTANCE_ID}.{DATABASE_ID}.{TABLE_ID}`
+  &quot;fullyQualifiedName&quot;: &quot;A String&quot;, # [Fully Qualified Name (FQN)](https://cloud.google.com//data-catalog/docs/fully-qualified-names) of the resource. Set automatically for entries representing resources from synced systems. Settable only during creation, and read-only later. Can be used for search and lookup of the entries.
   &quot;gcsFilesetSpec&quot;: { # Describes a Cloud Storage fileset entry. # Specification that applies to a Cloud Storage fileset. Valid only for entries with the `FILESET` type.
     &quot;filePatterns&quot;: [ # Required. Patterns to identify a set of files in Google Cloud Storage. For more information, see [Wildcard Names] (https://cloud.google.com/storage/docs/gsutil/addlhelp/WildcardNames). Note: Currently, bucket wildcards are not supported. Examples of valid `file_patterns`: * `gs://bucket_name/dir/*`: matches all files in `bucket_name/dir` directory * `gs://bucket_name/dir/**`: matches all files in `bucket_name/dir` and all subdirectories * `gs://bucket_name/file*`: matches files prefixed by `file` in `bucket_name` * `gs://bucket_name/??.txt`: matches files with two characters followed by `.txt` in `bucket_name` * `gs://bucket_name/[aeiou].txt`: matches files that contain a single vowel character followed by `.txt` in `bucket_name` * `gs://bucket_name/[a-m].txt`: matches files that contain `a`, `b`, ... or `m` followed by `.txt` in `bucket_name` * `gs://bucket_name/a/*/b`: matches all files in `bucket_name` that match the `a/*/b` pattern, such as `a/c/b`, `a/d/b` * `gs://another_bucket/a.txt`: matches `gs://another_bucket/a.txt` You can combine wildcards to match complex sets of files, for example: `gs://bucket_name/[a-m]??.j*g`
       &quot;A String&quot;,
@@ -1702,6 +1781,18 @@ Returns:
         &quot;type&quot;: &quot;A String&quot;, # Required. Type of the column. Must be a UTF-8 string with the maximum size of 128 bytes.
       },
     ],
+  },
+  &quot;serviceSpec&quot;: { # Specification that applies to a Service resource. Valid only for entries with the `SERVICE` type. # Specification that applies to a Service resource.
+    &quot;cloudBigtableInstanceSpec&quot;: { # Specification that applies to Instance entries that are part of `CLOUD_BIGTABLE` system. (user_specified_type) # Specification that applies to Instance entries of `CLOUD_BIGTABLE` system.
+      &quot;cloudBigtableClusterSpecs&quot;: [ # The list of clusters for the Instance.
+        { # Spec that applies to clusters of an Instance of Cloud Bigtable.
+          &quot;displayName&quot;: &quot;A String&quot;, # Name of the cluster.
+          &quot;linkedResource&quot;: &quot;A String&quot;, # A link back to the parent resource, in this case Instance.
+          &quot;location&quot;: &quot;A String&quot;, # Location of the cluster, typically a Cloud zone.
+          &quot;type&quot;: &quot;A String&quot;, # Type of the resource. For a cluster this would be &quot;CLUSTER&quot;.
+        },
+      ],
+    },
   },
   &quot;sourceSystemTimestamps&quot;: { # Timestamps associated with this resource in a particular system. # Timestamps from the underlying resource, not from the Data Catalog entry. Output only when the entry has a system listed in the `IntegratedSystem` enum. For entries with `user_specified_system`, this field is optional and defaults to an empty timestamp.
     &quot;createTime&quot;: &quot;A String&quot;, # Creation timestamp of the resource within the given system.

@@ -85,7 +85,7 @@ h1, h2, h3 {
 <p class="firstline">Deletes the specified network.</p>
 <p class="toc_element">
   <code><a href="#get">get(project, network, x__xgafv=None)</a></code></p>
-<p class="firstline">Returns the specified network. Gets a list of available networks by making a list() request.</p>
+<p class="firstline">Returns the specified network.</p>
 <p class="toc_element">
   <code><a href="#getEffectiveFirewalls">getEffectiveFirewalls(project, network, x__xgafv=None)</a></code></p>
 <p class="firstline">Returns the effective firewalls on a given network.</p>
@@ -338,7 +338,7 @@ Returns:
 
 <div class="method">
     <code class="details" id="get">get(project, network, x__xgafv=None)</code>
-  <pre>Returns the specified network. Gets a list of available networks by making a list() request.
+  <pre>Returns the specified network.
 
 Args:
   project: string, Project ID for this request. (required)
@@ -358,7 +358,7 @@ Returns:
   &quot;description&quot;: &quot;A String&quot;, # An optional description of this resource. Provide this field when you create the resource.
   &quot;enableUlaInternalIpv6&quot;: True or False, # Enable ULA internal ipv6 on this network. Enabling this feature will assign a /48 from google defined ULA prefix fd20::/20. .
   &quot;firewallPolicy&quot;: &quot;A String&quot;, # [Output Only] URL of the firewall policy the network is associated with.
-  &quot;gatewayIPv4&quot;: &quot;A String&quot;, # [Output Only] The gateway address for default routing out of the network, selected by GCP.
+  &quot;gatewayIPv4&quot;: &quot;A String&quot;, # [Output Only] The gateway address for default routing out of the network, selected by Google Cloud.
   &quot;id&quot;: &quot;A String&quot;, # [Output Only] The unique identifier for the resource. This identifier is defined by the server.
   &quot;internalIpv6Range&quot;: &quot;A String&quot;, # When enabling ula internal ipv6, caller optionally can specify the /48 range they want from the google defined ULA prefix fd20::/20. The input must be a valid /48 ULA IPv6 address and must be within the fd20::/20. Operation will fail if the speficied /48 is already in used by another resource. If the field is not speficied, then a /48 range will be randomly allocated from fd20::/20 and returned via this field. .
   &quot;kind&quot;: &quot;compute#network&quot;, # [Output Only] Type of the resource. Always compute#network for networks.
@@ -469,6 +469,7 @@ Returns:
           &quot;priority&quot;: 42, # An integer indicating the priority of a rule in the list. The priority must be a positive value between 0 and 2147483647. Rules are evaluated from highest to lowest priority where 0 is the highest priority and 2147483647 is the lowest prority.
           &quot;ruleName&quot;: &quot;A String&quot;, # An optional name for the rule. This field is not a unique identifier and can be updated.
           &quot;ruleTupleCount&quot;: 42, # [Output Only] Calculation of the complexity of a single firewall policy rule.
+          &quot;securityProfileGroup&quot;: &quot;A String&quot;, # A fully-qualified URL of a SecurityProfile resource instance. Example: https://networksecurity.googleapis.com/v1/projects/{project}/locations/{location}/securityProfileGroups/my-security-profile-group Must be specified if action = &#x27;apply_security_profile_group&#x27; and cannot be specified for other actions.
           &quot;targetResources&quot;: [ # A list of network resource URLs to which this rule applies. This field allows you to control which network&#x27;s VMs get this rule. If this field is left blank, all VMs within the organization will receive the rule.
             &quot;A String&quot;,
           ],
@@ -481,6 +482,7 @@ Returns:
           &quot;targetServiceAccounts&quot;: [ # A list of service accounts indicating the sets of instances that are applied with this rule.
             &quot;A String&quot;,
           ],
+          &quot;tlsInspect&quot;: True or False, # Boolean flag indicating if the traffic should be TLS decrypted. Can be set only if action = &#x27;apply_security_profile_group&#x27; and cannot be set for other actions.
         },
       ],
       &quot;shortName&quot;: &quot;A String&quot;, # [Output Only] The short name of the firewall policy.
@@ -545,11 +547,11 @@ Returns:
       &quot;id&quot;: &quot;A String&quot;, # [Output Only] The unique identifier for the security policy. This identifier is defined by the server.
       &quot;rules&quot;: [ # The rules that apply to the network.
         { # Represents a rule that describes one or more match conditions along with the action to be taken when traffic matches this condition (allow or deny).
-          &quot;action&quot;: &quot;A String&quot;, # The Action to perform when the rule is matched. The following are the valid actions: - allow: allow access to target. - deny(STATUS): deny access to target, returns the HTTP response code specified. Valid values for `STATUS` are 403, 404, and 502. - rate_based_ban: limit client traffic to the configured threshold and ban the client if the traffic exceeds the threshold. Configure parameters for this action in RateLimitOptions. Requires rate_limit_options to be set. - redirect: redirect to a different target. This can either be an internal reCAPTCHA redirect, or an external URL-based redirect via a 302 response. Parameters for this action can be configured via redirectOptions. - throttle: limit client traffic to the configured threshold. Configure parameters for this action in rateLimitOptions. Requires rate_limit_options to be set for this.
+          &quot;action&quot;: &quot;A String&quot;, # The Action to perform when the rule is matched. The following are the valid actions: - allow: allow access to target. - deny(STATUS): deny access to target, returns the HTTP response code specified. Valid values for `STATUS` are 403, 404, and 502. - rate_based_ban: limit client traffic to the configured threshold and ban the client if the traffic exceeds the threshold. Configure parameters for this action in RateLimitOptions. Requires rate_limit_options to be set. - redirect: redirect to a different target. This can either be an internal reCAPTCHA redirect, or an external URL-based redirect via a 302 response. Parameters for this action can be configured via redirectOptions. This action is only supported in Global Security Policies of type CLOUD_ARMOR. - throttle: limit client traffic to the configured threshold. Configure parameters for this action in rateLimitOptions. Requires rate_limit_options to be set for this.
           &quot;description&quot;: &quot;A String&quot;, # An optional description of this resource. Provide this property when you create the resource.
           &quot;direction&quot;: &quot;A String&quot;, # The direction in which this rule applies. This field may only be specified when versioned_expr is set to FIREWALL.
           &quot;enableLogging&quot;: True or False, # Denotes whether to enable logging for a particular rule. If logging is enabled, logs will be exported to the configured export destination in Stackdriver. Logs may be exported to BigQuery or Pub/Sub. Note: you cannot enable logging on &quot;goto_next&quot; rules. This field may only be specified when the versioned_expr is set to FIREWALL.
-          &quot;headerAction&quot;: { # Optional, additional actions that are performed on headers.
+          &quot;headerAction&quot;: { # Optional, additional actions that are performed on headers. This field is only supported in Global Security Policies of type CLOUD_ARMOR.
             &quot;requestHeadersToAdds&quot;: [ # The list of request headers to add or overwrite if they&#x27;re already present.
               {
                 &quot;headerName&quot;: &quot;A String&quot;, # The name of the header to set.
@@ -575,13 +577,54 @@ Returns:
                 &quot;A String&quot;,
               ],
             },
-            &quot;expr&quot;: { # Represents a textual expression in the Common Expression Language (CEL) syntax. CEL is a C-like expression language. The syntax and semantics of CEL are documented at https://github.com/google/cel-spec. Example (Comparison): title: &quot;Summary size limit&quot; description: &quot;Determines if a summary is less than 100 chars&quot; expression: &quot;document.summary.size() &lt; 100&quot; Example (Equality): title: &quot;Requestor is owner&quot; description: &quot;Determines if requestor is the document owner&quot; expression: &quot;document.owner == request.auth.claims.email&quot; Example (Logic): title: &quot;Public documents&quot; description: &quot;Determine whether the document should be publicly visible&quot; expression: &quot;document.type != &#x27;private&#x27; &amp;&amp; document.type != &#x27;internal&#x27;&quot; Example (Data Manipulation): title: &quot;Notification string&quot; description: &quot;Create a notification string with a timestamp.&quot; expression: &quot;&#x27;New message received at &#x27; + string(document.create_time)&quot; The exact variables and functions that may be referenced within an expression are determined by the service that evaluates it. See the service documentation for additional information. # User defined CEVAL expression. A CEVAL expression is used to specify match criteria such as origin.ip, source.region_code and contents in the request header.
+            &quot;expr&quot;: { # Represents a textual expression in the Common Expression Language (CEL) syntax. CEL is a C-like expression language. The syntax and semantics of CEL are documented at https://github.com/google/cel-spec. Example (Comparison): title: &quot;Summary size limit&quot; description: &quot;Determines if a summary is less than 100 chars&quot; expression: &quot;document.summary.size() &lt; 100&quot; Example (Equality): title: &quot;Requestor is owner&quot; description: &quot;Determines if requestor is the document owner&quot; expression: &quot;document.owner == request.auth.claims.email&quot; Example (Logic): title: &quot;Public documents&quot; description: &quot;Determine whether the document should be publicly visible&quot; expression: &quot;document.type != &#x27;private&#x27; &amp;&amp; document.type != &#x27;internal&#x27;&quot; Example (Data Manipulation): title: &quot;Notification string&quot; description: &quot;Create a notification string with a timestamp.&quot; expression: &quot;&#x27;New message received at &#x27; + string(document.create_time)&quot; The exact variables and functions that may be referenced within an expression are determined by the service that evaluates it. See the service documentation for additional information. # User defined CEVAL expression. A CEVAL expression is used to specify match criteria such as origin.ip, source.region_code and contents in the request header. Expressions containing `evaluateThreatIntelligence` require Cloud Armor Managed Protection Plus tier and are not supported in Edge Policies nor in Regional Policies. Expressions containing `evaluatePreconfiguredExpr(&#x27;sourceiplist-*&#x27;)` require Cloud Armor Managed Protection Plus tier and are only supported in Global Security Policies.
               &quot;description&quot;: &quot;A String&quot;, # Optional. Description of the expression. This is a longer text which describes the expression, e.g. when hovered over it in a UI.
               &quot;expression&quot;: &quot;A String&quot;, # Textual representation of an expression in Common Expression Language syntax.
               &quot;location&quot;: &quot;A String&quot;, # Optional. String indicating the location of the expression for error reporting, e.g. a file name and a position in the file.
               &quot;title&quot;: &quot;A String&quot;, # Optional. Title for the expression, i.e. a short string describing its purpose. This can be used e.g. in UIs which allow to enter the expression.
             },
+            &quot;exprOptions&quot;: { # The configuration options available when specifying a user defined CEVAL expression (i.e., &#x27;expr&#x27;).
+              &quot;recaptchaOptions&quot;: { # reCAPTCHA configuration options to be applied for the rule. If the rule does not evaluate reCAPTCHA tokens, this field will have no effect.
+                &quot;actionTokenSiteKeys&quot;: [ # A list of site keys to be used during the validation of reCAPTCHA action-tokens. The provided site keys need to be created from reCAPTCHA API under the same project where the security policy is created.
+                  &quot;A String&quot;,
+                ],
+                &quot;sessionTokenSiteKeys&quot;: [ # A list of site keys to be used during the validation of reCAPTCHA session-tokens. The provided site keys need to be created from reCAPTCHA API under the same project where the security policy is created.
+                  &quot;A String&quot;,
+                ],
+              },
+            },
             &quot;versionedExpr&quot;: &quot;A String&quot;, # Preconfigured versioned expression. If this field is specified, config must also be specified. Available preconfigured expressions along with their requirements are: SRC_IPS_V1 - must specify the corresponding src_ip_range field in config.
+          },
+          &quot;networkMatch&quot;: { # Represents a match condition that incoming network traffic is evaluated against. # A match condition that incoming packets are evaluated against for CLOUD_ARMOR_NETWORK security policies. If it matches, the corresponding &#x27;action&#x27; is enforced. The match criteria for a rule consists of built-in match fields (like &#x27;srcIpRanges&#x27;) and potentially multiple user-defined match fields (&#x27;userDefinedFields&#x27;). Field values may be extracted directly from the packet or derived from it (e.g. &#x27;srcRegionCodes&#x27;). Some fields may not be present in every packet (e.g. &#x27;srcPorts&#x27;). A user-defined field is only present if the base header is found in the packet and the entire field is in bounds. Each match field may specify which values can match it, listing one or more ranges, prefixes, or exact values that are considered a match for the field. A field value must be present in order to match a specified match field. If no match values are specified for a match field, then any field value is considered to match it, and it&#x27;s not required to be present. For strings specifying &#x27;*&#x27; is also equivalent to match all. For a packet to match a rule, all specified match fields must match the corresponding field values derived from the packet. Example: networkMatch: srcIpRanges: - &quot;192.0.2.0/24&quot; - &quot;198.51.100.0/24&quot; userDefinedFields: - name: &quot;ipv4_fragment_offset&quot; values: - &quot;1-0x1fff&quot; The above match condition matches packets with a source IP in 192.0.2.0/24 or 198.51.100.0/24 and a user-defined field named &quot;ipv4_fragment_offset&quot; with a value between 1 and 0x1fff inclusive.
+            &quot;destIpRanges&quot;: [ # Destination IPv4/IPv6 addresses or CIDR prefixes, in standard text format.
+              &quot;A String&quot;,
+            ],
+            &quot;destPorts&quot;: [ # Destination port numbers for TCP/UDP/SCTP. Each element can be a 16-bit unsigned decimal number (e.g. &quot;80&quot;) or range (e.g. &quot;0-1023&quot;).
+              &quot;A String&quot;,
+            ],
+            &quot;ipProtocols&quot;: [ # IPv4 protocol / IPv6 next header (after extension headers). Each element can be an 8-bit unsigned decimal number (e.g. &quot;6&quot;), range (e.g. &quot;253-254&quot;), or one of the following protocol names: &quot;tcp&quot;, &quot;udp&quot;, &quot;icmp&quot;, &quot;esp&quot;, &quot;ah&quot;, &quot;ipip&quot;, or &quot;sctp&quot;.
+              &quot;A String&quot;,
+            ],
+            &quot;srcAsns&quot;: [ # BGP Autonomous System Number associated with the source IP address.
+              42,
+            ],
+            &quot;srcIpRanges&quot;: [ # Source IPv4/IPv6 addresses or CIDR prefixes, in standard text format.
+              &quot;A String&quot;,
+            ],
+            &quot;srcPorts&quot;: [ # Source port numbers for TCP/UDP/SCTP. Each element can be a 16-bit unsigned decimal number (e.g. &quot;80&quot;) or range (e.g. &quot;0-1023&quot;).
+              &quot;A String&quot;,
+            ],
+            &quot;srcRegionCodes&quot;: [ # Two-letter ISO 3166-1 alpha-2 country code associated with the source IP address.
+              &quot;A String&quot;,
+            ],
+            &quot;userDefinedFields&quot;: [ # User-defined fields. Each element names a defined field and lists the matching values for that field.
+              {
+                &quot;name&quot;: &quot;A String&quot;, # Name of the user-defined field, as given in the definition.
+                &quot;values&quot;: [ # Matching values of the field. Each element can be a 32-bit unsigned decimal or hexadecimal (starting with &quot;0x&quot;) number (e.g. &quot;64&quot;) or range (e.g. &quot;0x400-0x7ff&quot;).
+                  &quot;A String&quot;,
+                ],
+              },
+            ],
           },
           &quot;preconfiguredWafConfig&quot;: { # Preconfigured WAF configuration to be applied for the rule. If the rule does not evaluate preconfigured WAF rules, i.e., if evaluatePreconfiguredWaf() is not used, this field will have no effect.
             &quot;exclusions&quot;: [ # A list of exclusions to apply during preconfigured WAF evaluation.
@@ -634,8 +677,8 @@ Returns:
               },
             ],
             &quot;enforceOnKeyName&quot;: &quot;A String&quot;, # Rate limit key name applicable only for the following key types: HTTP_HEADER -- Name of the HTTP header whose value is taken as the key value. HTTP_COOKIE -- Name of the HTTP cookie whose value is taken as the key value.
-            &quot;exceedAction&quot;: &quot;A String&quot;, # Action to take for requests that are above the configured rate limit threshold, to either deny with a specified HTTP response code, or redirect to a different endpoint. Valid options are `deny(STATUS)`, where valid values for `STATUS` are 403, 404, 429, and 502, and `redirect`, where the redirect parameters come from `exceedRedirectOptions` below.
-            &quot;exceedRedirectOptions&quot;: { # Parameters defining the redirect action that is used as the exceed action. Cannot be specified if the exceed action is not redirect.
+            &quot;exceedAction&quot;: &quot;A String&quot;, # Action to take for requests that are above the configured rate limit threshold, to either deny with a specified HTTP response code, or redirect to a different endpoint. Valid options are `deny(STATUS)`, where valid values for `STATUS` are 403, 404, 429, and 502, and `redirect`, where the redirect parameters come from `exceedRedirectOptions` below. The `redirect` action is only supported in Global Security Policies of type CLOUD_ARMOR.
+            &quot;exceedRedirectOptions&quot;: { # Parameters defining the redirect action that is used as the exceed action. Cannot be specified if the exceed action is not redirect. This field is only supported in Global Security Policies of type CLOUD_ARMOR.
               &quot;target&quot;: &quot;A String&quot;, # Target for the redirect action. This is required if the type is EXTERNAL_302 and cannot be specified for GOOGLE_RECAPTCHA.
               &quot;type&quot;: &quot;A String&quot;, # Type of the redirect action.
             },
@@ -644,7 +687,7 @@ Returns:
               &quot;intervalSec&quot;: 42, # Interval over which the threshold is computed.
             },
           },
-          &quot;redirectOptions&quot;: { # Parameters defining the redirect action. Cannot be specified for any other actions.
+          &quot;redirectOptions&quot;: { # Parameters defining the redirect action. Cannot be specified for any other actions. This field is only supported in Global Security Policies of type CLOUD_ARMOR.
             &quot;target&quot;: &quot;A String&quot;, # Target for the redirect action. This is required if the type is EXTERNAL_302 and cannot be specified for GOOGLE_RECAPTCHA.
             &quot;type&quot;: &quot;A String&quot;, # Type of the redirect action.
           },
@@ -679,7 +722,7 @@ Args:
   &quot;description&quot;: &quot;A String&quot;, # An optional description of this resource. Provide this field when you create the resource.
   &quot;enableUlaInternalIpv6&quot;: True or False, # Enable ULA internal ipv6 on this network. Enabling this feature will assign a /48 from google defined ULA prefix fd20::/20. .
   &quot;firewallPolicy&quot;: &quot;A String&quot;, # [Output Only] URL of the firewall policy the network is associated with.
-  &quot;gatewayIPv4&quot;: &quot;A String&quot;, # [Output Only] The gateway address for default routing out of the network, selected by GCP.
+  &quot;gatewayIPv4&quot;: &quot;A String&quot;, # [Output Only] The gateway address for default routing out of the network, selected by Google Cloud.
   &quot;id&quot;: &quot;A String&quot;, # [Output Only] The unique identifier for the resource. This identifier is defined by the server.
   &quot;internalIpv6Range&quot;: &quot;A String&quot;, # When enabling ula internal ipv6, caller optionally can specify the /48 range they want from the google defined ULA prefix fd20::/20. The input must be a valid /48 ULA IPv6 address and must be within the fd20::/20. Operation will fail if the speficied /48 is already in used by another resource. If the field is not speficied, then a /48 range will be randomly allocated from fd20::/20 and returned via this field. .
   &quot;kind&quot;: &quot;compute#network&quot;, # [Output Only] Type of the resource. Always compute#network for networks.
@@ -828,7 +871,7 @@ Returns:
       &quot;description&quot;: &quot;A String&quot;, # An optional description of this resource. Provide this field when you create the resource.
       &quot;enableUlaInternalIpv6&quot;: True or False, # Enable ULA internal ipv6 on this network. Enabling this feature will assign a /48 from google defined ULA prefix fd20::/20. .
       &quot;firewallPolicy&quot;: &quot;A String&quot;, # [Output Only] URL of the firewall policy the network is associated with.
-      &quot;gatewayIPv4&quot;: &quot;A String&quot;, # [Output Only] The gateway address for default routing out of the network, selected by GCP.
+      &quot;gatewayIPv4&quot;: &quot;A String&quot;, # [Output Only] The gateway address for default routing out of the network, selected by Google Cloud.
       &quot;id&quot;: &quot;A String&quot;, # [Output Only] The unique identifier for the resource. This identifier is defined by the server.
       &quot;internalIpv6Range&quot;: &quot;A String&quot;, # When enabling ula internal ipv6, caller optionally can specify the /48 range they want from the google defined ULA prefix fd20::/20. The input must be a valid /48 ULA IPv6 address and must be within the fd20::/20. Operation will fail if the speficied /48 is already in used by another resource. If the field is not speficied, then a /48 range will be randomly allocated from fd20::/20 and returned via this field. .
       &quot;kind&quot;: &quot;compute#network&quot;, # [Output Only] Type of the resource. Always compute#network for networks.
@@ -975,7 +1018,7 @@ Args:
   &quot;description&quot;: &quot;A String&quot;, # An optional description of this resource. Provide this field when you create the resource.
   &quot;enableUlaInternalIpv6&quot;: True or False, # Enable ULA internal ipv6 on this network. Enabling this feature will assign a /48 from google defined ULA prefix fd20::/20. .
   &quot;firewallPolicy&quot;: &quot;A String&quot;, # [Output Only] URL of the firewall policy the network is associated with.
-  &quot;gatewayIPv4&quot;: &quot;A String&quot;, # [Output Only] The gateway address for default routing out of the network, selected by GCP.
+  &quot;gatewayIPv4&quot;: &quot;A String&quot;, # [Output Only] The gateway address for default routing out of the network, selected by Google Cloud.
   &quot;id&quot;: &quot;A String&quot;, # [Output Only] The unique identifier for the resource. This identifier is defined by the server.
   &quot;internalIpv6Range&quot;: &quot;A String&quot;, # When enabling ula internal ipv6, caller optionally can specify the /48 range they want from the google defined ULA prefix fd20::/20. The input must be a valid /48 ULA IPv6 address and must be within the fd20::/20. Operation will fail if the speficied /48 is already in used by another resource. If the field is not speficied, then a /48 range will be randomly allocated from fd20::/20 and returned via this field. .
   &quot;kind&quot;: &quot;compute#network&quot;, # [Output Only] Type of the resource. Always compute#network for networks.
