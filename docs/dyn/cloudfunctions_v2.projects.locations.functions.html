@@ -136,11 +136,11 @@ Args:
     },
     &quot;runtime&quot;: &quot;A String&quot;, # The runtime in which to run the function. Required when deploying a new function, optional when updating an existing function. For a complete list of possible choices, see the [`gcloud` command reference](https://cloud.google.com/sdk/gcloud/reference/functions/deploy#--runtime).
     &quot;source&quot;: { # The location of the function source code. # The location of the function source code.
+      &quot;gitUri&quot;: &quot;A String&quot;, # If provided, get the source from GitHub repository. This option is valid only for GCF 1st Gen function. Example: https://github.com///blob//
       &quot;repoSource&quot;: { # Location of the source in a Google Cloud Source Repository. # If provided, get the source from this location in a Cloud Source Repository.
         &quot;branchName&quot;: &quot;A String&quot;, # Regex matching branches to build. The syntax of the regular expressions accepted is the syntax accepted by RE2 and described at https://github.com/google/re2/wiki/Syntax
         &quot;commitSha&quot;: &quot;A String&quot;, # Explicit commit SHA to build.
         &quot;dir&quot;: &quot;A String&quot;, # Directory, relative to the source root, in which to run the build. This must be a relative path. If a step&#x27;s `dir` is specified and is an absolute path, this value is ignored for that step&#x27;s execution. eg. helloworld (no leading slash allowed)
-        &quot;invertRegex&quot;: True or False, # Only trigger a build if the revision regex does NOT match the revision regex.
         &quot;projectId&quot;: &quot;A String&quot;, # ID of the project that owns the Cloud Source Repository. If omitted, the project ID requesting the build is assumed.
         &quot;repoName&quot;: &quot;A String&quot;, # Name of the Cloud Source Repository.
         &quot;tagName&quot;: &quot;A String&quot;, # Regex matching tags to build. The syntax of the regular expressions accepted is the syntax accepted by RE2 and described at https://github.com/google/re2/wiki/Syntax
@@ -152,11 +152,11 @@ Args:
       },
     },
     &quot;sourceProvenance&quot;: { # Provenance of the source. Ways to find the original source, or verify that some source was used for this build. # Output only. A permanent fixed identifier for source.
+      &quot;gitUri&quot;: &quot;A String&quot;, # A copy of the build&#x27;s `source.git_uri`, if exists, with any commits resolved.
       &quot;resolvedRepoSource&quot;: { # Location of the source in a Google Cloud Source Repository. # A copy of the build&#x27;s `source.repo_source`, if exists, with any revisions resolved.
         &quot;branchName&quot;: &quot;A String&quot;, # Regex matching branches to build. The syntax of the regular expressions accepted is the syntax accepted by RE2 and described at https://github.com/google/re2/wiki/Syntax
         &quot;commitSha&quot;: &quot;A String&quot;, # Explicit commit SHA to build.
         &quot;dir&quot;: &quot;A String&quot;, # Directory, relative to the source root, in which to run the build. This must be a relative path. If a step&#x27;s `dir` is specified and is an absolute path, this value is ignored for that step&#x27;s execution. eg. helloworld (no leading slash allowed)
-        &quot;invertRegex&quot;: True or False, # Only trigger a build if the revision regex does NOT match the revision regex.
         &quot;projectId&quot;: &quot;A String&quot;, # ID of the project that owns the Cloud Source Repository. If omitted, the project ID requesting the build is assumed.
         &quot;repoName&quot;: &quot;A String&quot;, # Name of the Cloud Source Repository.
         &quot;tagName&quot;: &quot;A String&quot;, # Regex matching tags to build. The syntax of the regular expressions accepted is the syntax accepted by RE2 and described at https://github.com/google/re2/wiki/Syntax
@@ -192,6 +192,7 @@ Args:
     &quot;a_key&quot;: &quot;A String&quot;,
   },
   &quot;name&quot;: &quot;A String&quot;, # A user-defined name of the function. Function names must be unique globally and match pattern `projects/*/locations/*/functions/*`
+  &quot;satisfiesPzs&quot;: True or False, # Output only. Reserved for future use.
   &quot;serviceConfig&quot;: { # Describes the Service being deployed. Currently Supported : Cloud Run (fully managed). # Describes the Service being deployed. Currently deploys services to Cloud Run (fully managed).
     &quot;allTrafficOnLatestRevision&quot;: True or False, # Whether 100% of traffic is routed to the latest revision. On CreateFunction and UpdateFunction, when set to true, the revision being deployed will serve 100% of traffic, ignoring any traffic split settings, if any. On GetFunction, true will be returned if the latest revision is serving 100% of traffic.
     &quot;availableCpu&quot;: &quot;A String&quot;, # [Preview] The number of CPUs used in a single container instance. Default value is calculated from available memory. Supports the same values as Cloud Run, see https://cloud.google.com/run/docs/reference/rest/v1/Container#resourcerequirements Example: &quot;1&quot; indicates 1 vCPU
@@ -391,11 +392,11 @@ Returns:
     },
     &quot;runtime&quot;: &quot;A String&quot;, # The runtime in which to run the function. Required when deploying a new function, optional when updating an existing function. For a complete list of possible choices, see the [`gcloud` command reference](https://cloud.google.com/sdk/gcloud/reference/functions/deploy#--runtime).
     &quot;source&quot;: { # The location of the function source code. # The location of the function source code.
+      &quot;gitUri&quot;: &quot;A String&quot;, # If provided, get the source from GitHub repository. This option is valid only for GCF 1st Gen function. Example: https://github.com///blob//
       &quot;repoSource&quot;: { # Location of the source in a Google Cloud Source Repository. # If provided, get the source from this location in a Cloud Source Repository.
         &quot;branchName&quot;: &quot;A String&quot;, # Regex matching branches to build. The syntax of the regular expressions accepted is the syntax accepted by RE2 and described at https://github.com/google/re2/wiki/Syntax
         &quot;commitSha&quot;: &quot;A String&quot;, # Explicit commit SHA to build.
         &quot;dir&quot;: &quot;A String&quot;, # Directory, relative to the source root, in which to run the build. This must be a relative path. If a step&#x27;s `dir` is specified and is an absolute path, this value is ignored for that step&#x27;s execution. eg. helloworld (no leading slash allowed)
-        &quot;invertRegex&quot;: True or False, # Only trigger a build if the revision regex does NOT match the revision regex.
         &quot;projectId&quot;: &quot;A String&quot;, # ID of the project that owns the Cloud Source Repository. If omitted, the project ID requesting the build is assumed.
         &quot;repoName&quot;: &quot;A String&quot;, # Name of the Cloud Source Repository.
         &quot;tagName&quot;: &quot;A String&quot;, # Regex matching tags to build. The syntax of the regular expressions accepted is the syntax accepted by RE2 and described at https://github.com/google/re2/wiki/Syntax
@@ -407,11 +408,11 @@ Returns:
       },
     },
     &quot;sourceProvenance&quot;: { # Provenance of the source. Ways to find the original source, or verify that some source was used for this build. # Output only. A permanent fixed identifier for source.
+      &quot;gitUri&quot;: &quot;A String&quot;, # A copy of the build&#x27;s `source.git_uri`, if exists, with any commits resolved.
       &quot;resolvedRepoSource&quot;: { # Location of the source in a Google Cloud Source Repository. # A copy of the build&#x27;s `source.repo_source`, if exists, with any revisions resolved.
         &quot;branchName&quot;: &quot;A String&quot;, # Regex matching branches to build. The syntax of the regular expressions accepted is the syntax accepted by RE2 and described at https://github.com/google/re2/wiki/Syntax
         &quot;commitSha&quot;: &quot;A String&quot;, # Explicit commit SHA to build.
         &quot;dir&quot;: &quot;A String&quot;, # Directory, relative to the source root, in which to run the build. This must be a relative path. If a step&#x27;s `dir` is specified and is an absolute path, this value is ignored for that step&#x27;s execution. eg. helloworld (no leading slash allowed)
-        &quot;invertRegex&quot;: True or False, # Only trigger a build if the revision regex does NOT match the revision regex.
         &quot;projectId&quot;: &quot;A String&quot;, # ID of the project that owns the Cloud Source Repository. If omitted, the project ID requesting the build is assumed.
         &quot;repoName&quot;: &quot;A String&quot;, # Name of the Cloud Source Repository.
         &quot;tagName&quot;: &quot;A String&quot;, # Regex matching tags to build. The syntax of the regular expressions accepted is the syntax accepted by RE2 and described at https://github.com/google/re2/wiki/Syntax
@@ -447,6 +448,7 @@ Returns:
     &quot;a_key&quot;: &quot;A String&quot;,
   },
   &quot;name&quot;: &quot;A String&quot;, # A user-defined name of the function. Function names must be unique globally and match pattern `projects/*/locations/*/functions/*`
+  &quot;satisfiesPzs&quot;: True or False, # Output only. Reserved for future use.
   &quot;serviceConfig&quot;: { # Describes the Service being deployed. Currently Supported : Cloud Run (fully managed). # Describes the Service being deployed. Currently deploys services to Cloud Run (fully managed).
     &quot;allTrafficOnLatestRevision&quot;: True or False, # Whether 100% of traffic is routed to the latest revision. On CreateFunction and UpdateFunction, when set to true, the revision being deployed will serve 100% of traffic, ignoring any traffic split settings, if any. On GetFunction, true will be returned if the latest revision is serving 100% of traffic.
     &quot;availableCpu&quot;: &quot;A String&quot;, # [Preview] The number of CPUs used in a single container instance. Default value is calculated from available memory. Supports the same values as Cloud Run, see https://cloud.google.com/run/docs/reference/rest/v1/Container#resourcerequirements Example: &quot;1&quot; indicates 1 vCPU
@@ -580,11 +582,11 @@ Returns:
         },
         &quot;runtime&quot;: &quot;A String&quot;, # The runtime in which to run the function. Required when deploying a new function, optional when updating an existing function. For a complete list of possible choices, see the [`gcloud` command reference](https://cloud.google.com/sdk/gcloud/reference/functions/deploy#--runtime).
         &quot;source&quot;: { # The location of the function source code. # The location of the function source code.
+          &quot;gitUri&quot;: &quot;A String&quot;, # If provided, get the source from GitHub repository. This option is valid only for GCF 1st Gen function. Example: https://github.com///blob//
           &quot;repoSource&quot;: { # Location of the source in a Google Cloud Source Repository. # If provided, get the source from this location in a Cloud Source Repository.
             &quot;branchName&quot;: &quot;A String&quot;, # Regex matching branches to build. The syntax of the regular expressions accepted is the syntax accepted by RE2 and described at https://github.com/google/re2/wiki/Syntax
             &quot;commitSha&quot;: &quot;A String&quot;, # Explicit commit SHA to build.
             &quot;dir&quot;: &quot;A String&quot;, # Directory, relative to the source root, in which to run the build. This must be a relative path. If a step&#x27;s `dir` is specified and is an absolute path, this value is ignored for that step&#x27;s execution. eg. helloworld (no leading slash allowed)
-            &quot;invertRegex&quot;: True or False, # Only trigger a build if the revision regex does NOT match the revision regex.
             &quot;projectId&quot;: &quot;A String&quot;, # ID of the project that owns the Cloud Source Repository. If omitted, the project ID requesting the build is assumed.
             &quot;repoName&quot;: &quot;A String&quot;, # Name of the Cloud Source Repository.
             &quot;tagName&quot;: &quot;A String&quot;, # Regex matching tags to build. The syntax of the regular expressions accepted is the syntax accepted by RE2 and described at https://github.com/google/re2/wiki/Syntax
@@ -596,11 +598,11 @@ Returns:
           },
         },
         &quot;sourceProvenance&quot;: { # Provenance of the source. Ways to find the original source, or verify that some source was used for this build. # Output only. A permanent fixed identifier for source.
+          &quot;gitUri&quot;: &quot;A String&quot;, # A copy of the build&#x27;s `source.git_uri`, if exists, with any commits resolved.
           &quot;resolvedRepoSource&quot;: { # Location of the source in a Google Cloud Source Repository. # A copy of the build&#x27;s `source.repo_source`, if exists, with any revisions resolved.
             &quot;branchName&quot;: &quot;A String&quot;, # Regex matching branches to build. The syntax of the regular expressions accepted is the syntax accepted by RE2 and described at https://github.com/google/re2/wiki/Syntax
             &quot;commitSha&quot;: &quot;A String&quot;, # Explicit commit SHA to build.
             &quot;dir&quot;: &quot;A String&quot;, # Directory, relative to the source root, in which to run the build. This must be a relative path. If a step&#x27;s `dir` is specified and is an absolute path, this value is ignored for that step&#x27;s execution. eg. helloworld (no leading slash allowed)
-            &quot;invertRegex&quot;: True or False, # Only trigger a build if the revision regex does NOT match the revision regex.
             &quot;projectId&quot;: &quot;A String&quot;, # ID of the project that owns the Cloud Source Repository. If omitted, the project ID requesting the build is assumed.
             &quot;repoName&quot;: &quot;A String&quot;, # Name of the Cloud Source Repository.
             &quot;tagName&quot;: &quot;A String&quot;, # Regex matching tags to build. The syntax of the regular expressions accepted is the syntax accepted by RE2 and described at https://github.com/google/re2/wiki/Syntax
@@ -636,6 +638,7 @@ Returns:
         &quot;a_key&quot;: &quot;A String&quot;,
       },
       &quot;name&quot;: &quot;A String&quot;, # A user-defined name of the function. Function names must be unique globally and match pattern `projects/*/locations/*/functions/*`
+      &quot;satisfiesPzs&quot;: True or False, # Output only. Reserved for future use.
       &quot;serviceConfig&quot;: { # Describes the Service being deployed. Currently Supported : Cloud Run (fully managed). # Describes the Service being deployed. Currently deploys services to Cloud Run (fully managed).
         &quot;allTrafficOnLatestRevision&quot;: True or False, # Whether 100% of traffic is routed to the latest revision. On CreateFunction and UpdateFunction, when set to true, the revision being deployed will serve 100% of traffic, ignoring any traffic split settings, if any. On GetFunction, true will be returned if the latest revision is serving 100% of traffic.
         &quot;availableCpu&quot;: &quot;A String&quot;, # [Preview] The number of CPUs used in a single container instance. Default value is calculated from available memory. Supports the same values as Cloud Run, see https://cloud.google.com/run/docs/reference/rest/v1/Container#resourcerequirements Example: &quot;1&quot; indicates 1 vCPU
@@ -730,11 +733,11 @@ Args:
     },
     &quot;runtime&quot;: &quot;A String&quot;, # The runtime in which to run the function. Required when deploying a new function, optional when updating an existing function. For a complete list of possible choices, see the [`gcloud` command reference](https://cloud.google.com/sdk/gcloud/reference/functions/deploy#--runtime).
     &quot;source&quot;: { # The location of the function source code. # The location of the function source code.
+      &quot;gitUri&quot;: &quot;A String&quot;, # If provided, get the source from GitHub repository. This option is valid only for GCF 1st Gen function. Example: https://github.com///blob//
       &quot;repoSource&quot;: { # Location of the source in a Google Cloud Source Repository. # If provided, get the source from this location in a Cloud Source Repository.
         &quot;branchName&quot;: &quot;A String&quot;, # Regex matching branches to build. The syntax of the regular expressions accepted is the syntax accepted by RE2 and described at https://github.com/google/re2/wiki/Syntax
         &quot;commitSha&quot;: &quot;A String&quot;, # Explicit commit SHA to build.
         &quot;dir&quot;: &quot;A String&quot;, # Directory, relative to the source root, in which to run the build. This must be a relative path. If a step&#x27;s `dir` is specified and is an absolute path, this value is ignored for that step&#x27;s execution. eg. helloworld (no leading slash allowed)
-        &quot;invertRegex&quot;: True or False, # Only trigger a build if the revision regex does NOT match the revision regex.
         &quot;projectId&quot;: &quot;A String&quot;, # ID of the project that owns the Cloud Source Repository. If omitted, the project ID requesting the build is assumed.
         &quot;repoName&quot;: &quot;A String&quot;, # Name of the Cloud Source Repository.
         &quot;tagName&quot;: &quot;A String&quot;, # Regex matching tags to build. The syntax of the regular expressions accepted is the syntax accepted by RE2 and described at https://github.com/google/re2/wiki/Syntax
@@ -746,11 +749,11 @@ Args:
       },
     },
     &quot;sourceProvenance&quot;: { # Provenance of the source. Ways to find the original source, or verify that some source was used for this build. # Output only. A permanent fixed identifier for source.
+      &quot;gitUri&quot;: &quot;A String&quot;, # A copy of the build&#x27;s `source.git_uri`, if exists, with any commits resolved.
       &quot;resolvedRepoSource&quot;: { # Location of the source in a Google Cloud Source Repository. # A copy of the build&#x27;s `source.repo_source`, if exists, with any revisions resolved.
         &quot;branchName&quot;: &quot;A String&quot;, # Regex matching branches to build. The syntax of the regular expressions accepted is the syntax accepted by RE2 and described at https://github.com/google/re2/wiki/Syntax
         &quot;commitSha&quot;: &quot;A String&quot;, # Explicit commit SHA to build.
         &quot;dir&quot;: &quot;A String&quot;, # Directory, relative to the source root, in which to run the build. This must be a relative path. If a step&#x27;s `dir` is specified and is an absolute path, this value is ignored for that step&#x27;s execution. eg. helloworld (no leading slash allowed)
-        &quot;invertRegex&quot;: True or False, # Only trigger a build if the revision regex does NOT match the revision regex.
         &quot;projectId&quot;: &quot;A String&quot;, # ID of the project that owns the Cloud Source Repository. If omitted, the project ID requesting the build is assumed.
         &quot;repoName&quot;: &quot;A String&quot;, # Name of the Cloud Source Repository.
         &quot;tagName&quot;: &quot;A String&quot;, # Regex matching tags to build. The syntax of the regular expressions accepted is the syntax accepted by RE2 and described at https://github.com/google/re2/wiki/Syntax
@@ -786,6 +789,7 @@ Args:
     &quot;a_key&quot;: &quot;A String&quot;,
   },
   &quot;name&quot;: &quot;A String&quot;, # A user-defined name of the function. Function names must be unique globally and match pattern `projects/*/locations/*/functions/*`
+  &quot;satisfiesPzs&quot;: True or False, # Output only. Reserved for future use.
   &quot;serviceConfig&quot;: { # Describes the Service being deployed. Currently Supported : Cloud Run (fully managed). # Describes the Service being deployed. Currently deploys services to Cloud Run (fully managed).
     &quot;allTrafficOnLatestRevision&quot;: True or False, # Whether 100% of traffic is routed to the latest revision. On CreateFunction and UpdateFunction, when set to true, the revision being deployed will serve 100% of traffic, ignoring any traffic split settings, if any. On GetFunction, true will be returned if the latest revision is serving 100% of traffic.
     &quot;availableCpu&quot;: &quot;A String&quot;, # [Preview] The number of CPUs used in a single container instance. Default value is calculated from available memory. Supports the same values as Cloud Run, see https://cloud.google.com/run/docs/reference/rest/v1/Container#resourcerequirements Example: &quot;1&quot; indicates 1 vCPU

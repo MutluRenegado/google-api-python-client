@@ -486,8 +486,8 @@ Args:
 
 { # Message for enrolling an existing bare metal cluster to the Anthos On-Prem API.
   &quot;adminClusterMembership&quot;: &quot;A String&quot;, # Required. The admin cluster this bare metal user cluster belongs to. This is the full resource name of the admin cluster&#x27;s fleet membership. In the future, references to other resource types might be allowed if admin clusters are modeled as their own resources.
-  &quot;bareMetalClusterId&quot;: &quot;A String&quot;, # User provided OnePlatform identifier that is used as part of the resource name. This must be unique among all bare metal clusters within a project and location and will return a 409 if the cluster already exists. This value must be up to 40 characters and follow RFC-1123 (https://tools.ietf.org/html/rfc1123) format.
-  &quot;localName&quot;: &quot;A String&quot;, # The object name of the bare metal cluster custom resource on the associated admin cluster. This field is used to support conflicting resource names when enrolling existing clusters to the API. When not provided, this field will resolve to the bare_metal_cluster_id. Otherwise, it must match the object name of the bare metal cluster custom resource. It is not modifiable outside / beyond the enrollment operation.
+  &quot;bareMetalClusterId&quot;: &quot;A String&quot;, # User provided OnePlatform identifier that is used as part of the resource name. This must be unique among all bare metal clusters within a project and location and will return a 409 if the cluster already exists. (https://tools.ietf.org/html/rfc1123) format.
+  &quot;localName&quot;: &quot;A String&quot;, # Optional. The object name of the bare metal cluster custom resource on the associated admin cluster. This field is used to support conflicting resource names when enrolling existing clusters to the API. When not provided, this field will resolve to the bare_metal_cluster_id. Otherwise, it must match the object name of the bare metal cluster custom resource. It is not modifiable outside / beyond the enrollment operation.
 }
 
   x__xgafv: string, V1 error format.
@@ -1478,6 +1478,14 @@ Returns:
     { # Response message for querying bare metal admin cluster version config.
   &quot;versions&quot;: [ # List of available versions to install or to upgrade to.
     { # Contains information about a specific Anthos on bare metal version.
+      &quot;dependencies&quot;: [ # The list of upgrade dependencies for this version.
+        { # UpgradeDependency represents a dependency when upgrading a resource.
+          &quot;currentVersion&quot;: &quot;A String&quot;, # Current version of the dependency e.g. 1.15.0.
+          &quot;localName&quot;: &quot;A String&quot;, # Local name of the dependency.
+          &quot;resourceName&quot;: &quot;A String&quot;, # Resource name of the dependency.
+          &quot;targetVersion&quot;: &quot;A String&quot;, # Target version of the dependency e.g. 1.16.1. This is the version the dependency needs to be upgraded to before a resource can be upgraded.
+        },
+      ],
       &quot;hasDependencies&quot;: True or False, # If set, the cluster dependencies (e.g. the admin cluster, other user clusters managed by the same admin cluster, version skew policy, etc) must be upgraded before this version can be installed or upgraded to.
       &quot;version&quot;: &quot;A String&quot;, # Version number e.g. 1.13.1.
     },

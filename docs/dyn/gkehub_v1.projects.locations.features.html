@@ -128,13 +128,14 @@ Args:
     &quot;a_key&quot;: &quot;A String&quot;,
   },
   &quot;membershipSpecs&quot;: { # Optional. Membership-specific configuration for this Feature. If this Feature does not support any per-Membership configuration, this field may be unused. The keys indicate which Membership the configuration is for, in the form: `projects/{p}/locations/{l}/memberships/{m}` Where {p} is the project, {l} is a valid location and {m} is a valid Membership in this project at that location. {p} WILL match the Feature&#x27;s project. {p} will always be returned as the project number, but the project ID is also accepted during input. If the same Membership is specified in the map twice (using the project ID form, and the project number form), exactly ONE of the entries will be saved, with no guarantees as to which. For this reason, it is recommended the same format be used for all entries when mutating a Feature.
-    &quot;a_key&quot;: { # MembershipFeatureSpec contains configuration information for a single Membership.
+    &quot;a_key&quot;: { # MembershipFeatureSpec contains configuration information for a single Membership. NOTE: Please use snake case in your feature name.
       &quot;configmanagement&quot;: { # **Anthos Config Management**: Configuration for a single cluster. Intended to parallel the ConfigManagement CR. # Config Management-specific spec.
+        &quot;cluster&quot;: &quot;A String&quot;, # The user-specified cluster name used by Config Sync cluster-name-selector annotation or ClusterSelector, for applying configs to only a subset of clusters. Omit this field if the cluster&#x27;s fleet membership name is used by Config Sync cluster-name-selector annotation or ClusterSelector. Set this field if a name different from the cluster&#x27;s fleet membership name is used by Config Sync cluster-name-selector annotation or ClusterSelector.
         &quot;configSync&quot;: { # Configuration for Config Sync # Config Sync configuration for the cluster.
           &quot;allowVerticalScale&quot;: True or False, # Set to true to allow the vertical scaling. Defaults to false which disallows vertical scaling. This field is deprecated.
-          &quot;enabled&quot;: True or False, # Enables the installation of ConfigSync. If set to true, ConfigSync resources will be created and the other ConfigSync fields will be applied if exist. If set to false, all other ConfigSync fields will be ignored, ConfigSync resources will be deleted. If omitted, ConfigSync resources will be managed depends on the presence of git field.
+          &quot;enabled&quot;: True or False, # Enables the installation of ConfigSync. If set to true, ConfigSync resources will be created and the other ConfigSync fields will be applied if exist. If set to false, all other ConfigSync fields will be ignored, ConfigSync resources will be deleted. If omitted, ConfigSync resources will be managed depends on the presence of the git or oci field.
           &quot;git&quot;: { # Git repo configuration for a single cluster. # Git repo configuration for the cluster.
-            &quot;gcpServiceAccountEmail&quot;: &quot;A String&quot;, # The GCP Service Account Email used for auth when secret_type is gcpServiceAccount.
+            &quot;gcpServiceAccountEmail&quot;: &quot;A String&quot;, # The Google Cloud Service Account Email used for auth when secret_type is gcpServiceAccount.
             &quot;httpsProxy&quot;: &quot;A String&quot;, # URL for the HTTPS proxy to be used when communicating with the Git repo.
             &quot;policyDir&quot;: &quot;A String&quot;, # The path within the Git repository that represents the top level of the repo to sync. Default: the root directory of the repository.
             &quot;secretType&quot;: &quot;A String&quot;, # Type of secret configured for access to the Git repo. Must be one of ssh, cookiefile, gcenode, token, gcpserviceaccount or none. The validation of this is case-sensitive. Required.
@@ -143,11 +144,9 @@ Args:
             &quot;syncRev&quot;: &quot;A String&quot;, # Git revision (tag or hash) to check out. Default HEAD.
             &quot;syncWaitSecs&quot;: &quot;A String&quot;, # Period in seconds between consecutive syncs. Default: 15.
           },
-          &quot;managed&quot;: { # Configuration for Managed Config Sync. # Configuration for Managed Config Sync.
-            &quot;enabled&quot;: True or False, # Set to true to enable Managed Config Sync. Defaults to false which disables Managed Config Sync.
-          },
+          &quot;metricsGcpServiceAccountEmail&quot;: &quot;A String&quot;, # The Email of the Google Cloud Service Account (GSA) used for exporting Config Sync metrics to Cloud Monitoring and Cloud Monarch when Workload Identity is enabled. The GSA should have the Monitoring Metric Writer (roles/monitoring.metricWriter) IAM role. The Kubernetes ServiceAccount `default` in the namespace `config-management-monitoring` should be binded to the GSA. This field is required when automatic Feature management is enabled.
           &quot;oci&quot;: { # OCI repo configuration for a single cluster # OCI repo configuration for the cluster
-            &quot;gcpServiceAccountEmail&quot;: &quot;A String&quot;, # The GCP Service Account Email used for auth when secret_type is gcpServiceAccount.
+            &quot;gcpServiceAccountEmail&quot;: &quot;A String&quot;, # The Google Cloud Service Account Email used for auth when secret_type is gcpServiceAccount.
             &quot;policyDir&quot;: &quot;A String&quot;, # The absolute path of the directory that contains the local resources. Default: the root directory of the image.
             &quot;secretType&quot;: &quot;A String&quot;, # Type of secret configured for access to the Git repo.
             &quot;syncRepo&quot;: &quot;A String&quot;, # The OCI image repository URL for the package to sync from. e.g. `LOCATION-docker.pkg.dev/PROJECT_ID/REPOSITORY_NAME/PACKAGE_NAME`.
@@ -155,12 +154,14 @@ Args:
           },
           &quot;preventDrift&quot;: True or False, # Set to true to enable the Config Sync admission webhook to prevent drifts. If set to `false`, disables the Config Sync admission webhook and does not prevent drifts.
           &quot;sourceFormat&quot;: &quot;A String&quot;, # Specifies whether the Config Sync Repo is in &quot;hierarchical&quot; or &quot;unstructured&quot; mode.
+          &quot;stopSyncing&quot;: True or False, # Set to true to stop syncing configs for a single cluster when automatic Feature management is enabled. Default to false. The field will be ignored when automatic Feature management is disabled.
         },
         &quot;hierarchyController&quot;: { # Configuration for Hierarchy Controller # Hierarchy Controller configuration for the cluster.
           &quot;enableHierarchicalResourceQuota&quot;: True or False, # Whether hierarchical resource quota is enabled in this cluster.
           &quot;enablePodTreeLabels&quot;: True or False, # Whether pod tree labels are enabled in this cluster.
           &quot;enabled&quot;: True or False, # Whether Hierarchy Controller is enabled in this cluster.
         },
+        &quot;management&quot;: &quot;A String&quot;, # Enables automatic Feature management.
         &quot;policyController&quot;: { # Configuration for Policy Controller # Policy Controller configuration for the cluster.
           &quot;auditIntervalSeconds&quot;: &quot;A String&quot;, # Sets the interval for Policy Controller Audit Scans (in seconds). When set to 0, this disables audit functionality altogether.
           &quot;enabled&quot;: True or False, # Enables the installation of Policy Controller. If false, the rest of PolicyController fields take no effect.
@@ -176,10 +177,10 @@ Args:
           &quot;mutationEnabled&quot;: True or False, # Enable or disable mutation in policy controller. If true, mutation CRDs, webhook and controller deployment will be deployed to the cluster.
           &quot;referentialRulesEnabled&quot;: True or False, # Enables the ability to use Constraint Templates that reference to objects other than the object currently being evaluated.
           &quot;templateLibraryInstalled&quot;: True or False, # Installs the default template library along with Policy Controller.
+          &quot;updateTime&quot;: &quot;A String&quot;, # Output only. Last time this membership spec was updated.
         },
         &quot;version&quot;: &quot;A String&quot;, # Version of ACM installed.
       },
-      &quot;fleetInherited&quot;: True or False, # True if value of `feature_spec` was inherited from a fleet-level default.
       &quot;fleetobservability&quot;: { # **FleetObservability**: The membership-specific input for FleetObservability feature. # Fleet observability membership spec
       },
       &quot;identityservice&quot;: { # **Anthos Identity Service**: Configuration for a single Membership. # Identity Service-specific spec.
@@ -220,6 +221,9 @@ Args:
         &quot;controlPlane&quot;: &quot;A String&quot;, # Deprecated: use `management` instead Enables automatic control plane management.
         &quot;management&quot;: &quot;A String&quot;, # Enables automatic Service Mesh management.
       },
+      &quot;origin&quot;: { # Origin defines where this MembershipFeatureSpec originated from. # Whether this per-Membership spec was inherited from a fleet-level default. This field can be updated by users by either overriding a Membership config (updated to USER implicitly) or setting to FLEET explicitly.
+        &quot;type&quot;: &quot;A String&quot;, # Type specifies which type of origin is set.
+      },
     },
   },
   &quot;membershipStates&quot;: { # Output only. Membership-specific Feature status. If this Feature does report any per-Membership status, this field may be unused. The keys indicate which Membership the state is for, in the form: `projects/{p}/locations/{l}/memberships/{m}` Where {p} is the project number, {l} is a valid location and {m} is a valid Membership in this project at that location. {p} MUST match the Feature&#x27;s project number.
@@ -231,7 +235,7 @@ Args:
         },
       },
       &quot;configmanagement&quot;: { # **Anthos Config Management**: State for a single cluster. # Config Management-specific state.
-        &quot;clusterName&quot;: &quot;A String&quot;, # The user-defined name for the cluster used by ClusterSelectors to group clusters together. This should match Membership&#x27;s membership_name, unless the user installed ACM on the cluster manually prior to enabling the ACM hub feature. Unique within a Anthos Config Management installation.
+        &quot;clusterName&quot;: &quot;A String&quot;, # This field is set to the `cluster_name` field of the Membership Spec if it is not empty. Otherwise, it is set to the cluster&#x27;s fleet membership name.
         &quot;configSyncState&quot;: { # State information for ConfigSync # Current sync status
           &quot;deploymentState&quot;: { # The state of ConfigSync&#x27;s deployment on a cluster # Information about the deployment of ConfigSync, including the version of the various Pods deployed
             &quot;admissionWebhook&quot;: &quot;A String&quot;, # Deployment state of admission-webhook
@@ -242,6 +246,11 @@ Args:
             &quot;rootReconciler&quot;: &quot;A String&quot;, # Deployment state of root-reconciler
             &quot;syncer&quot;: &quot;A String&quot;, # Deployment state of the syncer pod
           },
+          &quot;errors&quot;: [ # Errors pertaining to the installation of Config Sync.
+            { # Errors pertaining to the installation of Config Sync
+              &quot;errorMessage&quot;: &quot;A String&quot;, # A string representing the user facing error message
+            },
+          ],
           &quot;syncState&quot;: { # State indicating an ACM&#x27;s progress syncing configurations to a cluster # The state of ConfigSync&#x27;s process to sync configs to a cluster
             &quot;code&quot;: &quot;A String&quot;, # Sync status code
             &quot;errors&quot;: [ # A list of errors resulting from problematic configs. This list will be truncated after 100 errors, although it is unlikely for that many errors to simultaneously exist.
@@ -289,11 +298,12 @@ Args:
           },
         },
         &quot;membershipSpec&quot;: { # **Anthos Config Management**: Configuration for a single cluster. Intended to parallel the ConfigManagement CR. # Membership configuration in the cluster. This represents the actual state in the cluster, while the MembershipSpec in the FeatureSpec represents the intended state
+          &quot;cluster&quot;: &quot;A String&quot;, # The user-specified cluster name used by Config Sync cluster-name-selector annotation or ClusterSelector, for applying configs to only a subset of clusters. Omit this field if the cluster&#x27;s fleet membership name is used by Config Sync cluster-name-selector annotation or ClusterSelector. Set this field if a name different from the cluster&#x27;s fleet membership name is used by Config Sync cluster-name-selector annotation or ClusterSelector.
           &quot;configSync&quot;: { # Configuration for Config Sync # Config Sync configuration for the cluster.
             &quot;allowVerticalScale&quot;: True or False, # Set to true to allow the vertical scaling. Defaults to false which disallows vertical scaling. This field is deprecated.
-            &quot;enabled&quot;: True or False, # Enables the installation of ConfigSync. If set to true, ConfigSync resources will be created and the other ConfigSync fields will be applied if exist. If set to false, all other ConfigSync fields will be ignored, ConfigSync resources will be deleted. If omitted, ConfigSync resources will be managed depends on the presence of git field.
+            &quot;enabled&quot;: True or False, # Enables the installation of ConfigSync. If set to true, ConfigSync resources will be created and the other ConfigSync fields will be applied if exist. If set to false, all other ConfigSync fields will be ignored, ConfigSync resources will be deleted. If omitted, ConfigSync resources will be managed depends on the presence of the git or oci field.
             &quot;git&quot;: { # Git repo configuration for a single cluster. # Git repo configuration for the cluster.
-              &quot;gcpServiceAccountEmail&quot;: &quot;A String&quot;, # The GCP Service Account Email used for auth when secret_type is gcpServiceAccount.
+              &quot;gcpServiceAccountEmail&quot;: &quot;A String&quot;, # The Google Cloud Service Account Email used for auth when secret_type is gcpServiceAccount.
               &quot;httpsProxy&quot;: &quot;A String&quot;, # URL for the HTTPS proxy to be used when communicating with the Git repo.
               &quot;policyDir&quot;: &quot;A String&quot;, # The path within the Git repository that represents the top level of the repo to sync. Default: the root directory of the repository.
               &quot;secretType&quot;: &quot;A String&quot;, # Type of secret configured for access to the Git repo. Must be one of ssh, cookiefile, gcenode, token, gcpserviceaccount or none. The validation of this is case-sensitive. Required.
@@ -302,11 +312,9 @@ Args:
               &quot;syncRev&quot;: &quot;A String&quot;, # Git revision (tag or hash) to check out. Default HEAD.
               &quot;syncWaitSecs&quot;: &quot;A String&quot;, # Period in seconds between consecutive syncs. Default: 15.
             },
-            &quot;managed&quot;: { # Configuration for Managed Config Sync. # Configuration for Managed Config Sync.
-              &quot;enabled&quot;: True or False, # Set to true to enable Managed Config Sync. Defaults to false which disables Managed Config Sync.
-            },
+            &quot;metricsGcpServiceAccountEmail&quot;: &quot;A String&quot;, # The Email of the Google Cloud Service Account (GSA) used for exporting Config Sync metrics to Cloud Monitoring and Cloud Monarch when Workload Identity is enabled. The GSA should have the Monitoring Metric Writer (roles/monitoring.metricWriter) IAM role. The Kubernetes ServiceAccount `default` in the namespace `config-management-monitoring` should be binded to the GSA. This field is required when automatic Feature management is enabled.
             &quot;oci&quot;: { # OCI repo configuration for a single cluster # OCI repo configuration for the cluster
-              &quot;gcpServiceAccountEmail&quot;: &quot;A String&quot;, # The GCP Service Account Email used for auth when secret_type is gcpServiceAccount.
+              &quot;gcpServiceAccountEmail&quot;: &quot;A String&quot;, # The Google Cloud Service Account Email used for auth when secret_type is gcpServiceAccount.
               &quot;policyDir&quot;: &quot;A String&quot;, # The absolute path of the directory that contains the local resources. Default: the root directory of the image.
               &quot;secretType&quot;: &quot;A String&quot;, # Type of secret configured for access to the Git repo.
               &quot;syncRepo&quot;: &quot;A String&quot;, # The OCI image repository URL for the package to sync from. e.g. `LOCATION-docker.pkg.dev/PROJECT_ID/REPOSITORY_NAME/PACKAGE_NAME`.
@@ -314,12 +322,14 @@ Args:
             },
             &quot;preventDrift&quot;: True or False, # Set to true to enable the Config Sync admission webhook to prevent drifts. If set to `false`, disables the Config Sync admission webhook and does not prevent drifts.
             &quot;sourceFormat&quot;: &quot;A String&quot;, # Specifies whether the Config Sync Repo is in &quot;hierarchical&quot; or &quot;unstructured&quot; mode.
+            &quot;stopSyncing&quot;: True or False, # Set to true to stop syncing configs for a single cluster when automatic Feature management is enabled. Default to false. The field will be ignored when automatic Feature management is disabled.
           },
           &quot;hierarchyController&quot;: { # Configuration for Hierarchy Controller # Hierarchy Controller configuration for the cluster.
             &quot;enableHierarchicalResourceQuota&quot;: True or False, # Whether hierarchical resource quota is enabled in this cluster.
             &quot;enablePodTreeLabels&quot;: True or False, # Whether pod tree labels are enabled in this cluster.
             &quot;enabled&quot;: True or False, # Whether Hierarchy Controller is enabled in this cluster.
           },
+          &quot;management&quot;: &quot;A String&quot;, # Enables automatic Feature management.
           &quot;policyController&quot;: { # Configuration for Policy Controller # Policy Controller configuration for the cluster.
             &quot;auditIntervalSeconds&quot;: &quot;A String&quot;, # Sets the interval for Policy Controller Audit Scans (in seconds). When set to 0, this disables audit functionality altogether.
             &quot;enabled&quot;: True or False, # Enables the installation of Policy Controller. If false, the rest of PolicyController fields take no effect.
@@ -335,6 +345,7 @@ Args:
             &quot;mutationEnabled&quot;: True or False, # Enable or disable mutation in policy controller. If true, mutation CRDs, webhook and controller deployment will be deployed to the cluster.
             &quot;referentialRulesEnabled&quot;: True or False, # Enables the ability to use Constraint Templates that reference to objects other than the object currently being evaluated.
             &quot;templateLibraryInstalled&quot;: True or False, # Installs the default template library along with Policy Controller.
+            &quot;updateTime&quot;: &quot;A String&quot;, # Output only. Last time this membership spec was updated.
           },
           &quot;version&quot;: &quot;A String&quot;, # Version of ACM installed.
         },
@@ -354,6 +365,7 @@ Args:
             &quot;gatekeeperMutation&quot;: &quot;A String&quot;, # Status of the pod serving the mutation webhook.
           },
           &quot;migration&quot;: { # State for the migration of PolicyController from ACM -&gt; PoCo Hub. # Record state of ACM -&gt; PoCo Hub migration for this feature.
+            &quot;copyTime&quot;: &quot;A String&quot;, # Last time this membership spec was copied to PoCo feature.
             &quot;stage&quot;: &quot;A String&quot;, # Stage of the migration.
           },
           &quot;version&quot;: { # The build version of Gatekeeper Policy Controller is using. # The version of Gatekeeper Policy Controller deployed.
@@ -450,6 +462,14 @@ Args:
     &quot;appdevexperience&quot;: { # Spec for App Dev Experience Feature. # Appdevexperience specific spec.
     },
     &quot;fleetobservability&quot;: { # **Fleet Observability**: The Hub-wide input for the FleetObservability feature. # FleetObservability feature spec.
+      &quot;loggingConfig&quot;: { # LoggingConfig defines the configuration for different types of logs. # Specified if fleet logging feature is enabled for the entire fleet. If UNSPECIFIED, fleet logging feature is disabled for the entire fleet.
+        &quot;defaultConfig&quot;: { # RoutingConfig configures the behaviour of fleet logging feature. # Specified if applying the default routing config to logs not specified in other configs.
+          &quot;mode&quot;: &quot;A String&quot;, # mode configures the logs routing mode.
+        },
+        &quot;fleetScopeLogsConfig&quot;: { # RoutingConfig configures the behaviour of fleet logging feature. # Specified if applying the routing config to all logs for all fleet scopes.
+          &quot;mode&quot;: &quot;A String&quot;, # mode configures the logs routing mode.
+        },
+      },
     },
     &quot;multiclusteringress&quot;: { # **Multi-cluster Ingress**: The configuration for the MultiClusterIngress feature. # Multicluster Ingress-specific spec.
       &quot;configMembership&quot;: &quot;A String&quot;, # Fully-qualified Membership name which hosts the MultiClusterIngress CRD. Example: `projects/foo-proj/locations/global/memberships/bar`
@@ -463,6 +483,37 @@ Args:
       },
     },
     &quot;fleetobservability&quot;: { # **FleetObservability**: Hub-wide Feature for FleetObservability feature. state. # FleetObservability feature state.
+      &quot;logging&quot;: { # Feature state for logging feature. # The feature state of default logging.
+        &quot;defaultLog&quot;: { # Base state for fleet observability feature. # The base feature state of fleet default log.
+          &quot;code&quot;: &quot;A String&quot;, # The high-level, machine-readable status of this Feature.
+          &quot;errors&quot;: [ # Errors after reconciling the monitoring and logging feature if the code is not OK.
+            { # All error details of the fleet observability feature.
+              &quot;code&quot;: &quot;A String&quot;, # The code of the error.
+              &quot;description&quot;: &quot;A String&quot;, # A human-readable description of the current status.
+            },
+          ],
+        },
+        &quot;scopeLog&quot;: { # Base state for fleet observability feature. # The base feature state of fleet scope log.
+          &quot;code&quot;: &quot;A String&quot;, # The high-level, machine-readable status of this Feature.
+          &quot;errors&quot;: [ # Errors after reconciling the monitoring and logging feature if the code is not OK.
+            { # All error details of the fleet observability feature.
+              &quot;code&quot;: &quot;A String&quot;, # The code of the error.
+              &quot;description&quot;: &quot;A String&quot;, # A human-readable description of the current status.
+            },
+          ],
+        },
+      },
+      &quot;monitoring&quot;: { # Feature state for monitoring feature. # The feature state of fleet monitoring.
+        &quot;state&quot;: { # Base state for fleet observability feature. # The base feature state of fleet monitoring feature.
+          &quot;code&quot;: &quot;A String&quot;, # The high-level, machine-readable status of this Feature.
+          &quot;errors&quot;: [ # Errors after reconciling the monitoring and logging feature if the code is not OK.
+            { # All error details of the fleet observability feature.
+              &quot;code&quot;: &quot;A String&quot;, # The code of the error.
+              &quot;description&quot;: &quot;A String&quot;, # A human-readable description of the current status.
+            },
+          ],
+        },
+      },
     },
     &quot;state&quot;: { # FeatureState describes the high-level state of a Feature. It may be used to describe a Feature&#x27;s state at the environ-level, or per-membershop, depending on the context. # Output only. The &quot;running state&quot; of the Feature in this Hub.
       &quot;code&quot;: &quot;A String&quot;, # The high-level, machine-readable status of this Feature.
@@ -564,13 +615,14 @@ Returns:
     &quot;a_key&quot;: &quot;A String&quot;,
   },
   &quot;membershipSpecs&quot;: { # Optional. Membership-specific configuration for this Feature. If this Feature does not support any per-Membership configuration, this field may be unused. The keys indicate which Membership the configuration is for, in the form: `projects/{p}/locations/{l}/memberships/{m}` Where {p} is the project, {l} is a valid location and {m} is a valid Membership in this project at that location. {p} WILL match the Feature&#x27;s project. {p} will always be returned as the project number, but the project ID is also accepted during input. If the same Membership is specified in the map twice (using the project ID form, and the project number form), exactly ONE of the entries will be saved, with no guarantees as to which. For this reason, it is recommended the same format be used for all entries when mutating a Feature.
-    &quot;a_key&quot;: { # MembershipFeatureSpec contains configuration information for a single Membership.
+    &quot;a_key&quot;: { # MembershipFeatureSpec contains configuration information for a single Membership. NOTE: Please use snake case in your feature name.
       &quot;configmanagement&quot;: { # **Anthos Config Management**: Configuration for a single cluster. Intended to parallel the ConfigManagement CR. # Config Management-specific spec.
+        &quot;cluster&quot;: &quot;A String&quot;, # The user-specified cluster name used by Config Sync cluster-name-selector annotation or ClusterSelector, for applying configs to only a subset of clusters. Omit this field if the cluster&#x27;s fleet membership name is used by Config Sync cluster-name-selector annotation or ClusterSelector. Set this field if a name different from the cluster&#x27;s fleet membership name is used by Config Sync cluster-name-selector annotation or ClusterSelector.
         &quot;configSync&quot;: { # Configuration for Config Sync # Config Sync configuration for the cluster.
           &quot;allowVerticalScale&quot;: True or False, # Set to true to allow the vertical scaling. Defaults to false which disallows vertical scaling. This field is deprecated.
-          &quot;enabled&quot;: True or False, # Enables the installation of ConfigSync. If set to true, ConfigSync resources will be created and the other ConfigSync fields will be applied if exist. If set to false, all other ConfigSync fields will be ignored, ConfigSync resources will be deleted. If omitted, ConfigSync resources will be managed depends on the presence of git field.
+          &quot;enabled&quot;: True or False, # Enables the installation of ConfigSync. If set to true, ConfigSync resources will be created and the other ConfigSync fields will be applied if exist. If set to false, all other ConfigSync fields will be ignored, ConfigSync resources will be deleted. If omitted, ConfigSync resources will be managed depends on the presence of the git or oci field.
           &quot;git&quot;: { # Git repo configuration for a single cluster. # Git repo configuration for the cluster.
-            &quot;gcpServiceAccountEmail&quot;: &quot;A String&quot;, # The GCP Service Account Email used for auth when secret_type is gcpServiceAccount.
+            &quot;gcpServiceAccountEmail&quot;: &quot;A String&quot;, # The Google Cloud Service Account Email used for auth when secret_type is gcpServiceAccount.
             &quot;httpsProxy&quot;: &quot;A String&quot;, # URL for the HTTPS proxy to be used when communicating with the Git repo.
             &quot;policyDir&quot;: &quot;A String&quot;, # The path within the Git repository that represents the top level of the repo to sync. Default: the root directory of the repository.
             &quot;secretType&quot;: &quot;A String&quot;, # Type of secret configured for access to the Git repo. Must be one of ssh, cookiefile, gcenode, token, gcpserviceaccount or none. The validation of this is case-sensitive. Required.
@@ -579,11 +631,9 @@ Returns:
             &quot;syncRev&quot;: &quot;A String&quot;, # Git revision (tag or hash) to check out. Default HEAD.
             &quot;syncWaitSecs&quot;: &quot;A String&quot;, # Period in seconds between consecutive syncs. Default: 15.
           },
-          &quot;managed&quot;: { # Configuration for Managed Config Sync. # Configuration for Managed Config Sync.
-            &quot;enabled&quot;: True or False, # Set to true to enable Managed Config Sync. Defaults to false which disables Managed Config Sync.
-          },
+          &quot;metricsGcpServiceAccountEmail&quot;: &quot;A String&quot;, # The Email of the Google Cloud Service Account (GSA) used for exporting Config Sync metrics to Cloud Monitoring and Cloud Monarch when Workload Identity is enabled. The GSA should have the Monitoring Metric Writer (roles/monitoring.metricWriter) IAM role. The Kubernetes ServiceAccount `default` in the namespace `config-management-monitoring` should be binded to the GSA. This field is required when automatic Feature management is enabled.
           &quot;oci&quot;: { # OCI repo configuration for a single cluster # OCI repo configuration for the cluster
-            &quot;gcpServiceAccountEmail&quot;: &quot;A String&quot;, # The GCP Service Account Email used for auth when secret_type is gcpServiceAccount.
+            &quot;gcpServiceAccountEmail&quot;: &quot;A String&quot;, # The Google Cloud Service Account Email used for auth when secret_type is gcpServiceAccount.
             &quot;policyDir&quot;: &quot;A String&quot;, # The absolute path of the directory that contains the local resources. Default: the root directory of the image.
             &quot;secretType&quot;: &quot;A String&quot;, # Type of secret configured for access to the Git repo.
             &quot;syncRepo&quot;: &quot;A String&quot;, # The OCI image repository URL for the package to sync from. e.g. `LOCATION-docker.pkg.dev/PROJECT_ID/REPOSITORY_NAME/PACKAGE_NAME`.
@@ -591,12 +641,14 @@ Returns:
           },
           &quot;preventDrift&quot;: True or False, # Set to true to enable the Config Sync admission webhook to prevent drifts. If set to `false`, disables the Config Sync admission webhook and does not prevent drifts.
           &quot;sourceFormat&quot;: &quot;A String&quot;, # Specifies whether the Config Sync Repo is in &quot;hierarchical&quot; or &quot;unstructured&quot; mode.
+          &quot;stopSyncing&quot;: True or False, # Set to true to stop syncing configs for a single cluster when automatic Feature management is enabled. Default to false. The field will be ignored when automatic Feature management is disabled.
         },
         &quot;hierarchyController&quot;: { # Configuration for Hierarchy Controller # Hierarchy Controller configuration for the cluster.
           &quot;enableHierarchicalResourceQuota&quot;: True or False, # Whether hierarchical resource quota is enabled in this cluster.
           &quot;enablePodTreeLabels&quot;: True or False, # Whether pod tree labels are enabled in this cluster.
           &quot;enabled&quot;: True or False, # Whether Hierarchy Controller is enabled in this cluster.
         },
+        &quot;management&quot;: &quot;A String&quot;, # Enables automatic Feature management.
         &quot;policyController&quot;: { # Configuration for Policy Controller # Policy Controller configuration for the cluster.
           &quot;auditIntervalSeconds&quot;: &quot;A String&quot;, # Sets the interval for Policy Controller Audit Scans (in seconds). When set to 0, this disables audit functionality altogether.
           &quot;enabled&quot;: True or False, # Enables the installation of Policy Controller. If false, the rest of PolicyController fields take no effect.
@@ -612,10 +664,10 @@ Returns:
           &quot;mutationEnabled&quot;: True or False, # Enable or disable mutation in policy controller. If true, mutation CRDs, webhook and controller deployment will be deployed to the cluster.
           &quot;referentialRulesEnabled&quot;: True or False, # Enables the ability to use Constraint Templates that reference to objects other than the object currently being evaluated.
           &quot;templateLibraryInstalled&quot;: True or False, # Installs the default template library along with Policy Controller.
+          &quot;updateTime&quot;: &quot;A String&quot;, # Output only. Last time this membership spec was updated.
         },
         &quot;version&quot;: &quot;A String&quot;, # Version of ACM installed.
       },
-      &quot;fleetInherited&quot;: True or False, # True if value of `feature_spec` was inherited from a fleet-level default.
       &quot;fleetobservability&quot;: { # **FleetObservability**: The membership-specific input for FleetObservability feature. # Fleet observability membership spec
       },
       &quot;identityservice&quot;: { # **Anthos Identity Service**: Configuration for a single Membership. # Identity Service-specific spec.
@@ -656,6 +708,9 @@ Returns:
         &quot;controlPlane&quot;: &quot;A String&quot;, # Deprecated: use `management` instead Enables automatic control plane management.
         &quot;management&quot;: &quot;A String&quot;, # Enables automatic Service Mesh management.
       },
+      &quot;origin&quot;: { # Origin defines where this MembershipFeatureSpec originated from. # Whether this per-Membership spec was inherited from a fleet-level default. This field can be updated by users by either overriding a Membership config (updated to USER implicitly) or setting to FLEET explicitly.
+        &quot;type&quot;: &quot;A String&quot;, # Type specifies which type of origin is set.
+      },
     },
   },
   &quot;membershipStates&quot;: { # Output only. Membership-specific Feature status. If this Feature does report any per-Membership status, this field may be unused. The keys indicate which Membership the state is for, in the form: `projects/{p}/locations/{l}/memberships/{m}` Where {p} is the project number, {l} is a valid location and {m} is a valid Membership in this project at that location. {p} MUST match the Feature&#x27;s project number.
@@ -667,7 +722,7 @@ Returns:
         },
       },
       &quot;configmanagement&quot;: { # **Anthos Config Management**: State for a single cluster. # Config Management-specific state.
-        &quot;clusterName&quot;: &quot;A String&quot;, # The user-defined name for the cluster used by ClusterSelectors to group clusters together. This should match Membership&#x27;s membership_name, unless the user installed ACM on the cluster manually prior to enabling the ACM hub feature. Unique within a Anthos Config Management installation.
+        &quot;clusterName&quot;: &quot;A String&quot;, # This field is set to the `cluster_name` field of the Membership Spec if it is not empty. Otherwise, it is set to the cluster&#x27;s fleet membership name.
         &quot;configSyncState&quot;: { # State information for ConfigSync # Current sync status
           &quot;deploymentState&quot;: { # The state of ConfigSync&#x27;s deployment on a cluster # Information about the deployment of ConfigSync, including the version of the various Pods deployed
             &quot;admissionWebhook&quot;: &quot;A String&quot;, # Deployment state of admission-webhook
@@ -678,6 +733,11 @@ Returns:
             &quot;rootReconciler&quot;: &quot;A String&quot;, # Deployment state of root-reconciler
             &quot;syncer&quot;: &quot;A String&quot;, # Deployment state of the syncer pod
           },
+          &quot;errors&quot;: [ # Errors pertaining to the installation of Config Sync.
+            { # Errors pertaining to the installation of Config Sync
+              &quot;errorMessage&quot;: &quot;A String&quot;, # A string representing the user facing error message
+            },
+          ],
           &quot;syncState&quot;: { # State indicating an ACM&#x27;s progress syncing configurations to a cluster # The state of ConfigSync&#x27;s process to sync configs to a cluster
             &quot;code&quot;: &quot;A String&quot;, # Sync status code
             &quot;errors&quot;: [ # A list of errors resulting from problematic configs. This list will be truncated after 100 errors, although it is unlikely for that many errors to simultaneously exist.
@@ -725,11 +785,12 @@ Returns:
           },
         },
         &quot;membershipSpec&quot;: { # **Anthos Config Management**: Configuration for a single cluster. Intended to parallel the ConfigManagement CR. # Membership configuration in the cluster. This represents the actual state in the cluster, while the MembershipSpec in the FeatureSpec represents the intended state
+          &quot;cluster&quot;: &quot;A String&quot;, # The user-specified cluster name used by Config Sync cluster-name-selector annotation or ClusterSelector, for applying configs to only a subset of clusters. Omit this field if the cluster&#x27;s fleet membership name is used by Config Sync cluster-name-selector annotation or ClusterSelector. Set this field if a name different from the cluster&#x27;s fleet membership name is used by Config Sync cluster-name-selector annotation or ClusterSelector.
           &quot;configSync&quot;: { # Configuration for Config Sync # Config Sync configuration for the cluster.
             &quot;allowVerticalScale&quot;: True or False, # Set to true to allow the vertical scaling. Defaults to false which disallows vertical scaling. This field is deprecated.
-            &quot;enabled&quot;: True or False, # Enables the installation of ConfigSync. If set to true, ConfigSync resources will be created and the other ConfigSync fields will be applied if exist. If set to false, all other ConfigSync fields will be ignored, ConfigSync resources will be deleted. If omitted, ConfigSync resources will be managed depends on the presence of git field.
+            &quot;enabled&quot;: True or False, # Enables the installation of ConfigSync. If set to true, ConfigSync resources will be created and the other ConfigSync fields will be applied if exist. If set to false, all other ConfigSync fields will be ignored, ConfigSync resources will be deleted. If omitted, ConfigSync resources will be managed depends on the presence of the git or oci field.
             &quot;git&quot;: { # Git repo configuration for a single cluster. # Git repo configuration for the cluster.
-              &quot;gcpServiceAccountEmail&quot;: &quot;A String&quot;, # The GCP Service Account Email used for auth when secret_type is gcpServiceAccount.
+              &quot;gcpServiceAccountEmail&quot;: &quot;A String&quot;, # The Google Cloud Service Account Email used for auth when secret_type is gcpServiceAccount.
               &quot;httpsProxy&quot;: &quot;A String&quot;, # URL for the HTTPS proxy to be used when communicating with the Git repo.
               &quot;policyDir&quot;: &quot;A String&quot;, # The path within the Git repository that represents the top level of the repo to sync. Default: the root directory of the repository.
               &quot;secretType&quot;: &quot;A String&quot;, # Type of secret configured for access to the Git repo. Must be one of ssh, cookiefile, gcenode, token, gcpserviceaccount or none. The validation of this is case-sensitive. Required.
@@ -738,11 +799,9 @@ Returns:
               &quot;syncRev&quot;: &quot;A String&quot;, # Git revision (tag or hash) to check out. Default HEAD.
               &quot;syncWaitSecs&quot;: &quot;A String&quot;, # Period in seconds between consecutive syncs. Default: 15.
             },
-            &quot;managed&quot;: { # Configuration for Managed Config Sync. # Configuration for Managed Config Sync.
-              &quot;enabled&quot;: True or False, # Set to true to enable Managed Config Sync. Defaults to false which disables Managed Config Sync.
-            },
+            &quot;metricsGcpServiceAccountEmail&quot;: &quot;A String&quot;, # The Email of the Google Cloud Service Account (GSA) used for exporting Config Sync metrics to Cloud Monitoring and Cloud Monarch when Workload Identity is enabled. The GSA should have the Monitoring Metric Writer (roles/monitoring.metricWriter) IAM role. The Kubernetes ServiceAccount `default` in the namespace `config-management-monitoring` should be binded to the GSA. This field is required when automatic Feature management is enabled.
             &quot;oci&quot;: { # OCI repo configuration for a single cluster # OCI repo configuration for the cluster
-              &quot;gcpServiceAccountEmail&quot;: &quot;A String&quot;, # The GCP Service Account Email used for auth when secret_type is gcpServiceAccount.
+              &quot;gcpServiceAccountEmail&quot;: &quot;A String&quot;, # The Google Cloud Service Account Email used for auth when secret_type is gcpServiceAccount.
               &quot;policyDir&quot;: &quot;A String&quot;, # The absolute path of the directory that contains the local resources. Default: the root directory of the image.
               &quot;secretType&quot;: &quot;A String&quot;, # Type of secret configured for access to the Git repo.
               &quot;syncRepo&quot;: &quot;A String&quot;, # The OCI image repository URL for the package to sync from. e.g. `LOCATION-docker.pkg.dev/PROJECT_ID/REPOSITORY_NAME/PACKAGE_NAME`.
@@ -750,12 +809,14 @@ Returns:
             },
             &quot;preventDrift&quot;: True or False, # Set to true to enable the Config Sync admission webhook to prevent drifts. If set to `false`, disables the Config Sync admission webhook and does not prevent drifts.
             &quot;sourceFormat&quot;: &quot;A String&quot;, # Specifies whether the Config Sync Repo is in &quot;hierarchical&quot; or &quot;unstructured&quot; mode.
+            &quot;stopSyncing&quot;: True or False, # Set to true to stop syncing configs for a single cluster when automatic Feature management is enabled. Default to false. The field will be ignored when automatic Feature management is disabled.
           },
           &quot;hierarchyController&quot;: { # Configuration for Hierarchy Controller # Hierarchy Controller configuration for the cluster.
             &quot;enableHierarchicalResourceQuota&quot;: True or False, # Whether hierarchical resource quota is enabled in this cluster.
             &quot;enablePodTreeLabels&quot;: True or False, # Whether pod tree labels are enabled in this cluster.
             &quot;enabled&quot;: True or False, # Whether Hierarchy Controller is enabled in this cluster.
           },
+          &quot;management&quot;: &quot;A String&quot;, # Enables automatic Feature management.
           &quot;policyController&quot;: { # Configuration for Policy Controller # Policy Controller configuration for the cluster.
             &quot;auditIntervalSeconds&quot;: &quot;A String&quot;, # Sets the interval for Policy Controller Audit Scans (in seconds). When set to 0, this disables audit functionality altogether.
             &quot;enabled&quot;: True or False, # Enables the installation of Policy Controller. If false, the rest of PolicyController fields take no effect.
@@ -771,6 +832,7 @@ Returns:
             &quot;mutationEnabled&quot;: True or False, # Enable or disable mutation in policy controller. If true, mutation CRDs, webhook and controller deployment will be deployed to the cluster.
             &quot;referentialRulesEnabled&quot;: True or False, # Enables the ability to use Constraint Templates that reference to objects other than the object currently being evaluated.
             &quot;templateLibraryInstalled&quot;: True or False, # Installs the default template library along with Policy Controller.
+            &quot;updateTime&quot;: &quot;A String&quot;, # Output only. Last time this membership spec was updated.
           },
           &quot;version&quot;: &quot;A String&quot;, # Version of ACM installed.
         },
@@ -790,6 +852,7 @@ Returns:
             &quot;gatekeeperMutation&quot;: &quot;A String&quot;, # Status of the pod serving the mutation webhook.
           },
           &quot;migration&quot;: { # State for the migration of PolicyController from ACM -&gt; PoCo Hub. # Record state of ACM -&gt; PoCo Hub migration for this feature.
+            &quot;copyTime&quot;: &quot;A String&quot;, # Last time this membership spec was copied to PoCo feature.
             &quot;stage&quot;: &quot;A String&quot;, # Stage of the migration.
           },
           &quot;version&quot;: { # The build version of Gatekeeper Policy Controller is using. # The version of Gatekeeper Policy Controller deployed.
@@ -886,6 +949,14 @@ Returns:
     &quot;appdevexperience&quot;: { # Spec for App Dev Experience Feature. # Appdevexperience specific spec.
     },
     &quot;fleetobservability&quot;: { # **Fleet Observability**: The Hub-wide input for the FleetObservability feature. # FleetObservability feature spec.
+      &quot;loggingConfig&quot;: { # LoggingConfig defines the configuration for different types of logs. # Specified if fleet logging feature is enabled for the entire fleet. If UNSPECIFIED, fleet logging feature is disabled for the entire fleet.
+        &quot;defaultConfig&quot;: { # RoutingConfig configures the behaviour of fleet logging feature. # Specified if applying the default routing config to logs not specified in other configs.
+          &quot;mode&quot;: &quot;A String&quot;, # mode configures the logs routing mode.
+        },
+        &quot;fleetScopeLogsConfig&quot;: { # RoutingConfig configures the behaviour of fleet logging feature. # Specified if applying the routing config to all logs for all fleet scopes.
+          &quot;mode&quot;: &quot;A String&quot;, # mode configures the logs routing mode.
+        },
+      },
     },
     &quot;multiclusteringress&quot;: { # **Multi-cluster Ingress**: The configuration for the MultiClusterIngress feature. # Multicluster Ingress-specific spec.
       &quot;configMembership&quot;: &quot;A String&quot;, # Fully-qualified Membership name which hosts the MultiClusterIngress CRD. Example: `projects/foo-proj/locations/global/memberships/bar`
@@ -899,6 +970,37 @@ Returns:
       },
     },
     &quot;fleetobservability&quot;: { # **FleetObservability**: Hub-wide Feature for FleetObservability feature. state. # FleetObservability feature state.
+      &quot;logging&quot;: { # Feature state for logging feature. # The feature state of default logging.
+        &quot;defaultLog&quot;: { # Base state for fleet observability feature. # The base feature state of fleet default log.
+          &quot;code&quot;: &quot;A String&quot;, # The high-level, machine-readable status of this Feature.
+          &quot;errors&quot;: [ # Errors after reconciling the monitoring and logging feature if the code is not OK.
+            { # All error details of the fleet observability feature.
+              &quot;code&quot;: &quot;A String&quot;, # The code of the error.
+              &quot;description&quot;: &quot;A String&quot;, # A human-readable description of the current status.
+            },
+          ],
+        },
+        &quot;scopeLog&quot;: { # Base state for fleet observability feature. # The base feature state of fleet scope log.
+          &quot;code&quot;: &quot;A String&quot;, # The high-level, machine-readable status of this Feature.
+          &quot;errors&quot;: [ # Errors after reconciling the monitoring and logging feature if the code is not OK.
+            { # All error details of the fleet observability feature.
+              &quot;code&quot;: &quot;A String&quot;, # The code of the error.
+              &quot;description&quot;: &quot;A String&quot;, # A human-readable description of the current status.
+            },
+          ],
+        },
+      },
+      &quot;monitoring&quot;: { # Feature state for monitoring feature. # The feature state of fleet monitoring.
+        &quot;state&quot;: { # Base state for fleet observability feature. # The base feature state of fleet monitoring feature.
+          &quot;code&quot;: &quot;A String&quot;, # The high-level, machine-readable status of this Feature.
+          &quot;errors&quot;: [ # Errors after reconciling the monitoring and logging feature if the code is not OK.
+            { # All error details of the fleet observability feature.
+              &quot;code&quot;: &quot;A String&quot;, # The code of the error.
+              &quot;description&quot;: &quot;A String&quot;, # A human-readable description of the current status.
+            },
+          ],
+        },
+      },
     },
     &quot;state&quot;: { # FeatureState describes the high-level state of a Feature. It may be used to describe a Feature&#x27;s state at the environ-level, or per-membershop, depending on the context. # Output only. The &quot;running state&quot; of the Feature in this Hub.
       &quot;code&quot;: &quot;A String&quot;, # The high-level, machine-readable status of this Feature.
@@ -988,13 +1090,14 @@ Returns:
         &quot;a_key&quot;: &quot;A String&quot;,
       },
       &quot;membershipSpecs&quot;: { # Optional. Membership-specific configuration for this Feature. If this Feature does not support any per-Membership configuration, this field may be unused. The keys indicate which Membership the configuration is for, in the form: `projects/{p}/locations/{l}/memberships/{m}` Where {p} is the project, {l} is a valid location and {m} is a valid Membership in this project at that location. {p} WILL match the Feature&#x27;s project. {p} will always be returned as the project number, but the project ID is also accepted during input. If the same Membership is specified in the map twice (using the project ID form, and the project number form), exactly ONE of the entries will be saved, with no guarantees as to which. For this reason, it is recommended the same format be used for all entries when mutating a Feature.
-        &quot;a_key&quot;: { # MembershipFeatureSpec contains configuration information for a single Membership.
+        &quot;a_key&quot;: { # MembershipFeatureSpec contains configuration information for a single Membership. NOTE: Please use snake case in your feature name.
           &quot;configmanagement&quot;: { # **Anthos Config Management**: Configuration for a single cluster. Intended to parallel the ConfigManagement CR. # Config Management-specific spec.
+            &quot;cluster&quot;: &quot;A String&quot;, # The user-specified cluster name used by Config Sync cluster-name-selector annotation or ClusterSelector, for applying configs to only a subset of clusters. Omit this field if the cluster&#x27;s fleet membership name is used by Config Sync cluster-name-selector annotation or ClusterSelector. Set this field if a name different from the cluster&#x27;s fleet membership name is used by Config Sync cluster-name-selector annotation or ClusterSelector.
             &quot;configSync&quot;: { # Configuration for Config Sync # Config Sync configuration for the cluster.
               &quot;allowVerticalScale&quot;: True or False, # Set to true to allow the vertical scaling. Defaults to false which disallows vertical scaling. This field is deprecated.
-              &quot;enabled&quot;: True or False, # Enables the installation of ConfigSync. If set to true, ConfigSync resources will be created and the other ConfigSync fields will be applied if exist. If set to false, all other ConfigSync fields will be ignored, ConfigSync resources will be deleted. If omitted, ConfigSync resources will be managed depends on the presence of git field.
+              &quot;enabled&quot;: True or False, # Enables the installation of ConfigSync. If set to true, ConfigSync resources will be created and the other ConfigSync fields will be applied if exist. If set to false, all other ConfigSync fields will be ignored, ConfigSync resources will be deleted. If omitted, ConfigSync resources will be managed depends on the presence of the git or oci field.
               &quot;git&quot;: { # Git repo configuration for a single cluster. # Git repo configuration for the cluster.
-                &quot;gcpServiceAccountEmail&quot;: &quot;A String&quot;, # The GCP Service Account Email used for auth when secret_type is gcpServiceAccount.
+                &quot;gcpServiceAccountEmail&quot;: &quot;A String&quot;, # The Google Cloud Service Account Email used for auth when secret_type is gcpServiceAccount.
                 &quot;httpsProxy&quot;: &quot;A String&quot;, # URL for the HTTPS proxy to be used when communicating with the Git repo.
                 &quot;policyDir&quot;: &quot;A String&quot;, # The path within the Git repository that represents the top level of the repo to sync. Default: the root directory of the repository.
                 &quot;secretType&quot;: &quot;A String&quot;, # Type of secret configured for access to the Git repo. Must be one of ssh, cookiefile, gcenode, token, gcpserviceaccount or none. The validation of this is case-sensitive. Required.
@@ -1003,11 +1106,9 @@ Returns:
                 &quot;syncRev&quot;: &quot;A String&quot;, # Git revision (tag or hash) to check out. Default HEAD.
                 &quot;syncWaitSecs&quot;: &quot;A String&quot;, # Period in seconds between consecutive syncs. Default: 15.
               },
-              &quot;managed&quot;: { # Configuration for Managed Config Sync. # Configuration for Managed Config Sync.
-                &quot;enabled&quot;: True or False, # Set to true to enable Managed Config Sync. Defaults to false which disables Managed Config Sync.
-              },
+              &quot;metricsGcpServiceAccountEmail&quot;: &quot;A String&quot;, # The Email of the Google Cloud Service Account (GSA) used for exporting Config Sync metrics to Cloud Monitoring and Cloud Monarch when Workload Identity is enabled. The GSA should have the Monitoring Metric Writer (roles/monitoring.metricWriter) IAM role. The Kubernetes ServiceAccount `default` in the namespace `config-management-monitoring` should be binded to the GSA. This field is required when automatic Feature management is enabled.
               &quot;oci&quot;: { # OCI repo configuration for a single cluster # OCI repo configuration for the cluster
-                &quot;gcpServiceAccountEmail&quot;: &quot;A String&quot;, # The GCP Service Account Email used for auth when secret_type is gcpServiceAccount.
+                &quot;gcpServiceAccountEmail&quot;: &quot;A String&quot;, # The Google Cloud Service Account Email used for auth when secret_type is gcpServiceAccount.
                 &quot;policyDir&quot;: &quot;A String&quot;, # The absolute path of the directory that contains the local resources. Default: the root directory of the image.
                 &quot;secretType&quot;: &quot;A String&quot;, # Type of secret configured for access to the Git repo.
                 &quot;syncRepo&quot;: &quot;A String&quot;, # The OCI image repository URL for the package to sync from. e.g. `LOCATION-docker.pkg.dev/PROJECT_ID/REPOSITORY_NAME/PACKAGE_NAME`.
@@ -1015,12 +1116,14 @@ Returns:
               },
               &quot;preventDrift&quot;: True or False, # Set to true to enable the Config Sync admission webhook to prevent drifts. If set to `false`, disables the Config Sync admission webhook and does not prevent drifts.
               &quot;sourceFormat&quot;: &quot;A String&quot;, # Specifies whether the Config Sync Repo is in &quot;hierarchical&quot; or &quot;unstructured&quot; mode.
+              &quot;stopSyncing&quot;: True or False, # Set to true to stop syncing configs for a single cluster when automatic Feature management is enabled. Default to false. The field will be ignored when automatic Feature management is disabled.
             },
             &quot;hierarchyController&quot;: { # Configuration for Hierarchy Controller # Hierarchy Controller configuration for the cluster.
               &quot;enableHierarchicalResourceQuota&quot;: True or False, # Whether hierarchical resource quota is enabled in this cluster.
               &quot;enablePodTreeLabels&quot;: True or False, # Whether pod tree labels are enabled in this cluster.
               &quot;enabled&quot;: True or False, # Whether Hierarchy Controller is enabled in this cluster.
             },
+            &quot;management&quot;: &quot;A String&quot;, # Enables automatic Feature management.
             &quot;policyController&quot;: { # Configuration for Policy Controller # Policy Controller configuration for the cluster.
               &quot;auditIntervalSeconds&quot;: &quot;A String&quot;, # Sets the interval for Policy Controller Audit Scans (in seconds). When set to 0, this disables audit functionality altogether.
               &quot;enabled&quot;: True or False, # Enables the installation of Policy Controller. If false, the rest of PolicyController fields take no effect.
@@ -1036,10 +1139,10 @@ Returns:
               &quot;mutationEnabled&quot;: True or False, # Enable or disable mutation in policy controller. If true, mutation CRDs, webhook and controller deployment will be deployed to the cluster.
               &quot;referentialRulesEnabled&quot;: True or False, # Enables the ability to use Constraint Templates that reference to objects other than the object currently being evaluated.
               &quot;templateLibraryInstalled&quot;: True or False, # Installs the default template library along with Policy Controller.
+              &quot;updateTime&quot;: &quot;A String&quot;, # Output only. Last time this membership spec was updated.
             },
             &quot;version&quot;: &quot;A String&quot;, # Version of ACM installed.
           },
-          &quot;fleetInherited&quot;: True or False, # True if value of `feature_spec` was inherited from a fleet-level default.
           &quot;fleetobservability&quot;: { # **FleetObservability**: The membership-specific input for FleetObservability feature. # Fleet observability membership spec
           },
           &quot;identityservice&quot;: { # **Anthos Identity Service**: Configuration for a single Membership. # Identity Service-specific spec.
@@ -1080,6 +1183,9 @@ Returns:
             &quot;controlPlane&quot;: &quot;A String&quot;, # Deprecated: use `management` instead Enables automatic control plane management.
             &quot;management&quot;: &quot;A String&quot;, # Enables automatic Service Mesh management.
           },
+          &quot;origin&quot;: { # Origin defines where this MembershipFeatureSpec originated from. # Whether this per-Membership spec was inherited from a fleet-level default. This field can be updated by users by either overriding a Membership config (updated to USER implicitly) or setting to FLEET explicitly.
+            &quot;type&quot;: &quot;A String&quot;, # Type specifies which type of origin is set.
+          },
         },
       },
       &quot;membershipStates&quot;: { # Output only. Membership-specific Feature status. If this Feature does report any per-Membership status, this field may be unused. The keys indicate which Membership the state is for, in the form: `projects/{p}/locations/{l}/memberships/{m}` Where {p} is the project number, {l} is a valid location and {m} is a valid Membership in this project at that location. {p} MUST match the Feature&#x27;s project number.
@@ -1091,7 +1197,7 @@ Returns:
             },
           },
           &quot;configmanagement&quot;: { # **Anthos Config Management**: State for a single cluster. # Config Management-specific state.
-            &quot;clusterName&quot;: &quot;A String&quot;, # The user-defined name for the cluster used by ClusterSelectors to group clusters together. This should match Membership&#x27;s membership_name, unless the user installed ACM on the cluster manually prior to enabling the ACM hub feature. Unique within a Anthos Config Management installation.
+            &quot;clusterName&quot;: &quot;A String&quot;, # This field is set to the `cluster_name` field of the Membership Spec if it is not empty. Otherwise, it is set to the cluster&#x27;s fleet membership name.
             &quot;configSyncState&quot;: { # State information for ConfigSync # Current sync status
               &quot;deploymentState&quot;: { # The state of ConfigSync&#x27;s deployment on a cluster # Information about the deployment of ConfigSync, including the version of the various Pods deployed
                 &quot;admissionWebhook&quot;: &quot;A String&quot;, # Deployment state of admission-webhook
@@ -1102,6 +1208,11 @@ Returns:
                 &quot;rootReconciler&quot;: &quot;A String&quot;, # Deployment state of root-reconciler
                 &quot;syncer&quot;: &quot;A String&quot;, # Deployment state of the syncer pod
               },
+              &quot;errors&quot;: [ # Errors pertaining to the installation of Config Sync.
+                { # Errors pertaining to the installation of Config Sync
+                  &quot;errorMessage&quot;: &quot;A String&quot;, # A string representing the user facing error message
+                },
+              ],
               &quot;syncState&quot;: { # State indicating an ACM&#x27;s progress syncing configurations to a cluster # The state of ConfigSync&#x27;s process to sync configs to a cluster
                 &quot;code&quot;: &quot;A String&quot;, # Sync status code
                 &quot;errors&quot;: [ # A list of errors resulting from problematic configs. This list will be truncated after 100 errors, although it is unlikely for that many errors to simultaneously exist.
@@ -1149,11 +1260,12 @@ Returns:
               },
             },
             &quot;membershipSpec&quot;: { # **Anthos Config Management**: Configuration for a single cluster. Intended to parallel the ConfigManagement CR. # Membership configuration in the cluster. This represents the actual state in the cluster, while the MembershipSpec in the FeatureSpec represents the intended state
+              &quot;cluster&quot;: &quot;A String&quot;, # The user-specified cluster name used by Config Sync cluster-name-selector annotation or ClusterSelector, for applying configs to only a subset of clusters. Omit this field if the cluster&#x27;s fleet membership name is used by Config Sync cluster-name-selector annotation or ClusterSelector. Set this field if a name different from the cluster&#x27;s fleet membership name is used by Config Sync cluster-name-selector annotation or ClusterSelector.
               &quot;configSync&quot;: { # Configuration for Config Sync # Config Sync configuration for the cluster.
                 &quot;allowVerticalScale&quot;: True or False, # Set to true to allow the vertical scaling. Defaults to false which disallows vertical scaling. This field is deprecated.
-                &quot;enabled&quot;: True or False, # Enables the installation of ConfigSync. If set to true, ConfigSync resources will be created and the other ConfigSync fields will be applied if exist. If set to false, all other ConfigSync fields will be ignored, ConfigSync resources will be deleted. If omitted, ConfigSync resources will be managed depends on the presence of git field.
+                &quot;enabled&quot;: True or False, # Enables the installation of ConfigSync. If set to true, ConfigSync resources will be created and the other ConfigSync fields will be applied if exist. If set to false, all other ConfigSync fields will be ignored, ConfigSync resources will be deleted. If omitted, ConfigSync resources will be managed depends on the presence of the git or oci field.
                 &quot;git&quot;: { # Git repo configuration for a single cluster. # Git repo configuration for the cluster.
-                  &quot;gcpServiceAccountEmail&quot;: &quot;A String&quot;, # The GCP Service Account Email used for auth when secret_type is gcpServiceAccount.
+                  &quot;gcpServiceAccountEmail&quot;: &quot;A String&quot;, # The Google Cloud Service Account Email used for auth when secret_type is gcpServiceAccount.
                   &quot;httpsProxy&quot;: &quot;A String&quot;, # URL for the HTTPS proxy to be used when communicating with the Git repo.
                   &quot;policyDir&quot;: &quot;A String&quot;, # The path within the Git repository that represents the top level of the repo to sync. Default: the root directory of the repository.
                   &quot;secretType&quot;: &quot;A String&quot;, # Type of secret configured for access to the Git repo. Must be one of ssh, cookiefile, gcenode, token, gcpserviceaccount or none. The validation of this is case-sensitive. Required.
@@ -1162,11 +1274,9 @@ Returns:
                   &quot;syncRev&quot;: &quot;A String&quot;, # Git revision (tag or hash) to check out. Default HEAD.
                   &quot;syncWaitSecs&quot;: &quot;A String&quot;, # Period in seconds between consecutive syncs. Default: 15.
                 },
-                &quot;managed&quot;: { # Configuration for Managed Config Sync. # Configuration for Managed Config Sync.
-                  &quot;enabled&quot;: True or False, # Set to true to enable Managed Config Sync. Defaults to false which disables Managed Config Sync.
-                },
+                &quot;metricsGcpServiceAccountEmail&quot;: &quot;A String&quot;, # The Email of the Google Cloud Service Account (GSA) used for exporting Config Sync metrics to Cloud Monitoring and Cloud Monarch when Workload Identity is enabled. The GSA should have the Monitoring Metric Writer (roles/monitoring.metricWriter) IAM role. The Kubernetes ServiceAccount `default` in the namespace `config-management-monitoring` should be binded to the GSA. This field is required when automatic Feature management is enabled.
                 &quot;oci&quot;: { # OCI repo configuration for a single cluster # OCI repo configuration for the cluster
-                  &quot;gcpServiceAccountEmail&quot;: &quot;A String&quot;, # The GCP Service Account Email used for auth when secret_type is gcpServiceAccount.
+                  &quot;gcpServiceAccountEmail&quot;: &quot;A String&quot;, # The Google Cloud Service Account Email used for auth when secret_type is gcpServiceAccount.
                   &quot;policyDir&quot;: &quot;A String&quot;, # The absolute path of the directory that contains the local resources. Default: the root directory of the image.
                   &quot;secretType&quot;: &quot;A String&quot;, # Type of secret configured for access to the Git repo.
                   &quot;syncRepo&quot;: &quot;A String&quot;, # The OCI image repository URL for the package to sync from. e.g. `LOCATION-docker.pkg.dev/PROJECT_ID/REPOSITORY_NAME/PACKAGE_NAME`.
@@ -1174,12 +1284,14 @@ Returns:
                 },
                 &quot;preventDrift&quot;: True or False, # Set to true to enable the Config Sync admission webhook to prevent drifts. If set to `false`, disables the Config Sync admission webhook and does not prevent drifts.
                 &quot;sourceFormat&quot;: &quot;A String&quot;, # Specifies whether the Config Sync Repo is in &quot;hierarchical&quot; or &quot;unstructured&quot; mode.
+                &quot;stopSyncing&quot;: True or False, # Set to true to stop syncing configs for a single cluster when automatic Feature management is enabled. Default to false. The field will be ignored when automatic Feature management is disabled.
               },
               &quot;hierarchyController&quot;: { # Configuration for Hierarchy Controller # Hierarchy Controller configuration for the cluster.
                 &quot;enableHierarchicalResourceQuota&quot;: True or False, # Whether hierarchical resource quota is enabled in this cluster.
                 &quot;enablePodTreeLabels&quot;: True or False, # Whether pod tree labels are enabled in this cluster.
                 &quot;enabled&quot;: True or False, # Whether Hierarchy Controller is enabled in this cluster.
               },
+              &quot;management&quot;: &quot;A String&quot;, # Enables automatic Feature management.
               &quot;policyController&quot;: { # Configuration for Policy Controller # Policy Controller configuration for the cluster.
                 &quot;auditIntervalSeconds&quot;: &quot;A String&quot;, # Sets the interval for Policy Controller Audit Scans (in seconds). When set to 0, this disables audit functionality altogether.
                 &quot;enabled&quot;: True or False, # Enables the installation of Policy Controller. If false, the rest of PolicyController fields take no effect.
@@ -1195,6 +1307,7 @@ Returns:
                 &quot;mutationEnabled&quot;: True or False, # Enable or disable mutation in policy controller. If true, mutation CRDs, webhook and controller deployment will be deployed to the cluster.
                 &quot;referentialRulesEnabled&quot;: True or False, # Enables the ability to use Constraint Templates that reference to objects other than the object currently being evaluated.
                 &quot;templateLibraryInstalled&quot;: True or False, # Installs the default template library along with Policy Controller.
+                &quot;updateTime&quot;: &quot;A String&quot;, # Output only. Last time this membership spec was updated.
               },
               &quot;version&quot;: &quot;A String&quot;, # Version of ACM installed.
             },
@@ -1214,6 +1327,7 @@ Returns:
                 &quot;gatekeeperMutation&quot;: &quot;A String&quot;, # Status of the pod serving the mutation webhook.
               },
               &quot;migration&quot;: { # State for the migration of PolicyController from ACM -&gt; PoCo Hub. # Record state of ACM -&gt; PoCo Hub migration for this feature.
+                &quot;copyTime&quot;: &quot;A String&quot;, # Last time this membership spec was copied to PoCo feature.
                 &quot;stage&quot;: &quot;A String&quot;, # Stage of the migration.
               },
               &quot;version&quot;: { # The build version of Gatekeeper Policy Controller is using. # The version of Gatekeeper Policy Controller deployed.
@@ -1310,6 +1424,14 @@ Returns:
         &quot;appdevexperience&quot;: { # Spec for App Dev Experience Feature. # Appdevexperience specific spec.
         },
         &quot;fleetobservability&quot;: { # **Fleet Observability**: The Hub-wide input for the FleetObservability feature. # FleetObservability feature spec.
+          &quot;loggingConfig&quot;: { # LoggingConfig defines the configuration for different types of logs. # Specified if fleet logging feature is enabled for the entire fleet. If UNSPECIFIED, fleet logging feature is disabled for the entire fleet.
+            &quot;defaultConfig&quot;: { # RoutingConfig configures the behaviour of fleet logging feature. # Specified if applying the default routing config to logs not specified in other configs.
+              &quot;mode&quot;: &quot;A String&quot;, # mode configures the logs routing mode.
+            },
+            &quot;fleetScopeLogsConfig&quot;: { # RoutingConfig configures the behaviour of fleet logging feature. # Specified if applying the routing config to all logs for all fleet scopes.
+              &quot;mode&quot;: &quot;A String&quot;, # mode configures the logs routing mode.
+            },
+          },
         },
         &quot;multiclusteringress&quot;: { # **Multi-cluster Ingress**: The configuration for the MultiClusterIngress feature. # Multicluster Ingress-specific spec.
           &quot;configMembership&quot;: &quot;A String&quot;, # Fully-qualified Membership name which hosts the MultiClusterIngress CRD. Example: `projects/foo-proj/locations/global/memberships/bar`
@@ -1323,6 +1445,37 @@ Returns:
           },
         },
         &quot;fleetobservability&quot;: { # **FleetObservability**: Hub-wide Feature for FleetObservability feature. state. # FleetObservability feature state.
+          &quot;logging&quot;: { # Feature state for logging feature. # The feature state of default logging.
+            &quot;defaultLog&quot;: { # Base state for fleet observability feature. # The base feature state of fleet default log.
+              &quot;code&quot;: &quot;A String&quot;, # The high-level, machine-readable status of this Feature.
+              &quot;errors&quot;: [ # Errors after reconciling the monitoring and logging feature if the code is not OK.
+                { # All error details of the fleet observability feature.
+                  &quot;code&quot;: &quot;A String&quot;, # The code of the error.
+                  &quot;description&quot;: &quot;A String&quot;, # A human-readable description of the current status.
+                },
+              ],
+            },
+            &quot;scopeLog&quot;: { # Base state for fleet observability feature. # The base feature state of fleet scope log.
+              &quot;code&quot;: &quot;A String&quot;, # The high-level, machine-readable status of this Feature.
+              &quot;errors&quot;: [ # Errors after reconciling the monitoring and logging feature if the code is not OK.
+                { # All error details of the fleet observability feature.
+                  &quot;code&quot;: &quot;A String&quot;, # The code of the error.
+                  &quot;description&quot;: &quot;A String&quot;, # A human-readable description of the current status.
+                },
+              ],
+            },
+          },
+          &quot;monitoring&quot;: { # Feature state for monitoring feature. # The feature state of fleet monitoring.
+            &quot;state&quot;: { # Base state for fleet observability feature. # The base feature state of fleet monitoring feature.
+              &quot;code&quot;: &quot;A String&quot;, # The high-level, machine-readable status of this Feature.
+              &quot;errors&quot;: [ # Errors after reconciling the monitoring and logging feature if the code is not OK.
+                { # All error details of the fleet observability feature.
+                  &quot;code&quot;: &quot;A String&quot;, # The code of the error.
+                  &quot;description&quot;: &quot;A String&quot;, # A human-readable description of the current status.
+                },
+              ],
+            },
+          },
         },
         &quot;state&quot;: { # FeatureState describes the high-level state of a Feature. It may be used to describe a Feature&#x27;s state at the environ-level, or per-membershop, depending on the context. # Output only. The &quot;running state&quot; of the Feature in this Hub.
           &quot;code&quot;: &quot;A String&quot;, # The high-level, machine-readable status of this Feature.
@@ -1368,13 +1521,14 @@ Args:
     &quot;a_key&quot;: &quot;A String&quot;,
   },
   &quot;membershipSpecs&quot;: { # Optional. Membership-specific configuration for this Feature. If this Feature does not support any per-Membership configuration, this field may be unused. The keys indicate which Membership the configuration is for, in the form: `projects/{p}/locations/{l}/memberships/{m}` Where {p} is the project, {l} is a valid location and {m} is a valid Membership in this project at that location. {p} WILL match the Feature&#x27;s project. {p} will always be returned as the project number, but the project ID is also accepted during input. If the same Membership is specified in the map twice (using the project ID form, and the project number form), exactly ONE of the entries will be saved, with no guarantees as to which. For this reason, it is recommended the same format be used for all entries when mutating a Feature.
-    &quot;a_key&quot;: { # MembershipFeatureSpec contains configuration information for a single Membership.
+    &quot;a_key&quot;: { # MembershipFeatureSpec contains configuration information for a single Membership. NOTE: Please use snake case in your feature name.
       &quot;configmanagement&quot;: { # **Anthos Config Management**: Configuration for a single cluster. Intended to parallel the ConfigManagement CR. # Config Management-specific spec.
+        &quot;cluster&quot;: &quot;A String&quot;, # The user-specified cluster name used by Config Sync cluster-name-selector annotation or ClusterSelector, for applying configs to only a subset of clusters. Omit this field if the cluster&#x27;s fleet membership name is used by Config Sync cluster-name-selector annotation or ClusterSelector. Set this field if a name different from the cluster&#x27;s fleet membership name is used by Config Sync cluster-name-selector annotation or ClusterSelector.
         &quot;configSync&quot;: { # Configuration for Config Sync # Config Sync configuration for the cluster.
           &quot;allowVerticalScale&quot;: True or False, # Set to true to allow the vertical scaling. Defaults to false which disallows vertical scaling. This field is deprecated.
-          &quot;enabled&quot;: True or False, # Enables the installation of ConfigSync. If set to true, ConfigSync resources will be created and the other ConfigSync fields will be applied if exist. If set to false, all other ConfigSync fields will be ignored, ConfigSync resources will be deleted. If omitted, ConfigSync resources will be managed depends on the presence of git field.
+          &quot;enabled&quot;: True or False, # Enables the installation of ConfigSync. If set to true, ConfigSync resources will be created and the other ConfigSync fields will be applied if exist. If set to false, all other ConfigSync fields will be ignored, ConfigSync resources will be deleted. If omitted, ConfigSync resources will be managed depends on the presence of the git or oci field.
           &quot;git&quot;: { # Git repo configuration for a single cluster. # Git repo configuration for the cluster.
-            &quot;gcpServiceAccountEmail&quot;: &quot;A String&quot;, # The GCP Service Account Email used for auth when secret_type is gcpServiceAccount.
+            &quot;gcpServiceAccountEmail&quot;: &quot;A String&quot;, # The Google Cloud Service Account Email used for auth when secret_type is gcpServiceAccount.
             &quot;httpsProxy&quot;: &quot;A String&quot;, # URL for the HTTPS proxy to be used when communicating with the Git repo.
             &quot;policyDir&quot;: &quot;A String&quot;, # The path within the Git repository that represents the top level of the repo to sync. Default: the root directory of the repository.
             &quot;secretType&quot;: &quot;A String&quot;, # Type of secret configured for access to the Git repo. Must be one of ssh, cookiefile, gcenode, token, gcpserviceaccount or none. The validation of this is case-sensitive. Required.
@@ -1383,11 +1537,9 @@ Args:
             &quot;syncRev&quot;: &quot;A String&quot;, # Git revision (tag or hash) to check out. Default HEAD.
             &quot;syncWaitSecs&quot;: &quot;A String&quot;, # Period in seconds between consecutive syncs. Default: 15.
           },
-          &quot;managed&quot;: { # Configuration for Managed Config Sync. # Configuration for Managed Config Sync.
-            &quot;enabled&quot;: True or False, # Set to true to enable Managed Config Sync. Defaults to false which disables Managed Config Sync.
-          },
+          &quot;metricsGcpServiceAccountEmail&quot;: &quot;A String&quot;, # The Email of the Google Cloud Service Account (GSA) used for exporting Config Sync metrics to Cloud Monitoring and Cloud Monarch when Workload Identity is enabled. The GSA should have the Monitoring Metric Writer (roles/monitoring.metricWriter) IAM role. The Kubernetes ServiceAccount `default` in the namespace `config-management-monitoring` should be binded to the GSA. This field is required when automatic Feature management is enabled.
           &quot;oci&quot;: { # OCI repo configuration for a single cluster # OCI repo configuration for the cluster
-            &quot;gcpServiceAccountEmail&quot;: &quot;A String&quot;, # The GCP Service Account Email used for auth when secret_type is gcpServiceAccount.
+            &quot;gcpServiceAccountEmail&quot;: &quot;A String&quot;, # The Google Cloud Service Account Email used for auth when secret_type is gcpServiceAccount.
             &quot;policyDir&quot;: &quot;A String&quot;, # The absolute path of the directory that contains the local resources. Default: the root directory of the image.
             &quot;secretType&quot;: &quot;A String&quot;, # Type of secret configured for access to the Git repo.
             &quot;syncRepo&quot;: &quot;A String&quot;, # The OCI image repository URL for the package to sync from. e.g. `LOCATION-docker.pkg.dev/PROJECT_ID/REPOSITORY_NAME/PACKAGE_NAME`.
@@ -1395,12 +1547,14 @@ Args:
           },
           &quot;preventDrift&quot;: True or False, # Set to true to enable the Config Sync admission webhook to prevent drifts. If set to `false`, disables the Config Sync admission webhook and does not prevent drifts.
           &quot;sourceFormat&quot;: &quot;A String&quot;, # Specifies whether the Config Sync Repo is in &quot;hierarchical&quot; or &quot;unstructured&quot; mode.
+          &quot;stopSyncing&quot;: True or False, # Set to true to stop syncing configs for a single cluster when automatic Feature management is enabled. Default to false. The field will be ignored when automatic Feature management is disabled.
         },
         &quot;hierarchyController&quot;: { # Configuration for Hierarchy Controller # Hierarchy Controller configuration for the cluster.
           &quot;enableHierarchicalResourceQuota&quot;: True or False, # Whether hierarchical resource quota is enabled in this cluster.
           &quot;enablePodTreeLabels&quot;: True or False, # Whether pod tree labels are enabled in this cluster.
           &quot;enabled&quot;: True or False, # Whether Hierarchy Controller is enabled in this cluster.
         },
+        &quot;management&quot;: &quot;A String&quot;, # Enables automatic Feature management.
         &quot;policyController&quot;: { # Configuration for Policy Controller # Policy Controller configuration for the cluster.
           &quot;auditIntervalSeconds&quot;: &quot;A String&quot;, # Sets the interval for Policy Controller Audit Scans (in seconds). When set to 0, this disables audit functionality altogether.
           &quot;enabled&quot;: True or False, # Enables the installation of Policy Controller. If false, the rest of PolicyController fields take no effect.
@@ -1416,10 +1570,10 @@ Args:
           &quot;mutationEnabled&quot;: True or False, # Enable or disable mutation in policy controller. If true, mutation CRDs, webhook and controller deployment will be deployed to the cluster.
           &quot;referentialRulesEnabled&quot;: True or False, # Enables the ability to use Constraint Templates that reference to objects other than the object currently being evaluated.
           &quot;templateLibraryInstalled&quot;: True or False, # Installs the default template library along with Policy Controller.
+          &quot;updateTime&quot;: &quot;A String&quot;, # Output only. Last time this membership spec was updated.
         },
         &quot;version&quot;: &quot;A String&quot;, # Version of ACM installed.
       },
-      &quot;fleetInherited&quot;: True or False, # True if value of `feature_spec` was inherited from a fleet-level default.
       &quot;fleetobservability&quot;: { # **FleetObservability**: The membership-specific input for FleetObservability feature. # Fleet observability membership spec
       },
       &quot;identityservice&quot;: { # **Anthos Identity Service**: Configuration for a single Membership. # Identity Service-specific spec.
@@ -1460,6 +1614,9 @@ Args:
         &quot;controlPlane&quot;: &quot;A String&quot;, # Deprecated: use `management` instead Enables automatic control plane management.
         &quot;management&quot;: &quot;A String&quot;, # Enables automatic Service Mesh management.
       },
+      &quot;origin&quot;: { # Origin defines where this MembershipFeatureSpec originated from. # Whether this per-Membership spec was inherited from a fleet-level default. This field can be updated by users by either overriding a Membership config (updated to USER implicitly) or setting to FLEET explicitly.
+        &quot;type&quot;: &quot;A String&quot;, # Type specifies which type of origin is set.
+      },
     },
   },
   &quot;membershipStates&quot;: { # Output only. Membership-specific Feature status. If this Feature does report any per-Membership status, this field may be unused. The keys indicate which Membership the state is for, in the form: `projects/{p}/locations/{l}/memberships/{m}` Where {p} is the project number, {l} is a valid location and {m} is a valid Membership in this project at that location. {p} MUST match the Feature&#x27;s project number.
@@ -1471,7 +1628,7 @@ Args:
         },
       },
       &quot;configmanagement&quot;: { # **Anthos Config Management**: State for a single cluster. # Config Management-specific state.
-        &quot;clusterName&quot;: &quot;A String&quot;, # The user-defined name for the cluster used by ClusterSelectors to group clusters together. This should match Membership&#x27;s membership_name, unless the user installed ACM on the cluster manually prior to enabling the ACM hub feature. Unique within a Anthos Config Management installation.
+        &quot;clusterName&quot;: &quot;A String&quot;, # This field is set to the `cluster_name` field of the Membership Spec if it is not empty. Otherwise, it is set to the cluster&#x27;s fleet membership name.
         &quot;configSyncState&quot;: { # State information for ConfigSync # Current sync status
           &quot;deploymentState&quot;: { # The state of ConfigSync&#x27;s deployment on a cluster # Information about the deployment of ConfigSync, including the version of the various Pods deployed
             &quot;admissionWebhook&quot;: &quot;A String&quot;, # Deployment state of admission-webhook
@@ -1482,6 +1639,11 @@ Args:
             &quot;rootReconciler&quot;: &quot;A String&quot;, # Deployment state of root-reconciler
             &quot;syncer&quot;: &quot;A String&quot;, # Deployment state of the syncer pod
           },
+          &quot;errors&quot;: [ # Errors pertaining to the installation of Config Sync.
+            { # Errors pertaining to the installation of Config Sync
+              &quot;errorMessage&quot;: &quot;A String&quot;, # A string representing the user facing error message
+            },
+          ],
           &quot;syncState&quot;: { # State indicating an ACM&#x27;s progress syncing configurations to a cluster # The state of ConfigSync&#x27;s process to sync configs to a cluster
             &quot;code&quot;: &quot;A String&quot;, # Sync status code
             &quot;errors&quot;: [ # A list of errors resulting from problematic configs. This list will be truncated after 100 errors, although it is unlikely for that many errors to simultaneously exist.
@@ -1529,11 +1691,12 @@ Args:
           },
         },
         &quot;membershipSpec&quot;: { # **Anthos Config Management**: Configuration for a single cluster. Intended to parallel the ConfigManagement CR. # Membership configuration in the cluster. This represents the actual state in the cluster, while the MembershipSpec in the FeatureSpec represents the intended state
+          &quot;cluster&quot;: &quot;A String&quot;, # The user-specified cluster name used by Config Sync cluster-name-selector annotation or ClusterSelector, for applying configs to only a subset of clusters. Omit this field if the cluster&#x27;s fleet membership name is used by Config Sync cluster-name-selector annotation or ClusterSelector. Set this field if a name different from the cluster&#x27;s fleet membership name is used by Config Sync cluster-name-selector annotation or ClusterSelector.
           &quot;configSync&quot;: { # Configuration for Config Sync # Config Sync configuration for the cluster.
             &quot;allowVerticalScale&quot;: True or False, # Set to true to allow the vertical scaling. Defaults to false which disallows vertical scaling. This field is deprecated.
-            &quot;enabled&quot;: True or False, # Enables the installation of ConfigSync. If set to true, ConfigSync resources will be created and the other ConfigSync fields will be applied if exist. If set to false, all other ConfigSync fields will be ignored, ConfigSync resources will be deleted. If omitted, ConfigSync resources will be managed depends on the presence of git field.
+            &quot;enabled&quot;: True or False, # Enables the installation of ConfigSync. If set to true, ConfigSync resources will be created and the other ConfigSync fields will be applied if exist. If set to false, all other ConfigSync fields will be ignored, ConfigSync resources will be deleted. If omitted, ConfigSync resources will be managed depends on the presence of the git or oci field.
             &quot;git&quot;: { # Git repo configuration for a single cluster. # Git repo configuration for the cluster.
-              &quot;gcpServiceAccountEmail&quot;: &quot;A String&quot;, # The GCP Service Account Email used for auth when secret_type is gcpServiceAccount.
+              &quot;gcpServiceAccountEmail&quot;: &quot;A String&quot;, # The Google Cloud Service Account Email used for auth when secret_type is gcpServiceAccount.
               &quot;httpsProxy&quot;: &quot;A String&quot;, # URL for the HTTPS proxy to be used when communicating with the Git repo.
               &quot;policyDir&quot;: &quot;A String&quot;, # The path within the Git repository that represents the top level of the repo to sync. Default: the root directory of the repository.
               &quot;secretType&quot;: &quot;A String&quot;, # Type of secret configured for access to the Git repo. Must be one of ssh, cookiefile, gcenode, token, gcpserviceaccount or none. The validation of this is case-sensitive. Required.
@@ -1542,11 +1705,9 @@ Args:
               &quot;syncRev&quot;: &quot;A String&quot;, # Git revision (tag or hash) to check out. Default HEAD.
               &quot;syncWaitSecs&quot;: &quot;A String&quot;, # Period in seconds between consecutive syncs. Default: 15.
             },
-            &quot;managed&quot;: { # Configuration for Managed Config Sync. # Configuration for Managed Config Sync.
-              &quot;enabled&quot;: True or False, # Set to true to enable Managed Config Sync. Defaults to false which disables Managed Config Sync.
-            },
+            &quot;metricsGcpServiceAccountEmail&quot;: &quot;A String&quot;, # The Email of the Google Cloud Service Account (GSA) used for exporting Config Sync metrics to Cloud Monitoring and Cloud Monarch when Workload Identity is enabled. The GSA should have the Monitoring Metric Writer (roles/monitoring.metricWriter) IAM role. The Kubernetes ServiceAccount `default` in the namespace `config-management-monitoring` should be binded to the GSA. This field is required when automatic Feature management is enabled.
             &quot;oci&quot;: { # OCI repo configuration for a single cluster # OCI repo configuration for the cluster
-              &quot;gcpServiceAccountEmail&quot;: &quot;A String&quot;, # The GCP Service Account Email used for auth when secret_type is gcpServiceAccount.
+              &quot;gcpServiceAccountEmail&quot;: &quot;A String&quot;, # The Google Cloud Service Account Email used for auth when secret_type is gcpServiceAccount.
               &quot;policyDir&quot;: &quot;A String&quot;, # The absolute path of the directory that contains the local resources. Default: the root directory of the image.
               &quot;secretType&quot;: &quot;A String&quot;, # Type of secret configured for access to the Git repo.
               &quot;syncRepo&quot;: &quot;A String&quot;, # The OCI image repository URL for the package to sync from. e.g. `LOCATION-docker.pkg.dev/PROJECT_ID/REPOSITORY_NAME/PACKAGE_NAME`.
@@ -1554,12 +1715,14 @@ Args:
             },
             &quot;preventDrift&quot;: True or False, # Set to true to enable the Config Sync admission webhook to prevent drifts. If set to `false`, disables the Config Sync admission webhook and does not prevent drifts.
             &quot;sourceFormat&quot;: &quot;A String&quot;, # Specifies whether the Config Sync Repo is in &quot;hierarchical&quot; or &quot;unstructured&quot; mode.
+            &quot;stopSyncing&quot;: True or False, # Set to true to stop syncing configs for a single cluster when automatic Feature management is enabled. Default to false. The field will be ignored when automatic Feature management is disabled.
           },
           &quot;hierarchyController&quot;: { # Configuration for Hierarchy Controller # Hierarchy Controller configuration for the cluster.
             &quot;enableHierarchicalResourceQuota&quot;: True or False, # Whether hierarchical resource quota is enabled in this cluster.
             &quot;enablePodTreeLabels&quot;: True or False, # Whether pod tree labels are enabled in this cluster.
             &quot;enabled&quot;: True or False, # Whether Hierarchy Controller is enabled in this cluster.
           },
+          &quot;management&quot;: &quot;A String&quot;, # Enables automatic Feature management.
           &quot;policyController&quot;: { # Configuration for Policy Controller # Policy Controller configuration for the cluster.
             &quot;auditIntervalSeconds&quot;: &quot;A String&quot;, # Sets the interval for Policy Controller Audit Scans (in seconds). When set to 0, this disables audit functionality altogether.
             &quot;enabled&quot;: True or False, # Enables the installation of Policy Controller. If false, the rest of PolicyController fields take no effect.
@@ -1575,6 +1738,7 @@ Args:
             &quot;mutationEnabled&quot;: True or False, # Enable or disable mutation in policy controller. If true, mutation CRDs, webhook and controller deployment will be deployed to the cluster.
             &quot;referentialRulesEnabled&quot;: True or False, # Enables the ability to use Constraint Templates that reference to objects other than the object currently being evaluated.
             &quot;templateLibraryInstalled&quot;: True or False, # Installs the default template library along with Policy Controller.
+            &quot;updateTime&quot;: &quot;A String&quot;, # Output only. Last time this membership spec was updated.
           },
           &quot;version&quot;: &quot;A String&quot;, # Version of ACM installed.
         },
@@ -1594,6 +1758,7 @@ Args:
             &quot;gatekeeperMutation&quot;: &quot;A String&quot;, # Status of the pod serving the mutation webhook.
           },
           &quot;migration&quot;: { # State for the migration of PolicyController from ACM -&gt; PoCo Hub. # Record state of ACM -&gt; PoCo Hub migration for this feature.
+            &quot;copyTime&quot;: &quot;A String&quot;, # Last time this membership spec was copied to PoCo feature.
             &quot;stage&quot;: &quot;A String&quot;, # Stage of the migration.
           },
           &quot;version&quot;: { # The build version of Gatekeeper Policy Controller is using. # The version of Gatekeeper Policy Controller deployed.
@@ -1690,6 +1855,14 @@ Args:
     &quot;appdevexperience&quot;: { # Spec for App Dev Experience Feature. # Appdevexperience specific spec.
     },
     &quot;fleetobservability&quot;: { # **Fleet Observability**: The Hub-wide input for the FleetObservability feature. # FleetObservability feature spec.
+      &quot;loggingConfig&quot;: { # LoggingConfig defines the configuration for different types of logs. # Specified if fleet logging feature is enabled for the entire fleet. If UNSPECIFIED, fleet logging feature is disabled for the entire fleet.
+        &quot;defaultConfig&quot;: { # RoutingConfig configures the behaviour of fleet logging feature. # Specified if applying the default routing config to logs not specified in other configs.
+          &quot;mode&quot;: &quot;A String&quot;, # mode configures the logs routing mode.
+        },
+        &quot;fleetScopeLogsConfig&quot;: { # RoutingConfig configures the behaviour of fleet logging feature. # Specified if applying the routing config to all logs for all fleet scopes.
+          &quot;mode&quot;: &quot;A String&quot;, # mode configures the logs routing mode.
+        },
+      },
     },
     &quot;multiclusteringress&quot;: { # **Multi-cluster Ingress**: The configuration for the MultiClusterIngress feature. # Multicluster Ingress-specific spec.
       &quot;configMembership&quot;: &quot;A String&quot;, # Fully-qualified Membership name which hosts the MultiClusterIngress CRD. Example: `projects/foo-proj/locations/global/memberships/bar`
@@ -1703,6 +1876,37 @@ Args:
       },
     },
     &quot;fleetobservability&quot;: { # **FleetObservability**: Hub-wide Feature for FleetObservability feature. state. # FleetObservability feature state.
+      &quot;logging&quot;: { # Feature state for logging feature. # The feature state of default logging.
+        &quot;defaultLog&quot;: { # Base state for fleet observability feature. # The base feature state of fleet default log.
+          &quot;code&quot;: &quot;A String&quot;, # The high-level, machine-readable status of this Feature.
+          &quot;errors&quot;: [ # Errors after reconciling the monitoring and logging feature if the code is not OK.
+            { # All error details of the fleet observability feature.
+              &quot;code&quot;: &quot;A String&quot;, # The code of the error.
+              &quot;description&quot;: &quot;A String&quot;, # A human-readable description of the current status.
+            },
+          ],
+        },
+        &quot;scopeLog&quot;: { # Base state for fleet observability feature. # The base feature state of fleet scope log.
+          &quot;code&quot;: &quot;A String&quot;, # The high-level, machine-readable status of this Feature.
+          &quot;errors&quot;: [ # Errors after reconciling the monitoring and logging feature if the code is not OK.
+            { # All error details of the fleet observability feature.
+              &quot;code&quot;: &quot;A String&quot;, # The code of the error.
+              &quot;description&quot;: &quot;A String&quot;, # A human-readable description of the current status.
+            },
+          ],
+        },
+      },
+      &quot;monitoring&quot;: { # Feature state for monitoring feature. # The feature state of fleet monitoring.
+        &quot;state&quot;: { # Base state for fleet observability feature. # The base feature state of fleet monitoring feature.
+          &quot;code&quot;: &quot;A String&quot;, # The high-level, machine-readable status of this Feature.
+          &quot;errors&quot;: [ # Errors after reconciling the monitoring and logging feature if the code is not OK.
+            { # All error details of the fleet observability feature.
+              &quot;code&quot;: &quot;A String&quot;, # The code of the error.
+              &quot;description&quot;: &quot;A String&quot;, # A human-readable description of the current status.
+            },
+          ],
+        },
+      },
     },
     &quot;state&quot;: { # FeatureState describes the high-level state of a Feature. It may be used to describe a Feature&#x27;s state at the environ-level, or per-membershop, depending on the context. # Output only. The &quot;running state&quot; of the Feature in this Hub.
       &quot;code&quot;: &quot;A String&quot;, # The high-level, machine-readable status of this Feature.

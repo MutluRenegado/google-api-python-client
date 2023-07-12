@@ -162,6 +162,7 @@ Args:
 { # Defines the services to connect to incoming Dialogflow conversations.
   &quot;automatedAgentConfig&quot;: { # Defines the Automated Agent to connect to a conversation. # Configuration for an automated agent to use with this profile.
     &quot;agent&quot;: &quot;A String&quot;, # Required. ID of the Dialogflow agent environment to use. This project needs to either be the same project as the conversation or you need to grant `service-@gcp-sa-dialogflow.iam.gserviceaccount.com` the `Dialogflow API Service Agent` role in this project. - For ES agents, use format: `projects//locations//agent/environments/`. If environment is not specified, the default `draft` environment is used. Refer to [DetectIntentRequest](/dialogflow/docs/reference/rpc/google.cloud.dialogflow.v2beta1#google.cloud.dialogflow.v2beta1.DetectIntentRequest) for more details. - For CX agents, use format `projects//locations//agents//environments/`. If environment is not specified, the default `draft` environment is used.
+    &quot;sessionTtl&quot;: &quot;A String&quot;, # Optional. Sets Dialogflow CX session life time. By default, a Dialogflow CX session remains active and its data is stored for 30 minutes after the last request is sent for the session. This value should be no longer than 1 day.
   },
   &quot;createTime&quot;: &quot;A String&quot;, # Output only. Create time of the conversation profile.
   &quot;displayName&quot;: &quot;A String&quot;, # Required. Human readable name for this profile. Max length 1024 bytes.
@@ -176,7 +177,7 @@ Args:
           &quot;conversationProcessConfig&quot;: { # Config to process conversation. # Configs for processing conversation.
             &quot;recentSentencesCount&quot;: 42, # Number of recent non-small-talk sentences to use as context for article and FAQ suggestion
           },
-          &quot;enableEventBasedSuggestion&quot;: True or False, # Automatically iterates all participants and tries to compile suggestions. Supported features: ARTICLE_SUGGESTION, FAQ, DIALOGFLOW_ASSIST.
+          &quot;enableEventBasedSuggestion&quot;: True or False, # Automatically iterates all participants and tries to compile suggestions. Supported features: ARTICLE_SUGGESTION, FAQ, DIALOGFLOW_ASSIST, ENTITY_EXTRACTION.
           &quot;queryConfig&quot;: { # Config for suggestion query. # Configs of query.
             &quot;confidenceThreshold&quot;: 3.14, # Confidence threshold of query result. Agent Assist gives each suggestion a score in the range [0.0, 1.0], based on the relevance between the suggestion and the current conversation context. A score of 0.0 has no relevance, while a score of 1.0 has high relevance. Only suggestions with a score greater than or equal to the value of this field are included in the results. For a baseline model (the default), the recommended value is in the range [0.05, 0.1]. For a custom model, there is no recommended value. Tune this value by starting from a very low value and slowly increasing until you have desired results. If this field is not set, it is default to 0.0, which means that all suggestions are returned. Supported features: ARTICLE_SUGGESTION, FAQ, SMART_REPLY, SMART_COMPOSE, KNOWLEDGE_SEARCH, KNOWLEDGE_ASSIST, ENTITY_EXTRACTION.
             &quot;contextFilterSettings&quot;: { # Settings that determine how to filter recent conversation context when generating suggestions. # Determines how recent conversation context is filtered when generating suggestions. If unspecified, no messages will be dropped.
@@ -184,7 +185,7 @@ Args:
               &quot;dropIvrMessages&quot;: True or False, # If set to true, all messages from ivr stage are dropped.
               &quot;dropVirtualAgentMessages&quot;: True or False, # If set to true, all messages from virtual agent are dropped.
             },
-            &quot;dialogflowQuerySource&quot;: { # Dialogflow source setting. Supported feature: DIALOGFLOW_ASSIST. # Query from Dialogflow agent. It is used by DIALOGFLOW_ASSIST.
+            &quot;dialogflowQuerySource&quot;: { # Dialogflow source setting. Supported feature: DIALOGFLOW_ASSIST, ENTITY_EXTRACTION. # Query from Dialogflow agent. It is used by DIALOGFLOW_ASSIST, ENTITY_EXTRACTION.
               &quot;agent&quot;: &quot;A String&quot;, # Required. The name of a dialogflow virtual agent used for end user side intent detection and suggestion. Format: `projects//locations//agent`. When multiple agents are allowed in the same Dialogflow project.
               &quot;humanAgentSideConfig&quot;: { # The configuration used for human agent side Dialogflow assist suggestion. # The Dialogflow assist configuration for human agent.
                 &quot;agent&quot;: &quot;A String&quot;, # Optional. The name of a dialogflow virtual agent used for intent detection and suggestion triggered by human agent. Format: `projects//locations//agent`.
@@ -223,7 +224,7 @@ Args:
           &quot;conversationProcessConfig&quot;: { # Config to process conversation. # Configs for processing conversation.
             &quot;recentSentencesCount&quot;: 42, # Number of recent non-small-talk sentences to use as context for article and FAQ suggestion
           },
-          &quot;enableEventBasedSuggestion&quot;: True or False, # Automatically iterates all participants and tries to compile suggestions. Supported features: ARTICLE_SUGGESTION, FAQ, DIALOGFLOW_ASSIST.
+          &quot;enableEventBasedSuggestion&quot;: True or False, # Automatically iterates all participants and tries to compile suggestions. Supported features: ARTICLE_SUGGESTION, FAQ, DIALOGFLOW_ASSIST, ENTITY_EXTRACTION.
           &quot;queryConfig&quot;: { # Config for suggestion query. # Configs of query.
             &quot;confidenceThreshold&quot;: 3.14, # Confidence threshold of query result. Agent Assist gives each suggestion a score in the range [0.0, 1.0], based on the relevance between the suggestion and the current conversation context. A score of 0.0 has no relevance, while a score of 1.0 has high relevance. Only suggestions with a score greater than or equal to the value of this field are included in the results. For a baseline model (the default), the recommended value is in the range [0.05, 0.1]. For a custom model, there is no recommended value. Tune this value by starting from a very low value and slowly increasing until you have desired results. If this field is not set, it is default to 0.0, which means that all suggestions are returned. Supported features: ARTICLE_SUGGESTION, FAQ, SMART_REPLY, SMART_COMPOSE, KNOWLEDGE_SEARCH, KNOWLEDGE_ASSIST, ENTITY_EXTRACTION.
             &quot;contextFilterSettings&quot;: { # Settings that determine how to filter recent conversation context when generating suggestions. # Determines how recent conversation context is filtered when generating suggestions. If unspecified, no messages will be dropped.
@@ -231,7 +232,7 @@ Args:
               &quot;dropIvrMessages&quot;: True or False, # If set to true, all messages from ivr stage are dropped.
               &quot;dropVirtualAgentMessages&quot;: True or False, # If set to true, all messages from virtual agent are dropped.
             },
-            &quot;dialogflowQuerySource&quot;: { # Dialogflow source setting. Supported feature: DIALOGFLOW_ASSIST. # Query from Dialogflow agent. It is used by DIALOGFLOW_ASSIST.
+            &quot;dialogflowQuerySource&quot;: { # Dialogflow source setting. Supported feature: DIALOGFLOW_ASSIST, ENTITY_EXTRACTION. # Query from Dialogflow agent. It is used by DIALOGFLOW_ASSIST, ENTITY_EXTRACTION.
               &quot;agent&quot;: &quot;A String&quot;, # Required. The name of a dialogflow virtual agent used for end user side intent detection and suggestion. Format: `projects//locations//agent`. When multiple agents are allowed in the same Dialogflow project.
               &quot;humanAgentSideConfig&quot;: { # The configuration used for human agent side Dialogflow assist suggestion. # The Dialogflow assist configuration for human agent.
                 &quot;agent&quot;: &quot;A String&quot;, # Optional. The name of a dialogflow virtual agent used for intent detection and suggestion triggered by human agent. Format: `projects//locations//agent`.
@@ -325,6 +326,7 @@ Returns:
     { # Defines the services to connect to incoming Dialogflow conversations.
   &quot;automatedAgentConfig&quot;: { # Defines the Automated Agent to connect to a conversation. # Configuration for an automated agent to use with this profile.
     &quot;agent&quot;: &quot;A String&quot;, # Required. ID of the Dialogflow agent environment to use. This project needs to either be the same project as the conversation or you need to grant `service-@gcp-sa-dialogflow.iam.gserviceaccount.com` the `Dialogflow API Service Agent` role in this project. - For ES agents, use format: `projects//locations//agent/environments/`. If environment is not specified, the default `draft` environment is used. Refer to [DetectIntentRequest](/dialogflow/docs/reference/rpc/google.cloud.dialogflow.v2beta1#google.cloud.dialogflow.v2beta1.DetectIntentRequest) for more details. - For CX agents, use format `projects//locations//agents//environments/`. If environment is not specified, the default `draft` environment is used.
+    &quot;sessionTtl&quot;: &quot;A String&quot;, # Optional. Sets Dialogflow CX session life time. By default, a Dialogflow CX session remains active and its data is stored for 30 minutes after the last request is sent for the session. This value should be no longer than 1 day.
   },
   &quot;createTime&quot;: &quot;A String&quot;, # Output only. Create time of the conversation profile.
   &quot;displayName&quot;: &quot;A String&quot;, # Required. Human readable name for this profile. Max length 1024 bytes.
@@ -339,7 +341,7 @@ Returns:
           &quot;conversationProcessConfig&quot;: { # Config to process conversation. # Configs for processing conversation.
             &quot;recentSentencesCount&quot;: 42, # Number of recent non-small-talk sentences to use as context for article and FAQ suggestion
           },
-          &quot;enableEventBasedSuggestion&quot;: True or False, # Automatically iterates all participants and tries to compile suggestions. Supported features: ARTICLE_SUGGESTION, FAQ, DIALOGFLOW_ASSIST.
+          &quot;enableEventBasedSuggestion&quot;: True or False, # Automatically iterates all participants and tries to compile suggestions. Supported features: ARTICLE_SUGGESTION, FAQ, DIALOGFLOW_ASSIST, ENTITY_EXTRACTION.
           &quot;queryConfig&quot;: { # Config for suggestion query. # Configs of query.
             &quot;confidenceThreshold&quot;: 3.14, # Confidence threshold of query result. Agent Assist gives each suggestion a score in the range [0.0, 1.0], based on the relevance between the suggestion and the current conversation context. A score of 0.0 has no relevance, while a score of 1.0 has high relevance. Only suggestions with a score greater than or equal to the value of this field are included in the results. For a baseline model (the default), the recommended value is in the range [0.05, 0.1]. For a custom model, there is no recommended value. Tune this value by starting from a very low value and slowly increasing until you have desired results. If this field is not set, it is default to 0.0, which means that all suggestions are returned. Supported features: ARTICLE_SUGGESTION, FAQ, SMART_REPLY, SMART_COMPOSE, KNOWLEDGE_SEARCH, KNOWLEDGE_ASSIST, ENTITY_EXTRACTION.
             &quot;contextFilterSettings&quot;: { # Settings that determine how to filter recent conversation context when generating suggestions. # Determines how recent conversation context is filtered when generating suggestions. If unspecified, no messages will be dropped.
@@ -347,7 +349,7 @@ Returns:
               &quot;dropIvrMessages&quot;: True or False, # If set to true, all messages from ivr stage are dropped.
               &quot;dropVirtualAgentMessages&quot;: True or False, # If set to true, all messages from virtual agent are dropped.
             },
-            &quot;dialogflowQuerySource&quot;: { # Dialogflow source setting. Supported feature: DIALOGFLOW_ASSIST. # Query from Dialogflow agent. It is used by DIALOGFLOW_ASSIST.
+            &quot;dialogflowQuerySource&quot;: { # Dialogflow source setting. Supported feature: DIALOGFLOW_ASSIST, ENTITY_EXTRACTION. # Query from Dialogflow agent. It is used by DIALOGFLOW_ASSIST, ENTITY_EXTRACTION.
               &quot;agent&quot;: &quot;A String&quot;, # Required. The name of a dialogflow virtual agent used for end user side intent detection and suggestion. Format: `projects//locations//agent`. When multiple agents are allowed in the same Dialogflow project.
               &quot;humanAgentSideConfig&quot;: { # The configuration used for human agent side Dialogflow assist suggestion. # The Dialogflow assist configuration for human agent.
                 &quot;agent&quot;: &quot;A String&quot;, # Optional. The name of a dialogflow virtual agent used for intent detection and suggestion triggered by human agent. Format: `projects//locations//agent`.
@@ -386,7 +388,7 @@ Returns:
           &quot;conversationProcessConfig&quot;: { # Config to process conversation. # Configs for processing conversation.
             &quot;recentSentencesCount&quot;: 42, # Number of recent non-small-talk sentences to use as context for article and FAQ suggestion
           },
-          &quot;enableEventBasedSuggestion&quot;: True or False, # Automatically iterates all participants and tries to compile suggestions. Supported features: ARTICLE_SUGGESTION, FAQ, DIALOGFLOW_ASSIST.
+          &quot;enableEventBasedSuggestion&quot;: True or False, # Automatically iterates all participants and tries to compile suggestions. Supported features: ARTICLE_SUGGESTION, FAQ, DIALOGFLOW_ASSIST, ENTITY_EXTRACTION.
           &quot;queryConfig&quot;: { # Config for suggestion query. # Configs of query.
             &quot;confidenceThreshold&quot;: 3.14, # Confidence threshold of query result. Agent Assist gives each suggestion a score in the range [0.0, 1.0], based on the relevance between the suggestion and the current conversation context. A score of 0.0 has no relevance, while a score of 1.0 has high relevance. Only suggestions with a score greater than or equal to the value of this field are included in the results. For a baseline model (the default), the recommended value is in the range [0.05, 0.1]. For a custom model, there is no recommended value. Tune this value by starting from a very low value and slowly increasing until you have desired results. If this field is not set, it is default to 0.0, which means that all suggestions are returned. Supported features: ARTICLE_SUGGESTION, FAQ, SMART_REPLY, SMART_COMPOSE, KNOWLEDGE_SEARCH, KNOWLEDGE_ASSIST, ENTITY_EXTRACTION.
             &quot;contextFilterSettings&quot;: { # Settings that determine how to filter recent conversation context when generating suggestions. # Determines how recent conversation context is filtered when generating suggestions. If unspecified, no messages will be dropped.
@@ -394,7 +396,7 @@ Returns:
               &quot;dropIvrMessages&quot;: True or False, # If set to true, all messages from ivr stage are dropped.
               &quot;dropVirtualAgentMessages&quot;: True or False, # If set to true, all messages from virtual agent are dropped.
             },
-            &quot;dialogflowQuerySource&quot;: { # Dialogflow source setting. Supported feature: DIALOGFLOW_ASSIST. # Query from Dialogflow agent. It is used by DIALOGFLOW_ASSIST.
+            &quot;dialogflowQuerySource&quot;: { # Dialogflow source setting. Supported feature: DIALOGFLOW_ASSIST, ENTITY_EXTRACTION. # Query from Dialogflow agent. It is used by DIALOGFLOW_ASSIST, ENTITY_EXTRACTION.
               &quot;agent&quot;: &quot;A String&quot;, # Required. The name of a dialogflow virtual agent used for end user side intent detection and suggestion. Format: `projects//locations//agent`. When multiple agents are allowed in the same Dialogflow project.
               &quot;humanAgentSideConfig&quot;: { # The configuration used for human agent side Dialogflow assist suggestion. # The Dialogflow assist configuration for human agent.
                 &quot;agent&quot;: &quot;A String&quot;, # Optional. The name of a dialogflow virtual agent used for intent detection and suggestion triggered by human agent. Format: `projects//locations//agent`.
@@ -513,6 +515,7 @@ Returns:
     { # Defines the services to connect to incoming Dialogflow conversations.
   &quot;automatedAgentConfig&quot;: { # Defines the Automated Agent to connect to a conversation. # Configuration for an automated agent to use with this profile.
     &quot;agent&quot;: &quot;A String&quot;, # Required. ID of the Dialogflow agent environment to use. This project needs to either be the same project as the conversation or you need to grant `service-@gcp-sa-dialogflow.iam.gserviceaccount.com` the `Dialogflow API Service Agent` role in this project. - For ES agents, use format: `projects//locations//agent/environments/`. If environment is not specified, the default `draft` environment is used. Refer to [DetectIntentRequest](/dialogflow/docs/reference/rpc/google.cloud.dialogflow.v2beta1#google.cloud.dialogflow.v2beta1.DetectIntentRequest) for more details. - For CX agents, use format `projects//locations//agents//environments/`. If environment is not specified, the default `draft` environment is used.
+    &quot;sessionTtl&quot;: &quot;A String&quot;, # Optional. Sets Dialogflow CX session life time. By default, a Dialogflow CX session remains active and its data is stored for 30 minutes after the last request is sent for the session. This value should be no longer than 1 day.
   },
   &quot;createTime&quot;: &quot;A String&quot;, # Output only. Create time of the conversation profile.
   &quot;displayName&quot;: &quot;A String&quot;, # Required. Human readable name for this profile. Max length 1024 bytes.
@@ -527,7 +530,7 @@ Returns:
           &quot;conversationProcessConfig&quot;: { # Config to process conversation. # Configs for processing conversation.
             &quot;recentSentencesCount&quot;: 42, # Number of recent non-small-talk sentences to use as context for article and FAQ suggestion
           },
-          &quot;enableEventBasedSuggestion&quot;: True or False, # Automatically iterates all participants and tries to compile suggestions. Supported features: ARTICLE_SUGGESTION, FAQ, DIALOGFLOW_ASSIST.
+          &quot;enableEventBasedSuggestion&quot;: True or False, # Automatically iterates all participants and tries to compile suggestions. Supported features: ARTICLE_SUGGESTION, FAQ, DIALOGFLOW_ASSIST, ENTITY_EXTRACTION.
           &quot;queryConfig&quot;: { # Config for suggestion query. # Configs of query.
             &quot;confidenceThreshold&quot;: 3.14, # Confidence threshold of query result. Agent Assist gives each suggestion a score in the range [0.0, 1.0], based on the relevance between the suggestion and the current conversation context. A score of 0.0 has no relevance, while a score of 1.0 has high relevance. Only suggestions with a score greater than or equal to the value of this field are included in the results. For a baseline model (the default), the recommended value is in the range [0.05, 0.1]. For a custom model, there is no recommended value. Tune this value by starting from a very low value and slowly increasing until you have desired results. If this field is not set, it is default to 0.0, which means that all suggestions are returned. Supported features: ARTICLE_SUGGESTION, FAQ, SMART_REPLY, SMART_COMPOSE, KNOWLEDGE_SEARCH, KNOWLEDGE_ASSIST, ENTITY_EXTRACTION.
             &quot;contextFilterSettings&quot;: { # Settings that determine how to filter recent conversation context when generating suggestions. # Determines how recent conversation context is filtered when generating suggestions. If unspecified, no messages will be dropped.
@@ -535,7 +538,7 @@ Returns:
               &quot;dropIvrMessages&quot;: True or False, # If set to true, all messages from ivr stage are dropped.
               &quot;dropVirtualAgentMessages&quot;: True or False, # If set to true, all messages from virtual agent are dropped.
             },
-            &quot;dialogflowQuerySource&quot;: { # Dialogflow source setting. Supported feature: DIALOGFLOW_ASSIST. # Query from Dialogflow agent. It is used by DIALOGFLOW_ASSIST.
+            &quot;dialogflowQuerySource&quot;: { # Dialogflow source setting. Supported feature: DIALOGFLOW_ASSIST, ENTITY_EXTRACTION. # Query from Dialogflow agent. It is used by DIALOGFLOW_ASSIST, ENTITY_EXTRACTION.
               &quot;agent&quot;: &quot;A String&quot;, # Required. The name of a dialogflow virtual agent used for end user side intent detection and suggestion. Format: `projects//locations//agent`. When multiple agents are allowed in the same Dialogflow project.
               &quot;humanAgentSideConfig&quot;: { # The configuration used for human agent side Dialogflow assist suggestion. # The Dialogflow assist configuration for human agent.
                 &quot;agent&quot;: &quot;A String&quot;, # Optional. The name of a dialogflow virtual agent used for intent detection and suggestion triggered by human agent. Format: `projects//locations//agent`.
@@ -574,7 +577,7 @@ Returns:
           &quot;conversationProcessConfig&quot;: { # Config to process conversation. # Configs for processing conversation.
             &quot;recentSentencesCount&quot;: 42, # Number of recent non-small-talk sentences to use as context for article and FAQ suggestion
           },
-          &quot;enableEventBasedSuggestion&quot;: True or False, # Automatically iterates all participants and tries to compile suggestions. Supported features: ARTICLE_SUGGESTION, FAQ, DIALOGFLOW_ASSIST.
+          &quot;enableEventBasedSuggestion&quot;: True or False, # Automatically iterates all participants and tries to compile suggestions. Supported features: ARTICLE_SUGGESTION, FAQ, DIALOGFLOW_ASSIST, ENTITY_EXTRACTION.
           &quot;queryConfig&quot;: { # Config for suggestion query. # Configs of query.
             &quot;confidenceThreshold&quot;: 3.14, # Confidence threshold of query result. Agent Assist gives each suggestion a score in the range [0.0, 1.0], based on the relevance between the suggestion and the current conversation context. A score of 0.0 has no relevance, while a score of 1.0 has high relevance. Only suggestions with a score greater than or equal to the value of this field are included in the results. For a baseline model (the default), the recommended value is in the range [0.05, 0.1]. For a custom model, there is no recommended value. Tune this value by starting from a very low value and slowly increasing until you have desired results. If this field is not set, it is default to 0.0, which means that all suggestions are returned. Supported features: ARTICLE_SUGGESTION, FAQ, SMART_REPLY, SMART_COMPOSE, KNOWLEDGE_SEARCH, KNOWLEDGE_ASSIST, ENTITY_EXTRACTION.
             &quot;contextFilterSettings&quot;: { # Settings that determine how to filter recent conversation context when generating suggestions. # Determines how recent conversation context is filtered when generating suggestions. If unspecified, no messages will be dropped.
@@ -582,7 +585,7 @@ Returns:
               &quot;dropIvrMessages&quot;: True or False, # If set to true, all messages from ivr stage are dropped.
               &quot;dropVirtualAgentMessages&quot;: True or False, # If set to true, all messages from virtual agent are dropped.
             },
-            &quot;dialogflowQuerySource&quot;: { # Dialogflow source setting. Supported feature: DIALOGFLOW_ASSIST. # Query from Dialogflow agent. It is used by DIALOGFLOW_ASSIST.
+            &quot;dialogflowQuerySource&quot;: { # Dialogflow source setting. Supported feature: DIALOGFLOW_ASSIST, ENTITY_EXTRACTION. # Query from Dialogflow agent. It is used by DIALOGFLOW_ASSIST, ENTITY_EXTRACTION.
               &quot;agent&quot;: &quot;A String&quot;, # Required. The name of a dialogflow virtual agent used for end user side intent detection and suggestion. Format: `projects//locations//agent`. When multiple agents are allowed in the same Dialogflow project.
               &quot;humanAgentSideConfig&quot;: { # The configuration used for human agent side Dialogflow assist suggestion. # The Dialogflow assist configuration for human agent.
                 &quot;agent&quot;: &quot;A String&quot;, # Optional. The name of a dialogflow virtual agent used for intent detection and suggestion triggered by human agent. Format: `projects//locations//agent`.
@@ -687,6 +690,7 @@ Returns:
     { # Defines the services to connect to incoming Dialogflow conversations.
       &quot;automatedAgentConfig&quot;: { # Defines the Automated Agent to connect to a conversation. # Configuration for an automated agent to use with this profile.
         &quot;agent&quot;: &quot;A String&quot;, # Required. ID of the Dialogflow agent environment to use. This project needs to either be the same project as the conversation or you need to grant `service-@gcp-sa-dialogflow.iam.gserviceaccount.com` the `Dialogflow API Service Agent` role in this project. - For ES agents, use format: `projects//locations//agent/environments/`. If environment is not specified, the default `draft` environment is used. Refer to [DetectIntentRequest](/dialogflow/docs/reference/rpc/google.cloud.dialogflow.v2beta1#google.cloud.dialogflow.v2beta1.DetectIntentRequest) for more details. - For CX agents, use format `projects//locations//agents//environments/`. If environment is not specified, the default `draft` environment is used.
+        &quot;sessionTtl&quot;: &quot;A String&quot;, # Optional. Sets Dialogflow CX session life time. By default, a Dialogflow CX session remains active and its data is stored for 30 minutes after the last request is sent for the session. This value should be no longer than 1 day.
       },
       &quot;createTime&quot;: &quot;A String&quot;, # Output only. Create time of the conversation profile.
       &quot;displayName&quot;: &quot;A String&quot;, # Required. Human readable name for this profile. Max length 1024 bytes.
@@ -701,7 +705,7 @@ Returns:
               &quot;conversationProcessConfig&quot;: { # Config to process conversation. # Configs for processing conversation.
                 &quot;recentSentencesCount&quot;: 42, # Number of recent non-small-talk sentences to use as context for article and FAQ suggestion
               },
-              &quot;enableEventBasedSuggestion&quot;: True or False, # Automatically iterates all participants and tries to compile suggestions. Supported features: ARTICLE_SUGGESTION, FAQ, DIALOGFLOW_ASSIST.
+              &quot;enableEventBasedSuggestion&quot;: True or False, # Automatically iterates all participants and tries to compile suggestions. Supported features: ARTICLE_SUGGESTION, FAQ, DIALOGFLOW_ASSIST, ENTITY_EXTRACTION.
               &quot;queryConfig&quot;: { # Config for suggestion query. # Configs of query.
                 &quot;confidenceThreshold&quot;: 3.14, # Confidence threshold of query result. Agent Assist gives each suggestion a score in the range [0.0, 1.0], based on the relevance between the suggestion and the current conversation context. A score of 0.0 has no relevance, while a score of 1.0 has high relevance. Only suggestions with a score greater than or equal to the value of this field are included in the results. For a baseline model (the default), the recommended value is in the range [0.05, 0.1]. For a custom model, there is no recommended value. Tune this value by starting from a very low value and slowly increasing until you have desired results. If this field is not set, it is default to 0.0, which means that all suggestions are returned. Supported features: ARTICLE_SUGGESTION, FAQ, SMART_REPLY, SMART_COMPOSE, KNOWLEDGE_SEARCH, KNOWLEDGE_ASSIST, ENTITY_EXTRACTION.
                 &quot;contextFilterSettings&quot;: { # Settings that determine how to filter recent conversation context when generating suggestions. # Determines how recent conversation context is filtered when generating suggestions. If unspecified, no messages will be dropped.
@@ -709,7 +713,7 @@ Returns:
                   &quot;dropIvrMessages&quot;: True or False, # If set to true, all messages from ivr stage are dropped.
                   &quot;dropVirtualAgentMessages&quot;: True or False, # If set to true, all messages from virtual agent are dropped.
                 },
-                &quot;dialogflowQuerySource&quot;: { # Dialogflow source setting. Supported feature: DIALOGFLOW_ASSIST. # Query from Dialogflow agent. It is used by DIALOGFLOW_ASSIST.
+                &quot;dialogflowQuerySource&quot;: { # Dialogflow source setting. Supported feature: DIALOGFLOW_ASSIST, ENTITY_EXTRACTION. # Query from Dialogflow agent. It is used by DIALOGFLOW_ASSIST, ENTITY_EXTRACTION.
                   &quot;agent&quot;: &quot;A String&quot;, # Required. The name of a dialogflow virtual agent used for end user side intent detection and suggestion. Format: `projects//locations//agent`. When multiple agents are allowed in the same Dialogflow project.
                   &quot;humanAgentSideConfig&quot;: { # The configuration used for human agent side Dialogflow assist suggestion. # The Dialogflow assist configuration for human agent.
                     &quot;agent&quot;: &quot;A String&quot;, # Optional. The name of a dialogflow virtual agent used for intent detection and suggestion triggered by human agent. Format: `projects//locations//agent`.
@@ -748,7 +752,7 @@ Returns:
               &quot;conversationProcessConfig&quot;: { # Config to process conversation. # Configs for processing conversation.
                 &quot;recentSentencesCount&quot;: 42, # Number of recent non-small-talk sentences to use as context for article and FAQ suggestion
               },
-              &quot;enableEventBasedSuggestion&quot;: True or False, # Automatically iterates all participants and tries to compile suggestions. Supported features: ARTICLE_SUGGESTION, FAQ, DIALOGFLOW_ASSIST.
+              &quot;enableEventBasedSuggestion&quot;: True or False, # Automatically iterates all participants and tries to compile suggestions. Supported features: ARTICLE_SUGGESTION, FAQ, DIALOGFLOW_ASSIST, ENTITY_EXTRACTION.
               &quot;queryConfig&quot;: { # Config for suggestion query. # Configs of query.
                 &quot;confidenceThreshold&quot;: 3.14, # Confidence threshold of query result. Agent Assist gives each suggestion a score in the range [0.0, 1.0], based on the relevance between the suggestion and the current conversation context. A score of 0.0 has no relevance, while a score of 1.0 has high relevance. Only suggestions with a score greater than or equal to the value of this field are included in the results. For a baseline model (the default), the recommended value is in the range [0.05, 0.1]. For a custom model, there is no recommended value. Tune this value by starting from a very low value and slowly increasing until you have desired results. If this field is not set, it is default to 0.0, which means that all suggestions are returned. Supported features: ARTICLE_SUGGESTION, FAQ, SMART_REPLY, SMART_COMPOSE, KNOWLEDGE_SEARCH, KNOWLEDGE_ASSIST, ENTITY_EXTRACTION.
                 &quot;contextFilterSettings&quot;: { # Settings that determine how to filter recent conversation context when generating suggestions. # Determines how recent conversation context is filtered when generating suggestions. If unspecified, no messages will be dropped.
@@ -756,7 +760,7 @@ Returns:
                   &quot;dropIvrMessages&quot;: True or False, # If set to true, all messages from ivr stage are dropped.
                   &quot;dropVirtualAgentMessages&quot;: True or False, # If set to true, all messages from virtual agent are dropped.
                 },
-                &quot;dialogflowQuerySource&quot;: { # Dialogflow source setting. Supported feature: DIALOGFLOW_ASSIST. # Query from Dialogflow agent. It is used by DIALOGFLOW_ASSIST.
+                &quot;dialogflowQuerySource&quot;: { # Dialogflow source setting. Supported feature: DIALOGFLOW_ASSIST, ENTITY_EXTRACTION. # Query from Dialogflow agent. It is used by DIALOGFLOW_ASSIST, ENTITY_EXTRACTION.
                   &quot;agent&quot;: &quot;A String&quot;, # Required. The name of a dialogflow virtual agent used for end user side intent detection and suggestion. Format: `projects//locations//agent`. When multiple agents are allowed in the same Dialogflow project.
                   &quot;humanAgentSideConfig&quot;: { # The configuration used for human agent side Dialogflow assist suggestion. # The Dialogflow assist configuration for human agent.
                     &quot;agent&quot;: &quot;A String&quot;, # Optional. The name of a dialogflow virtual agent used for intent detection and suggestion triggered by human agent. Format: `projects//locations//agent`.
@@ -869,6 +873,7 @@ Args:
 { # Defines the services to connect to incoming Dialogflow conversations.
   &quot;automatedAgentConfig&quot;: { # Defines the Automated Agent to connect to a conversation. # Configuration for an automated agent to use with this profile.
     &quot;agent&quot;: &quot;A String&quot;, # Required. ID of the Dialogflow agent environment to use. This project needs to either be the same project as the conversation or you need to grant `service-@gcp-sa-dialogflow.iam.gserviceaccount.com` the `Dialogflow API Service Agent` role in this project. - For ES agents, use format: `projects//locations//agent/environments/`. If environment is not specified, the default `draft` environment is used. Refer to [DetectIntentRequest](/dialogflow/docs/reference/rpc/google.cloud.dialogflow.v2beta1#google.cloud.dialogflow.v2beta1.DetectIntentRequest) for more details. - For CX agents, use format `projects//locations//agents//environments/`. If environment is not specified, the default `draft` environment is used.
+    &quot;sessionTtl&quot;: &quot;A String&quot;, # Optional. Sets Dialogflow CX session life time. By default, a Dialogflow CX session remains active and its data is stored for 30 minutes after the last request is sent for the session. This value should be no longer than 1 day.
   },
   &quot;createTime&quot;: &quot;A String&quot;, # Output only. Create time of the conversation profile.
   &quot;displayName&quot;: &quot;A String&quot;, # Required. Human readable name for this profile. Max length 1024 bytes.
@@ -883,7 +888,7 @@ Args:
           &quot;conversationProcessConfig&quot;: { # Config to process conversation. # Configs for processing conversation.
             &quot;recentSentencesCount&quot;: 42, # Number of recent non-small-talk sentences to use as context for article and FAQ suggestion
           },
-          &quot;enableEventBasedSuggestion&quot;: True or False, # Automatically iterates all participants and tries to compile suggestions. Supported features: ARTICLE_SUGGESTION, FAQ, DIALOGFLOW_ASSIST.
+          &quot;enableEventBasedSuggestion&quot;: True or False, # Automatically iterates all participants and tries to compile suggestions. Supported features: ARTICLE_SUGGESTION, FAQ, DIALOGFLOW_ASSIST, ENTITY_EXTRACTION.
           &quot;queryConfig&quot;: { # Config for suggestion query. # Configs of query.
             &quot;confidenceThreshold&quot;: 3.14, # Confidence threshold of query result. Agent Assist gives each suggestion a score in the range [0.0, 1.0], based on the relevance between the suggestion and the current conversation context. A score of 0.0 has no relevance, while a score of 1.0 has high relevance. Only suggestions with a score greater than or equal to the value of this field are included in the results. For a baseline model (the default), the recommended value is in the range [0.05, 0.1]. For a custom model, there is no recommended value. Tune this value by starting from a very low value and slowly increasing until you have desired results. If this field is not set, it is default to 0.0, which means that all suggestions are returned. Supported features: ARTICLE_SUGGESTION, FAQ, SMART_REPLY, SMART_COMPOSE, KNOWLEDGE_SEARCH, KNOWLEDGE_ASSIST, ENTITY_EXTRACTION.
             &quot;contextFilterSettings&quot;: { # Settings that determine how to filter recent conversation context when generating suggestions. # Determines how recent conversation context is filtered when generating suggestions. If unspecified, no messages will be dropped.
@@ -891,7 +896,7 @@ Args:
               &quot;dropIvrMessages&quot;: True or False, # If set to true, all messages from ivr stage are dropped.
               &quot;dropVirtualAgentMessages&quot;: True or False, # If set to true, all messages from virtual agent are dropped.
             },
-            &quot;dialogflowQuerySource&quot;: { # Dialogflow source setting. Supported feature: DIALOGFLOW_ASSIST. # Query from Dialogflow agent. It is used by DIALOGFLOW_ASSIST.
+            &quot;dialogflowQuerySource&quot;: { # Dialogflow source setting. Supported feature: DIALOGFLOW_ASSIST, ENTITY_EXTRACTION. # Query from Dialogflow agent. It is used by DIALOGFLOW_ASSIST, ENTITY_EXTRACTION.
               &quot;agent&quot;: &quot;A String&quot;, # Required. The name of a dialogflow virtual agent used for end user side intent detection and suggestion. Format: `projects//locations//agent`. When multiple agents are allowed in the same Dialogflow project.
               &quot;humanAgentSideConfig&quot;: { # The configuration used for human agent side Dialogflow assist suggestion. # The Dialogflow assist configuration for human agent.
                 &quot;agent&quot;: &quot;A String&quot;, # Optional. The name of a dialogflow virtual agent used for intent detection and suggestion triggered by human agent. Format: `projects//locations//agent`.
@@ -930,7 +935,7 @@ Args:
           &quot;conversationProcessConfig&quot;: { # Config to process conversation. # Configs for processing conversation.
             &quot;recentSentencesCount&quot;: 42, # Number of recent non-small-talk sentences to use as context for article and FAQ suggestion
           },
-          &quot;enableEventBasedSuggestion&quot;: True or False, # Automatically iterates all participants and tries to compile suggestions. Supported features: ARTICLE_SUGGESTION, FAQ, DIALOGFLOW_ASSIST.
+          &quot;enableEventBasedSuggestion&quot;: True or False, # Automatically iterates all participants and tries to compile suggestions. Supported features: ARTICLE_SUGGESTION, FAQ, DIALOGFLOW_ASSIST, ENTITY_EXTRACTION.
           &quot;queryConfig&quot;: { # Config for suggestion query. # Configs of query.
             &quot;confidenceThreshold&quot;: 3.14, # Confidence threshold of query result. Agent Assist gives each suggestion a score in the range [0.0, 1.0], based on the relevance between the suggestion and the current conversation context. A score of 0.0 has no relevance, while a score of 1.0 has high relevance. Only suggestions with a score greater than or equal to the value of this field are included in the results. For a baseline model (the default), the recommended value is in the range [0.05, 0.1]. For a custom model, there is no recommended value. Tune this value by starting from a very low value and slowly increasing until you have desired results. If this field is not set, it is default to 0.0, which means that all suggestions are returned. Supported features: ARTICLE_SUGGESTION, FAQ, SMART_REPLY, SMART_COMPOSE, KNOWLEDGE_SEARCH, KNOWLEDGE_ASSIST, ENTITY_EXTRACTION.
             &quot;contextFilterSettings&quot;: { # Settings that determine how to filter recent conversation context when generating suggestions. # Determines how recent conversation context is filtered when generating suggestions. If unspecified, no messages will be dropped.
@@ -938,7 +943,7 @@ Args:
               &quot;dropIvrMessages&quot;: True or False, # If set to true, all messages from ivr stage are dropped.
               &quot;dropVirtualAgentMessages&quot;: True or False, # If set to true, all messages from virtual agent are dropped.
             },
-            &quot;dialogflowQuerySource&quot;: { # Dialogflow source setting. Supported feature: DIALOGFLOW_ASSIST. # Query from Dialogflow agent. It is used by DIALOGFLOW_ASSIST.
+            &quot;dialogflowQuerySource&quot;: { # Dialogflow source setting. Supported feature: DIALOGFLOW_ASSIST, ENTITY_EXTRACTION. # Query from Dialogflow agent. It is used by DIALOGFLOW_ASSIST, ENTITY_EXTRACTION.
               &quot;agent&quot;: &quot;A String&quot;, # Required. The name of a dialogflow virtual agent used for end user side intent detection and suggestion. Format: `projects//locations//agent`. When multiple agents are allowed in the same Dialogflow project.
               &quot;humanAgentSideConfig&quot;: { # The configuration used for human agent side Dialogflow assist suggestion. # The Dialogflow assist configuration for human agent.
                 &quot;agent&quot;: &quot;A String&quot;, # Optional. The name of a dialogflow virtual agent used for intent detection and suggestion triggered by human agent. Format: `projects//locations//agent`.
@@ -1033,6 +1038,7 @@ Returns:
     { # Defines the services to connect to incoming Dialogflow conversations.
   &quot;automatedAgentConfig&quot;: { # Defines the Automated Agent to connect to a conversation. # Configuration for an automated agent to use with this profile.
     &quot;agent&quot;: &quot;A String&quot;, # Required. ID of the Dialogflow agent environment to use. This project needs to either be the same project as the conversation or you need to grant `service-@gcp-sa-dialogflow.iam.gserviceaccount.com` the `Dialogflow API Service Agent` role in this project. - For ES agents, use format: `projects//locations//agent/environments/`. If environment is not specified, the default `draft` environment is used. Refer to [DetectIntentRequest](/dialogflow/docs/reference/rpc/google.cloud.dialogflow.v2beta1#google.cloud.dialogflow.v2beta1.DetectIntentRequest) for more details. - For CX agents, use format `projects//locations//agents//environments/`. If environment is not specified, the default `draft` environment is used.
+    &quot;sessionTtl&quot;: &quot;A String&quot;, # Optional. Sets Dialogflow CX session life time. By default, a Dialogflow CX session remains active and its data is stored for 30 minutes after the last request is sent for the session. This value should be no longer than 1 day.
   },
   &quot;createTime&quot;: &quot;A String&quot;, # Output only. Create time of the conversation profile.
   &quot;displayName&quot;: &quot;A String&quot;, # Required. Human readable name for this profile. Max length 1024 bytes.
@@ -1047,7 +1053,7 @@ Returns:
           &quot;conversationProcessConfig&quot;: { # Config to process conversation. # Configs for processing conversation.
             &quot;recentSentencesCount&quot;: 42, # Number of recent non-small-talk sentences to use as context for article and FAQ suggestion
           },
-          &quot;enableEventBasedSuggestion&quot;: True or False, # Automatically iterates all participants and tries to compile suggestions. Supported features: ARTICLE_SUGGESTION, FAQ, DIALOGFLOW_ASSIST.
+          &quot;enableEventBasedSuggestion&quot;: True or False, # Automatically iterates all participants and tries to compile suggestions. Supported features: ARTICLE_SUGGESTION, FAQ, DIALOGFLOW_ASSIST, ENTITY_EXTRACTION.
           &quot;queryConfig&quot;: { # Config for suggestion query. # Configs of query.
             &quot;confidenceThreshold&quot;: 3.14, # Confidence threshold of query result. Agent Assist gives each suggestion a score in the range [0.0, 1.0], based on the relevance between the suggestion and the current conversation context. A score of 0.0 has no relevance, while a score of 1.0 has high relevance. Only suggestions with a score greater than or equal to the value of this field are included in the results. For a baseline model (the default), the recommended value is in the range [0.05, 0.1]. For a custom model, there is no recommended value. Tune this value by starting from a very low value and slowly increasing until you have desired results. If this field is not set, it is default to 0.0, which means that all suggestions are returned. Supported features: ARTICLE_SUGGESTION, FAQ, SMART_REPLY, SMART_COMPOSE, KNOWLEDGE_SEARCH, KNOWLEDGE_ASSIST, ENTITY_EXTRACTION.
             &quot;contextFilterSettings&quot;: { # Settings that determine how to filter recent conversation context when generating suggestions. # Determines how recent conversation context is filtered when generating suggestions. If unspecified, no messages will be dropped.
@@ -1055,7 +1061,7 @@ Returns:
               &quot;dropIvrMessages&quot;: True or False, # If set to true, all messages from ivr stage are dropped.
               &quot;dropVirtualAgentMessages&quot;: True or False, # If set to true, all messages from virtual agent are dropped.
             },
-            &quot;dialogflowQuerySource&quot;: { # Dialogflow source setting. Supported feature: DIALOGFLOW_ASSIST. # Query from Dialogflow agent. It is used by DIALOGFLOW_ASSIST.
+            &quot;dialogflowQuerySource&quot;: { # Dialogflow source setting. Supported feature: DIALOGFLOW_ASSIST, ENTITY_EXTRACTION. # Query from Dialogflow agent. It is used by DIALOGFLOW_ASSIST, ENTITY_EXTRACTION.
               &quot;agent&quot;: &quot;A String&quot;, # Required. The name of a dialogflow virtual agent used for end user side intent detection and suggestion. Format: `projects//locations//agent`. When multiple agents are allowed in the same Dialogflow project.
               &quot;humanAgentSideConfig&quot;: { # The configuration used for human agent side Dialogflow assist suggestion. # The Dialogflow assist configuration for human agent.
                 &quot;agent&quot;: &quot;A String&quot;, # Optional. The name of a dialogflow virtual agent used for intent detection and suggestion triggered by human agent. Format: `projects//locations//agent`.
@@ -1094,7 +1100,7 @@ Returns:
           &quot;conversationProcessConfig&quot;: { # Config to process conversation. # Configs for processing conversation.
             &quot;recentSentencesCount&quot;: 42, # Number of recent non-small-talk sentences to use as context for article and FAQ suggestion
           },
-          &quot;enableEventBasedSuggestion&quot;: True or False, # Automatically iterates all participants and tries to compile suggestions. Supported features: ARTICLE_SUGGESTION, FAQ, DIALOGFLOW_ASSIST.
+          &quot;enableEventBasedSuggestion&quot;: True or False, # Automatically iterates all participants and tries to compile suggestions. Supported features: ARTICLE_SUGGESTION, FAQ, DIALOGFLOW_ASSIST, ENTITY_EXTRACTION.
           &quot;queryConfig&quot;: { # Config for suggestion query. # Configs of query.
             &quot;confidenceThreshold&quot;: 3.14, # Confidence threshold of query result. Agent Assist gives each suggestion a score in the range [0.0, 1.0], based on the relevance between the suggestion and the current conversation context. A score of 0.0 has no relevance, while a score of 1.0 has high relevance. Only suggestions with a score greater than or equal to the value of this field are included in the results. For a baseline model (the default), the recommended value is in the range [0.05, 0.1]. For a custom model, there is no recommended value. Tune this value by starting from a very low value and slowly increasing until you have desired results. If this field is not set, it is default to 0.0, which means that all suggestions are returned. Supported features: ARTICLE_SUGGESTION, FAQ, SMART_REPLY, SMART_COMPOSE, KNOWLEDGE_SEARCH, KNOWLEDGE_ASSIST, ENTITY_EXTRACTION.
             &quot;contextFilterSettings&quot;: { # Settings that determine how to filter recent conversation context when generating suggestions. # Determines how recent conversation context is filtered when generating suggestions. If unspecified, no messages will be dropped.
@@ -1102,7 +1108,7 @@ Returns:
               &quot;dropIvrMessages&quot;: True or False, # If set to true, all messages from ivr stage are dropped.
               &quot;dropVirtualAgentMessages&quot;: True or False, # If set to true, all messages from virtual agent are dropped.
             },
-            &quot;dialogflowQuerySource&quot;: { # Dialogflow source setting. Supported feature: DIALOGFLOW_ASSIST. # Query from Dialogflow agent. It is used by DIALOGFLOW_ASSIST.
+            &quot;dialogflowQuerySource&quot;: { # Dialogflow source setting. Supported feature: DIALOGFLOW_ASSIST, ENTITY_EXTRACTION. # Query from Dialogflow agent. It is used by DIALOGFLOW_ASSIST, ENTITY_EXTRACTION.
               &quot;agent&quot;: &quot;A String&quot;, # Required. The name of a dialogflow virtual agent used for end user side intent detection and suggestion. Format: `projects//locations//agent`. When multiple agents are allowed in the same Dialogflow project.
               &quot;humanAgentSideConfig&quot;: { # The configuration used for human agent side Dialogflow assist suggestion. # The Dialogflow assist configuration for human agent.
                 &quot;agent&quot;: &quot;A String&quot;, # Optional. The name of a dialogflow virtual agent used for intent detection and suggestion triggered by human agent. Format: `projects//locations//agent`.
@@ -1205,7 +1211,7 @@ Args:
     &quot;conversationProcessConfig&quot;: { # Config to process conversation. # Configs for processing conversation.
       &quot;recentSentencesCount&quot;: 42, # Number of recent non-small-talk sentences to use as context for article and FAQ suggestion
     },
-    &quot;enableEventBasedSuggestion&quot;: True or False, # Automatically iterates all participants and tries to compile suggestions. Supported features: ARTICLE_SUGGESTION, FAQ, DIALOGFLOW_ASSIST.
+    &quot;enableEventBasedSuggestion&quot;: True or False, # Automatically iterates all participants and tries to compile suggestions. Supported features: ARTICLE_SUGGESTION, FAQ, DIALOGFLOW_ASSIST, ENTITY_EXTRACTION.
     &quot;queryConfig&quot;: { # Config for suggestion query. # Configs of query.
       &quot;confidenceThreshold&quot;: 3.14, # Confidence threshold of query result. Agent Assist gives each suggestion a score in the range [0.0, 1.0], based on the relevance between the suggestion and the current conversation context. A score of 0.0 has no relevance, while a score of 1.0 has high relevance. Only suggestions with a score greater than or equal to the value of this field are included in the results. For a baseline model (the default), the recommended value is in the range [0.05, 0.1]. For a custom model, there is no recommended value. Tune this value by starting from a very low value and slowly increasing until you have desired results. If this field is not set, it is default to 0.0, which means that all suggestions are returned. Supported features: ARTICLE_SUGGESTION, FAQ, SMART_REPLY, SMART_COMPOSE, KNOWLEDGE_SEARCH, KNOWLEDGE_ASSIST, ENTITY_EXTRACTION.
       &quot;contextFilterSettings&quot;: { # Settings that determine how to filter recent conversation context when generating suggestions. # Determines how recent conversation context is filtered when generating suggestions. If unspecified, no messages will be dropped.
@@ -1213,7 +1219,7 @@ Args:
         &quot;dropIvrMessages&quot;: True or False, # If set to true, all messages from ivr stage are dropped.
         &quot;dropVirtualAgentMessages&quot;: True or False, # If set to true, all messages from virtual agent are dropped.
       },
-      &quot;dialogflowQuerySource&quot;: { # Dialogflow source setting. Supported feature: DIALOGFLOW_ASSIST. # Query from Dialogflow agent. It is used by DIALOGFLOW_ASSIST.
+      &quot;dialogflowQuerySource&quot;: { # Dialogflow source setting. Supported feature: DIALOGFLOW_ASSIST, ENTITY_EXTRACTION. # Query from Dialogflow agent. It is used by DIALOGFLOW_ASSIST, ENTITY_EXTRACTION.
         &quot;agent&quot;: &quot;A String&quot;, # Required. The name of a dialogflow virtual agent used for end user side intent detection and suggestion. Format: `projects//locations//agent`. When multiple agents are allowed in the same Dialogflow project.
         &quot;humanAgentSideConfig&quot;: { # The configuration used for human agent side Dialogflow assist suggestion. # The Dialogflow assist configuration for human agent.
           &quot;agent&quot;: &quot;A String&quot;, # Optional. The name of a dialogflow virtual agent used for intent detection and suggestion triggered by human agent. Format: `projects//locations//agent`.

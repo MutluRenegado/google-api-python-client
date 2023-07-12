@@ -1045,6 +1045,41 @@
             "https://www.googleapis.com/auth/sqlservice.admin"
           ]
         },
+        "reencrypt": {
+          "description": "Reencrypt CMEK instance with latest key version.",
+          "flatPath": "sql/v1beta4/projects/{project}/instances/{instance}/reencrypt",
+          "httpMethod": "POST",
+          "id": "sql.instances.reencrypt",
+          "parameterOrder": [
+            "project",
+            "instance"
+          ],
+          "parameters": {
+            "instance": {
+              "description": "Cloud SQL instance ID. This does not include the project ID.",
+              "location": "path",
+              "required": true,
+              "type": "string"
+            },
+            "project": {
+              "description": "ID of the project that contains the instance.",
+              "location": "path",
+              "required": true,
+              "type": "string"
+            }
+          },
+          "path": "sql/v1beta4/projects/{project}/instances/{instance}/reencrypt",
+          "request": {
+            "$ref": "InstancesReencryptRequest"
+          },
+          "response": {
+            "$ref": "Operation"
+          },
+          "scopes": [
+            "https://www.googleapis.com/auth/cloud-platform",
+            "https://www.googleapis.com/auth/sqlservice.admin"
+          ]
+        },
         "resetSslConfig": {
           "description": "Deletes all client certificates and generates a new server SSL certificate for the instance.",
           "flatPath": "sql/v1beta4/projects/{project}/instances/{instance}/resetSslConfig",
@@ -1454,6 +1489,38 @@
               "path": "sql/v1beta4/projects/{project}/instances/{instance}/getDiskShrinkConfig",
               "response": {
                 "$ref": "SqlInstancesGetDiskShrinkConfigResponse"
+              },
+              "scopes": [
+                "https://www.googleapis.com/auth/cloud-platform",
+                "https://www.googleapis.com/auth/sqlservice.admin"
+              ]
+            },
+            "getLatestRecoveryTime": {
+              "description": "Get Latest Recovery Time for a given instance.",
+              "flatPath": "sql/v1beta4/projects/{project}/instances/{instance}/getLatestRecoveryTime",
+              "httpMethod": "GET",
+              "id": "sql.projects.instances.getLatestRecoveryTime",
+              "parameterOrder": [
+                "project",
+                "instance"
+              ],
+              "parameters": {
+                "instance": {
+                  "description": "Cloud SQL instance ID. This does not include the project ID.",
+                  "location": "path",
+                  "required": true,
+                  "type": "string"
+                },
+                "project": {
+                  "description": "Project ID of the project that contains the instance.",
+                  "location": "path",
+                  "required": true,
+                  "type": "string"
+                }
+              },
+              "path": "sql/v1beta4/projects/{project}/instances/{instance}/getLatestRecoveryTime",
+              "response": {
+                "$ref": "SqlInstancesGetLatestRecoveryTimeResponse"
               },
               "scopes": [
                 "https://www.googleapis.com/auth/cloud-platform",
@@ -2055,7 +2122,7 @@
       }
     }
   },
-  "revision": "20230530",
+  "revision": "20230627",
   "rootUrl": "https://sqladmin.googleapis.com/",
   "schemas": {
     "AclEntry": {
@@ -2178,6 +2245,32 @@
         },
         "kind": {
           "description": "This is always `sql#backupContext`.",
+          "type": "string"
+        }
+      },
+      "type": "object"
+    },
+    "BackupReencryptionConfig": {
+      "description": "Backup Reencryption Config",
+      "id": "BackupReencryptionConfig",
+      "properties": {
+        "backupLimit": {
+          "description": "Backup re-encryption limit",
+          "format": "int32",
+          "type": "integer"
+        },
+        "backupType": {
+          "description": "Type of backups users want to re-encrypt.",
+          "enum": [
+            "BACKUP_TYPE_UNSPECIFIED",
+            "AUTOMATED",
+            "ON_DEMAND"
+          ],
+          "enumDescriptions": [
+            "Unknown backup type, will be defaulted to AUTOMATIC backup type",
+            "Reencrypt automatic backups",
+            "Reencrypt on-demand backups"
+          ],
           "type": "string"
         }
       },
@@ -2409,6 +2502,10 @@
           "description": "Timestamp, if specified, identifies the time to which the source instance is cloned.",
           "format": "google-datetime",
           "type": "string"
+        },
+        "preferredZone": {
+          "description": "Optional. (Point-in-time recovery for PostgreSQL only) Clone to an instance in the specified zone. If no zone is specified, clone to the same zone as the source instance.",
+          "type": "string"
         }
       },
       "type": "object"
@@ -2424,6 +2521,12 @@
             "FIRST_GEN",
             "SECOND_GEN",
             "EXTERNAL"
+          ],
+          "enumDeprecated": [
+            false,
+            true,
+            false,
+            false
           ],
           "enumDescriptions": [
             "This is an unknown backend type for instance.",
@@ -2468,7 +2571,50 @@
             "SQLSERVER_2019_STANDARD",
             "SQLSERVER_2019_ENTERPRISE",
             "SQLSERVER_2019_EXPRESS",
-            "SQLSERVER_2019_WEB"
+            "SQLSERVER_2019_WEB",
+            "SQLSERVER_2022_STANDARD",
+            "SQLSERVER_2022_ENTERPRISE",
+            "SQLSERVER_2022_EXPRESS",
+            "SQLSERVER_2022_WEB"
+          ],
+          "enumDeprecated": [
+            false,
+            true,
+            true,
+            false,
+            false,
+            false,
+            false,
+            false,
+            false,
+            false,
+            false,
+            false,
+            false,
+            false,
+            false,
+            false,
+            false,
+            false,
+            false,
+            false,
+            false,
+            true,
+            false,
+            false,
+            false,
+            false,
+            false,
+            false,
+            false,
+            false,
+            false,
+            false,
+            false,
+            false,
+            false,
+            false,
+            false
           ],
           "enumDescriptions": [
             "This is an unknown database version.",
@@ -2503,8 +2649,16 @@
             "The database version is SQL Server 2019 Standard.",
             "The database version is SQL Server 2019 Enterprise.",
             "The database version is SQL Server 2019 Express.",
-            "The database version is SQL Server 2019 Web."
+            "The database version is SQL Server 2019 Web.",
+            "The database version is SQL Server 2022 Standard.",
+            "The database version is SQL Server 2022 Enterprise.",
+            "The database version is SQL Server 2022 Express.",
+            "The database version is SQL Server 2022 Web."
           ],
+          "type": "string"
+        },
+        "dnsName": {
+          "description": "The dns name of the instance.",
           "type": "string"
         },
         "ipAddresses": {
@@ -2525,6 +2679,17 @@
         "serverCaCert": {
           "$ref": "SslCert",
           "description": "SSL configuration."
+        }
+      },
+      "type": "object"
+    },
+    "DataCacheConfig": {
+      "description": "Data cache configurations.",
+      "id": "DataCacheConfig",
+      "properties": {
+        "dataCacheEnabled": {
+          "description": "Whether data cache is enabled for the instance.",
+          "type": "boolean"
         }
       },
       "type": "object"
@@ -2606,6 +2771,12 @@
             "SECOND_GEN",
             "EXTERNAL"
           ],
+          "enumDeprecated": [
+            false,
+            true,
+            false,
+            false
+          ],
           "enumDescriptions": [
             "This is an unknown backend type for instance.",
             "V1 speckle instance.",
@@ -2625,6 +2796,7 @@
           "type": "string"
         },
         "currentDiskSize": {
+          "deprecated": true,
           "description": "The current disk usage of the instance in bytes. This property has been deprecated. Use the \"cloudsql.googleapis.com/database/disk/bytes_used\" metric in Cloud Monitoring API instead. Please see [this announcement](https://groups.google.com/d/msg/google-cloud-sql-announce/I_7-F9EBhT0/BtvFtdFeAgAJ) for details.",
           "format": "int64",
           "type": "string"
@@ -2669,7 +2841,50 @@
             "SQLSERVER_2019_STANDARD",
             "SQLSERVER_2019_ENTERPRISE",
             "SQLSERVER_2019_EXPRESS",
-            "SQLSERVER_2019_WEB"
+            "SQLSERVER_2019_WEB",
+            "SQLSERVER_2022_STANDARD",
+            "SQLSERVER_2022_ENTERPRISE",
+            "SQLSERVER_2022_EXPRESS",
+            "SQLSERVER_2022_WEB"
+          ],
+          "enumDeprecated": [
+            false,
+            true,
+            true,
+            false,
+            false,
+            false,
+            false,
+            false,
+            false,
+            false,
+            false,
+            false,
+            false,
+            false,
+            false,
+            false,
+            false,
+            false,
+            false,
+            false,
+            false,
+            true,
+            false,
+            false,
+            false,
+            false,
+            false,
+            false,
+            false,
+            false,
+            false,
+            false,
+            false,
+            false,
+            false,
+            false,
+            false
           ],
           "enumDescriptions": [
             "This is an unknown database version.",
@@ -2704,7 +2919,11 @@
             "The database version is SQL Server 2019 Standard.",
             "The database version is SQL Server 2019 Enterprise.",
             "The database version is SQL Server 2019 Express.",
-            "The database version is SQL Server 2019 Web."
+            "The database version is SQL Server 2019 Web.",
+            "The database version is SQL Server 2022 Standard.",
+            "The database version is SQL Server 2022 Enterprise.",
+            "The database version is SQL Server 2022 Express.",
+            "The database version is SQL Server 2022 Web."
           ],
           "type": "string"
         },
@@ -2762,6 +2981,7 @@
           "type": "array"
         },
         "ipv6Address": {
+          "deprecated": true,
           "description": "The IPv6 address assigned to the instance. (Deprecated) This property was applicable only to First Generation instances.",
           "type": "string"
         },
@@ -2778,6 +2998,7 @@
           "type": "string"
         },
         "maxDiskSize": {
+          "deprecated": true,
           "description": "The maximum disk size of the instance in bytes.",
           "format": "int64",
           "type": "string"
@@ -2856,6 +3077,16 @@
             "MAINTENANCE",
             "FAILED",
             "ONLINE_MAINTENANCE"
+          ],
+          "enumDeprecated": [
+            false,
+            false,
+            false,
+            false,
+            false,
+            false,
+            false,
+            true
           ],
           "enumDescriptions": [
             "The state of the instance is unknown.",
@@ -3054,18 +3285,19 @@
                 "DIFF"
               ],
               "enumDescriptions": [
-                "default type to meet enum requirement, will be set to FULL if not set",
+                "default type.",
                 "Full backup.",
                 "Differential backup."
               ],
               "type": "string"
             },
             "copyOnly": {
-              "description": "Whether or not the export will be exeucted with COPY_ONLY, SQL Server only deprecated as the behavior should default to copy_only = true use differential_base instead",
+              "deprecated": true,
+              "description": "Deprecated: copy_only is deprecated. Use differential_base instead",
               "type": "boolean"
             },
             "differentialBase": {
-              "description": "Whether or not the backup can be use as differential base only non copy only backup can be served as differential base",
+              "description": "Whether or not the backup can be used as a differential base copy_only backup can not be served as differential base",
               "type": "boolean"
             },
             "stripeCount": {
@@ -3243,7 +3475,50 @@
               "SQLSERVER_2019_STANDARD",
               "SQLSERVER_2019_ENTERPRISE",
               "SQLSERVER_2019_EXPRESS",
-              "SQLSERVER_2019_WEB"
+              "SQLSERVER_2019_WEB",
+              "SQLSERVER_2022_STANDARD",
+              "SQLSERVER_2022_ENTERPRISE",
+              "SQLSERVER_2022_EXPRESS",
+              "SQLSERVER_2022_WEB"
+            ],
+            "enumDeprecated": [
+              false,
+              true,
+              true,
+              false,
+              false,
+              false,
+              false,
+              false,
+              false,
+              false,
+              false,
+              false,
+              false,
+              false,
+              false,
+              false,
+              false,
+              false,
+              false,
+              false,
+              false,
+              true,
+              false,
+              false,
+              false,
+              false,
+              false,
+              false,
+              false,
+              false,
+              false,
+              false,
+              false,
+              false,
+              false,
+              false,
+              false
             ],
             "enumDescriptions": [
               "This is an unknown database version.",
@@ -3278,7 +3553,11 @@
               "The database version is SQL Server 2019 Standard.",
               "The database version is SQL Server 2019 Enterprise.",
               "The database version is SQL Server 2019 Express.",
-              "The database version is SQL Server 2019 Web."
+              "The database version is SQL Server 2019 Web.",
+              "The database version is SQL Server 2022 Standard.",
+              "The database version is SQL Server 2022 Enterprise.",
+              "The database version is SQL Server 2022 Express.",
+              "The database version is SQL Server 2022 Web."
             ],
             "type": "string"
           },
@@ -3406,7 +3685,7 @@
                 "DIFF"
               ],
               "enumDescriptions": [
-                "default type to meet enum requirement, will be set to FULL if not set",
+                "default type.",
                 "Full backup.",
                 "Differential backup."
               ],
@@ -3665,6 +3944,17 @@
       },
       "type": "object"
     },
+    "InstancesReencryptRequest": {
+      "description": "Database Instance reencrypt request.",
+      "id": "InstancesReencryptRequest",
+      "properties": {
+        "backupReencryptionConfig": {
+          "$ref": "BackupReencryptionConfig",
+          "description": "Configuration specific to backup re-encryption"
+        }
+      },
+      "type": "object"
+    },
     "InstancesRestoreBackupRequest": {
       "description": "Database instance restore backup request.",
       "id": "InstancesRestoreBackupRequest",
@@ -3771,6 +4061,7 @@
       "id": "LocationPreference",
       "properties": {
         "followGaeApplication": {
+          "deprecated": true,
           "description": "The App Engine application to follow, it must be in the same region as the Cloud SQL instance. WARNING: Changing this might restart the instance.",
           "type": "string"
         },
@@ -4012,7 +4303,49 @@
             "START_EXTERNAL_SYNC",
             "LOG_CLEANUP",
             "AUTO_RESTART",
-            "REENCRYPT"
+            "REENCRYPT",
+            "SWITCHOVER"
+          ],
+          "enumDeprecated": [
+            false,
+            false,
+            false,
+            false,
+            false,
+            false,
+            false,
+            true,
+            true,
+            false,
+            false,
+            false,
+            false,
+            false,
+            false,
+            false,
+            false,
+            false,
+            false,
+            false,
+            false,
+            false,
+            false,
+            false,
+            false,
+            false,
+            false,
+            false,
+            false,
+            false,
+            true,
+            true,
+            true,
+            false,
+            false,
+            false,
+            false,
+            false,
+            false
           ],
           "enumDescriptions": [
             "Unknown operation type.",
@@ -4052,7 +4385,8 @@
             "Starts external sync of a Cloud SQL EM replica to an external primary instance.",
             "Recovers logs from an instance's old data disk.",
             "Performs auto-restart of an HA-enabled Cloud SQL database for auto recovery.",
-            "Re-encrypts CMEK instances with latest key version."
+            "Re-encrypts CMEK instances with latest key version.",
+            "Switches over to replica instance from primary."
           ],
           "type": "string"
         },
@@ -4369,6 +4703,12 @@
             "NEVER",
             "ON_DEMAND"
           ],
+          "enumDeprecated": [
+            false,
+            false,
+            false,
+            true
+          ],
           "enumDescriptions": [
             "Unknown activation plan.",
             "The instance is always up and running.",
@@ -4386,6 +4726,7 @@
           "description": "Specifies advance machine configuration for the instance relevant only for SQL Server."
         },
         "authorizedGaeApplications": {
+          "deprecated": true,
           "description": "The App Engine app IDs that can access this instance. (Deprecated) Applied to First Generation instances only.",
           "items": {
             "type": "string"
@@ -4429,8 +4770,13 @@
           "type": "string"
         },
         "crashSafeReplicationEnabled": {
+          "deprecated": true,
           "description": "Configuration specific to read replica instances. Indicates whether database flags for crash-safe replication are enabled. This property was only applicable to First Generation instances.",
           "type": "boolean"
+        },
+        "dataCacheConfig": {
+          "$ref": "DataCacheConfig",
+          "description": "Configuration for data cache."
         },
         "dataDiskSizeGb": {
           "description": "The size of data disk, in GB. The data disk size minimum is 10GB.",
@@ -4444,6 +4790,12 @@
             "PD_SSD",
             "PD_HDD",
             "OBSOLETE_LOCAL_SSD"
+          ],
+          "enumDeprecated": [
+            false,
+            false,
+            false,
+            true
           ],
           "enumDescriptions": [
             "This is an unknown data disk type.",
@@ -4474,6 +4826,20 @@
             "$ref": "DenyMaintenancePeriod"
           },
           "type": "array"
+        },
+        "edition": {
+          "description": "Optional. The edition of the instance.",
+          "enum": [
+            "EDITION_UNSPECIFIED",
+            "ENTERPRISE",
+            "ENTERPRISE_PLUS"
+          ],
+          "enumDescriptions": [
+            "The instance did not specify the edition.",
+            "The instance is an enterprise edition.",
+            "The instance is an Enterprise Plus edition."
+          ],
+          "type": "string"
         },
         "insightsConfig": {
           "$ref": "InsightsConfig",
@@ -4514,6 +4880,7 @@
           "type": "string"
         },
         "replicationType": {
+          "deprecated": true,
           "description": "The type of replication this instance uses. This can be either `ASYNCHRONOUS` or `SYNCHRONOUS`. (Deprecated) This property was only applicable to First Generation instances.",
           "enum": [
             "SQL_REPLICATION_TYPE_UNSPECIFIED",
@@ -4626,7 +4993,8 @@
             "RISKY_BACKUP_ADMIN_PRIVILEGE",
             "INSUFFICIENT_GCS_PERMISSIONS",
             "INVALID_FILE_INFO",
-            "UNSUPPORTED_DATABASE_SETTINGS"
+            "UNSUPPORTED_DATABASE_SETTINGS",
+            "MYSQL_PARALLEL_IMPORT_INSUFFICIENT_PRIVILEGE"
           ],
           "enumDescriptions": [
             "",
@@ -4662,7 +5030,8 @@
             "Additional BACKUP_ADMIN privilege is granted to the replication user which may lock source MySQL 8 instance for DDLs during initial sync.",
             "The Cloud Storage bucket is missing necessary permissions.",
             "The Cloud Storage bucket has an error in the file or contains invalid file information.",
-            "The source instance has unsupported database settings for migration."
+            "The source instance has unsupported database settings for migration.",
+            "The replication user is missing parallel import specific privileges. (e.g. LOCK TABLES) for MySQL."
           ],
           "type": "string"
         }
@@ -4684,6 +5053,22 @@
         "minimalTargetSizeGb": {
           "description": "The minimum size to which a disk can be shrunk in GigaBytes.",
           "format": "int64",
+          "type": "string"
+        }
+      },
+      "type": "object"
+    },
+    "SqlInstancesGetLatestRecoveryTimeResponse": {
+      "description": "Instance get latest recovery time response.",
+      "id": "SqlInstancesGetLatestRecoveryTimeResponse",
+      "properties": {
+        "kind": {
+          "description": "This is always `sql#getLatestRecoveryTime`.",
+          "type": "string"
+        },
+        "latestRecoveryTime": {
+          "description": "Timestamp, identifies the latest recovery time of the source instance.",
+          "format": "google-datetime",
           "type": "string"
         }
       },
@@ -4838,6 +5223,7 @@
       "id": "SqlScheduledMaintenance",
       "properties": {
         "canDefer": {
+          "deprecated": true,
           "type": "boolean"
         },
         "canReschedule": {
@@ -5241,6 +5627,7 @@
           "type": "string"
         },
         "nextPageToken": {
+          "deprecated": true,
           "description": "Unused.",
           "type": "string"
         }

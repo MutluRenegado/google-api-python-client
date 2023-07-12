@@ -201,6 +201,17 @@ Returns:
   &quot;httpErrorStatusCode&quot;: 42, # [Output Only] If the operation fails, this field contains the HTTP error status code that was returned. For example, a `404` means the resource was not found.
   &quot;id&quot;: &quot;A String&quot;, # [Output Only] The unique identifier for the operation. This identifier is defined by the server.
   &quot;insertTime&quot;: &quot;A String&quot;, # [Output Only] The time that this operation was requested. This value is in RFC3339 text format.
+  &quot;instancesBulkInsertOperationMetadata&quot;: {
+    &quot;perLocationStatus&quot;: { # Status information per location (location name is key). Example key: zones/us-central1-a
+      &quot;a_key&quot;: {
+        &quot;createdVmCount&quot;: 42, # [Output Only] Count of VMs successfully created so far.
+        &quot;deletedVmCount&quot;: 42, # [Output Only] Count of VMs that got deleted during rollback.
+        &quot;failedToCreateVmCount&quot;: 42, # [Output Only] Count of VMs that started creating but encountered an error.
+        &quot;status&quot;: &quot;A String&quot;, # [Output Only] Creation status of BulkInsert operation - information if the flow is rolling forward or rolling back.
+        &quot;targetVmCount&quot;: 42, # [Output Only] Count of VMs originally planned to be created.
+      },
+    },
+  },
   &quot;kind&quot;: &quot;compute#operation&quot;, # [Output Only] Type of the resource. Always `compute#operation` for Operation resources.
   &quot;name&quot;: &quot;A String&quot;, # [Output Only] Name of the operation.
   &quot;operationGroupId&quot;: &quot;A String&quot;, # [Output Only] An ID that represents a group of operations, such as when a group of operations results from a `bulkInsert` API request.
@@ -452,6 +463,17 @@ Returns:
   &quot;httpErrorStatusCode&quot;: 42, # [Output Only] If the operation fails, this field contains the HTTP error status code that was returned. For example, a `404` means the resource was not found.
   &quot;id&quot;: &quot;A String&quot;, # [Output Only] The unique identifier for the operation. This identifier is defined by the server.
   &quot;insertTime&quot;: &quot;A String&quot;, # [Output Only] The time that this operation was requested. This value is in RFC3339 text format.
+  &quot;instancesBulkInsertOperationMetadata&quot;: {
+    &quot;perLocationStatus&quot;: { # Status information per location (location name is key). Example key: zones/us-central1-a
+      &quot;a_key&quot;: {
+        &quot;createdVmCount&quot;: 42, # [Output Only] Count of VMs successfully created so far.
+        &quot;deletedVmCount&quot;: 42, # [Output Only] Count of VMs that got deleted during rollback.
+        &quot;failedToCreateVmCount&quot;: 42, # [Output Only] Count of VMs that started creating but encountered an error.
+        &quot;status&quot;: &quot;A String&quot;, # [Output Only] Creation status of BulkInsert operation - information if the flow is rolling forward or rolling back.
+        &quot;targetVmCount&quot;: 42, # [Output Only] Count of VMs originally planned to be created.
+      },
+    },
+  },
   &quot;kind&quot;: &quot;compute#operation&quot;, # [Output Only] Type of the resource. Always `compute#operation` for Operation resources.
   &quot;name&quot;: &quot;A String&quot;, # [Output Only] Name of the operation.
   &quot;operationGroupId&quot;: &quot;A String&quot;, # [Output Only] An ID that represents a group of operations, such as when a group of operations results from a `bulkInsert` API request.
@@ -551,6 +573,17 @@ Returns:
   &quot;httpErrorStatusCode&quot;: 42, # [Output Only] If the operation fails, this field contains the HTTP error status code that was returned. For example, a `404` means the resource was not found.
   &quot;id&quot;: &quot;A String&quot;, # [Output Only] The unique identifier for the operation. This identifier is defined by the server.
   &quot;insertTime&quot;: &quot;A String&quot;, # [Output Only] The time that this operation was requested. This value is in RFC3339 text format.
+  &quot;instancesBulkInsertOperationMetadata&quot;: {
+    &quot;perLocationStatus&quot;: { # Status information per location (location name is key). Example key: zones/us-central1-a
+      &quot;a_key&quot;: {
+        &quot;createdVmCount&quot;: 42, # [Output Only] Count of VMs successfully created so far.
+        &quot;deletedVmCount&quot;: 42, # [Output Only] Count of VMs that got deleted during rollback.
+        &quot;failedToCreateVmCount&quot;: 42, # [Output Only] Count of VMs that started creating but encountered an error.
+        &quot;status&quot;: &quot;A String&quot;, # [Output Only] Creation status of BulkInsert operation - information if the flow is rolling forward or rolling back.
+        &quot;targetVmCount&quot;: 42, # [Output Only] Count of VMs originally planned to be created.
+      },
+    },
+  },
   &quot;kind&quot;: &quot;compute#operation&quot;, # [Output Only] Type of the resource. Always `compute#operation` for Operation resources.
   &quot;name&quot;: &quot;A String&quot;, # [Output Only] Name of the operation.
   &quot;operationGroupId&quot;: &quot;A String&quot;, # [Output Only] An ID that represents a group of operations, such as when a group of operations results from a `bulkInsert` API request.
@@ -644,6 +677,17 @@ Returns:
   &quot;httpErrorStatusCode&quot;: 42, # [Output Only] If the operation fails, this field contains the HTTP error status code that was returned. For example, a `404` means the resource was not found.
   &quot;id&quot;: &quot;A String&quot;, # [Output Only] The unique identifier for the operation. This identifier is defined by the server.
   &quot;insertTime&quot;: &quot;A String&quot;, # [Output Only] The time that this operation was requested. This value is in RFC3339 text format.
+  &quot;instancesBulkInsertOperationMetadata&quot;: {
+    &quot;perLocationStatus&quot;: { # Status information per location (location name is key). Example key: zones/us-central1-a
+      &quot;a_key&quot;: {
+        &quot;createdVmCount&quot;: 42, # [Output Only] Count of VMs successfully created so far.
+        &quot;deletedVmCount&quot;: 42, # [Output Only] Count of VMs that got deleted during rollback.
+        &quot;failedToCreateVmCount&quot;: 42, # [Output Only] Count of VMs that started creating but encountered an error.
+        &quot;status&quot;: &quot;A String&quot;, # [Output Only] Creation status of BulkInsert operation - information if the flow is rolling forward or rolling back.
+        &quot;targetVmCount&quot;: 42, # [Output Only] Count of VMs originally planned to be created.
+      },
+    },
+  },
   &quot;kind&quot;: &quot;compute#operation&quot;, # [Output Only] Type of the resource. Always `compute#operation` for Operation resources.
   &quot;name&quot;: &quot;A String&quot;, # [Output Only] Name of the operation.
   &quot;operationGroupId&quot;: &quot;A String&quot;, # [Output Only] An ID that represents a group of operations, such as when a group of operations results from a `bulkInsert` API request.
@@ -698,6 +742,15 @@ Returns:
     &quot;layer7DdosDefenseConfig&quot;: { # Configuration options for L7 DDoS detection. This field is only supported in Global Security Policies of type CLOUD_ARMOR. # If set to true, enables Cloud Armor Machine Learning.
       &quot;enable&quot;: True or False, # If set to true, enables CAAP for L7 DDoS detection. This field is only supported in Global Security Policies of type CLOUD_ARMOR.
       &quot;ruleVisibility&quot;: &quot;A String&quot;, # Rule visibility can be one of the following: STANDARD - opaque rules. (default) PREMIUM - transparent rules. This field is only supported in Global Security Policies of type CLOUD_ARMOR.
+      &quot;thresholdConfigs&quot;: [ # Configuration options for layer7 adaptive protection for various customizable thresholds.
+        {
+          &quot;autoDeployConfidenceThreshold&quot;: 3.14,
+          &quot;autoDeployExpirationSec&quot;: 42,
+          &quot;autoDeployImpactedBaselineThreshold&quot;: 3.14,
+          &quot;autoDeployLoadThreshold&quot;: 3.14,
+          &quot;name&quot;: &quot;A String&quot;, # The name must be 1-63 characters long, and comply with RFC1035. The name must be unique within the security policy.
+        },
+      ],
     },
   },
   &quot;advancedOptionsConfig&quot;: {
@@ -1124,6 +1177,15 @@ Args:
     &quot;layer7DdosDefenseConfig&quot;: { # Configuration options for L7 DDoS detection. This field is only supported in Global Security Policies of type CLOUD_ARMOR. # If set to true, enables Cloud Armor Machine Learning.
       &quot;enable&quot;: True or False, # If set to true, enables CAAP for L7 DDoS detection. This field is only supported in Global Security Policies of type CLOUD_ARMOR.
       &quot;ruleVisibility&quot;: &quot;A String&quot;, # Rule visibility can be one of the following: STANDARD - opaque rules. (default) PREMIUM - transparent rules. This field is only supported in Global Security Policies of type CLOUD_ARMOR.
+      &quot;thresholdConfigs&quot;: [ # Configuration options for layer7 adaptive protection for various customizable thresholds.
+        {
+          &quot;autoDeployConfidenceThreshold&quot;: 3.14,
+          &quot;autoDeployExpirationSec&quot;: 42,
+          &quot;autoDeployImpactedBaselineThreshold&quot;: 3.14,
+          &quot;autoDeployLoadThreshold&quot;: 3.14,
+          &quot;name&quot;: &quot;A String&quot;, # The name must be 1-63 characters long, and comply with RFC1035. The name must be unique within the security policy.
+        },
+      ],
     },
   },
   &quot;advancedOptionsConfig&quot;: {
@@ -1395,6 +1457,17 @@ Returns:
   &quot;httpErrorStatusCode&quot;: 42, # [Output Only] If the operation fails, this field contains the HTTP error status code that was returned. For example, a `404` means the resource was not found.
   &quot;id&quot;: &quot;A String&quot;, # [Output Only] The unique identifier for the operation. This identifier is defined by the server.
   &quot;insertTime&quot;: &quot;A String&quot;, # [Output Only] The time that this operation was requested. This value is in RFC3339 text format.
+  &quot;instancesBulkInsertOperationMetadata&quot;: {
+    &quot;perLocationStatus&quot;: { # Status information per location (location name is key). Example key: zones/us-central1-a
+      &quot;a_key&quot;: {
+        &quot;createdVmCount&quot;: 42, # [Output Only] Count of VMs successfully created so far.
+        &quot;deletedVmCount&quot;: 42, # [Output Only] Count of VMs that got deleted during rollback.
+        &quot;failedToCreateVmCount&quot;: 42, # [Output Only] Count of VMs that started creating but encountered an error.
+        &quot;status&quot;: &quot;A String&quot;, # [Output Only] Creation status of BulkInsert operation - information if the flow is rolling forward or rolling back.
+        &quot;targetVmCount&quot;: 42, # [Output Only] Count of VMs originally planned to be created.
+      },
+    },
+  },
   &quot;kind&quot;: &quot;compute#operation&quot;, # [Output Only] Type of the resource. Always `compute#operation` for Operation resources.
   &quot;name&quot;: &quot;A String&quot;, # [Output Only] Name of the operation.
   &quot;operationGroupId&quot;: &quot;A String&quot;, # [Output Only] An ID that represents a group of operations, such as when a group of operations results from a `bulkInsert` API request.
@@ -1457,6 +1530,15 @@ Returns:
         &quot;layer7DdosDefenseConfig&quot;: { # Configuration options for L7 DDoS detection. This field is only supported in Global Security Policies of type CLOUD_ARMOR. # If set to true, enables Cloud Armor Machine Learning.
           &quot;enable&quot;: True or False, # If set to true, enables CAAP for L7 DDoS detection. This field is only supported in Global Security Policies of type CLOUD_ARMOR.
           &quot;ruleVisibility&quot;: &quot;A String&quot;, # Rule visibility can be one of the following: STANDARD - opaque rules. (default) PREMIUM - transparent rules. This field is only supported in Global Security Policies of type CLOUD_ARMOR.
+          &quot;thresholdConfigs&quot;: [ # Configuration options for layer7 adaptive protection for various customizable thresholds.
+            {
+              &quot;autoDeployConfidenceThreshold&quot;: 3.14,
+              &quot;autoDeployExpirationSec&quot;: 42,
+              &quot;autoDeployImpactedBaselineThreshold&quot;: 3.14,
+              &quot;autoDeployLoadThreshold&quot;: 3.14,
+              &quot;name&quot;: &quot;A String&quot;, # The name must be 1-63 characters long, and comply with RFC1035. The name must be unique within the security policy.
+            },
+          ],
         },
       },
       &quot;advancedOptionsConfig&quot;: {
@@ -1790,6 +1872,17 @@ Returns:
   &quot;httpErrorStatusCode&quot;: 42, # [Output Only] If the operation fails, this field contains the HTTP error status code that was returned. For example, a `404` means the resource was not found.
   &quot;id&quot;: &quot;A String&quot;, # [Output Only] The unique identifier for the operation. This identifier is defined by the server.
   &quot;insertTime&quot;: &quot;A String&quot;, # [Output Only] The time that this operation was requested. This value is in RFC3339 text format.
+  &quot;instancesBulkInsertOperationMetadata&quot;: {
+    &quot;perLocationStatus&quot;: { # Status information per location (location name is key). Example key: zones/us-central1-a
+      &quot;a_key&quot;: {
+        &quot;createdVmCount&quot;: 42, # [Output Only] Count of VMs successfully created so far.
+        &quot;deletedVmCount&quot;: 42, # [Output Only] Count of VMs that got deleted during rollback.
+        &quot;failedToCreateVmCount&quot;: 42, # [Output Only] Count of VMs that started creating but encountered an error.
+        &quot;status&quot;: &quot;A String&quot;, # [Output Only] Creation status of BulkInsert operation - information if the flow is rolling forward or rolling back.
+        &quot;targetVmCount&quot;: 42, # [Output Only] Count of VMs originally planned to be created.
+      },
+    },
+  },
   &quot;kind&quot;: &quot;compute#operation&quot;, # [Output Only] Type of the resource. Always `compute#operation` for Operation resources.
   &quot;name&quot;: &quot;A String&quot;, # [Output Only] Name of the operation.
   &quot;operationGroupId&quot;: &quot;A String&quot;, # [Output Only] An ID that represents a group of operations, such as when a group of operations results from a `bulkInsert` API request.
@@ -1839,6 +1932,15 @@ Args:
     &quot;layer7DdosDefenseConfig&quot;: { # Configuration options for L7 DDoS detection. This field is only supported in Global Security Policies of type CLOUD_ARMOR. # If set to true, enables Cloud Armor Machine Learning.
       &quot;enable&quot;: True or False, # If set to true, enables CAAP for L7 DDoS detection. This field is only supported in Global Security Policies of type CLOUD_ARMOR.
       &quot;ruleVisibility&quot;: &quot;A String&quot;, # Rule visibility can be one of the following: STANDARD - opaque rules. (default) PREMIUM - transparent rules. This field is only supported in Global Security Policies of type CLOUD_ARMOR.
+      &quot;thresholdConfigs&quot;: [ # Configuration options for layer7 adaptive protection for various customizable thresholds.
+        {
+          &quot;autoDeployConfidenceThreshold&quot;: 3.14,
+          &quot;autoDeployExpirationSec&quot;: 42,
+          &quot;autoDeployImpactedBaselineThreshold&quot;: 3.14,
+          &quot;autoDeployLoadThreshold&quot;: 3.14,
+          &quot;name&quot;: &quot;A String&quot;, # The name must be 1-63 characters long, and comply with RFC1035. The name must be unique within the security policy.
+        },
+      ],
     },
   },
   &quot;advancedOptionsConfig&quot;: {
@@ -2109,6 +2211,17 @@ Returns:
   &quot;httpErrorStatusCode&quot;: 42, # [Output Only] If the operation fails, this field contains the HTTP error status code that was returned. For example, a `404` means the resource was not found.
   &quot;id&quot;: &quot;A String&quot;, # [Output Only] The unique identifier for the operation. This identifier is defined by the server.
   &quot;insertTime&quot;: &quot;A String&quot;, # [Output Only] The time that this operation was requested. This value is in RFC3339 text format.
+  &quot;instancesBulkInsertOperationMetadata&quot;: {
+    &quot;perLocationStatus&quot;: { # Status information per location (location name is key). Example key: zones/us-central1-a
+      &quot;a_key&quot;: {
+        &quot;createdVmCount&quot;: 42, # [Output Only] Count of VMs successfully created so far.
+        &quot;deletedVmCount&quot;: 42, # [Output Only] Count of VMs that got deleted during rollback.
+        &quot;failedToCreateVmCount&quot;: 42, # [Output Only] Count of VMs that started creating but encountered an error.
+        &quot;status&quot;: &quot;A String&quot;, # [Output Only] Creation status of BulkInsert operation - information if the flow is rolling forward or rolling back.
+        &quot;targetVmCount&quot;: 42, # [Output Only] Count of VMs originally planned to be created.
+      },
+    },
+  },
   &quot;kind&quot;: &quot;compute#operation&quot;, # [Output Only] Type of the resource. Always `compute#operation` for Operation resources.
   &quot;name&quot;: &quot;A String&quot;, # [Output Only] Name of the operation.
   &quot;operationGroupId&quot;: &quot;A String&quot;, # [Output Only] An ID that represents a group of operations, such as when a group of operations results from a `bulkInsert` API request.
@@ -2361,6 +2474,17 @@ Returns:
   &quot;httpErrorStatusCode&quot;: 42, # [Output Only] If the operation fails, this field contains the HTTP error status code that was returned. For example, a `404` means the resource was not found.
   &quot;id&quot;: &quot;A String&quot;, # [Output Only] The unique identifier for the operation. This identifier is defined by the server.
   &quot;insertTime&quot;: &quot;A String&quot;, # [Output Only] The time that this operation was requested. This value is in RFC3339 text format.
+  &quot;instancesBulkInsertOperationMetadata&quot;: {
+    &quot;perLocationStatus&quot;: { # Status information per location (location name is key). Example key: zones/us-central1-a
+      &quot;a_key&quot;: {
+        &quot;createdVmCount&quot;: 42, # [Output Only] Count of VMs successfully created so far.
+        &quot;deletedVmCount&quot;: 42, # [Output Only] Count of VMs that got deleted during rollback.
+        &quot;failedToCreateVmCount&quot;: 42, # [Output Only] Count of VMs that started creating but encountered an error.
+        &quot;status&quot;: &quot;A String&quot;, # [Output Only] Creation status of BulkInsert operation - information if the flow is rolling forward or rolling back.
+        &quot;targetVmCount&quot;: 42, # [Output Only] Count of VMs originally planned to be created.
+      },
+    },
+  },
   &quot;kind&quot;: &quot;compute#operation&quot;, # [Output Only] Type of the resource. Always `compute#operation` for Operation resources.
   &quot;name&quot;: &quot;A String&quot;, # [Output Only] Name of the operation.
   &quot;operationGroupId&quot;: &quot;A String&quot;, # [Output Only] An ID that represents a group of operations, such as when a group of operations results from a `bulkInsert` API request.
@@ -2455,6 +2579,17 @@ Returns:
   &quot;httpErrorStatusCode&quot;: 42, # [Output Only] If the operation fails, this field contains the HTTP error status code that was returned. For example, a `404` means the resource was not found.
   &quot;id&quot;: &quot;A String&quot;, # [Output Only] The unique identifier for the operation. This identifier is defined by the server.
   &quot;insertTime&quot;: &quot;A String&quot;, # [Output Only] The time that this operation was requested. This value is in RFC3339 text format.
+  &quot;instancesBulkInsertOperationMetadata&quot;: {
+    &quot;perLocationStatus&quot;: { # Status information per location (location name is key). Example key: zones/us-central1-a
+      &quot;a_key&quot;: {
+        &quot;createdVmCount&quot;: 42, # [Output Only] Count of VMs successfully created so far.
+        &quot;deletedVmCount&quot;: 42, # [Output Only] Count of VMs that got deleted during rollback.
+        &quot;failedToCreateVmCount&quot;: 42, # [Output Only] Count of VMs that started creating but encountered an error.
+        &quot;status&quot;: &quot;A String&quot;, # [Output Only] Creation status of BulkInsert operation - information if the flow is rolling forward or rolling back.
+        &quot;targetVmCount&quot;: 42, # [Output Only] Count of VMs originally planned to be created.
+      },
+    },
+  },
   &quot;kind&quot;: &quot;compute#operation&quot;, # [Output Only] Type of the resource. Always `compute#operation` for Operation resources.
   &quot;name&quot;: &quot;A String&quot;, # [Output Only] Name of the operation.
   &quot;operationGroupId&quot;: &quot;A String&quot;, # [Output Only] An ID that represents a group of operations, such as when a group of operations results from a `bulkInsert` API request.
@@ -2549,6 +2684,17 @@ Returns:
   &quot;httpErrorStatusCode&quot;: 42, # [Output Only] If the operation fails, this field contains the HTTP error status code that was returned. For example, a `404` means the resource was not found.
   &quot;id&quot;: &quot;A String&quot;, # [Output Only] The unique identifier for the operation. This identifier is defined by the server.
   &quot;insertTime&quot;: &quot;A String&quot;, # [Output Only] The time that this operation was requested. This value is in RFC3339 text format.
+  &quot;instancesBulkInsertOperationMetadata&quot;: {
+    &quot;perLocationStatus&quot;: { # Status information per location (location name is key). Example key: zones/us-central1-a
+      &quot;a_key&quot;: {
+        &quot;createdVmCount&quot;: 42, # [Output Only] Count of VMs successfully created so far.
+        &quot;deletedVmCount&quot;: 42, # [Output Only] Count of VMs that got deleted during rollback.
+        &quot;failedToCreateVmCount&quot;: 42, # [Output Only] Count of VMs that started creating but encountered an error.
+        &quot;status&quot;: &quot;A String&quot;, # [Output Only] Creation status of BulkInsert operation - information if the flow is rolling forward or rolling back.
+        &quot;targetVmCount&quot;: 42, # [Output Only] Count of VMs originally planned to be created.
+      },
+    },
+  },
   &quot;kind&quot;: &quot;compute#operation&quot;, # [Output Only] Type of the resource. Always `compute#operation` for Operation resources.
   &quot;name&quot;: &quot;A String&quot;, # [Output Only] Name of the operation.
   &quot;operationGroupId&quot;: &quot;A String&quot;, # [Output Only] An ID that represents a group of operations, such as when a group of operations results from a `bulkInsert` API request.

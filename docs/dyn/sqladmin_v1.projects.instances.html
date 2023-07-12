@@ -81,6 +81,9 @@ h1, h2, h3 {
   <code><a href="#getDiskShrinkConfig">getDiskShrinkConfig(project, instance, x__xgafv=None)</a></code></p>
 <p class="firstline">Get Disk Shrink Config for a given instance.</p>
 <p class="toc_element">
+  <code><a href="#getLatestRecoveryTime">getLatestRecoveryTime(project, instance, x__xgafv=None)</a></code></p>
+<p class="firstline">Get Latest Recovery Time for a given instance.</p>
+<p class="toc_element">
   <code><a href="#performDiskShrink">performDiskShrink(project, instance, body=None, x__xgafv=None)</a></code></p>
 <p class="firstline">Perform Disk Shrink on primary instance.</p>
 <p class="toc_element">
@@ -120,6 +123,27 @@ Returns:
   &quot;kind&quot;: &quot;A String&quot;, # This is always `sql#getDiskShrinkConfig`.
   &quot;message&quot;: &quot;A String&quot;, # Additional message to customers.
   &quot;minimalTargetSizeGb&quot;: &quot;A String&quot;, # The minimum size to which a disk can be shrunk in GigaBytes.
+}</pre>
+</div>
+
+<div class="method">
+    <code class="details" id="getLatestRecoveryTime">getLatestRecoveryTime(project, instance, x__xgafv=None)</code>
+  <pre>Get Latest Recovery Time for a given instance.
+
+Args:
+  project: string, Project ID of the project that contains the instance. (required)
+  instance: string, Cloud SQL instance ID. This does not include the project ID. (required)
+  x__xgafv: string, V1 error format.
+    Allowed values
+      1 - v1 error format
+      2 - v2 error format
+
+Returns:
+  An object of the form:
+
+    { # Instance get latest recovery time response.
+  &quot;kind&quot;: &quot;A String&quot;, # This is always `sql#getLatestRecoveryTime`.
+  &quot;latestRecoveryTime&quot;: &quot;A String&quot;, # Timestamp, identifies the latest recovery time of the source instance.
 }</pre>
 </div>
 
@@ -164,8 +188,8 @@ Returns:
   &quot;exportContext&quot;: { # Database instance export context. # The context for export operation, if applicable.
     &quot;bakExportOptions&quot;: { # Options for exporting BAK files (SQL Server-only)
       &quot;bakType&quot;: &quot;A String&quot;, # Type of this bak file will be export, FULL or DIFF, SQL Server only
-      &quot;copyOnly&quot;: True or False, # Whether or not the export will be exeucted with COPY_ONLY, SQL Server only deprecated as the behavior should default to copy_only = true use differential_base instead
-      &quot;differentialBase&quot;: True or False, # Whether or not the backup can be use as differential base only non copy only backup can be served as differential base
+      &quot;copyOnly&quot;: True or False, # Deprecated: copy_only is deprecated. Use differential_base instead
+      &quot;differentialBase&quot;: True or False, # Whether or not the backup can be used as a differential base copy_only backup can not be served as differential base
       &quot;stripeCount&quot;: 42, # Option for specifying how many stripes to use for the export. If blank, and the value of the striped field is true, the number of stripes is automatically chosen.
       &quot;striped&quot;: True or False, # Whether or not the export should be striped.
     },
@@ -279,8 +303,8 @@ Returns:
   &quot;exportContext&quot;: { # Database instance export context. # The context for export operation, if applicable.
     &quot;bakExportOptions&quot;: { # Options for exporting BAK files (SQL Server-only)
       &quot;bakType&quot;: &quot;A String&quot;, # Type of this bak file will be export, FULL or DIFF, SQL Server only
-      &quot;copyOnly&quot;: True or False, # Whether or not the export will be exeucted with COPY_ONLY, SQL Server only deprecated as the behavior should default to copy_only = true use differential_base instead
-      &quot;differentialBase&quot;: True or False, # Whether or not the backup can be use as differential base only non copy only backup can be served as differential base
+      &quot;copyOnly&quot;: True or False, # Deprecated: copy_only is deprecated. Use differential_base instead
+      &quot;differentialBase&quot;: True or False, # Whether or not the backup can be used as a differential base copy_only backup can not be served as differential base
       &quot;stripeCount&quot;: 42, # Option for specifying how many stripes to use for the export. If blank, and the value of the striped field is true, the number of stripes is automatically chosen.
       &quot;striped&quot;: True or False, # Whether or not the export should be striped.
     },
@@ -390,8 +414,8 @@ Returns:
   &quot;exportContext&quot;: { # Database instance export context. # The context for export operation, if applicable.
     &quot;bakExportOptions&quot;: { # Options for exporting BAK files (SQL Server-only)
       &quot;bakType&quot;: &quot;A String&quot;, # Type of this bak file will be export, FULL or DIFF, SQL Server only
-      &quot;copyOnly&quot;: True or False, # Whether or not the export will be exeucted with COPY_ONLY, SQL Server only deprecated as the behavior should default to copy_only = true use differential_base instead
-      &quot;differentialBase&quot;: True or False, # Whether or not the backup can be use as differential base only non copy only backup can be served as differential base
+      &quot;copyOnly&quot;: True or False, # Deprecated: copy_only is deprecated. Use differential_base instead
+      &quot;differentialBase&quot;: True or False, # Whether or not the backup can be used as a differential base copy_only backup can not be served as differential base
       &quot;stripeCount&quot;: 42, # Option for specifying how many stripes to use for the export. If blank, and the value of the striped field is true, the number of stripes is automatically chosen.
       &quot;striped&quot;: True or False, # Whether or not the export should be striped.
     },
@@ -512,8 +536,8 @@ Returns:
   &quot;exportContext&quot;: { # Database instance export context. # The context for export operation, if applicable.
     &quot;bakExportOptions&quot;: { # Options for exporting BAK files (SQL Server-only)
       &quot;bakType&quot;: &quot;A String&quot;, # Type of this bak file will be export, FULL or DIFF, SQL Server only
-      &quot;copyOnly&quot;: True or False, # Whether or not the export will be exeucted with COPY_ONLY, SQL Server only deprecated as the behavior should default to copy_only = true use differential_base instead
-      &quot;differentialBase&quot;: True or False, # Whether or not the backup can be use as differential base only non copy only backup can be served as differential base
+      &quot;copyOnly&quot;: True or False, # Deprecated: copy_only is deprecated. Use differential_base instead
+      &quot;differentialBase&quot;: True or False, # Whether or not the backup can be used as a differential base copy_only backup can not be served as differential base
       &quot;stripeCount&quot;: 42, # Option for specifying how many stripes to use for the export. If blank, and the value of the striped field is true, the number of stripes is automatically chosen.
       &quot;striped&quot;: True or False, # Whether or not the export should be striped.
     },

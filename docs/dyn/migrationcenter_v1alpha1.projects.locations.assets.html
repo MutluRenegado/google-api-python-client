@@ -230,6 +230,12 @@ Args:
                     &quot;memoryMb&quot;: 42, # Memory in mebibytes.
                     &quot;physicalCoreCount&quot;: 42, # Number of physical cores.
                     &quot;series&quot;: &quot;A String&quot;, # Compute Engine machine series.
+                    &quot;storage&quot;: [ # Compute Engine storage. Never empty.
+                      { # Compute Engine storage option descriptor.
+                        &quot;sizeGb&quot;: 42, # Disk size in GiB.
+                        &quot;type&quot;: &quot;A String&quot;, # Disk type backing the storage.
+                      },
+                    ],
                   },
                 },
                 &quot;fit&quot;: { # Describes the fit level of an asset for migration to a specific target. # Output only. Description of how well the asset this insight is associated with fits the proposed migration.
@@ -249,7 +255,7 @@ Args:
         },
         &quot;name&quot;: &quot;A String&quot;, # Output only. The full name of the asset.
         &quot;performanceData&quot;: { # Performance data for an asset. # Output only. Performance data for the asset.
-          &quot;dailyResourceUsageAggregations&quot;: [ # Daily resource usage aggregations. Contains all of the data available for an asset, up to the last 420 days.
+          &quot;dailyResourceUsageAggregations&quot;: [ # Daily resource usage aggregations. Contains all of the data available for an asset, up to the last 420 days. Aggregations are sorted from oldest to most recent.
             { # Usage data aggregation for a single day.
               &quot;cpu&quot;: { # Statistical aggregation of CPU usage. # CPU usage.
                 &quot;utilizationPercentage&quot;: { # Statistical aggregation of samples for a single resource usage. # CPU utilization percentage.
@@ -580,6 +586,12 @@ Returns:
                   &quot;memoryMb&quot;: 42, # Memory in mebibytes.
                   &quot;physicalCoreCount&quot;: 42, # Number of physical cores.
                   &quot;series&quot;: &quot;A String&quot;, # Compute Engine machine series.
+                  &quot;storage&quot;: [ # Compute Engine storage. Never empty.
+                    { # Compute Engine storage option descriptor.
+                      &quot;sizeGb&quot;: 42, # Disk size in GiB.
+                      &quot;type&quot;: &quot;A String&quot;, # Disk type backing the storage.
+                    },
+                  ],
                 },
               },
               &quot;fit&quot;: { # Describes the fit level of an asset for migration to a specific target. # Output only. Description of how well the asset this insight is associated with fits the proposed migration.
@@ -599,7 +611,7 @@ Returns:
       },
       &quot;name&quot;: &quot;A String&quot;, # Output only. The full name of the asset.
       &quot;performanceData&quot;: { # Performance data for an asset. # Output only. Performance data for the asset.
-        &quot;dailyResourceUsageAggregations&quot;: [ # Daily resource usage aggregations. Contains all of the data available for an asset, up to the last 420 days.
+        &quot;dailyResourceUsageAggregations&quot;: [ # Daily resource usage aggregations. Contains all of the data available for an asset, up to the last 420 days. Aggregations are sorted from oldest to most recent.
           { # Usage data aggregation for a single day.
             &quot;cpu&quot;: { # Statistical aggregation of CPU usage. # CPU usage.
               &quot;utilizationPercentage&quot;: { # Statistical aggregation of samples for a single resource usage. # CPU utilization percentage.
@@ -962,6 +974,12 @@ Returns:
               &quot;memoryMb&quot;: 42, # Memory in mebibytes.
               &quot;physicalCoreCount&quot;: 42, # Number of physical cores.
               &quot;series&quot;: &quot;A String&quot;, # Compute Engine machine series.
+              &quot;storage&quot;: [ # Compute Engine storage. Never empty.
+                { # Compute Engine storage option descriptor.
+                  &quot;sizeGb&quot;: 42, # Disk size in GiB.
+                  &quot;type&quot;: &quot;A String&quot;, # Disk type backing the storage.
+                },
+              ],
             },
           },
           &quot;fit&quot;: { # Describes the fit level of an asset for migration to a specific target. # Output only. Description of how well the asset this insight is associated with fits the proposed migration.
@@ -981,7 +999,7 @@ Returns:
   },
   &quot;name&quot;: &quot;A String&quot;, # Output only. The full name of the asset.
   &quot;performanceData&quot;: { # Performance data for an asset. # Output only. Performance data for the asset.
-    &quot;dailyResourceUsageAggregations&quot;: [ # Daily resource usage aggregations. Contains all of the data available for an asset, up to the last 420 days.
+    &quot;dailyResourceUsageAggregations&quot;: [ # Daily resource usage aggregations. Contains all of the data available for an asset, up to the last 420 days. Aggregations are sorted from oldest to most recent.
       { # Usage data aggregation for a single day.
         &quot;cpu&quot;: { # Statistical aggregation of CPU usage. # CPU usage.
           &quot;utilizationPercentage&quot;: { # Statistical aggregation of samples for a single resource usage. # CPU utilization percentage.
@@ -1324,6 +1342,12 @@ Returns:
                   &quot;memoryMb&quot;: 42, # Memory in mebibytes.
                   &quot;physicalCoreCount&quot;: 42, # Number of physical cores.
                   &quot;series&quot;: &quot;A String&quot;, # Compute Engine machine series.
+                  &quot;storage&quot;: [ # Compute Engine storage. Never empty.
+                    { # Compute Engine storage option descriptor.
+                      &quot;sizeGb&quot;: 42, # Disk size in GiB.
+                      &quot;type&quot;: &quot;A String&quot;, # Disk type backing the storage.
+                    },
+                  ],
                 },
               },
               &quot;fit&quot;: { # Describes the fit level of an asset for migration to a specific target. # Output only. Description of how well the asset this insight is associated with fits the proposed migration.
@@ -1343,7 +1367,7 @@ Returns:
       },
       &quot;name&quot;: &quot;A String&quot;, # Output only. The full name of the asset.
       &quot;performanceData&quot;: { # Performance data for an asset. # Output only. Performance data for the asset.
-        &quot;dailyResourceUsageAggregations&quot;: [ # Daily resource usage aggregations. Contains all of the data available for an asset, up to the last 420 days.
+        &quot;dailyResourceUsageAggregations&quot;: [ # Daily resource usage aggregations. Contains all of the data available for an asset, up to the last 420 days. Aggregations are sorted from oldest to most recent.
           { # Usage data aggregation for a single day.
             &quot;cpu&quot;: { # Statistical aggregation of CPU usage. # CPU usage.
               &quot;utilizationPercentage&quot;: { # Statistical aggregation of samples for a single resource usage. # CPU utilization percentage.
@@ -1689,6 +1713,12 @@ Args:
               &quot;memoryMb&quot;: 42, # Memory in mebibytes.
               &quot;physicalCoreCount&quot;: 42, # Number of physical cores.
               &quot;series&quot;: &quot;A String&quot;, # Compute Engine machine series.
+              &quot;storage&quot;: [ # Compute Engine storage. Never empty.
+                { # Compute Engine storage option descriptor.
+                  &quot;sizeGb&quot;: 42, # Disk size in GiB.
+                  &quot;type&quot;: &quot;A String&quot;, # Disk type backing the storage.
+                },
+              ],
             },
           },
           &quot;fit&quot;: { # Describes the fit level of an asset for migration to a specific target. # Output only. Description of how well the asset this insight is associated with fits the proposed migration.
@@ -1708,7 +1738,7 @@ Args:
   },
   &quot;name&quot;: &quot;A String&quot;, # Output only. The full name of the asset.
   &quot;performanceData&quot;: { # Performance data for an asset. # Output only. Performance data for the asset.
-    &quot;dailyResourceUsageAggregations&quot;: [ # Daily resource usage aggregations. Contains all of the data available for an asset, up to the last 420 days.
+    &quot;dailyResourceUsageAggregations&quot;: [ # Daily resource usage aggregations. Contains all of the data available for an asset, up to the last 420 days. Aggregations are sorted from oldest to most recent.
       { # Usage data aggregation for a single day.
         &quot;cpu&quot;: { # Statistical aggregation of CPU usage. # CPU usage.
           &quot;utilizationPercentage&quot;: { # Statistical aggregation of samples for a single resource usage. # CPU utilization percentage.
@@ -2034,6 +2064,12 @@ Returns:
               &quot;memoryMb&quot;: 42, # Memory in mebibytes.
               &quot;physicalCoreCount&quot;: 42, # Number of physical cores.
               &quot;series&quot;: &quot;A String&quot;, # Compute Engine machine series.
+              &quot;storage&quot;: [ # Compute Engine storage. Never empty.
+                { # Compute Engine storage option descriptor.
+                  &quot;sizeGb&quot;: 42, # Disk size in GiB.
+                  &quot;type&quot;: &quot;A String&quot;, # Disk type backing the storage.
+                },
+              ],
             },
           },
           &quot;fit&quot;: { # Describes the fit level of an asset for migration to a specific target. # Output only. Description of how well the asset this insight is associated with fits the proposed migration.
@@ -2053,7 +2089,7 @@ Returns:
   },
   &quot;name&quot;: &quot;A String&quot;, # Output only. The full name of the asset.
   &quot;performanceData&quot;: { # Performance data for an asset. # Output only. Performance data for the asset.
-    &quot;dailyResourceUsageAggregations&quot;: [ # Daily resource usage aggregations. Contains all of the data available for an asset, up to the last 420 days.
+    &quot;dailyResourceUsageAggregations&quot;: [ # Daily resource usage aggregations. Contains all of the data available for an asset, up to the last 420 days. Aggregations are sorted from oldest to most recent.
       { # Usage data aggregation for a single day.
         &quot;cpu&quot;: { # Statistical aggregation of CPU usage. # CPU usage.
           &quot;utilizationPercentage&quot;: { # Statistical aggregation of samples for a single resource usage. # CPU utilization percentage.
@@ -2369,7 +2405,7 @@ Args:
       &quot;labels&quot;: { # Labels as key value pairs.
         &quot;a_key&quot;: &quot;A String&quot;,
       },
-      &quot;performanceSamples&quot;: [ # Asset performance data samples.
+      &quot;performanceSamples&quot;: [ # Asset performance data samples. Samples that are older than 40 days are ignored.
         { # Performance data sample.
           &quot;cpu&quot;: { # CPU usage sample. # CPU usage sample.
             &quot;utilizedPercentage&quot;: 3.14, # Percentage of total CPU capacity utilized. Must be in the interval [0, 100]. On most systems can be calculated using 100 - idle percentage.
@@ -2384,7 +2420,7 @@ Args:
             &quot;averageEgressBps&quot;: 3.14, # Average network egress in B/s sampled over a short window. Must be non-negative.
             &quot;averageIngressBps&quot;: 3.14, # Average network ingress in B/s sampled over a short window. Must be non-negative.
           },
-          &quot;sampleTime&quot;: &quot;A String&quot;, # Time the sample was collected.
+          &quot;sampleTime&quot;: &quot;A String&quot;, # Required. Time the sample was collected.
         },
       ],
       &quot;reportTime&quot;: &quot;A String&quot;, # The time the data was reported.
